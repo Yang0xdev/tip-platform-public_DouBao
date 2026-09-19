@@ -323,6 +323,28 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
  .kpis.adm-kpi{grid-template-columns:repeat(2,1fr);}
  .bar-row{grid-template-columns:96px 1fr 56px;}
 }
+/* ================= 端到端旅程 ================= */
+.jwrap{max-width:1080px;margin:0 auto;}
+.jhead{background:linear-gradient(135deg,#0E5E63,#15797F);color:#fff;border-radius:18px;padding:24px 28px;margin-bottom:16px;}
+.jhead h1{font-size:21px;} .jhead p{opacity:.93;font-size:13px;margin-top:7px;line-height:1.75;max-width:820px;}
+.jlegend{display:flex;gap:10px;flex-wrap:wrap;margin-top:13px;}
+.jlegend .jl{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;background:rgba(255,255,255,.15);padding:4px 12px;border-radius:20px;}
+.jlegend .jl i{width:9px;height:9px;border-radius:50%;display:inline-block;}
+.jphase{background:#fff;border:1px solid var(--line-2);border-radius:16px;box-shadow:var(--sh);padding:16px 22px 10px;margin-bottom:16px;}
+.jphase>h3{font-size:15px;display:flex;align-items:center;gap:10px;margin:2px 0 6px;}
+.jphase>h3 .pn{width:26px;height:26px;border-radius:8px;background:var(--brand-50);color:var(--brand-d);display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex:none;}
+.jphase>h3 .psub{font-size:12px;color:var(--t2);font-weight:400;}
+.jnode{display:grid;grid-template-columns:38px 80px 1fr 92px;gap:14px;align-items:center;padding:13px 2px;border-top:1px dashed var(--line);}
+.jnum{width:30px;height:30px;border-radius:50%;background:var(--bg);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:var(--t1);}
+.jtag{font-size:11px;border-radius:7px;padding:4px 8px;text-align:center;font-weight:600;white-space:nowrap;}
+.jtag.c{background:#E9F2F8;color:#1D5F8A;} .jtag.s{background:var(--brand-50);color:var(--brand-d);} .jtag.i{background:#EFEAF8;color:#6B5AA8;} .jtag.a{background:#EAF0F1;color:#335056;}
+.jbody b{font-size:13.5px;} .jbody .jd{font-size:12px;color:var(--t2);margin-top:3px;line-height:1.6;}
+.jgo{font-size:12px;color:var(--brand);font-weight:600;text-align:right;white-space:nowrap;}
+.jgate{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--red);background:var(--red-bg);border-radius:6px;padding:2px 8px;margin-top:7px;}
+.jgate svg{width:12px;height:12px;flex:none;}
+.jgate.warn{color:#8a5312;background:var(--amber-bg);} .jgate.info{color:#1D5F8A;background:#E9F2F8;}
+.jgatesum{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:4px;}
+@media(max-width:760px){.jnode{grid-template-columns:32px 1fr;gap:4px 12px;}.jtag{justify-self:start;}.jgo{grid-column:2;text-align:left;}}
 </style>
 </head>
 <body>
@@ -333,9 +355,10 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
     <a data-go="client/home-visitor">客户端</a>
     <a data-go="advisor">销售端</a>
     <a data-go="ipad">iPad 面谈</a>
+    <a data-go="journey">端到端主线</a>
     <a data-go="admin">总后台</a>
   </div>
-  <div class="stage-note">高保真可点击原型 · 依据 G-P2 页面目录 V0.2 · 全部为虚构示例数据，不构成移民/法律建议 · 已交付：客户端 23 屏 + 销售展业端 12 屏 + iPad 面谈 2 屏 + 统一总后台 14 视图（Pass 1 内容履约 + Pass 2 销售治理），形成「一后台控两端」闭环</div>
+  <div class="stage-note">高保真可点击原型 · 依据 G-P2 页面目录 V0.2 · 全部为虚构示例数据，不构成移民/法律建议 · 已交付：客户端 23 屏 + 销售展业端 12 屏 + iPad 面谈 2 屏 + 统一总后台 14 视图（Pass 1+2）+ 端到端主线（14 节点跨三端、五道硬闸门），形成「一后台控两端」闭环</div>
 </div>
 
 <!-- ============ 启动总览 ============ -->
@@ -349,6 +372,7 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
     <a class="entry" data-go="client/home-visitor"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="2" width="10" height="20" rx="2.5"/><line x1="10.5" y1="18.5" x2="13.5" y2="18.5"/></svg></div><b>客户服务端</b><div class="e-d">游客免留资浏览 → 初评 → 选顾问 → 方案/订单 → 办理可视 → 全球通行查询</div><div class="e-c">23 屏可点击 →</div></a>
     <a class="entry" data-go="advisor/workbench"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3 3-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/><circle cx="17.5" cy="9" r="2.4"/><path d="M16 14.6c2.6.2 4 1.7 4.5 3.9"/></svg></div><b>销售展业端（手机）</b><div class="e-d">工作台、项目超市、授权学习闭环、客户跟进、订单协同、佣金六态对账、合规分享</div><div class="e-c">12 屏可点击 →</div></a>
     <a class="entry" data-go="ipad/i01"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="13" rx="2"/><line x1="10.5" y1="21" x2="13.5" y2="21"/></svg></div><b>顾问 iPad 面谈</b><div class="e-d">需求采集、项目并排比较、方案共读；演示/工作双模式一键切换</div><div class="e-c">2 屏可点击 →</div></a>
+    <a class="entry" data-go="journey"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><circle cx="18" cy="6" r="2.2"/><path d="M8 7.2 16 16.8M16 8.2 8 15.8"/></svg></div><b>端到端主线（推荐先看）</b><div class="e-d">一单从游客浏览到结算归档，14 个节点跨三端流转，逐节点打开对应屏；含五道硬闸门</div><div class="e-c">跨三端旅程图 →</div></a>
     <a class="entry" data-go="admin"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><b>统一总后台</b><div class="e-d">控制台、前后台控制矩阵、内容/供给/案件/财务/通知/权限/合规 A01–A12</div><div class="e-c">14 视图可点击（含销售治理）→</div></a>
   </div>
 
@@ -381,6 +405,60 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
 <!-- ============ 后续端（占位） ============ -->
 <section class="view" id="view-advisor"><div class="stage" id="advisor-wrap"></div></section>
 <section class="view" id="view-ipad"><div class="stage" id="ipad-wrap"></div></section>
+
+<!-- ============ 端到端客户旅程 ============ -->
+<section class="view" id="view-journey">
+ <div class="jwrap">
+  <div class="jhead">
+   <h1>端到端客户旅程 · 一单如何在三端之间流转</h1>
+   <p>以虚构示例「客 #1980 · A 国技术工作居留」为主线，从游客浏览到结算归档共 14 个节点，串起客户服务端、顾问手机 / iPad、统一总后台。每个节点可打开对应原型屏；红色为硬闸门（不满足即阻断），黄色为时限 / 复核要求。</p>
+   <div class="jlegend">
+    <span class="jl"><i style="background:#1D5F8A"></i>客户服务端</span>
+    <span class="jl"><i style="background:#0E5E63"></i>顾问手机</span>
+    <span class="jl"><i style="background:#6B5AA8"></i>iPad 面谈</span>
+    <span class="jl"><i style="background:#335056"></i>统一总后台</span>
+   </div>
+  </div>
+
+  <div class="jphase">
+   <h3><span class="pn">1</span>公开浏览与初评 <span class="psub">游客免留资、不强制登录；此阶段不绑定顾问、不产生佣金归因</span></h3>
+   <div class="jnode"><div class="jnum">1</div><div class="jtag c">客户端</div><div class="jbody"><b>游客浏览已发布项目</b><div class="jd">找项目 / 详情 / 最多 3 项并排比较；暂停、下架、未核验项不进目录。</div><div class="jgate"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><span>发布门：无有效核验记录的事实不得发布</span></div></div><a class="jgo" data-go="client/projects">打开 P-02/03 ›</a></div>
+   <div class="jnode"><div class="jnum">2</div><div class="jtag c">客户端</div><div class="jbody"><b>初步评估问卷与结果</b><div class="jd">用过审问卷版本采集需求，结果只输出符合 / 差距 / 待确认，无概率、无评分、无承诺。</div><div class="jgate warn"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.5 2"/></svg><span>问卷模板须为 A12 审核版；未完成不出结论</span></div></div><a class="jgo" data-go="client/assessment">打开 P-05/06 ›</a></div>
+   <div class="jnode"><div class="jnum">3</div><div class="jtag c">客户端</div><div class="jbody"><b>全球通行公开工具（支线）</b><div class="jd">护照 × 目的地短期签证查询、护照对比；仅旅行入境，与长期身份严格区分，使用不创建需求。</div><div class="jgate info"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></svg><span>第三方数据署名；授权失效自动下架（Q6 未落实前仅示例数据）</span></div></div><a class="jgo" data-go="client/global-home">打开 P-19–21 ›</a></div>
+   <div class="jnode"><div class="jnum">4</div><div class="jtag c">客户端</div><div class="jbody"><b>查看顾问公开名片并选择</b><div class="jd">仅白名单已核验字段；客户明确选择 / 同意后才发起联系，资质到期名片自动置灰。</div></div><a class="jgo" data-go="client/advisor-card">打开 P-07 ›</a></div>
+  </div>
+
+  <div class="jphase">
+   <h3><span class="pn">2</span>承接、面谈与签约 <span class="psub">客户选择 ＋ 顾问接受才成立关系；一名主责；先过闸门才收款</span></h3>
+   <div class="jnode"><div class="jnum">5</div><div class="jtag s">顾问手机</div><div class="jbody"><b>顾问在工作台接受咨询</b><div class="jd">待接受队列 → 接受后成立服务关系；来源 ≠ 归属，顾问仅见本人关系内客户。</div><div class="jgate"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><span>冲突未裁决前禁止发起方案 / 订单（A04）</span></div></div><a class="jgo" data-go="advisor/workbench">打开 S-01/06 ›</a></div>
+   <div class="jnode"><div class="jnum">6</div><div class="jtag i">iPad</div><div class="jbody"><b>面谈需求采集与项目并排</b><div class="jd">现场确认需求，最多 3 项目并排，只给符合 / 差距 / 待确认；可一键切客户演示模式。</div><div class="jgate info"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></svg><span>演示态隐藏佣金、内部备注、其他客户</span></div></div><a class="jgo" data-go="ipad/i01">打开 I-01 ›</a></div>
+   <div class="jnode"><div class="jnum">7</div><div class="jtag i">iPad</div><div class="jbody"><b>方案共读与客户确认</b><div class="jd">费用分项与收取方、责任分工、不承诺事项逐条同读；禁表述实时校验，命中须改后客户才能确认。</div><div class="jgate"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><span>禁表述门：包过 / 内部渠道等命中即拦截确认</span></div></div><a class="jgo" data-go="ipad/i02">打开 I-02 ›</a></div>
+   <div class="jnode"><div class="jnum">8</div><div class="jtag s">顾问手机</div><div class="jbody"><b>发起订单，过主体一致性门</b><div class="jd">仅可选已授权项目与已发布收费方案；顾问不可改金额、到账、官方进度。</div><div class="jgate"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><span>主体门：签约主体＝境外交付关联方＝收款账户，不一致阻断（ORD-2409 反例）</span></div></div><a class="jgo" data-go="advisor/order">打开 S-08 ›</a></div>
+   <div class="jnode"><div class="jnum">9</div><div class="jtag c">客户端</div><div class="jbody"><b>合同签署、付款凭证上传与复核</b><div class="jd">分项费用与收取方写入合同；客户上传转账凭证，财务核对到账且主体一致才确认，出具收据。</div><div class="jgate warn"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.5 2"/></svg><span>金额类修改双人复核；“待核验”≠到账；不做资金托管</span></div></div><a class="jgo" data-go="client/order">打开 P-09 / A05·A07 ›</a></div>
+  </div>
+
+  <div class="jphase">
+   <h3><span class="pn">3</span>履约、通知与结算 <span class="psub">四级来源凭据、T0 时限升级、六态佣金；外部事实只能核验不能编造</span></h3>
+   <div class="jnode"><div class="jnum">10</div><div class="jtag c">客户端</div><div class="jbody"><b>材料准备、提交与退回</b><div class="jd">按申请人 / 授权组织清单；退回原因可见、可重试；家庭成员材料须本人授权。</div><div class="jgate"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><span>授权门：未授权材料服务端直接拒绝，不靠隐藏入口</span></div></div><a class="jgo" data-go="client/materials">打开 P-12 / A06 ›</a></div>
+   <div class="jnode"><div class="jnum">11</div><div class="jtag a">总后台</div><div class="jbody"><b>官方受理凭据核验（T0）</b><div class="jd">服务方报告不等于官方受理；凭据核验人不能是案件发起人；App+短信+电话多通道，未达升级。</div><div class="jgate"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><span>凭据门：核验人≠发起人；T0 未回执升级主管 / 合规</span></div></div><a class="jgo" data-go="admin/a06">打开 A06 / A09 ›</a></div>
+   <div class="jnode"><div class="jnum">12</div><div class="jtag a">总后台</div><div class="jbody"><b>境外段交付（受控服务方门户）</b><div class="jd">境外持牌方经批次授权访问案件材料，默认只读、全屏水印、访问到期回收。</div><div class="jgate info"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></svg><span>跨境共享逐项审批、最小化、留痕（A02/A10）</span></div></div><a class="jgo" data-go="admin/a02">打开 A02 ›</a></div>
+   <div class="jnode"><div class="jnum">13</div><div class="jtag s">顾问手机</div><div class="jbody"><b>佣金六态对账与结算</b><div class="jd">预估→待触发→应计待核验→可结算→处理中→已结算；下单锁定规则版本，异币种分列。</div><div class="jgate"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><span>仅登记订单进入；无规则不产生应计；结算双人复核</span></div></div><a class="jgo" data-go="advisor/commission">打开 S-09 / A07 ›</a></div>
+   <div class="jnode"><div class="jnum">14</div><div class="jtag c">客户端</div><div class="jbody"><b>投诉 / 争议独立受理（若发生）</b><div class="jd">工单独立调查，被投诉顾问不独占、不能关闭；私收款核实走合规处置，合规佣金不连坐清零。</div><div class="jgate"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><span>回避门：调查人与被调查顾问分离（A08/A12）</span></div></div><a class="jgo" data-go="client/ticket">打开 P-15 / A08 ›</a></div>
+  </div>
+
+  <div class="jphase">
+   <h3><span class="pn">★</span>贯穿全程的五道硬闸门与边界</h3>
+   <div class="jgatesum">
+    <div class="gate block" style="margin:0;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><div><b>发布门</b><div>事实无核验记录不得发布；编辑≠发布。</div></div></div>
+    <div class="gate block" style="margin:0;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><div><b>主体门</b><div>签约 / 交付 / 收款三要素不一致即阻断下单。</div></div></div>
+    <div class="gate block" style="margin:0;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><div><b>凭据门</b><div>官方节点以凭据核验为准，核验人≠发起人。</div></div></div>
+    <div class="gate warn" style="margin:0;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.5 2"/></svg><div><b>T0 时限门</b><div>多通道 + 送达回执 + 失败换通道 / 升级。</div></div></div>
+    <div class="gate info" style="margin:0;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><div><b>授权与审计门</b><div>人员×案件×动作×有效期；服务端逐项校验。</div></div></div>
+   </div>
+   <div class="notice" style="margin:12px 0 4px;">后台能力边界是「<b>配置 / 核验 / 发布 / 留痕</b>」：官方进度、到账、签证决定、获批结果只能登记凭据并核验，任何终端都不能手工改写成承诺或结果。</div>
+  </div>
+ </div>
+</section>
 <section class="view" id="view-admin">
  <div class="adm">
   <aside class="adm-side">
@@ -730,7 +808,7 @@ const SM=[
  ["P-19","全球通行·我的护照","client/global-home"],["P-20","签证要求查询","client/visa-check"],["P-21","护照对比与通行力","client/passport-compare"]
 ];
 document.getElementById("sitemap").innerHTML=SM.map(x=>'<a class="sm" data-go="'+x[2]+'"><span class="pid">'+x[0]+"</span>"+x[1]+"</a>").join("")+
- '<a class="sm" data-go="admin/home"><span class="pid">A</span>统一总后台 · 14 视图（Pass 1+2）</a><a class="sm" data-go="advisor/workbench"><span class="pid">S</span>销售展业端 · 12 屏可点击</a><a class="sm" data-go="ipad/i01"><span class="pid">I</span>iPad 面谈 · 2 屏（演示/工作双模式）</a>';
+ '<a class="sm" data-go="journey"><span class="pid">J</span>端到端主线 · 14 节点跨三端</a><a class="sm" data-go="admin/home"><span class="pid">A</span>统一总后台 · 14 视图（Pass 1+2）</a><a class="sm" data-go="advisor/workbench"><span class="pid">S</span>销售展业端 · 12 屏可点击</a><a class="sm" data-go="ipad/i01"><span class="pid">I</span>iPad 面谈 · 2 屏（演示/工作双模式）</a>';
 
 /* ================= 总后台 Pass 1 ================= */
 const ANAV=[
@@ -1433,8 +1511,8 @@ function toast(m){const t=document.getElementById("toast");t.textContent=m;t.cla
 function route(h){
  const key=(h||location.hash.replace("#/","")||"launcher");
  const seg=key.split("/")[0];
- ["launcher","client","advisor","ipad","admin"].forEach(v=>document.getElementById("view-"+v).classList.toggle("on",v===seg));
- const segMap={launcher:"launcher",client:"client/home-visitor",advisor:"advisor",ipad:"ipad",admin:"admin"};
+ ["launcher","client","advisor","ipad","journey","admin"].forEach(v=>document.getElementById("view-"+v).classList.toggle("on",v===seg));
+ const segMap={launcher:"launcher",client:"client/home-visitor",advisor:"advisor",ipad:"ipad",journey:"journey",admin:"admin"};
  document.querySelectorAll(".seg a").forEach(a=>a.classList.toggle("on",a.dataset.go===(segMap[seg]||"launcher")));
  document.querySelectorAll(".screen-page").forEach(s=>s.classList.remove("on"));
  if(seg==="client"){const sk=key.split("/")[1]||"home-visitor";const el=document.getElementById("cs-"+sk);if(el){el.classList.add("on");const ph=el.querySelector(".pbody");if(ph)ph.scrollTop=0;}}
