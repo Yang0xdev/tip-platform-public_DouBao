@@ -258,6 +258,61 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
 [data-panelgroup] [data-panel]{display:none;} [data-panelgroup] [data-panel].on{display:block;}
 .a-tabs [data-tab]{cursor:pointer;}
 .matrix-go{color:var(--brand);font-weight:600;font-size:11.5px;white-space:nowrap;}
+/* ================= 销售端（手机） ================= */
+.tabbar.five{grid-template-columns:repeat(5,1fr);}
+.ahdr{flex:none;padding:10px 16px 6px;}
+.ahdr .at{font-size:19px;font-weight:700;} .ahdr .as{font-size:12px;color:var(--t2);margin-top:2px;}
+.taskcard{background:#fff;border-radius:14px;box-shadow:var(--sh);border:1px solid var(--line-2);padding:13px 14px;margin-bottom:10px;border-left:4px solid var(--brand);}
+.taskcard.urgent{border-left-color:var(--red);background:#fff;}
+.taskcard .tt1{font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:7px;}
+.taskcard .tt2{font-size:12px;color:var(--t2);margin:4px 0 9px;}
+.taskcard .tacts{display:flex;gap:8px;}
+.taskcard .tacts .abtn{height:32px;padding:0 13px;font-size:12px;border-radius:8px;}
+.minikpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.minikpis .mk{background:#fff;border:1px solid var(--line-2);border-radius:12px;padding:10px;text-align:center;box-shadow:var(--sh);}
+.minikpis .mk b{font-size:19px;display:block;} .minikpis .mk span{font-size:11px;color:var(--t2);}
+.proj-row{display:flex;gap:11px;align-items:center;background:#fff;border:1px solid var(--line-2);border-radius:13px;padding:11px 13px;margin-bottom:9px;box-shadow:var(--sh);}
+.proj-row .pl{flex:1;min-width:0;} .proj-row .pl b{font-size:13.5px;} .proj-row .pl .pm{font-size:11.5px;color:var(--t2);margin-top:3px;}
+.lockchip{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;color:var(--amber);background:var(--amber-bg);border-radius:6px;padding:1px 7px;}
+.lockchip svg{width:12px;height:12px;}
+.stepsmini .step{padding-bottom:13px;} .stepsmini .step .stt{font-size:13px;}
+.readitem{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line-2);}
+.readitem:last-child{border-bottom:none;} .readitem .ri{flex:1;} .readitem .ri b{font-size:13px;} .readitem .ri .rm{font-size:11.5px;color:var(--t2);}
+.namecard{background:linear-gradient(135deg,#0E5E63,#1B7A80);color:#fff;border-radius:16px;padding:18px;margin-bottom:12px;}
+.namecard .nname{font-size:18px;font-weight:700;} .namecard .nmeta{font-size:12px;opacity:.92;margin-top:7px;line-height:1.9;}
+.namecard .nverify{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.16);border-radius:20px;padding:3px 11px;font-size:11px;margin-top:9px;}
+.namecard .nverify svg{width:13px;height:13px;}
+.masked{color:var(--t3);letter-spacing:1px;}
+/* ================= iPad 面谈 ================= */
+.tablet{width:1080px;max-width:100%;height:780px;background:#fff;border-radius:30px;box-shadow:0 2px 10px rgba(16,40,44,.12),0 30px 70px rgba(16,40,44,.18);border:11px solid #11262B;overflow:hidden;position:relative;}
+.tablet .tscreen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);}
+.tpad-top{flex:none;display:flex;align-items:center;gap:12px;padding:0 18px;height:50px;background:#fff;border-bottom:1px solid var(--line);}
+.tpad-top .ttl{font-size:15px;font-weight:700;} .tpad-top .tsub{font-size:11.5px;color:var(--t2);}
+.demo-toggle{margin-left:auto;display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--t1);}
+.switch{width:42px;height:24px;border-radius:12px;background:var(--line);position:relative;transition:.2s;flex:none;}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:.2s;}
+.tscreen.demo .switch{background:var(--brand);} .tscreen.demo .switch::after{transform:translateX(18px);}
+.lbl-demo{display:none;} .tscreen.demo .lbl-demo{display:inline;} .tscreen.demo .lbl-work{display:none;}
+.internal-only{} .tscreen.demo .internal-only{display:none!important;}
+.demo-flag{display:none;align-items:center;gap:8px;background:var(--amber-bg);color:#8a5312;font-size:12px;padding:8px 18px;border-bottom:1px solid #f0dfc4;}
+.demo-flag svg{width:16px;height:16px;} .tscreen.demo .demo-flag{display:flex;}
+.tpad-body{flex:1;min-height:0;display:grid;grid-template-columns:330px 1fr;}
+.tpad-body.cols3{grid-template-columns:250px 1fr;}
+.tpad-side{background:#fff;border-right:1px solid var(--line);padding:16px 18px;overflow:auto;}
+.tpad-main{padding:16px 18px;overflow:auto;}
+.tpad-side h4,.tpad-main h4{font-size:13px;font-weight:600;margin:4px 0 10px;}
+.fld{margin-bottom:11px;} .fld label{display:block;font-size:11.5px;color:var(--t2);margin-bottom:4px;}
+.fld .input{height:40px;font-size:13.5px;border-radius:10px;}
+.cmp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.cmp-card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:13px;font-size:12px;display:flex;flex-direction:column;}
+.cmp-card .ch{font-size:13.5px;font-weight:700;margin-bottom:8px;} .cmp-card .crow{padding:6px 0;border-top:1px dashed var(--line);}
+.cmp-card .crow span{display:block;color:var(--t2);font-size:10.5px;margin-bottom:2px;}
+.toc a{display:block;padding:9px 11px;border-radius:9px;font-size:12.5px;color:var(--t1);} .toc a.on{background:var(--brand-50);color:var(--brand-d);font-weight:600;}
+.readpanel{background:#fff;border:1px solid var(--line);border-radius:13px;padding:16px 18px;margin-bottom:12px;}
+.readpanel h4{font-size:14px;margin-bottom:9px;}
+.confirmbar{flex:none;display:flex;gap:10px;padding:12px 18px;background:#fff;border-top:1px solid var(--line);}
+.confirmbar .abtn{flex:1;height:42px;justify-content:center;}
+@media(max-width:1100px){.tablet{height:720px;}.cmp-grid{grid-template-columns:1fr;}.tpad-body{grid-template-columns:1fr;overflow:auto;}.tpad-side{border-right:none;border-bottom:1px solid var(--line);}}
 @media(max-width:960px){
  .adm{grid-template-columns:1fr;}
  .adm-side{padding:8px 10px;}
@@ -280,20 +335,20 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
     <a data-go="ipad">iPad 面谈</a>
     <a data-go="admin">总后台</a>
   </div>
-  <div class="stage-note">高保真可点击原型 · 依据 G-P2 页面目录 V0.2 · 全部为虚构示例数据，不构成移民/法律建议 · 已交付：客户端 23 屏 + 总后台 Pass 1（14 视图）</div>
+  <div class="stage-note">高保真可点击原型 · 依据 G-P2 页面目录 V0.2 · 全部为虚构示例数据，不构成移民/法律建议 · 已交付：客户端 23 屏 + 总后台 Pass 1（14 视图）+ 销售展业端 12 屏 + iPad 面谈 2 屏</div>
 </div>
 
 <!-- ============ 启动总览 ============ -->
 <section class="view on" id="view-launcher">
   <div class="hero">
     <h1>透明化身份规划服务平台 · 高保真原型</h1>
-    <p>客户知情选择、顾问受控展业、后台核验履责。已完成客户端 23 屏与总后台 Pass 1（控制台 + 前后台控制矩阵 + A01–A12 共 14 个后台视图）；销售端、iPad 面谈随后批次完成。视觉方向：温和、清晰、不紧张、人人可用（Wise / Monzo / 友邦式气质，自有品牌，不复制其界面）。</p>
+    <p>客户知情选择、顾问受控展业、后台核验履责。已完成客户端 23 屏、总后台 Pass 1（控制台 + 前后台控制矩阵 + A01–A12 共 14 个后台视图）、销售展业端 12 屏与 iPad 面谈 2 屏（演示/工作双模式）；后台 Pass 2 销售治理视图为下一阶段。视觉方向：温和、清晰、不紧张、人人可用（Wise / Monzo / 友邦式气质，自有品牌，不复制其界面）。</p>
     <span class="demo-tag">演示数据 · 示例国家/项目 · 无成功率展示 · 费用分项写明收取方</span>
   </div>
   <div class="entry-grid">
     <a class="entry" data-go="client/home-visitor"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="2" width="10" height="20" rx="2.5"/><line x1="10.5" y1="18.5" x2="13.5" y2="18.5"/></svg></div><b>客户服务端</b><div class="e-d">游客免留资浏览 → 初评 → 选顾问 → 方案/订单 → 办理可视 → 全球通行查询</div><div class="e-c">23 屏可点击 →</div></a>
-    <a class="entry" data-go="advisor"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3 3-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/><circle cx="17.5" cy="9" r="2.4"/><path d="M16 14.6c2.6.2 4 1.7 4.5 3.9"/></svg></div><b>销售展业端（手机）</b><div class="e-d">工作台、项目超市、授权学习、客户、订单协同、佣金对账、合规分享</div><div class="e-c">下一阶段 →</div></a>
-    <a class="entry" data-go="ipad"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="13" rx="2"/><line x1="10.5" y1="21" x2="13.5" y2="21"/></svg></div><b>顾问 iPad 面谈</b><div class="e-d">需求采集、项目并排比较、方案共读；演示/工作双模式</div><div class="e-c">下一阶段 →</div></a>
+    <a class="entry" data-go="advisor/workbench"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3 3-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/><circle cx="17.5" cy="9" r="2.4"/><path d="M16 14.6c2.6.2 4 1.7 4.5 3.9"/></svg></div><b>销售展业端（手机）</b><div class="e-d">工作台、项目超市、授权学习闭环、客户跟进、订单协同、佣金六态对账、合规分享</div><div class="e-c">12 屏可点击 →</div></a>
+    <a class="entry" data-go="ipad/i01"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="13" rx="2"/><line x1="10.5" y1="21" x2="13.5" y2="21"/></svg></div><b>顾问 iPad 面谈</b><div class="e-d">需求采集、项目并排比较、方案共读；演示/工作双模式一键切换</div><div class="e-c">2 屏可点击 →</div></a>
     <a class="entry" data-go="admin"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><b>统一总后台</b><div class="e-d">控制台、前后台控制矩阵、内容/供给/案件/财务/通知/权限/合规 A01–A12</div><div class="e-c">Pass 1 · 14 视图可点击 →</div></a>
   </div>
 
@@ -324,8 +379,8 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
 <!-- ============ 客户端 ============ -->
 <section class="view" id="view-client"><div class="stage" id="client-wrap"></div></section>
 <!-- ============ 后续端（占位） ============ -->
-<section class="view" id="view-advisor"><div class="future-view"><div class="fi"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3 3-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/></svg></div><h2>销售展业端（手机）</h2><p>客户端确认后进入本批：工作台、项目超市、授权学习闭环、客户与跟进、订单协同、佣金六态对账、合规分享与名片，共 12 屏。</p><button class="btn sm ghost" data-go="client/home-visitor">先看客户端</button></div></section>
-<section class="view" id="view-ipad"><div class="future-view"><div class="fi"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="13" rx="2"/><line x1="10.5" y1="21" x2="13.5" y2="21"/></svg></div><h2>顾问 iPad 面谈</h2><p>需求采集与项目并排比较、方案共读两屏，含客户演示模式开关（隐藏佣金/内部备注/其他客户）。随销售端同批完成。</p><button class="btn sm ghost" data-go="client/home-visitor">先看客户端</button></div></section>
+<section class="view" id="view-advisor"><div class="stage" id="advisor-wrap"></div></section>
+<section class="view" id="view-ipad"><div class="stage" id="ipad-wrap"></div></section>
 <section class="view" id="view-admin">
  <div class="adm">
   <aside class="adm-side">
@@ -675,7 +730,7 @@ const SM=[
  ["P-19","全球通行·我的护照","client/global-home"],["P-20","签证要求查询","client/visa-check"],["P-21","护照对比与通行力","client/passport-compare"]
 ];
 document.getElementById("sitemap").innerHTML=SM.map(x=>'<a class="sm" data-go="'+x[2]+'"><span class="pid">'+x[0]+"</span>"+x[1]+"</a>").join("")+
- '<a class="sm" data-go="admin/home"><span class="pid">A</span>总后台 Pass 1 · 14 视图可点击</a><div class="sm future"><span class="pid">S</span>销售端 12 屏（下一批）</div><div class="sm future"><span class="pid">I</span>iPad 面谈 2 屏（下一批）</div>';
+ '<a class="sm" data-go="admin/home"><span class="pid">A</span>总后台 Pass 1 · 14 视图可点击</a><a class="sm" data-go="advisor/workbench"><span class="pid">S</span>销售展业端 · 12 屏可点击</a><a class="sm" data-go="ipad/i01"><span class="pid">I</span>iPad 面谈 · 2 屏（演示/工作双模式）</a>';
 
 /* ================= 总后台 Pass 1 ================= */
 const ANAV=[
@@ -1010,6 +1065,261 @@ function renderAdmin(sk){
  window.scrollTo(0,0);
 }
 
+/* ================= 销售展业端（手机） ================= */
+function atabbar(active){const t=[["workbench","briefcase","工作台"],["market","store","项目超市"],["clients","users","客户"],["learn","book","学习"],["me","user","我的"]];return '<div class="tabbar five">'+t.map(x=>'<a data-go="advisor/'+x[0]+'" class="'+(active===x[0]?"on":"")+'">'+ic(x[1])+"<span>"+x[2]+"</span></a>").join("")+"</div>";}
+function aphone(id,inner,tab){return '<div class="screen-page" id="as-'+id+'"><div class="phone"><div class="screen">'+inner+(tab?atabbar(tab):"")+'</div></div><div class="device-label">销售展业端 · '+id+' · 390×800</div></div>';}
+const AS={};
+/* S-00 入驻与审核 */
+AS.onboard=aphone("onboard",body(
+ '<div class="ahdr"><div class="at">顾问入驻</div><div class="as">完成平台审核后才可展业；未通过不可见任何客户业务</div></div>'+
+ '<div class="card"><h3>入驻进度</h3><div class="stepper stepsmini">'+
+ '<div class="step done"><div class="dotn">'+ic("check")+'</div><div><div class="stt">身份与从业证明</div><div class="sts">已上传</div></div></div>'+
+ '<div class="step done"><div class="dotn">'+ic("check")+'</div><div><div class="stt">人员备案信息（如适用）</div><div class="sts">已采集</div></div></div>'+
+ '<div class="step cur"><div class="dotn">3</div><div><div class="stt">资质核验</div><div class="sts">平台核验中</div></div></div>'+
+ '<div class="step"><div class="dotn">4</div><div><div class="stt">承诺签署</div><div class="sts">随审核完成</div></div></div>'+
+ '<div class="step"><div class="dotn">5</div><div><div class="stt">平台审核与培训认证</div><div class="sts">A03</div></div></div></div></div>'+
+ '<div class="card"><h3>已提交信息</h3>'+
+ '<div class="row"><span class="rl">姓名（示例）</span><span class="rv">陈某</span></div>'+
+ '<div class="row"><span class="rl">所属机构</span><span class="rv">示例出入境咨询（北京）</span></div>'+
+ '<div class="row"><span class="rl">从业证明</span><span class="tag verified">已上传</span></div>'+
+ '<div class="row"><span class="rl">人员备案信息</span><span class="tag verified">已采集</span></div></div>'+
+ '<div class="card"><h3>入驻承诺</h3>'+
+ '<div class="wl yes">'+ic("check")+"<span>不私收客户款项，所有收款走平台登记订单与对公账户</span></div>"+
+ '<div class="wl yes">'+ic("check")+"<span>不以平台名义作平台外承诺，授权项目内成交如实登记</span></div>"+
+ '<div class="wl yes">'+ic("check")+"<span>不夸大误导、不协助虚假材料，使用经核准话术与素材</span></div>"+
+ '<div class="wl yes">'+ic("check")+"<span>履行保密与个人信息保护义务，客户资料仅用于授权范围</span></div></div>"+
+ '<div class="notice warn">审核中：结果将通过站内消息通知；期间可学习公开资料，暂不可见客户与项目佣金。</div>'+
+ '<a class="abtn blocked" style="width:100%;height:48px;border-radius:24px;justify-content:center;" data-toast="审核通过后自动解锁工作台，当前不可进入">审核通过后解锁工作台</a>'
+));
+/* S-01 工作台 */
+AS.workbench=aphone("workbench",body(
+ '<div class="ahdr"><div class="at">工作台</div><div class="as">陈某 · 已授权 5 个项目 · 人员备案有效</div></div>'+
+ '<div class="t0bar">'+ic("alert")+'<div style="flex:1;"><div class="t0t">CASE-A02 受理回执 T0 剩余 4 小时</div><div class="t0s">短信未达已转人工电话，未回执将升级主管</div></div><a class="abtn sm" style="background:#fff;color:var(--red);" data-go="advisor/order">去处理</a></div>'+
+ '<div class="minikpis"><div class="mk"><b>2</b><span>待接受咨询</span></div><div class="mk"><b>4</b><span>今日待办</span></div><div class="mk"><b style="color:var(--amber)">1</b><span>授权临期</span></div></div>'+
+ '<div class="sec-title">待接受咨询</div>'+
+ '<div class="taskcard"><div class="tt1">客 #2051 · 技术居留</div><div class="tt2">完成初评后请求顾问，来源：客户端初评</div><div class="tacts"><a class="abtn" data-toast="已接受：服务关系成立（客户选择＋顾问接受）">接受</a><a class="abtn ghost" data-toast="演示：查看脱敏初评摘要">查看摘要</a></div></div>'+
+ '<div class="taskcard"><div class="tt1">客 #2049 · 随行子女</div><div class="tt2">来自名片“联系顾问”，尚未分配主责</div><div class="tacts"><a class="abtn" data-toast="已接受：你成为主责顾问">接受</a><a class="abtn ghost" data-go="advisor/clients">转分配</a></div></div>'+
+ '<div class="sec-title">今日待办</div>'+
+ '<div class="card" style="padding:4px 14px;">'+
+ '<div class="row" data-go="advisor/client"><span class="rl">客 #2051 补料清单待审核</span><span class="tag pending">待办</span></div>'+
+ '<div class="row" data-go="advisor/client"><span class="rl">客 #1980 方案 PROP-309 待客户确认</span><span class="tag info">跟进</span></div>'+
+ '<div class="row" data-go="advisor/learn"><span class="rl">A 国项目 v3.2 必读版本未确认</span><span class="tag pending">必读</span></div>'+
+ '<div class="row" data-go="advisor/commission"><span class="rl">ORD-2401 收据已开，可告知客户</span><span class="tag verified">完成</span></div></div>'+
+ '<div class="notice">你仅可见本人关系内的客户与任务；T0 超期任务自动升级，<b>原截止时间不因超期改写</b>。</div>'
+,true),"workbench");
+/* S-02 项目超市 */
+AS.market=aphone("market",body(
+ '<div class="ahdr"><div class="at">项目超市</div><div class="as">已授权可展业；未授权不可见佣金、不可报价</div></div>'+
+ '<div class="search">'+ic("search")+'<span>搜索已授权 / 可申请项目</span></div>'+
+ '<div class="chips" style="margin:10px 0;" data-select><span class="chip on">已授权 3</span><span class="chip">可申请 2</span><span class="chip">已暂停 1</span></div>'+
+ '<a class="proj-row" data-go="advisor/project"><div class="pl"><b>【示例】A 国 · 技术工作居留</b><div class="pm">v3.2 · 境内签约 + 示例律所 A 交付</div></div><span class="tag verified">已授权</span></a>'+
+ '<a class="proj-row" data-go="advisor/project"><div class="pl"><b>【示例】A 国 · 随行子女路径</b><div class="pm">v1.4 · 交付方边界见内部规则</div></div><span class="tag verified">已授权</span></a>'+
+ '<a class="proj-row" data-go="advisor/authorize"><div class="pl"><b>【示例】B 地区 · 投资居留</b><div class="pm">v0.9 · 完成必读并通过审核后可展业</div><span class="lockchip" style="margin-top:5px;">'+ic("lock")+'未授权：佣金不可见 / 不可报价</span></div><span class="tag pending">可申请</span></a>'+
+ '<a class="proj-row" data-go="advisor/authorize"><div class="pl"><b>【示例】C 国 · 数字游民</b><div class="pm">v0.3 · 待项目核验完成后开放授权</div></div><span class="tag pending">可申请</span></a>'+
+ '<a class="proj-row" style="opacity:.6;"><div class="pl"><b>【示例】A 国 · 雇主担保</b><div class="pm">供给暂停，已下架对客展示</div></div><span class="tag gray">已暂停</span></a>'+
+ '<div class="notice">授权＝完成项目必读 → 阅读确认 → 申请 → A03 审核，绑定资质 / 备案有效期；到期自动暂停新业务。</div>'
+,true),"market");
+/* S-03 项目内部详情 */
+AS.project=aphone("project",appbar("项目内部规则","advisor/market")+body(
+ '<div class="ahdr" style="padding-left:0;"><div class="at" style="font-size:17px;">【示例】A 国 · 技术工作居留</div><div class="as">v3.2 <span class="tag verified" style="margin-left:6px;">已授权 · 有效期至 2027-03</span></div></div>'+
+ atabs("sp",[["say","对客可表述"],["ban","禁表述清单"],["in","内部规则与边界"]])+
+ apanels("sp",[
+  ["say",'<div class="card">'+
+   '<div class="wl yes">'+ic("check")+"<span>身份性质：长期工作居留（<b>非永居 / 非入籍</b>），福利与投票权以官方为准</span></div>"+
+   '<div class="wl yes">'+ic("check")+"<span>申请条件、办理流程、所需材料与责任分工</span></div>"+
+   '<div class="wl yes">'+ic("check")+"<span>费用分项、币种与<b>收取方</b>；异币种不相加</span></div>"+
+   '<div class="wl yes">'+ic("check")+"<span>审理周期只能说“参考 9–14 个月、<b>非承诺</b>”</span></div>"+
+   '<div class="wl yes">'+ic("check")+"<span>可自助到哪一步、何时转持牌方 / 官方渠道</span></div></div>"],
+  ["ban",'<div class="card">'+
+   '<div class="wl no">'+ic("ban")+"<span>成功率 / 获批率 / “包过” / 保证获批</span></div>"+
+   '<div class="wl no">'+ic("ban")+"<span>“官方内部渠道”、加急包受理、规避移民监</span></div>"+
+   '<div class="wl no">'+ic("ban")+"<span>投资保本 / 稳赚 / 收益承诺</span></div>"+
+   '<div class="wl no">'+ic("ban")+"<span>承诺官方审理时限、承诺永居 / 入籍时间点</span></div></div>"+
+   '<div class="notice warn">iPad 面谈时，系统对讲解与方案文字做<b>禁表述实时校验提示</b>；命中需修改后方可与客户确认。</div>'],
+  ["in",'<div class="card">'+
+   '<div class="row"><span class="rl">境内对客签约主体</span><span class="rv">示例出入境咨询（北京）</span></div>'+
+   '<div class="row"><span class="rl">境外交付方</span><span class="rv">示例律所 A（持牌编号示例）</span></div>'+
+   '<div class="row"><span class="rl">服务方门户</span><span class="rv">只读 + 全屏水印</span></div>'+
+   '<div class="row"><span class="rl">收费方案版本</span><span class="rv">v3（已发布）</span></div></div>'+
+   '<div class="card internal-only" style="background:var(--line-2);box-shadow:none;"><h3>佣金规则（仅工作模式）</h3><div class="small muted">规则版本 v1，下单时锁定；点击 / 咨询 / 方案确认不产生可提现佣金；详见收入与对账。</div></div>']
+ ])+
+ '<div class="btn-row"><a class="btn ghost" data-go="ipad/i02">'+ic("share")+'<span style="margin-left:6px;">iPad 面谈 · 方案共读</span></a><a class="btn" data-go="advisor/share" style="flex:1.2;">合规展业素材</a></div>'
+));
+/* S-04 授权与学习闭环 */
+AS.authorize=aphone("authorize",appbar("项目授权","advisor/market")+body(
+ '<div class="ahdr" style="padding-left:0;"><div class="at" style="font-size:17px;">B 地区投资居留 · 授权申请</div><div class="as">学习必读 → 确认 → 申请 → A03 审核 → 绑定资质有效期</div></div>'+
+ '<div class="stepper" style="margin:6px 0 14px;">'+
+ '<div class="step cur"><div class="dotn">1</div><div><div class="stt">必读资料</div><div class="sts">3 份待确认</div></div></div>'+
+ '<div class="step"><div class="dotn">2</div><div class="stt">阅读确认</div></div>'+
+ '<div class="step"><div class="dotn">3</div><div class="stt">提交授权申请</div></div>'+
+ '<div class="step"><div class="dotn">4</div><div class="stt">A03 审核</div></div>'+
+ '<div class="step"><div class="dotn">5</div><div class="stt">授权生效（绑定有效期）</div></div></div>'+
+ '<div class="card"><h3>必读资料 <span class="more">版本 v0.9</span></h3>'+
+ '<div class="readitem"><div class="ri"><b>项目规则与交付边界</b><div class="rm">必读 · v0.9 · 8 分钟</div></div><span class="tag pending">未确认</span></div>'+
+ '<div class="readitem"><div class="ri"><b>禁表述清单与合规要求</b><div class="rm">必读 · A12 发布</div></div><span class="tag pending">未确认</span></div>'+
+ '<div class="readitem"><div class="ri"><b>收费方案与收取方说明</b><div class="rm">必读 · Fee v3</div></div><span class="tag pending">未确认</span></div></div>'+
+ '<a class="btn ghost" data-toast="已记录阅读确认（3/3），可提交授权申请">我已阅读并确认全部必读</a>'+
+ '<div style="height:10px;"></div><a class="btn" data-toast="授权申请已提交 A03，审核通过前仍不可展业该项目">提交授权申请</a>'+
+ '<div class="notice">授权绑定资质 / 备案有效期；到期未续<b>自动暂停新业务（停新接旧）</b>，存量客户进入交接。</div>'
+));
+/* S-05 合规分享与名片 */
+AS.share=aphone("share",appbar("合规分享与名片","advisor/workbench")+body(
+ '<div class="namecard"><div class="nname">陈某 <span style="font-size:12px;font-weight:400;opacity:.9;">身份规划顾问</span></div>'+
+ '<div class="nmeta">人员备案编号：示例 BJ-2026-018<br>从业年限：6 年 · 示例出入境咨询（北京）<br>授权项目：A 国技术居留 / 随行子女等 3 项</div>'+
+ '<div class="nverify">'+ic("checkcircle")+'资质与备案已核验 · 字段来自后台白名单</div></div>'+
+ '<div class="card"><h3>经核准素材库（A12）</h3>'+
+ '<div class="readitem"><div class="ri"><b>A 国技术居留项目介绍</b><div class="rm">已核准 · v3.2</div></div><a class="abtn sm ghost" data-toast="演示：生成合规分享链接 / 海报（带顾问标识）">生成</a></div>'+
+ '<div class="readitem"><div class="ri"><b>防骗教育《5 种“包过”话术》</b><div class="rm">公开内容 · 可转发</div></div><a class="abtn sm ghost" data-toast="演示：转发公开教育内容">转发</a></div>'+
+ '<div class="readitem" style="opacity:.6;"><div class="ri"><b>旧版项目海报</b><div class="rm">素材已过期（项目更新至 v3.2）</div></div><span class="lockchip">'+ic("ban")+"停止生成</span></div></div>"+
+ '<div class="notice danger" style="background:var(--red-bg);color:var(--red);">仅可生成经核准的素材与链接；分享物<b>不含佣金、内部备注、其他客户资料</b>；过期素材不可再分享，否则触发合规预警。</div>'+
+ '<a class="btn" data-toast="演示：生成我的合规名片（仅白名单已核验字段）">生成我的合规名片</a>'
+));
+
+/* S-06 我的客户 */
+AS.clients=aphone("clients",body(
+ '<div class="ahdr"><div class="at">我的客户</div><div class="as">仅本人关系内；来源 ≠ 归属，不可检索全平台</div></div>'+
+ '<div class="chips" data-select><span class="chip on">全部</span><span class="chip">待接受</span><span class="chip">服务中</span><span class="chip">方案中</span><span class="chip">协作</span></div>'+
+ '<a class="proj-row" data-go="advisor/client"><div class="pl"><b>客 #2051</b><div class="pm">技术居留 · 初评完成 · 待你接受</div></div><span class="tag pending">待接受</span></a>'+
+ '<a class="proj-row" data-go="advisor/client"><div class="pl"><b>客 #1980</b><div class="pm">技术居留 · CASE-A03 办理中</div></div><span class="tag verified">服务中</span></a>'+
+ '<a class="proj-row" data-go="advisor/client"><div class="pl"><b>客 #1902</b><div class="pm">方案 PROP-312 待复核</div></div><span class="tag info">方案中</span></a>'+
+ '<a class="proj-row" data-go="advisor/client"><div class="pl"><b>客 #2010</b><div class="pm">与顾问赵某重复线索，后台冲突复核中</div></div><span class="tag danger">协作·冲突</span></a>'+
+ '<div class="notice warn">冲突未裁决前不能发起方案 / 订单；一名客户仅一名主责顾问，换顾问须客户确认并留痕。</div>'+
+ '<div class="notice">平台外成交线索的内部处理指引：<b>不监控私人通讯</b>，但授权项目内成交须登记；未登记订单不享受合同核验、凭据存档与投诉退款保障（仅内部可见，不对客展示）。</div>'
+,true),"clients");
+/* S-07 客户详情与跟进 */
+AS.client=aphone("client",appbar("客户详情","advisor/clients")+body(
+ '<div class="ahdr" style="padding-left:0;"><div class="at" style="font-size:17px;">客 #1980 <span class="tag verified" style="margin-left:6px;">你为主责</span></div><div class="as">技术居留 · 关联方案 PROP-309 / 案件 CASE-A03</div></div>'+
+ '<div class="t0bar" style="background:var(--brand-50);color:var(--brand-d);"><div style="width:9px;height:9px;border-radius:50%;background:var(--brand);"></div><div style="flex:1;"><div class="t0t" style="color:var(--brand-d);">客户下一步：确认方案 PROP-309</div><div class="t0s" style="color:var(--brand-d);">可发送经模板的提醒，送达回执可查（A09）</div></div><a class="abtn sm ghost" data-toast="演示：发送提醒并生成送达回执">提醒</a></div>'+
+ atabs("sc",[["biz","方案/订单/案件"],["follow","跟进记录"],["scope","可见范围"]])+
+ apanels("sc",[
+  ["biz",'<div class="card" style="padding:4px 14px;">'+
+   '<div class="row" data-go="advisor/order"><span class="rl">方案 PROP-309</span><span class="tag verified">已转订单</span></div>'+
+   '<div class="row" data-go="advisor/order"><span class="rl">订单 ORD-2401</span><span class="tag verified">收款已核验</span></div>'+
+   '<div class="row" data-go="advisor/order"><span class="rl">案件 CASE-A03</span><span class="tag info">材料审核中</span></div>'+
+   '<div class="row"><span class="rl">官方受理回执</span><span class="tag pending">待核验凭据</span></div></div>'],
+  ["follow",'<div class="card"><div class="timeline2">'+
+   '<div class="tl"><div class="tt">09-18 电话沟通 30 分钟</div><div class="tm">客户确认随行配偶，需补亲属关系公证</div></div>'+
+   '<div class="tl"><div class="tt">09-16 方案 v2 已发送</div><div class="tm">客户对境外律师费有疑问，已解释收取方</div></div>'+
+   '<div class="tl"><div class="tt">09-12 面谈（iPad 共读）</div><div class="tm">客户确认理解不承诺事项</div></div></div>'+
+   '<a class="btn ghost sm" style="margin-top:8px;" data-toast="演示：新增跟进记录（不含客户敏感原件）">＋ 添加跟进</a></div>'],
+  ["scope",'<div class="card">'+
+   '<div class="wl yes">'+ic("check")+"<span>可见：客户主动提交的信息、方案 / 订单 / 本人案件进度</span></div>"+
+   '<div class="wl no">'+ic("lock")+"<span>证件原件默认不可见，须逐案额外授权（A06/A10 审批）</span></div>"+
+   '<div class="wl no">'+ic("ban")+"<span>不可见支付账户明细、其他顾问客户、服务方结算信息</span></div></div>"+
+   '<a class="btn ghost" data-toast="演示：发起原件批次访问申请（限时 / 水印 / 留痕）">申请查看原件</a>']
+ ])+'<div class="notice">iPad 面谈切到客户演示模式时，本页内部备注、佣金与其他客户信息自动隐藏。</div>'
+));
+/* S-08 订单与办理协同 */
+AS.order=aphone("order",appbar("订单与办理协同","advisor/workbench")+body(
+ '<div class="ahdr" style="padding-left:0;"><div class="at" style="font-size:17px;">发起订单 / 办理协同</div><div class="as">主体校验不通过不可发起；顾问不可改金额、到账与官方进度</div></div>'+
+ agate("ok","checkcircle","PROP-312 · 可发起订单","对客签约主体＝境内备案主体、境外交付＝已关联持牌方、收款账户＝签约主体，三要素一致。",
+  '<a class="abtn sm" data-toast="演示：提交订单，进入 A05 双人复核">提交订单</a>')+
+ agate("block","ban","ORD-2409-018 · 已被系统阻断","收款账户归属与签约主体不一致，<b>顾问端无法发起 / 无法收款</b>，已退回（后台 A05 可见详情）。")+
+ '<div class="card"><h3>发起订单（仅可选已发布内容）</h3>'+
+ '<div class="row"><span class="rl">项目 / 版本</span><span class="rv">A 国技术居留 v3.2（已授权）</span></div>'+
+ '<div class="row"><span class="rl">收费方案</span><span class="rv">Fee v3（已发布）</span></div>'+
+ '<div class="row"><span class="rl">费用分项与收取方</span><span class="rv">对客只读，不可改价</span></div>'+
+ '<div class="row"><span class="rl">合同模板</span><span class="rv">合规已审版本</span></div></div>'+
+ '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'+
+ '<a class="abtn ghost" style="height:44px;justify-content:center;" data-toast="演示：向办理员 / 服务方发起任务交接">任务交接</a>'+
+ '<a class="abtn ghost" style="height:44px;justify-content:center;" data-toast="演示：登记异常（同步 A06/A08，不改写状态）">异常登记</a></div>'+
+ agate("warn","ban","顾问端不可做",'修改合同金额、标记款项到账、改写官方进度、绕过主体校验——这些动作在顾问端不存在；财务到账以银行 / 支付核验为准，官方节点以凭据核验为准。')
+));
+/* S-09 收入与佣金对账 */
+AS.commission=aphone("commission",appbar("收入与佣金对账","advisor/workbench")+body(
+ '<div class="ahdr" style="padding-left:0;"><div class="at" style="font-size:17px;">收入与佣金</div><div class="as">仅平台登记订单可见 · 规则版本下单时锁定</div></div>'+
+ '<div class="minikpis"><div class="mk"><b>示例</b><span>可结算 CNY</span></div><div class="mk"><b>示例</b><span>应计待核验</span></div><div class="mk"><b>示例</b><span>结算处理中</span></div></div>'+
+ atabs("comm",[["list","佣金明细"],["rule","规则快照"],["disp","异议与调整"]])+
+ apanels("comm",[
+  ["list",'<div class="card" style="padding:4px 14px;">'+
+   '<div class="row"><span class="rl">ORD-2401 平台服务费分配</span><span class="tag verified">已结算</span></div>'+
+   '<div class="row"><span class="rl">ORD-2407</span><span class="tag info">结算处理中</span></div>'+
+   '<div class="row"><span class="rl">ORD-2409（已登记）</span><span class="tag pending">应计待核验</span></div>'+
+   '<div class="row"><span class="rl">PROP-309 方案确认</span><span class="tag gray">待触发（不产生可提现佣金）</span></div>'+
+   '<div class="row"><span class="rl">ORD-2401 外币段</span><span class="small muted">异币种分列，不合并</span></div></div>'+
+   '<div class="small muted" style="margin:6px 2px;">六态：预估 → 待触发 → 应计待核验 → 可结算 → 结算处理中 → 已结算（冻结 / 调整）。</div>'],
+  ["rule",'<div class="card"><div class="row"><span class="rl">当前规则版本</span><span class="rv">v1</span></div>'+
+   '<div class="row"><span class="rl">ORD-2401 适用版本</span><span class="rv">v1（下单时锁定快照）</span></div>'+
+   '<div class="row"><span class="rl">佣金来源</span><span class="rv">平台服务费分配</span></div>'+
+   '<div class="row"><span class="rl">点击 / 咨询 / 方案确认</span><span class="rv">不产生可提现佣金</span></div></div>'],
+  ["disp",'<div class="card"><a class="btn ghost sm" data-toast="演示：就某笔佣金发起异议（A07 双人复核）">发起对账异议</a>'+
+   '<div class="timeline2" style="margin-top:12px;"><div class="tl"><div class="tt">退款调整：ORD-2388 部分退款</div><div class="tm">佣金按规则同步调整，留痕可查</div></div></div></div>']
+ ])+
+ agate("warn","alert","平台外成交与私收款",'平台外成交不产生平台佣金、也不纳入平台保障；<b>私收客户款项一经核实即冻结新增授权并进入合规处置</b>，已发生的合规佣金按原规则结算，不连坐清零。')
+));
+/* S-10 学习与资料中心 */
+AS.learn=aphone("learn",body(
+ '<div class="ahdr"><div class="at">学习与资料</div><div class="as">轻量资料中心；项目必读版本确认与授权联动</div></div>'+
+ '<div class="card"><h3>项目必读（版本确认）</h3>'+
+ '<div class="readitem" data-go="advisor/project"><div class="ri"><b>A 国技术居留规则</b><div class="rm">v3.2 · 已确认 · 09-12</div></div><span class="tag verified">已确认</span></div>'+
+ '<div class="readitem" data-go="advisor/authorize"><div class="ri"><b>B 地区投资居留规则</b><div class="rm">v0.9 · 3 份必读未确认</div></div><span class="tag pending">待确认</span></div>'+
+ '<div class="readitem"><div class="ri"><b>禁表述清单（A12）</b><div class="rm">2026-09 版 · 已确认</div></div><span class="tag verified">已确认</span></div></div>'+
+ '<div class="card"><h3>常用资料</h3>'+
+ '<div class="row" data-toast="演示：打开资料（只读）"><span class="rl">费用透明讲解口径</span><span class="rv">›</span></div>'+
+ '<div class="row" data-toast="演示：打开资料（只读）"><span class="rl">材料清单与公证指引</span><span class="rv">›</span></div>'+
+ '<div class="row" data-toast="演示：打开资料（只读）"><span class="rl">T0 与客户沟通时限要求</span><span class="rv">›</span></div></div>'+
+ '<div class="notice">不建完整培训学院；资料更新后旧版本确认状态自动失效，需重新确认才可继续展业。</div>'
+,true),"learn");
+/* S-11 我的（顾问） */
+AS.me=aphone("me",body(
+ '<div class="ahdr"><div class="at">我的</div><div class="as">陈某 · 身份规划顾问</div></div>'+
+ '<div class="card"><div class="row"><span class="rl">人员备案</span><span class="tag verified">有效 · 2027-03 到期</span></div>'+
+ '<div class="row"><span class="rl">从业 / 执业资质</span><span class="tag verified">已核验</span></div>'+
+ '<div class="row" data-go="advisor/market"><span class="rl">项目授权</span><span class="rv">5 项有效 · 1 项临期 ›</span></div>'+
+ '<div class="row" data-go="advisor/onboard"><span class="rl">入驻承诺</span><span class="rv">已签署 ›</span></div></div>'+
+ '<div class="card" style="padding:4px 14px;">'+
+ '<div class="row" data-toast="演示：查看停新接旧与客户交接记录"><span class="rl">交接记录</span><span class="rv">›</span></div>'+
+ '<div class="row" data-go="advisor/commission"><span class="rl">收入与对账</span><span class="rv">›</span></div>'+
+ '<div class="row" data-toast="演示：平台外交易规则说明（内部）"><span class="rl">平台外交易规则说明</span><span class="rv">›</span></div>'+
+ '<div class="row" data-toast="演示：通知与隐私设置"><span class="rl">设置</span><span class="rv">›</span></div></div>'+
+ '<div class="notice">资质、备案与授权状态由后台 A03 统一管理，端内<b>只读不可自行修改</b>；状态变化实时生效。</div>'+
+ '<a class="btn gray" data-toast="演示：退出登录（不影响后台登记数据）">退出登录</a>'
+,true),"me");
+
+/* ================= iPad 面谈 ================= */
+function ipad(id,inner){return '<div class="screen-page" id="is-'+id+'"><div class="tablet"><div class="tscreen" id="ts-'+id+'">'+inner+'</div></div><div class="device-label">顾问 iPad 面谈 · '+id+' · 1080×780（右上角可切换客户演示模式）</div></div>';}
+function dtoggle(){return '<a class="demo-toggle" data-demo><span class="switch"></span><span class="lbl-work">工作模式</span><span class="lbl-demo">客户演示模式</span></a>';}
+function dflag(){return '<div class="demo-flag">'+ic("eye")+'<span><b>客户演示模式：</b>佣金、内部备注、其他客户信息已隐藏，客户所见即对客内容。</span></div>';}
+IP={};
+/* I-01 需求采集与并排比较 */
+IP.i01=ipad("i01",
+ '<div class="tpad-top"><div>'+ic("briefcase")+'</div><div><div class="ttl">面谈 · 需求采集与项目并排比较</div><div class="tsub"><span class="internal-only">顾问 陈某 · </span>现场录入 / 确认客户需求，最多 3 个项目并排</div></div>'+dtoggle()+'</div>'+dflag()+
+ '<div class="tpad-body"><div class="tpad-side"><h4>客户需求</h4>'+
+ '<div class="fld"><label>主申请人年龄 / 学历 / 语言</label><input class="input" placeholder="示例：35 / 本科 / 英语 B1"></div>'+
+ '<div class="fld"><label>主要目的</label><div class="chips" data-select><span class="chip on">子女教育</span><span class="chip">工作居留</span><span class="chip">长居养老</span></div></div>'+
+ '<div class="fld"><label>随行家庭成员</label><div class="chips" data-select><span class="chip on">配偶</span><span class="chip on">1 名子女</span></div></div>'+
+ '<div class="fld"><label>预算区间（分币种，不合计）</label><input class="input" placeholder="示例：CNY 服务费 + USD 境外费"></div>'+
+ '<div class="fld"><label>期望时间</label><input class="input" placeholder="示例：12–18 个月（非承诺）"></div>'+
+ '<a class="abtn" style="width:100%;justify-content:center;height:42px;" data-toast="演示：生成初步评估（仅输出 符合 / 差距 / 待确认，无评分无成功率）">生成初步评估</a>'+
+ '<div class="small muted" style="margin-top:9px;">需求与初评口径与客户端 P-05/P-06 一致。</div></div>'+
+ '<div class="tpad-main"><h4>并排比较（最多 3 个）</h4><div class="cmp-grid">'+
+ '<div class="cmp-card"><div class="ch">A 国 · 技术工作居留 <span class="tag verified" style="margin-left:4px;">符合</span></div><div class="crow"><span>核心门槛</span>职业在示例清单、语言 B1、有雇主 / 技能路径</div><div class="crow"><span>参考周期</span>9–14 个月（非承诺）</div><div class="crow"><span>费用与收取方</span>平台 / 境内机构 / 境外律所 / 官方，分项列示</div><div class="crow internal-only"><span>佣金 / 内部备注</span>仅工作模式可见</div><div class="crow"><span>自助范围</span>材料准备可自助，境外段由持牌方完成</div><a class="abtn sm" style="margin-top:9px;justify-content:center;" data-go="ipad/i02">进入方案共读</a></div>'+
+ '<div class="cmp-card"><div class="ch">A 国 · 随行子女路径 <span class="tag info" style="margin-left:4px;">待确认</span></div><div class="crow"><span>核心门槛</span>子女年龄 / 在学证明待核</div><div class="crow"><span>参考周期</span>随主申请（非承诺）</div><div class="crow"><span>费用与收取方</span>随主案，少量官方附加费</div><div class="crow internal-only"><span>佣金 / 内部备注</span>仅工作模式可见</div><div class="crow"><span>自助范围</span>亲属关系公证可先行准备</div></div>'+
+ '<div class="cmp-card"><div class="ch">C 国 · 数字游民 <span class="tag pending" style="margin-left:4px;">差距</span></div><div class="crow"><span>核心门槛</span>远程收入证明、语言要求待补</div><div class="crow"><span>参考周期</span>项目核验中，暂不承诺</div><div class="crow"><span>费用与收取方</span>收费方案待发布</div><div class="crow internal-only"><span>佣金 / 内部备注</span>仅工作模式可见</div><div class="crow"><span>自助范围</span>仅可浏览准备清单</div></div>'+
+ '</div><div class="notice" style="margin-top:12px;">并排比较不输出评分、排名或成功率；周期与费用均为参考 / 分项口径，最终以经复核方案与合同为准。</div></div></div>');
+/* I-02 方案共读 */
+IP.i02=ipad("i02",
+ '<div class="tpad-top"><div>'+ic("book")+'</div><div><div class="ttl">面谈 · 方案共读 <span class="internal-only">PROP-309 · 客 #1980</span></div><div class="tsub">与客户同读：建议、费用分项、责任、材料与不承诺事项</div></div>'+dtoggle()+'</div>'+dflag()+
+ '<div class="tpad-body cols3"><div class="tpad-side"><h4>方案目录</h4><div class="toc">'+
+ '<a class="on">建议与结论</a><a>路径与时间</a><a>费用分项与收取方</a><a>责任分工</a><a>材料清单</a><a>不承诺事项</a><a>下一步</a></div>'+
+ '<div class="card internal-only" style="background:var(--line-2);box-shadow:none;margin-top:10px;"><b style="font-size:12.5px;">内部备注（不对客）</b><div class="small muted" style="margin-top:5px;">客户对境外律师费敏感，需强调收取方与服务内容；勿在演示模式打开。</div></div>'+
+ '<div class="small muted" style="margin-top:10px;">禁表述实时校验：<span class="tag verified">本段未命中</span></div></div>'+
+ '<div class="tpad-main">'+
+ '<div class="readpanel"><h4>建议与结论（条件式，不承诺）</h4><div class="small" style="color:var(--t1);line-height:1.8;">基于已核验信息：主申请人在职业清单与语言上<b>符合</b>示例门槛；随行子女年龄证明<b>待确认</b>；资金证明为当前<b>差距项</b>。本结论不是获批保证，最终以官方审理为准。</div></div>'+
+ '<div class="readpanel"><h4>费用分项与收取方（异币种不相加）</h4>'+atbl(["费项","收取方","币种","性质"],[
+  ["平台服务费","平台","CNY 示例","确定"],["文件 / 公证翻译","境内机构","CNY 示例区间","估算"],["境外法律服务","<span class='internal-only'>境外律所（佣金另计）</span><span class='lbl-demo'>境外持牌方</span>","USD 示例","合同为准"],["官方申请费","官方（代收代付）","外币示例","可能调整"]
+ ])+'<div class="small muted" style="margin-top:7px;">不折算总价、“待确认”不等于 0；退款规则与节点写入合同。</div></div>'+
+ '<div class="readpanel"><h4>责任分工与材料</h4>'+atbl(["环节","责任方"],[["信息与材料真实性","客户"],["流程协调 / 进度凭据 / 透明告知","平台（境内主体）"],["境外法律段递交与沟通","境外持牌方"],["审批决定","目的地官方"]])+
+ '<div style="margin-top:9px;"><span class="tag verified">护照已核验</span> <span class="tag pending">无犯罪公证待补</span> <span class="src sp" style="margin-left:2px;">服务方报告</span></div></div>'+
+ '<div class="readpanel" style="border-color:#f0d2cf;background:#fdf6f5;"><h4 style="color:var(--red);">不承诺事项（须客户逐条知悉）</h4><div class="small" style="color:#7a2720;line-height:1.8;">不承诺获批 / 审理时限 / 永居入籍时间点；不承诺投资收益；平台与顾问不替代官方决定；参考周期非承诺。</div></div>'+
+ '<div class="readpanel"><h4>禁表述实时校验（演示）</h4><div class="input" style="height:auto;min-height:40px;padding:9px 12px;color:var(--red);">“这个项目我们包过，有内部渠道”</div><div class="notice danger" style="margin:8px 0 0;background:var(--red-bg);color:var(--red);">命中禁表述：包过 / 内部渠道。请修改后客户才能确认。</div></div>'+
+ '</div></div>'+
+ '<div class="confirmbar"><a class="abtn ghost" data-toast="已记录客户修改意见，顾问更新后重新共读，版本留痕">客户要修改</a><a class="abtn" data-toast="客户确认已记录（含不承诺事项知悉），可回销售端发起订单 S-08">客户确认理解并继续</a></div>');
+
+/* 渲染销售端 / iPad */
+Object.keys(AS).forEach(k=>{const w=document.createElement("div");w.innerHTML=AS[k];document.getElementById("advisor-wrap").appendChild(w.firstElementChild);});
+Object.keys(IP).forEach(k=>{const w=document.createElement("div");w.innerHTML=IP[k];document.getElementById("ipad-wrap").appendChild(w.firstElementChild);});
+
 let toastT;
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove("show"),1900);}
 function route(h){
@@ -1021,6 +1331,8 @@ function route(h){
  document.querySelectorAll(".screen-page").forEach(s=>s.classList.remove("on"));
  if(seg==="client"){const sk=key.split("/")[1]||"home-visitor";const el=document.getElementById("cs-"+sk);if(el){el.classList.add("on");const ph=el.querySelector(".pbody");if(ph)ph.scrollTop=0;}}
  if(seg==="admin"){renderAdmin(key.split("/")[1]||"home");}
+ if(seg==="advisor"){const sk=key.split("/")[1]||"workbench";const el=document.getElementById("as-"+sk);if(el)el.classList.add("on");}
+ if(seg==="ipad"){const sk=key.split("/")[1]||"i01";const el=document.getElementById("is-"+sk);if(el)el.classList.add("on");}
  window.scrollTo(0,0);
 }
 window.addEventListener("hashchange",()=>route());
@@ -1033,6 +1345,10 @@ document.addEventListener("click",e=>{
  if(sel){const box=sel.parentElement;box.querySelectorAll(".chip,.r").forEach(x=>x.classList.remove("on"));sel.classList.add("on");return;}
  const tab=e.target.closest("[data-tabs] [data-tab]");
  if(tab){const box=tab.closest("[data-tabs]");box.querySelectorAll("[data-tab]").forEach(x=>x.classList.remove("on"));tab.classList.add("on");document.querySelectorAll('[data-panelgroup="'+box.dataset.tabs+'"] [data-panel]').forEach(p=>p.classList.toggle("on",p.dataset.panel===tab.dataset.tab));return;}
+ const dm=e.target.closest("[data-demo]");
+ if(dm){const ts=dm.closest(".tscreen");if(ts)ts.classList.toggle("demo");return;}
+ const toc=e.target.closest(".toc a");
+ if(toc){const box=toc.parentElement;box.querySelectorAll("a").forEach(x=>x.classList.remove("on"));toc.classList.add("on");toast("演示：定位到「"+toc.textContent+"」章节共读");return;}
 });
 route();
 </script>
