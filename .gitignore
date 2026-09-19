@@ -1,0 +1,10 @@
+# 工具与自检产物（非交付物）
+.tmp-tool-results/
+**/_shots/
+**/_backup/
+_report.json
+
+# 系统/编辑器
+.DS_Store
+Thumbs.db
+*.pyc
