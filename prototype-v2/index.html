@@ -186,6 +186,88 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
 .future-view h2{font-size:18px;margin-bottom:8px;} .future-view p{color:var(--t2);font-size:13.5px;margin-bottom:18px;}
 #toast{position:fixed;left:50%;bottom:40px;transform:translateX(-50%) translateY(20px);background:rgba(20,38,43,.94);color:#fff;padding:11px 20px;border-radius:22px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:99;max-width:80%;text-align:center;}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* ================= 总后台（桌面 Web） ================= */
+.adm{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 59px);}
+.adm-side{background:linear-gradient(180deg,#0C474B,#0A3B3F);color:#cfe3e1;padding:14px 12px 20px;}
+.adm-brand{display:flex;align-items:center;gap:9px;color:#fff;font-weight:700;font-size:14.5px;padding:6px 10px 14px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:8px;}
+.adm-brand svg{width:21px;height:21px;}
+.adm-g{font-size:10.5px;letter-spacing:.1em;color:#7fa6a2;padding:14px 10px 5px;}
+.adm-ni{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:9px;color:#c4d9d6;font-size:13px;margin-bottom:1px;line-height:1.3;}
+.adm-ni svg{width:17px;height:17px;flex:none;}
+.adm-ni .ac{margin-left:auto;font-size:10px;color:#8fb0ac;}
+.adm-ni .bdg{margin-left:auto;background:#C2441F;color:#fff;font-size:10px;font-weight:600;border-radius:10px;padding:1px 7px;}
+.adm-ni.on{background:rgba(255,255,255,.13);color:#fff;font-weight:600;}
+.adm-side-foot{margin-top:14px;padding:10px;border-top:1px solid rgba(255,255,255,.12);font-size:11px;color:#93b5b1;line-height:1.6;}
+.adm-main{padding:20px 26px 70px;min-width:0;}
+.adm-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:6px;flex-wrap:wrap;}
+.adm-top h1{font-size:20px;font-weight:700;}
+.adm-top .sub{color:var(--t2);font-size:12.5px;margin-top:3px;max-width:640px;}
+.adm-top .acts{margin-left:auto;display:flex;gap:9px;align-items:center;flex-wrap:wrap;}
+.envpill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:#8a5312;background:var(--amber-bg);border:1px solid #efd9b8;border-radius:20px;padding:4px 11px;}
+.envpill .pulse{width:7px;height:7px;border-radius:50%;background:var(--amber);}
+.abtn{display:inline-flex;align-items:center;gap:7px;height:37px;padding:0 15px;border-radius:10px;font-size:13px;font-weight:600;background:var(--brand);color:#fff;white-space:nowrap;}
+.abtn:active{background:var(--brand-d);}
+.abtn.ghost{background:#fff;color:var(--brand-d);border:1px solid var(--line);box-shadow:var(--sh);}
+.abtn.gray{background:var(--line-2);color:var(--t1);}
+.abtn.danger{background:var(--red-bg);color:var(--red);}
+.abtn.blocked{background:var(--line-2);color:var(--t3);cursor:not-allowed;box-shadow:none;}
+.abtn.sm{height:31px;padding:0 12px;font-size:12px;border-radius:8px;}
+.abtn svg{width:15px;height:15px;}
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.agrid.three{grid-template-columns:repeat(3,1fr);}
+.acard{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh);padding:15px 18px;margin-bottom:14px;}
+.acard h3{font-size:14.5px;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.acard h3 .hint{font-size:11px;color:var(--t3);font-weight:400;margin-left:auto;}
+.acard h3 svg{width:18px;height:18px;color:var(--brand);}
+.atbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+.atbl th{text-align:left;font-size:11.5px;color:var(--t2);font-weight:600;background:var(--line-2);padding:9px 10px;white-space:nowrap;}
+.atbl th:first-child{border-radius:8px 0 0 8px;} .atbl th:last-child{border-radius:0 8px 8px 0;}
+.atbl td{padding:10px;border-top:1px solid var(--line);vertical-align:middle;}
+.atbl tbody tr{cursor:pointer;} .atbl tbody tr:hover td{background:#F8FBFA;}
+.atbl .nm{font-weight:600;color:var(--ink);} .atbl .meta{font-size:11.5px;color:var(--t2);margin-top:2px;}
+.gate{border-radius:12px;padding:13px 15px;margin-bottom:12px;font-size:12.5px;display:flex;gap:11px;align-items:flex-start;line-height:1.6;}
+.gate svg{width:19px;height:19px;flex:none;margin-top:2px;}
+.gate.block{background:var(--red-bg);color:#7a2720;border:1px solid #f2d3d0;}
+.gate.ok{background:var(--green-bg);color:#1c5e40;border:1px solid #cfe8db;}
+.gate.warn{background:var(--amber-bg);color:#8a5312;border:1px solid #f0dfc4;}
+.gate.info{background:var(--blue-bg);color:#194d6e;border:1px solid #cfe2ee;}
+.gate b{font-weight:700;}
+.gate .gacts{margin-top:9px;display:flex;gap:8px;flex-wrap:wrap;}
+.kpis.adm-kpi{grid-template-columns:repeat(4,1fr);margin:14px 0;}
+.kpis.adm-kpi .kpi{text-align:left;box-shadow:var(--sh);border:1px solid var(--line-2);}
+.kpis .kt{font-size:11px;color:var(--t2);} .kpis .kn{font-size:22px;margin:3px 0;}
+.kpi .kdelta{font-size:11px;} .kdelta.up{color:var(--green);} .kdelta.warn{color:var(--amber);} .kdelta.bad{color:var(--red);}
+.qrow{display:flex;align-items:center;gap:12px;padding:11px 4px;border-bottom:1px solid var(--line-2);}
+.qrow:last-child{border-bottom:none;}
+.qrow .qi-dot{width:8px;height:8px;border-radius:50%;flex:none;}
+.qrow .qt{flex:1;min-width:0;} .qrow .qt b{font-size:13px;font-weight:600;} .qrow .qt .qm{font-size:11.5px;color:var(--t2);margin-top:1px;}
+.bar-row{display:grid;grid-template-columns:150px 1fr 70px;gap:12px;align-items:center;margin:10px 0;font-size:12px;}
+.bart{height:9px;background:var(--line-2);border-radius:6px;overflow:hidden;}
+.barf{height:100%;background:linear-gradient(90deg,#0E5E63,#2B8A8F);border-radius:6px;}
+.barf.amber{background:linear-gradient(90deg,#B45309,#D89038);} .barf.red{background:linear-gradient(90deg,#B42318,#D3594E);}
+.wl{display:flex;gap:9px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--line);font-size:12.5px;line-height:1.5;}
+.wl:last-child{border-bottom:none;}
+.wl svg{width:17px;height:17px;flex:none;margin-top:1px;}
+.wl.yes svg{color:var(--green);} .wl.no svg{color:var(--red);}
+.pillset{display:flex;flex-wrap:wrap;gap:7px;}
+.kword{display:inline-flex;align-items:center;gap:6px;background:var(--red-bg);color:var(--red);border:1px solid #f0d2cf;border-radius:8px;padding:4px 10px;font-size:12px;}
+.split{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;align-items:start;}
+.audit-log{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;color:var(--t1);}
+.audit-log .al{display:grid;grid-template-columns:132px 1fr;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line);}
+.audit-log .alt{color:var(--t3);}
+[data-panelgroup] [data-panel]{display:none;} [data-panelgroup] [data-panel].on{display:block;}
+.a-tabs [data-tab]{cursor:pointer;}
+.matrix-go{color:var(--brand);font-weight:600;font-size:11.5px;white-space:nowrap;}
+@media(max-width:960px){
+ .adm{grid-template-columns:1fr;}
+ .adm-side{padding:8px 10px;}
+ .adm-brand{display:none;} .adm-g{display:none;} .adm-side-foot{display:none;}
+ #adm-nav{display:flex;gap:4px;overflow-x:auto;padding-bottom:4px;}
+ .adm-ni{flex:none;margin-bottom:0;} .adm-ni .ac,.adm-ni .bdg{display:none;}
+ .agrid,.agrid.three,.split{grid-template-columns:1fr;}
+ .kpis.adm-kpi{grid-template-columns:repeat(2,1fr);}
+ .bar-row{grid-template-columns:96px 1fr 56px;}
+}
 </style>
 </head>
 <body>
@@ -198,21 +280,21 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
     <a data-go="ipad">iPad 面谈</a>
     <a data-go="admin">总后台</a>
   </div>
-  <div class="stage-note">高保真可点击原型 · 依据 G-P2 页面目录 V0.2 · 全部为虚构示例数据，不构成移民/法律建议 · 本轮交付：客户端</div>
+  <div class="stage-note">高保真可点击原型 · 依据 G-P2 页面目录 V0.2 · 全部为虚构示例数据，不构成移民/法律建议 · 已交付：客户端 23 屏 + 总后台 Pass 1（14 视图）</div>
 </div>
 
 <!-- ============ 启动总览 ============ -->
 <section class="view on" id="view-launcher">
   <div class="hero">
     <h1>透明化身份规划服务平台 · 高保真原型</h1>
-    <p>客户知情选择、顾问受控展业、后台核验履责。当前为客户端 23 屏可点击原型；销售端、iPad 面谈、总后台将在随后批次完成。视觉方向：温和、清晰、不紧张、人人可用（Wise / Monzo / 友邦式气质，自有品牌，不复制其界面）。</p>
+    <p>客户知情选择、顾问受控展业、后台核验履责。已完成客户端 23 屏与总后台 Pass 1（控制台 + 前后台控制矩阵 + A01–A12 共 14 个后台视图）；销售端、iPad 面谈随后批次完成。视觉方向：温和、清晰、不紧张、人人可用（Wise / Monzo / 友邦式气质，自有品牌，不复制其界面）。</p>
     <span class="demo-tag">演示数据 · 示例国家/项目 · 无成功率展示 · 费用分项写明收取方</span>
   </div>
   <div class="entry-grid">
     <a class="entry" data-go="client/home-visitor"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="2" width="10" height="20" rx="2.5"/><line x1="10.5" y1="18.5" x2="13.5" y2="18.5"/></svg></div><b>客户服务端</b><div class="e-d">游客免留资浏览 → 初评 → 选顾问 → 方案/订单 → 办理可视 → 全球通行查询</div><div class="e-c">23 屏可点击 →</div></a>
     <a class="entry" data-go="advisor"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3 3-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/><circle cx="17.5" cy="9" r="2.4"/><path d="M16 14.6c2.6.2 4 1.7 4.5 3.9"/></svg></div><b>销售展业端（手机）</b><div class="e-d">工作台、项目超市、授权学习、客户、订单协同、佣金对账、合规分享</div><div class="e-c">下一阶段 →</div></a>
     <a class="entry" data-go="ipad"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="13" rx="2"/><line x1="10.5" y1="21" x2="13.5" y2="21"/></svg></div><b>顾问 iPad 面谈</b><div class="e-d">需求采集、项目并排比较、方案共读；演示/工作双模式</div><div class="e-c">下一阶段 →</div></a>
-    <a class="entry" data-go="admin"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><b>统一总后台</b><div class="e-d">核验治理、服务方/顾问授权、案件凭据、财务结算、通知、合规、审计</div><div class="e-c">下一阶段 →</div></a>
+    <a class="entry" data-go="admin"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><b>统一总后台</b><div class="e-d">控制台、前后台控制矩阵、内容/供给/案件/财务/通知/权限/合规 A01–A12</div><div class="e-c">Pass 1 · 14 视图可点击 →</div></a>
   </div>
 
   <div class="panel">
@@ -244,7 +326,16 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
 <!-- ============ 后续端（占位） ============ -->
 <section class="view" id="view-advisor"><div class="future-view"><div class="fi"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3 3-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/></svg></div><h2>销售展业端（手机）</h2><p>客户端确认后进入本批：工作台、项目超市、授权学习闭环、客户与跟进、订单协同、佣金六态对账、合规分享与名片，共 12 屏。</p><button class="btn sm ghost" data-go="client/home-visitor">先看客户端</button></div></section>
 <section class="view" id="view-ipad"><div class="future-view"><div class="fi"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="13" rx="2"/><line x1="10.5" y1="21" x2="13.5" y2="21"/></svg></div><h2>顾问 iPad 面谈</h2><p>需求采集与项目并排比较、方案共读两屏，含客户演示模式开关（隐藏佣金/内部备注/其他客户）。随销售端同批完成。</p><button class="btn sm ghost" data-go="client/home-visitor">先看客户端</button></div></section>
-<section class="view" id="view-admin"><div class="future-view"><div class="fi"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><h2>统一总后台</h2><p>A01–A12 共 12 个模块（含新增合规工作台、护照/签证数据源治理）。A0 供给与核验底座先行，最后一批完成。</p><button class="btn sm ghost" data-go="client/home-visitor">先看客户端</button></div></section>
+<section class="view" id="view-admin">
+ <div class="adm">
+  <aside class="adm-side">
+   <div class="adm-brand"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5z"/></svg>履约治理控制台</div>
+   <nav id="adm-nav"></nav>
+   <div class="adm-side-foot">演示环境 · 影子运行<br>数据均为虚构示例，不触发真实对外动作。</div>
+  </aside>
+  <div class="adm-main" id="adm-content"></div>
+ </div>
+</section>
 
 <div id="toast"></div>
 <script>
@@ -288,7 +379,21 @@ store:'<path d="M4 10 5.2 4h13.6L20 10M4 10v9h16v-9M4 10h16"/><path d="M9.5 19v-
 users:'<circle cx="9" cy="8.5" r="3.2"/><path d="M3 20c.6-3.2 3-4.8 6-4.8s5.4 1.6 6 4.8"/><path d="M16 5.6a3.2 3.2 0 0 1 0 6M17.5 15.6c2 .6 3.2 2 3.6 4.4"/>',
 send:'<path d="M4 12 20 4l-6 16-3.2-6.2z"/><path d="M10.8 13.8 20 4"/>',
 download:'<path d="M12 4v10m0 0 4.5-4.5M12 14l-4.5-4.5"/><path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"/>',
-more:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>'
+more:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',
+database:'<ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v6c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-6"/><path d="M4.5 11.5v6c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-6"/>',
+building:'<rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 7.2h1.6M13.4 7.2H15M9 11h1.6M13.4 11H15M9 14.8h1.6M13.4 14.8H15M10.2 21v-2.6h3.6V21"/>',
+chart:'<path d="M4 20V4M4 20h16"/><path d="M8 16.5v-4M12 16.5V8.5M16 16.5v-6.5"/>',
+key:'<circle cx="8" cy="8" r="3.6"/><path d="m10.8 10.8 8.2 8.2M16.5 14.5l2-2M14.5 16.5l2-2"/>',
+ban:'<circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/>',
+clipboard:'<rect x="6" y="4.5" width="12" height="16.5" rx="2"/><path d="M9.5 4.5a2.5 2.5 0 0 1 5 0M9 11h6M9 14.5h4"/>',
+headset:'<path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="3" y="13" width="3.6" height="5" rx="1.6"/><rect x="17.4" y="13" width="3.6" height="5" rx="1.6"/><path d="M20.4 17.5v1a3 3 0 0 1-3 3h-3.2"/>',
+link:'<path d="M10 14a4 4 0 0 0 6 .6l1.8-1.8a4 4 0 0 0-5.7-5.7L10.8 8.4"/><path d="M14 10a4 4 0 0 0-6-.6l-1.8 1.8a4 4 0 0 0 5.7 5.7l1-.9"/>',
+plus:'<path d="M12 5v14M5 12h14"/>',
+filter:'<path d="M3 5h18l-7 8v5l-4 2v-7z"/>',
+inbox:'<path d="M4 13 6.6 5h10.8L20 13M4 13v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5M4 13h4.2l1.4 1.8h4.8L15.8 13H20"/>',
+logout:'<path d="M14 4H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7"/><path d="M10 12h10m0 0-3.5-3.5M20 12l-3.5 3.5"/>',
+idcard:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.6 16c.5-1.4 1.6-2 2.9-2s2.4.6 2.9 2M14 10h4M14 13h4"/>',
+gavel:'<path d="m13.5 6.5 4 4M8.5 9.5l3 3M14 6l2.5-2.5 3.5 3.5L17.5 9.5M6 18.5 9 15.5M3 21h8M13 19l-2 2"/>'
 };
 function ic(n,cls){return '<svg class="'+(cls||"")+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(P[n]||"")+"</svg>";}
 function ico(n){return '<span style="display:inline-flex;vertical-align:-3px;">'+ic(n)+"</span>";}
@@ -570,7 +675,340 @@ const SM=[
  ["P-19","全球通行·我的护照","client/global-home"],["P-20","签证要求查询","client/visa-check"],["P-21","护照对比与通行力","client/passport-compare"]
 ];
 document.getElementById("sitemap").innerHTML=SM.map(x=>'<a class="sm" data-go="'+x[2]+'"><span class="pid">'+x[0]+"</span>"+x[1]+"</a>").join("")+
- '<div class="sm future"><span class="pid">S</span>销售端 12 屏（下一批）</div><div class="sm future"><span class="pid">I</span>iPad 面谈 2 屏（下一批）</div><div class="sm future"><span class="pid">A</span>总后台 12 模块（下一批）</div>';
+ '<a class="sm" data-go="admin/home"><span class="pid">A</span>总后台 Pass 1 · 14 视图可点击</a><div class="sm future"><span class="pid">S</span>销售端 12 屏（下一批）</div><div class="sm future"><span class="pid">I</span>iPad 面谈 2 屏（下一批）</div>';
+
+/* ================= 总后台 Pass 1 ================= */
+const ANAV=[
+ {g:"总览"},{k:"home",i:"grid",n:"控制台",c:"A00"},{k:"matrix",i:"eye",n:"前后台控制矩阵",c:""},
+ {g:"供给与内容"},{k:"a01",i:"store",n:"项目与内容治理",c:"A01",b:"3"},{k:"a02",i:"building",n:"服务方管理",c:"A02"},{k:"a03",i:"users",n:"顾问与授权",c:"A03",b:"1"},
+ {g:"履约"},{k:"a04",i:"chat",n:"客户关系与咨询",c:"A04",b:"2"},{k:"a05",i:"doccheck",n:"方案·报价·订单",c:"A05",b:"1"},{k:"a06",i:"folder",n:"案件与材料",c:"A06",b:"2"},{k:"a07",i:"coins",n:"财务与收费",c:"A07"},
+ {g:"服务与运营"},{k:"a08",i:"headset",n:"服务质量",c:"A08"},{k:"a09",i:"bell",n:"通知与运营内容",c:"A09"},
+ {g:"治理"},{k:"a10",i:"lock",n:"权限·安全·审计",c:"A10"},{k:"a11",i:"chart",n:"经营与质量报表",c:"A11"},{k:"a12",i:"shield",n:"合规工作台",c:"A12",b:"1"}
+];
+function atop(t,sub,acts){return '<div class="adm-top"><div><h1>'+t+'</h1><div class="sub">'+sub+'</div></div><div class="acts">'+(acts||"")+"</div></div>";}
+function acard(t,icon,body,hint){return '<div class="acard"><h3>'+(icon?ic(icon):"")+"<span>"+t+"</span>"+(hint?'<span class="hint">'+hint+"</span>":"")+"</h3>"+body+"</div>";}
+function atbl(heads,rows){return '<div style="overflow-x:auto;"><table class="atbl"><thead><tr>'+heads.map(h=>"<th>"+h+"</th>").join("")+"</tr></thead><tbody>"+rows.map(r=>"<tr>"+r.map(c=>"<td>"+c+"</td>").join("")+"</tr>").join("")+"</tbody></table></div>";}
+function akpis(a){return '<div class="kpis adm-kpi">'+a.map(k=>'<div class="kpi"><div class="kt">'+k[0]+'</div><div class="kn">'+k[1]+'</div><div class="kdelta '+(k[3]||"")+'">'+(k[2]||"")+"</div></div>").join("")+"</div>";}
+function agate(type,icon,t,lines,acts){return '<div class="gate '+type+'">'+ic(icon)+"<div><b>"+t+"</b>"+(lines?"<div>"+lines+"</div>":"")+(acts?'<div class="gacts">'+acts+"</div>":"")+"</div></div>";}
+function atabs(g,items){return '<div class="a-tabs" data-tabs="'+g+'">'+items.map((x,i)=>'<div data-tab="'+x[0]+'"'+(i===0?' class="on"':"")+">"+x[1]+"</div>").join("")+"</div>";}
+function apanels(g,ps){return '<div data-panelgroup="'+g+'">'+ps.map((p,i)=>'<div data-panel="'+p[0]+'"'+(i===0?' class="on"':'')+">"+p[1]+"</div>").join("")+"</div>";}
+function qrow(color,t,m,go){return '<a class="qrow" data-go="'+go+'"><span class="qi-dot" style="background:'+color+'"></span><div class="qt"><b>'+t+'</b><div class="qm">'+m+'</div></div><span class="matrix-go">去处理 ›</span></a>';}
+const ENVPILL='<span class="envpill"><span class="pulse"></span>演示 / 影子运行</span>';
+const PREVIEWBTN='<a class="abtn ghost sm" data-go="client/home-active">'+ic("eye")+"预览客户端</a>";
+
+const AV={};
+/* ---------- A00 控制台 ---------- */
+AV.home=atop("履约治理控制台","统一管理客户端展示内容、供给核验、案件履约、资金、通知与合规。当前为 <b>Pass 1</b>：以“控制客户端 + A0 供给核验底座”为范围；销售治理视图在销售端上线后补齐。",ENVPILL+PREVIEWBTN)+
+ akpis([["待核验事实","12","3 项阻断发布","warn"],["待发布复核","3","含 1 篇合规稿","warn"],["凭据门待办","5","核验人≠发起人",""],["T0 临期/超时","2","1 条已升级","bad"],["未决投诉","1","已隔离被诉顾问","warn"],["数据源异常","0","签证数据源在线","up"]])+
+ '<div class="agrid"><div>'+
+ acard("今日待办队列","inbox",
+  qrow("#C2441F","订单 ORD-2409-018 主体一致性校验未通过","签约主体 / 境外交付方 / 收款账户不一致，已阻断下单","admin/a05")+
+  qrow("#C2441F","案件 CASE-A02 官方受理回执 T0 剩余 4 小时","短信未达已转人工电话，仍未回执将升级主管","admin/a06")+
+  qrow("#B45309","B 地区投资居留项目 3 项事实缺核验记录","不能提交发布复核，客户端暂不展示","admin/a01")+
+  qrow("#B45309","顾问 林某 人员备案 9/30 到期","到期未续将自动暂停新业务（停新接旧）","admin/a03")+
+  qrow("#1D5F8A","初评问卷 v4 待合规审核","合规通过后客户端才更新","admin/a12")+
+  qrow("#1D5F8A","1 条 T0 通知短信未达，已换通道","送达回执与升级记录见通知中心","admin/a09"))+
+ "</div><div>"+
+ acard("后台动作如何影响客户端","eye",
+  '<div class="wl no">'+ic("ban")+"<span>项目未过发布复核 → 客户端“找项目 / 详情”<b>不展示</b></span></div>"+
+  '<div class="wl no">'+ic("ban")+"<span>顾问资质到期未续 → 名片<b>自动置灰</b>、不可新接咨询</span></div>"+
+  '<div class="wl no">'+ic("ban")+"<span>签证数据源授权失效 → “全球通行”<b>自动下架</b>并公告</span></div>"+
+  '<div class="wl yes">'+ic("check")+"<span>收费改价未复核 → 客户端仍展示<b>上一已发布版本</b></span></div>"+
+  '<div class="wl yes">'+ic("check")+"<span>官方凭据未核验 → 进度停在“公司审核”，<b>不显示已受理</b></span></div>")+
+ agate("info","lock","控制边界",'后台权限是“<b>配置 / 核验 / 发布 / 留痕</b>”。官方审理进度、付款到账、签证决定、获批结果等外部事实，只能登记凭据并核验，<b>不能在后台编造或改写成承诺</b>。')+
+ "</div></div>";
+
+/* ---------- 前后台控制矩阵 ---------- */
+AV.matrix=atop("前后台控制矩阵","客户端每一块内容由哪个后台模块、以什么动作控制。编辑≠发布、无核验不发布、发布需复核、全程留痕。",ENVPILL)+
+ acard("客户端内容 × 后台控制","eye",atbl(
+  ["客户端页面 / 内容","受控字段","后台模块","控制动作与规则","客户端"],
+  [
+   ["<span class='nm'>P-01 首页</span><div class='meta'>banner / 人群分区 / 精选 / 快捷</div>","内容位、排序、定时上下架","A09 + A01","编辑→复核→发布，版本留痕","<a class='matrix-go' data-go='client/home-visitor'>查看 ›</a>"],
+   ["<span class='nm'>P-02/03/04 找项目·详情·比较</span>","条件、限制、路径、版本、核验状态","A01","事实须挂核验记录才可发布","<a class='matrix-go' data-go='client/project-detail'>查看 ›</a>"],
+   ["<span class='nm'>费用分项 / 收取方</span>","收费方案、币种、确定/估算","A01·A05·A07","版本化、金额双人复核、异币种不相加","<a class='matrix-go' data-go='client/order'>查看 ›</a>"],
+   ["<span class='nm'>P-05/06 初评问卷与结果</span>","题目、结果口径","A12","审核发布；禁止成功率输出","<a class='matrix-go' data-go='client/assessment'>查看 ›</a>"],
+   ["<span class='nm'>P-07 顾问名片</span>","白名单字段、可见性","A03","仅核验字段上墙，资质驱动可见","<a class='matrix-go' data-go='client/advisor-card'>查看 ›</a>"],
+   ["<span class='nm'>联系顾问 / 分配</span>","分配、冲突、协作","A04","冲突人工复核、一名主责","<a class='matrix-go' data-go='client/advisor-card'>查看 ›</a>"],
+   ["<span class='nm'>P-08/09 方案·合同订单</span>","报价、合同模板、主体","A05","主体不一致即阻断，变更留痕","<a class='matrix-go' data-go='client/order'>查看 ›</a>"],
+   ["<span class='nm'>P-10/11/12 案件·进度·材料</span>","状态、凭据、材料、T0","A06·A02·A07","四级来源、核验门、核验人≠发起人","<a class='matrix-go' data-go='client/progress'>查看 ›</a>"],
+   ["<span class='nm'>P-13 消息中心</span>","模板、通道、回执","A09","多通道+送达回执+失败升级","<a class='matrix-go' data-go='client/messages'>查看 ›</a>"],
+   ["<span class='nm'>P-14/15 服务·工单投诉</span>","队列、路由、回避","A08","被投诉顾问不独占工单","<a class='matrix-go' data-go='client/ticket'>查看 ›</a>"],
+   ["<span class='nm'>P-16 防骗教育</span>","文章、官方渠道指引","A12·A01","审核后公开，游客可见","<a class='matrix-go' data-go='client/edu'>查看 ›</a>"],
+   ["<span class='nm'>P-17/18 我的·家庭授权</span>","授权、Consent、水印","A10·A12","逐项授权、下载审批、访问审计","<a class='matrix-go' data-go='client/family'>查看 ›</a>"],
+   ["<span class='nm'>P-19/20/21 全球通行</span>","数据源、授权、免责文案","A01·A12","第三方署名；授权失效自动下架","<a class='matrix-go' data-go='client/global-home'>查看 ›</a>"],
+   ["<span class='nm'>登录 / 账号 / 角色</span>","RBAC、数据范围","A10","服务端逐项校验，不靠隐藏按钮","<a class='matrix-go' data-go='client/login'>查看 ›</a>"]
+  ]))+
+ agate("block","ban","后台也不能控制的事",'官方审理进度与结果、付款是否到账、签证/免签决定、是否获批——<b>只能登记凭据并核验，不能手工改写</b>。任何“把状态改成已受理 / 已到账 / 已获批”的操作在系统中不存在。');
+
+/* ---------- A01 项目与内容治理 ---------- */
+AV.a01=atop("A01 · 项目与内容治理","项目库、核验台账、收费方案、发布复核、护照/签证数据源。客户端所有项目与事实内容的唯一事实源。",ENVPILL)+
+ atabs("a01",[["p","项目库"],["v","核验台账"],["fee","收费方案"],["pub","发布复核"],["ds","护照/签证数据源"]])+
+ apanels("a01",[
+  ["p",agate("block","ban","B 地区投资居留 v0.9 不能提交复核","3 项事实（投资门槛、居住要求、配额）<b>无官方或持牌方核验记录</b>，发布按钮已锁定；客户端不展示该项目。",'<a class="abtn sm" data-toast="演示：打开核验记录登记表（关联官方/持牌方凭据）">登记核验记录</a><a class="abtn sm gray" data-toast="演示：进入项目草稿编辑">编辑草稿</a>')+
+   acard("项目库（5）","store",atbl(["项目","版本","状态","核验记录","最近更新","操作"],[
+    ["<span class='nm'>【示例】A 国 · 技术工作居留</span>","v3.2","<span class='tag verified'>已发布</span>","<span class='tag verified'>完整</span>","09-12","<a class='abtn ghost sm' data-toast='演示：查看/编辑（改动生成草稿，不影响线上）'>查看</a>"],
+    ["<span class='nm'>【示例】A 国 · 随行子女路径</span>","v1.4","<span class='tag verified'>已发布</span>","<span class='tag verified'>完整</span>","09-11","<a class='abtn ghost sm' data-toast='演示：查看'>查看</a>"],
+    ["<span class='nm'>【示例】B 地区 · 投资居留</span>","v0.9","<span class='tag gray'>草稿</span>","<span class='tag danger'>缺 3 项</span>","09-16","<a class='abtn ghost sm' data-toast='演示：缺核验记录，提交复核将被拦截'>提交复核</a>"],
+    ["<span class='nm'>【示例】C 国 · 数字游民</span>","v0.3","<span class='tag pending'>待核验</span>","<span class='tag pending'>待补 2 项</span>","09-15","<a class='abtn ghost sm' data-toast='演示：查看'>查看</a>"],
+    ["<span class='nm'>【示例】A 国 · 雇主担保（暂停）</span>","v2.1","<span class='tag danger'>已下架</span>","供给暂停","09-05","<a class='abtn ghost sm' data-toast='演示：下架原因与恢复条件'>原因</a>"]
+   ]))+agate("info","edit","编辑≠发布","客户端只展示最近一个“复核通过并发布”的版本；任何编辑先成为草稿，不影响线上，发布需第二人复核。")],
+  ["v",acard("事实核验台账","doccheck",atbl(["事实项","所属项目","来源类型","核验人","日期 / 凭据","状态"],[
+    ["投资门槛 / 居住要求 / 配额","B 地区投资居留","<span class='tag gray'>待登记</span>","—","—","<span class='tag danger'>缺失·阻断发布</span>"],
+    ["技术职业清单","A 国技术居留","<span class='src off'>官方凭据</span>","王复核","09-10 / 官方清单链接","<span class='tag verified'>已核验</span>"],
+    ["随行子女年龄上限","A 国随行子女","<span class='src off'>官方凭据</span>","李复核","09-11 / 条例条文","<span class='tag verified'>已核验</span>"],
+    ["境外律所资质","A 国（持牌方）","<span class='src sp'>服务方报告</span>","王复核","09-09 / 持牌编号","<span class='tag verified'>已核验</span>"],
+    ["参考审理周期 9–14 个月","A 国技术居留","<span class='src sp'>服务方经验</span>","张登记","09-12 / 经验区间","<span class='tag pending'>参考·非承诺</span>"]
+   ]))+agate("warn","alert","经验值不得写成承诺","周期、排队、配额松紧等经验值只能标注“参考 / 非承诺”，不得写成官方时限，更不得据此给出获批保证。")],
+  ["fee",acard("收费方案（版本 v3，已发布）","coins",atbl(["费项","收取方","币种","金额（示例）","性质","状态"],[
+    ["平台服务费","平台","CNY","示例固定","确定","<span class='tag verified'>已发布</span>"],
+    ["文件 / 公证 / 翻译","境内机构","CNY","示例区间","估算","<span class='tag pending'>以实际票据</span>"],
+    ["境外法律服务","境外持牌方","USD","示例","合同为准","<span class='tag info'>合同载明</span>"],
+    ["官方申请费","官方（代收代付）","外币","示例","可能调整","<span class='tag pending'>代收代付</span>"]
+   ]))+agate("info","coins","费用规则","异币种<b>不相加、不折算总价</b>；“待确认”不得显示为 0；每一项写明收取方；改价须双人复核并保留历史版本，客户端只读已发布版本。",'<a class="abtn sm" data-toast="演示：新建改价草稿（提交双人复核）">新建改价草稿</a>')],
+  ["pub",acard("发布复核队列","shieldcheck",atbl(["对象","变更摘要","提交人","复核状态","操作"],[
+    ["A 国技术居留 v3.2","随行子女年龄口径更新","运营-周","<span class='tag verified'>已发布</span>","<span class='small muted'>复核人 李 · 留痕</span>"],
+    ["防骗教育《5 种“包过”话术》","新增消费者教育稿","内容-陈","<span class='tag pending'>待合规复核</span>","<a class='abtn ghost sm' data-go='admin/a12'>转 A12</a>"],
+    ["B 地区投资居留 v0.9","首次提交","运营-周","<span class='tag danger'>阻断：缺核验</span>","<span class='small muted'>补齐后自动可提交</span>"]
+   ]))+agate("info","shieldcheck","复核规则","复核须第二人；营销/教育/问卷类文案转 A12 合规；驳回必须填写原因并通知提交人，全过程留痕。")],
+  ["ds",agate("ok","check","签证数据源当前在线","示例第三方签证数据库（IATA Timatic 类）：授权有效至 <b>2027-01-31</b>，按月更新，最近核对 09-15、差异 2 条已修正；客户端 P-19/20/21 正常在线。")+
+   acard("护照 / 签证数据源治理","database",atbl(["数据源","类型","授权有效期","更新节拍","最近核对 / 差异","前端状态","操作"],[
+    ["示例第三方签证库","签证要求 / 停留","2027-01-31","月更","09-15 · 差异 2 已修正","<span class='tag verified'>在线</span>","<a class='abtn ghost sm' data-toast='演示：查看差异与核对记录'>差异</a>"],
+    ["第三方护照指数（署名）","通行力排名","订阅期内","月更","09-01 · 0","<span class='tag verified'>在线</span>","<a class='abtn ghost sm' data-toast='演示：查看第三方方法论与免责声明'>说明</a>"]
+   ]))+
+   agate("block","ban","授权失效的自动联动","授权过期、或连续 2 次核对失败 → “全球通行”<b>自动下架</b>、客户端显示“数据维护中”、首页发公告；<b>不允许用缓存继续对客</b>。",'<a class="abtn sm danger" data-toast="演示联动：全球通行已切换为“数据维护中”，并生成首页公告与下架记录">模拟授权失效</a>')+
+   agate("warn","alert","上线前置（Q6 未关闭）","第三方签证数据为专有数据，正式签约与更新机制（如 IATA Timatic 类授权）落实前，本模块只建框架、不对客上线；当前全部为示例数据。")]
+ ]);
+
+/* ---------- A02 服务方管理 ---------- */
+AV.a02=atop("A02 · 服务方管理","境内签约 / 备案主体与境外持牌方准入、受控门户账号、协议与保密跨境条款。",ENVPILL)+
+ akpis([["在册主体","5","境内 2 · 境外 3",""],["境内已备案","2","15 日内备案制","up"],["境外持牌","3","均关联境内主体","up"],["待补资质","1","1 家门户未开通","warn"]])+
+ acard("主体台账","building",atbl(["主体（示例）","类型","资质 / 备案","关联境内协作主体","受控门户","协议状态","操作"],[
+  ["示例出入境咨询（北京）","境内签约主体","<span class='tag verified'>已备案</span><div class='meta'>国务院令第 841 号</div>","—","不适用","<span class='tag verified'>已签</span>","<a class='abtn ghost sm' data-toast='演示：主体详情与备案凭证'>详情</a>"],
+  ["示例境外律所 · A 国","境外持牌方","<span class='tag verified'>持牌有效</span><div class='meta'>持牌编号示例</div>","示例出入境咨询（北京）","只读 + 水印","<span class='tag verified'>保密/跨境已签</span>","<a class='abtn ghost sm' data-toast='演示：持牌与协议详情'>详情</a>"],
+  ["示例境外机构 · B 地区","境外服务方","<span class='tag pending'>资质待补</span>","未关联","未开通","<span class='tag pending'>待办</span>","<a class='abtn sm' data-toast='演示：发起资质补全与关联流程'>去补全</a>"]
+ ]))+
+ agate("warn","alert","跨境服务边界","境外企业机构不得在境内直接提供中介服务。模式为：<b>境内备案主体对客签约 + 境外持牌方以 B2B 完成境外段</b>，每家境外主体必须关联一家境内协作主体。")+
+ '<div class="agrid"><div>'+acard("受控门户权限（示例境外律所）","lock",
+  '<div class="wl yes">'+ic("check")+"<span>可见本机构承接案件的材料清单与状态（只读、全屏水印）</span></div>"+
+  '<div class="wl yes">'+ic("check")+"<span>按批次上传服务方报告 / 凭据</span></div>"+
+  '<div class="wl no">'+ic("ban")+"<span>客户证件原件默认不可见，须逐案批次授权（A06/A10）</span></div>"+
+  '<div class="wl no">'+ic("ban")+"<span>不可下载、不可见其他客户、不可见佣金</span></div>"+
+  '<div class="wl no">'+ic("ban")+"<span>不可修改金额、官方进度或对客承诺</span></div>")+"</div><div>"+
+ acard("协议与条款","doccheck",atbl(["条款","状态"],[
+  ["服务委托与交付边界","<span class='tag verified'>已签</span>"],
+  ["保密与个人信息处理","<span class='tag verified'>已签</span>"],
+  ["跨境数据共享清单（最小化）","<span class='tag verified'>已审</span>"],
+  ["禁止夸大误导 / 协助虚假材料","<span class='tag verified'>已承诺</span>"],
+  ["资质到期联动暂停","<span class='tag info'>系统强制</span>"]
+ ]))+"</div></div>";
+
+/* ---------- A03 顾问与授权 ---------- */
+AV.a03=atop("A03 · 顾问与授权","顾问入驻审核、资质与人员备案、项目授权、名片字段白名单、到期处置。控制客户端 P-07 顾问名片与“联系顾问”。",ENVPILL)+
+ akpis([["在册顾问","18","",""],["授权正常","15","","up"],["授权临期","1","9/30 到期","warn"],["暂停 / 交接","2","含调查 1","bad"]])+
+ acard("顾问列表","users",atbl(["顾问（示例）","人员备案","从业 / 执业资质","授权项目","状态","操作"],[
+  ["<span class='nm'>林某</span>","<span class='tag verified'>已备案</span>","<span class='tag verified'>已核验</span>","3 项","<span class='tag pending'>备案 9/30 到期</span>","<a class='abtn ghost sm' data-toast='演示：续期通过则恢复；逾期自动暂停'>续期</a>"],
+  ["<span class='nm'>陈某</span>","<span class='tag verified'>已备案</span>","<span class='tag verified'>已核验</span>","5 项","<span class='tag verified'>正常</span>","<a class='abtn ghost sm' data-toast='演示：顾问详情与授权范围'>详情</a>"],
+  ["<span class='nm'>王某</span>","<span class='tag pending'>审核中</span>","<span class='tag pending'>待核验</span>","0 项","<span class='tag info'>入驻审核</span>","<a class='abtn sm' data-toast='演示：入驻资质审核（未通过不可见客户业务）'>审核</a>"],
+  ["<span class='nm'>赵某</span>","<span class='tag danger'>暂停</span>","调查中","2 项","<span class='tag danger'>停新接旧</span>","<a class='abtn danger sm' data-go='admin/a04'>交接客户</a>"]
+ ]))+
+ agate("warn","clock","到期处置自动化","资质 / 备案 / 项目授权到期未续 → 系统自动暂停其新业务（停新接旧），名片置灰、不可被选择；存量客户进入交接队列（A04），全程通知客户。")+
+ '<div class="agrid"><div>'+acard("名片字段白名单（控制 P-07）","idcard",
+  '<div class="wl yes">'+ic("check")+"<span>可上墙：姓名、人员备案编号、从业年限、所属机构、已授权项目、标准化擅长标签、核验状态</span></div>"+
+  '<div class="wl no">'+ic("ban")+"<span>禁止：成功率 / 获批率、私人联系方式、投资回报或保本承诺、“包过 / 内部渠道”话术、未核验头衔</span></div>"+
+  '<div class="wl no">'+ic("ban")+"<span>名片仅展示<b>已核验</b>字段；资质状态变化实时驱动可见性</span></div>")+"</div><div>"+
+ acard("授权学习闭环","book",
+  agate("info","book","与销售端 S-04 联动","完整“必读资料→确认→申请授权→审核→绑定有效期”闭环随销售端批次上线。Pass 1 后台先维护授权状态、有效期与项目可读范围。",
+   '<a class="abtn sm gray" data-toast="演示：Pass 2 随销售端开放学习/考试闭环">查看规则</a>'))+"</div></div>";
+
+/* ---------- A04 客户关系与咨询 ---------- */
+AV.a04=atop("A04 · 客户关系与咨询","咨询分配、关系归属、重复与冲突复核、换顾问与协作授权。",ENVPILL)+
+ akpis([["待分配咨询","2","","warn"],["服务中关系","134","",""],["冲突待复核","1","","bad"],["本周换顾问","1","已客户确认",""]])+
+ acard("咨询分配队列","chat",atbl(["来源","客户（脱敏）","需求标签","提交时间","状态","操作"],[
+  ["初步评估 P-06","客 #2051","技术居留 / 单人","09-18","<span class='tag pending'>待分配</span>","<a class='abtn sm' data-toast='演示：按授权项目+容量+回避规则分配'>自动分配</a>"],
+  ["名片·联系顾问","客 #2049","随行子女","09-18","<span class='tag pending'>待分配</span>","<a class='abtn ghost sm' data-toast='演示：人工指派主责顾问'>人工指派</a>"]
+ ]))+
+ agate("info","users","分配与归属规则","按“已授权项目 + 承接容量 + 利益回避”分配；<b>来源 ≠ 归属</b>；每个客户一名主责顾问，协作方需授权；顾问不可检索全平台客户，仅见本人关系内。")+
+ acard("关系与冲突复核","scale",atbl(["客户","主责顾问","协作 / 重复","关系状态","操作"],[
+  ["客 #1980","陈某","—","<span class='tag verified'>服务中</span>","<span class='small muted'>—</span>"],
+  ["客 #2010","林某 / 赵某（重复线索）","双方均跟进","<span class='tag danger'>冲突待复核</span>","<a class='abtn sm danger' data-toast='演示：人工确认唯一主责，另一方停止接触并留痕'>人工复核</a>"],
+  ["客 #1902","由林某 → 陈某","客户申请换顾问","<span class='tag info'>交接中</span>","<a class='abtn ghost sm' data-toast='演示：交接记录与客户确认凭证'>交接单</a>"]
+ ]))+
+ agate("block","ban","冲突期间的硬约束","同一客户被多人重复承接时系统不自动归并；冲突未裁决前<b>禁止发起方案与订单</b>，避免重复收费与口径冲突。");
+
+/* ---------- A05 方案报价与合同订单 ---------- */
+AV.a05=atop("A05 · 方案·报价·合同订单","报价复核、主体一致性校验门、合同模板、订单变更留痕。",ENVPILL)+
+ agate("block","ban","订单 ORD-2409-018 主体一致性校验未通过",'对客签约主体＝示例出入境咨询（北京）、境外交付＝示例律所 A，但<b>收款账户归属另一第三方</b>，三要素不一致。系统已<b>阻断下单与收款</b>。',
+  '<a class="abtn sm" data-toast="演示：并列展示签约主体/交付方/收款账户三要素与凭证">查看三要素</a><a class="abtn sm gray" data-toast="演示：退回顾问修正，客户端不可见此单">退回修正</a>')+
+ '<div class="agrid"><div>'+acard("报价复核队列","doccheck",atbl(["方案 / 订单","客户","收费方案","主体校验","金额复核","状态"],[
+  ["PROP-312","客 #2051","v3 已发布","<span class='tag verified'>一致</span>","<span class='tag pending'>待双人复核</span>","<a class='abtn sm' data-toast='演示：第二人复核（本人提交不可自审）'>复核</a>"],
+  ["PROP-309","客 #1980","v3 已发布","<span class='tag verified'>一致</span>","<span class='tag verified'>已通过</span>","<span class='small muted'>已转订单</span>"],
+  ["ORD-2409-018","客 #2010","—","<span class='tag danger'>不一致</span>","—","<span class='tag danger'>已阻断</span>"]
+ ]))+"</div><div>"+
+ acard("下单校验门","shieldcheck",
+  '<div class="wl yes">'+ic("check")+"<span>对客签约方＝境内备案主体</span></div>"+
+  '<div class="wl yes">'+ic("check")+"<span>境外段交付方＝已关联的持牌方</span></div>"+
+  '<div class="wl yes">'+ic("check")+"<span>收款账户＝签约主体账户</span></div>"+
+  '<div class="wl no">'+ic("ban")+"<span>任一不一致 → 阻断，不能生成订单 / 收款</span></div>"+
+  '<div class="wl no">'+ic("ban")+"<span>金额类修改双人复核；异币种不相加、不折总价</span></div>")+"</div></div>"+
+ acard("合同模板与订单留痕","files",
+  atbl(["模板 / 单据","版本","审核状态","用途"],[
+    ["服务协议（境内主体）","v5","<span class='tag verified'>合规已审</span>","对客签约"],
+    ["重要事项告知书","v3","<span class='tag verified'>合规已审</span>","风险与边界告知"],
+    ["数据授权 / 跨境共享同意书","v2","<span class='tag verified'>合规已审</span>","Consent 凭证"]
+  ])+
+  '<div class="timeline2" style="margin-top:12px;"><div class="tl"><div class="tt">方案生成 → 主体校验 → 双人复核 → 签约 → 收款核验</div><div class="tm">订单全链路状态机；任何金额/主体变更均留痕、可回溯、不可物理删除</div></div><div class="tl"><div class="tt">最近变更：PROP-309 境外律师费由“估算”改为合同载明金额</div><div class="tm">变更人 顾问陈 · 复核人 财务李 · 客户已重新确认 · 09-16</div></div></div>');
+
+/* ---------- A06 案件与材料 ---------- */
+AV.a06=atop("A06 · 案件与材料","案件工作台、材料审核、凭据核验门、门户批次授权、T0 时限配置。",ENVPILL)+
+ akpis([["进行中案件","42","",""],["凭据门待办","5","","warn"],["T0 临期","1","","warn"],["T0 超时","0（1 升级中）","","bad"]])+
+ agate("block","clock","CASE-A02 · 官方受理回执 T0 剩余 4 小时","回执尚未取得官方凭据；App 已达、短信未达并已转人工电话。仍未回执将升级主管并通知客户。<b>不允许把“公司已递交”展示为“官方已受理”。</b>",
+  '<a class="abtn sm" data-toast="演示：登记官方受理凭据（须核验人，非案件发起人）">登记凭据</a><a class="abtn sm gray" data-go="admin/a09">查看通知升级</a>')+
+ '<div class="agrid"><div>'+acard("材料审核与凭据核验门","folder",atbl(["材料 / 凭据","来源","提交","状态","核验人"],[
+  ["无犯罪记录公证","<span class='src cu'>客户提交</span>","客 #2051","<span class='tag pending'>待审核</span>","—"],
+  ["官方受理回执","<span class='src off'>官方凭据</span>","CASE-A02","<span class='tag danger'>待核验</span>","须非发起人"],
+  ["境外律所工作报告","<span class='src sp'>服务方报告</span>","门户批次","<span class='tag info'>已接收</span>","办理员"],
+  ["护照首页","<span class='src cu'>客户提交</span>","客 #1980","<span class='tag verified'>已核验</span>","王核验"]
+ ]))+"</div><div>"+
+ acard("门户批次授权 / T0 配置","settings",
+  atbl(["案件","服务方","范围 / 有效期","水印"],[["CASE-A03","示例律所 A","材料清单+报告 / 7 天","全屏水印"],["CASE-A02","示例律所 A","仅回执上传 / 3 天","全屏水印"]])+
+  '<div class="cat-sec">T0 时限配置</div>'+
+  atbl(["关键节点","时限","通道","升级"],[
+    ["收款核验","1 工作日","App+短信","主管"],
+    ["官方受理回执","2 工作日","App+短信+电话","主管+合规"],
+    ["补料通知","24 小时","App+短信","顾问主管"]
+  ]))+"</div></div>"+
+ agate("info","shieldcheck","职责分离（硬规则）","凭据核验人不能是该案件的办理发起人；官方凭据核验通过，进度时间线才从“公司审核”推进到“已核验官方凭据”。");
+
+/* ---------- A07 财务与收费 ---------- */
+AV.a07=atop("A07 · 财务与收费","Pass 1：收费方案落地、付款核验 / 到账、收据、代收代付。佣金规则与结算随销售端批次开放。",ENVPILL)+
+ atabs("a07",[["pay","收费与到账（Pass 1）"],["comm","佣金规则与结算（Pass 2）"]])+
+ apanels("a07",[
+  ["pay",agate("info","lock","财务权限边界","财务默认<b>无权查看证件原件</b>，仅依据银行 / 支付渠道凭据核验到账；客户上传水单不等于到账。")+
+   acard("付款核验 / 到账","coins",atbl(["订单","费项","币种金额（示例）","客户凭证","渠道到账","收据","状态"],[
+    ["ORD-2401","平台服务费","CNY 示例","<span class='src cu'>已上传</span>","<span class='src off'>已核验到账</span>","已开","<span class='tag verified'>已核验</span>"],
+    ["ORD-2409","平台服务费","CNY 示例","<span class='src cu'>已上传</span>","<span class='tag pending'>待核验</span>","待开","<span class='tag pending'>待核验≠到账</span>"]
+   ]))+
+   acard("官方费 · 代收代付","scale",atbl(["明细","票据","结算","状态"],[
+    ["官方申请费（外币示例）","官方票据待回传","多退少补","<span class='tag pending'>待票据</span>"],
+    ["官方费差额","—","退还客 #1980","<span class='tag info'>退款审批中</span>"]
+   ]))+agate("warn","alert","不混同原则","代收代付官方费与平台服务费分账记录、票据对应；异币种不相加；退款走双人复核并回写订单。")],
+  ["comm",agate("info","clock","随销售端批次开放","佣金“六态对账、规则快照、应计 / 可结算、异议、退款调整”对应销售端 S-09，将在销售端上线时补齐；Pass 1 仅预留规则版本库，<b>不做任何结算动作</b>。")+
+   acard("佣金规则版本库（预留）","coins",atbl(["规则版本","适用项目","状态"],[
+    ["v1（草稿）","A 国技术居留","<span class='tag gray'>未启用</span>"],
+    ["—","异币种订单","<span class='tag gray'>不合并 / 仅登记订单</span>"]
+   ]))]
+ ]);
+
+/* ---------- A08 服务质量 ---------- */
+AV.a08=atop("A08 · 服务质量","工单队列、投诉与争议处理、合规事件路由、满意度基线。",ENVPILL)+
+ akpis([["未决工单","7","",""],["投诉处理中","1","独立调查","warn"],["超时未响应","0","","up"],["满意度","基线采集中","样本不足不公布",""]])+
+ '<div class="agrid"><div>'+acard("工单 / 投诉队列","headset",atbl(["单号","类型","关联","渠道","处理人","状态"],[
+  ["T-1042","退款争议","ORD-2409 / 顾问林","App+电话","<b>客服主管（非顾问林）</b>","<span class='tag pending'>处理中</span>"],
+  ["T-1051","材料疑问","CASE-A03 / 顾问陈","App","客服-周","<span class='tag info'>已分派</span>"],
+  ["T-1055","进度质疑","CASE-A02","App","办理员+主管","<span class='tag pending'>核实中</span>"]
+ ]))+"</div><div>"+
+ acard("投诉处理闭环","shieldcheck",
+  '<div class="timeline2"><div class="tl"><div class="tt">受理与登记</div><div class="tm">自动关联订单/案件/顾问，告知处理时限</div></div>'+
+  '<div class="tl"><div class="tt">独立调查（A12 协同）</div><div class="tm">被投诉顾问不得参与、不能关闭工单</div></div>'+
+  '<div class="tl"><div class="tt">处理方案与客户确认</div><div class="tm">含补救 / 退款 / 交接，记录送达回执</div></div>'+
+  '<div class="tl"><div class="tt">关闭与回访</div><div class="tm">满意度独立回访，结果进入质量基线</div></div></div>')+"</div></div>"+
+ agate("block","ban","回避原则","被投诉顾问不独占工单、不能自行关闭；调查人与被调查顾问分离；涉嫌违规线索同步 A12 合规工作台。");
+
+/* ---------- A09 通知与运营内容 ---------- */
+AV.a09=atop("A09 · 通知与运营内容","多通道模板、送达回执看板、失败换通道 / 升级、首页与运营内容位编排。",ENVPILL)+
+ atabs("a09",[["tpl","消息模板"],["rcpt","送达回执"],["home","首页与内容位"]])+
+ apanels("a09",[
+  ["tpl",acard("模板库（业务 / 营销分离）","mail",atbl(["模板","类别","触发","审核状态"],[
+    ["官方受理回执提醒","<span class='tag info'>业务·T0</span>","凭据核验后","<span class='tag verified'>已发布</span>"],
+    ["补料通知（24h）","<span class='tag info'>业务·T0</span>","材料退回","<span class='tag verified'>已发布</span>"],
+    ["资金到账 / 收据","<span class='tag info'>业务</span>","到账核验","<span class='tag verified'>已发布</span>"],
+    ["新项目上线介绍","<span class='tag gray'>营销</span>","运营","<span class='tag pending'>单独同意+可退订</span>"]
+   ]))+agate("info","send","业务与营销分离","T0 / 合同 / 资金类业务消息不受营销退订影响，必须送达；营销消息须单独同意、一键退订，两类不混发。")],
+  ["rcpt",acard("送达回执看板（近 7 日）","bell",atbl(["消息","App","短信","人工电话","结果"],[
+    ["CASE-A02 受理回执提醒","<span class='tag verified'>已达·已读</span>","<span class='tag danger'>未达</span>","<span class='tag verified'>已接通</span>","<span class='tag pending'>已升级主管</span>"],
+    ["客 #2051 补料通知","<span class='tag verified'>已达</span>","<span class='tag verified'>已达</span>","—","<span class='tag verified'>完成</span>"],
+    ["ORD-2401 到账收据","<span class='tag verified'>已达·已读</span>","—","—","<span class='tag verified'>完成</span>"]
+   ]))+agate("block","alert","T0 未达必须升级","不能只显示“已发送”。失败按 App→短信→人工电话逐级换通道，仍未达升级主管 / 合规，并形成升级记录回写案件。")],
+  ["home",acard("首页内容位编排（控制 P-01）","grid",atbl(["内容位","当前内容","状态","操作"],[
+    ["主 Banner","身份规划，从看清条件和费用开始","<span class='tag verified'>已发布</span>","<a class='abtn ghost sm' data-toast='演示：编辑生成草稿，复核后发布'>编辑</a>"],
+    ["人群分区","子女随行 / 雇主技能 / 长居与财税","<span class='tag verified'>已发布</span>","<a class='abtn ghost sm' data-toast='演示：调整排序与上下架'>编排</a>"],
+    ["精选项目","A 国技术居留（已发布项目）","<span class='tag verified'>已发布</span>","<a class='abtn ghost sm' data-go='admin/a01'>项目库</a>"],
+    ["防骗教育入口","5 种“包过”话术（经 A12）","<span class='tag verified'>已发布</span>","<a class='abtn ghost sm' data-go='admin/a12'>合规</a>"]
+   ]))+'<a class="abtn" data-go="client/home-visitor" style="margin-top:6px;">'+ic("eye")+"在客户端预览</a>"+agate("info","edit","草稿不影响线上","内容编辑→复核→发布 / 定时上下架；项目类卡片只能选“已发布”项目，下架项目自动从首页移除。")]
+ ]);
+
+/* ---------- A10 权限安全与审计 ---------- */
+AV.a10=atop("A10 · 权限·安全·审计","账号角色、跨境共享审批、水印 / 下载审批、Consent 查询、访问审计、导出限制。",ENVPILL)+
+ '<div class="agrid"><div>'+acard("账号与角色（RBAC）","key",atbl(["角色","关键权限","数据范围 / 约束"],[
+  ["运营编辑","项目 / 内容草稿","不可发布"],
+  ["内容复核","发布复核","不可自审"],
+  ["核验员","凭据核验","不可核验本人发起案件"],
+  ["办理员","案件 / 材料","按授权范围"],
+  ["财务","到账核验 / 收据","不可见证件原件"],
+  ["合规","备案 / 词库 / 事件 / 审计","不背销售指标，可一票暂停"],
+  ["管理员","账号 / 角色","双人操作 + 全审计"]
+ ]))+"</div><div>"+
+ acard("待审批","lock",atbl(["申请","类型","状态"],[
+  ["示例律所 A · CASE-A03 原件访问","跨境共享 / 批次","<span class='tag pending'>待审批</span>"],
+  ["办理员下载含证件 PDF","水印 / 下载","<span class='tag pending'>待审批</span>"],
+  ["客 #1980 家庭授权查询","Consent 核验","<span class='tag verified'>已授权</span>"]
+ ]))+"</div></div>"+
+ acard("Consent 查询与访问审计","files",
+  '<div class="notice" style="margin-bottom:10px;">Consent 以“人员 × 案件 × 动作 × 有效期”记录，可按客户 / 案件检索；授权撤回实时生效，门户访问随即关闭。</div>'+
+  '<div class="audit-log"><div class="al"><span class="alt">09-18 16:02</span><span>核验员 王 · 核验 CASE-A02 回执 · 允许</span></div><div class="al"><span class="alt">09-18 15:40</span><span>门户 示例律所A · 查看 CASE-A03 清单（水印）· 允许</span></div><div class="al"><span class="alt">09-18 14:11</span><span>办理员 赵 · 批量导出客户列表 · <b style="color:var(--red)">拒绝（未走审批）</b></span></div><div class="al"><span class="alt">09-18 11:05</span><span>顾问 林 · 访问非本人客户 #1942 · <b style="color:var(--red)">拒绝并告警</b></span></div></div>')+
+ agate("info","shieldcheck","服务端逐项校验","权限在服务端逐动作校验，不靠前端隐藏按钮；批量导出须审批、加水印、留登记，敏感字段默认脱敏。");
+
+/* ---------- A11 经营与质量报表 ---------- */
+AV.a11=atop("A11 · 经营与质量报表","影子运行期先建基线、后定目标。展示履约质量与数据质量，不把未验证转化率当成绩。",ENVPILL)+
+ '<div class="agrid"><div>'+acard("履约 / 合规基线（示例）","chart",
+  [["通知送达率",96.4,""],["T0 按时回执率",92,"amber"],["凭据核验中位时长（≤1.2 工作日）",78,""],["主体校验一次通过率",97,""],["对账差异（应为 0）",100,"up"]].map(b=>
+   '<div class="bar-row"><span>'+b[0]+'</span><div class="bart"><div class="barf '+b[2]+'" style="width:'+b[1]+'%"></div></div><b>'+(b[0].indexOf("差异")>=0?"0 笔":b[1]+"%")+"</b></div>").join("")+
+  '<div class="bar-row"><span>资质 / 备案临期</span><div class="bart"><div class="barf red" style="width:18%"></div></div><b>1 项</b></div>')+
+ agate("warn","clock","先基线后目标","上述为试运行基线，未设奖惩阈值；样本与口径稳定后再与团队约定目标，避免早期数字诱导动作变形。")+"</div><div>"+
+ acard("线索口径（不公布成功率）","filter",
+  '<div class="audit-log"><div class="al"><span class="alt">口径</span><span>平台外线索 → 初评完成 → 选择顾问 → 方案 → 签约</span></div><div class="al"><span class="alt">用途</span><span>仅校准漏斗与服务容量，<b>不展示获批率 / 成功率</b></span></div><div class="al"><span class="alt">样本</span><span>邀请制小样本，单月数字不作对外宣传</span></div></div>')+
+ acard("数据质量","database",atbl(["指标","数值"],[
+  ["缺核验记录的事实项","12（3 项阻断发布）"],
+  ["签证数据差异（本月）","2，已修正"],
+  ["材料一次提交完整率","81%"]
+ ]))+"</div></div>";
+
+/* ---------- A12 合规工作台 ---------- */
+AV.a12=atop("A12 · 合规工作台","机构 / 人员备案台账、素材与问卷审核、禁表述词库、合规事件、同意与跨境审计。合规不背销售指标。",ENVPILL)+
+ atabs("a12",[["file","机构/人员备案"],["rev","素材与问卷审核"],["words","禁表述词库"],["evt","合规事件"],["con","同意与跨境审计"]])+
+ apanels("a12",[
+  ["file",acard("备案台账（国务院令第 841 号）","idcard",atbl(["对象","类型","状态","期限 / 到期","操作"],[
+    ["示例出入境咨询（北京）","机构备案","<span class='tag verified'>已备案</span>","设立 15 日内完成","<span class='small muted'>已归档</span>"],
+    ["林某等 3 人","人员备案（机构办理）","<span class='tag verified'>2 人已备案</span>","林某 9/30 到期","<a class='abtn sm' data-toast='演示：生成续办提醒并联动 A03 到期处置'>提醒续办</a>"],
+    ["既有机构补办","90 日过渡期","<span class='tag pending'>进行中</span>","约至 2026-12-14","<span class='small muted'>到期前督办</span>"]
+   ]))+agate("warn","alert","到期联动","人员备案到期未续 → 联动 A03 自动暂停新业务；境外机构不得在境内直接提供中介服务的口径纳入巡查。")],
+  ["rev",acard("待审素材 / 模板","gavel",atbl(["对象","类型","提交","状态","操作"],[
+    ["初步评估问卷 v4","问卷模板","产品","<span class='tag pending'>待合规审核</span>","<a class='abtn sm' data-toast='演示：通过后客户端问卷更新；驳回须填原因'>审核</a>"],
+    ["防骗教育《5 种“包过”话术》","教育内容","内容","<span class='tag pending'>待审</span>","<a class='abtn ghost sm' data-toast='演示：审核消费者教育内容'>审核</a>"],
+    ["顾问分享海报 ×3","分享素材","市场","<span class='tag info'>销售端上线后高频</span>","<span class='small muted'>Pass 2</span>"]
+   ]))],
+  ["words",acard("禁表述 / 高风险词库","ban",'<div class="pillset">'+
+    ["包过","100% 成功","成功率第一","官方内部渠道","保证获批","投资保本 / 稳赚","低价全包无隐形费","包规避移民监","可做虚假材料"].map(w=>'<span class="kword">'+w+"</span>").join("")+
+   '</div>')+agate("info","shieldcheck","分级处置","命中分级处理：提示修改 → 强制修改才能保存 → 拦截发布；词库辅助审核，<b>不替代人工合规判断</b>，覆盖项目描述、顾问话术与分享素材。")],
+  ["evt",acard("合规事件","gavel",atbl(["事件","级别","调查人","状态 / 处置"],[
+    ["顾问赵某涉嫌夸大承诺","<span class='tag danger'>高</span>","合规-周（非其主管）","调查中，已暂停新业务（A03）"],
+    ["B 地区项目事实缺核验即报审","<span class='tag pending'>中</span>","合规-吴","已拦截发布，补核验"]
+   ]))+agate("block","scale","独立性","合规不背销售指标；调查人与被调查顾问分离；合规可对内容、人员、项目一票暂停，处置记录进入审计。")],
+  ["con",acard("同意与跨境共享审计","key",atbl(["客户","授权对象","数据范围","有效期","状态"],[
+    ["客 #1980","示例律所 A","案件材料清单（不含原件）","7 天批次","<span class='tag verified'>有效</span>"],
+    ["客 #2051","家庭成员（配偶）","进度只读","长期（可撤回）","<span class='tag verified'>有效</span>"],
+    ["客 #1902","原顾问林某","案件访问","已随换顾问终止","<span class='tag danger'>已失效</span>"]
+   ]))+agate("info","eye","与 A10 一致","跨境共享逐项审批、最小化、全屏水印；撤回实时生效；所有授权与访问在 A10 留痕，可按客户导出凭证。")]
+ ]);
+
+/* ---------- 后台导航与渲染 ---------- */
+document.getElementById("adm-nav").innerHTML=ANAV.map(x=>x.g?'<div class="adm-g">'+x.g+'</div>':'<a class="adm-ni" data-am="'+x.k+'" data-go="admin/'+x.k+'">'+ic(x.i)+"<span>"+x.n+"</span>"+(x.b?'<span class="bdg">'+x.b+"</span>":(x.c?'<span class="ac">'+x.c+"</span>":""))+"</a>").join("");
+function renderAdmin(sk){
+ sk=AV[sk]?sk:"home";
+ document.getElementById("adm-content").innerHTML=AV[sk];
+ document.querySelectorAll("#adm-nav .adm-ni").forEach(a=>a.classList.toggle("on",a.dataset.am===sk));
+ window.scrollTo(0,0);
+}
 
 let toastT;
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove("show"),1900);}
@@ -582,6 +1020,7 @@ function route(h){
  document.querySelectorAll(".seg a").forEach(a=>a.classList.toggle("on",a.dataset.go===(segMap[seg]||"launcher")));
  document.querySelectorAll(".screen-page").forEach(s=>s.classList.remove("on"));
  if(seg==="client"){const sk=key.split("/")[1]||"home-visitor";const el=document.getElementById("cs-"+sk);if(el){el.classList.add("on");const ph=el.querySelector(".pbody");if(ph)ph.scrollTop=0;}}
+ if(seg==="admin"){renderAdmin(key.split("/")[1]||"home");}
  window.scrollTo(0,0);
 }
 window.addEventListener("hashchange",()=>route());
@@ -591,7 +1030,9 @@ document.addEventListener("click",e=>{
  const tt=e.target.closest("[data-toast]");
  if(tt){toast(tt.dataset.toast);return;}
  const sel=e.target.closest("[data-select] .chip,[data-select] .r");
- if(sel){const box=sel.parentElement;box.querySelectorAll(".chip,.r").forEach(x=>x.classList.remove("on"));sel.classList.add("on");}
+ if(sel){const box=sel.parentElement;box.querySelectorAll(".chip,.r").forEach(x=>x.classList.remove("on"));sel.classList.add("on");return;}
+ const tab=e.target.closest("[data-tabs] [data-tab]");
+ if(tab){const box=tab.closest("[data-tabs]");box.querySelectorAll("[data-tab]").forEach(x=>x.classList.remove("on"));tab.classList.add("on");document.querySelectorAll('[data-panelgroup="'+box.dataset.tabs+'"] [data-panel]').forEach(p=>p.classList.toggle("on",p.dataset.panel===tab.dataset.tab));return;}
 });
 route();
 </script>
