@@ -335,21 +335,21 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
     <a data-go="ipad">iPad 面谈</a>
     <a data-go="admin">总后台</a>
   </div>
-  <div class="stage-note">高保真可点击原型 · 依据 G-P2 页面目录 V0.2 · 全部为虚构示例数据，不构成移民/法律建议 · 已交付：客户端 23 屏 + 总后台 Pass 1（14 视图）+ 销售展业端 12 屏 + iPad 面谈 2 屏</div>
+  <div class="stage-note">高保真可点击原型 · 依据 G-P2 页面目录 V0.2 · 全部为虚构示例数据，不构成移民/法律建议 · 已交付：客户端 23 屏 + 销售展业端 12 屏 + iPad 面谈 2 屏 + 统一总后台 14 视图（Pass 1 内容履约 + Pass 2 销售治理），形成「一后台控两端」闭环</div>
 </div>
 
 <!-- ============ 启动总览 ============ -->
 <section class="view on" id="view-launcher">
   <div class="hero">
     <h1>透明化身份规划服务平台 · 高保真原型</h1>
-    <p>客户知情选择、顾问受控展业、后台核验履责。已完成客户端 23 屏、总后台 Pass 1（控制台 + 前后台控制矩阵 + A01–A12 共 14 个后台视图）、销售展业端 12 屏与 iPad 面谈 2 屏（演示/工作双模式）；后台 Pass 2 销售治理视图为下一阶段。视觉方向：温和、清晰、不紧张、人人可用（Wise / Monzo / 友邦式气质，自有品牌，不复制其界面）。</p>
+    <p>客户知情选择、顾问受控展业、后台核验履责。已完成客户端 23 屏、销售展业端 12 屏、iPad 面谈 2 屏（演示/工作双模式）与统一总后台（控制台、前后台/销售端双控制矩阵、A01–A12 共 14 个视图，含 Pass 2 销售治理：授权学习、关系交接、佣金六态结算、分享物审核、顾问业绩）。视觉方向：温和、清晰、不紧张、人人可用（Wise / Monzo / 友邦式气质，自有品牌，不复制其界面）。</p>
     <span class="demo-tag">演示数据 · 示例国家/项目 · 无成功率展示 · 费用分项写明收取方</span>
   </div>
   <div class="entry-grid">
     <a class="entry" data-go="client/home-visitor"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="2" width="10" height="20" rx="2.5"/><line x1="10.5" y1="18.5" x2="13.5" y2="18.5"/></svg></div><b>客户服务端</b><div class="e-d">游客免留资浏览 → 初评 → 选顾问 → 方案/订单 → 办理可视 → 全球通行查询</div><div class="e-c">23 屏可点击 →</div></a>
     <a class="entry" data-go="advisor/workbench"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3 3-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/><circle cx="17.5" cy="9" r="2.4"/><path d="M16 14.6c2.6.2 4 1.7 4.5 3.9"/></svg></div><b>销售展业端（手机）</b><div class="e-d">工作台、项目超市、授权学习闭环、客户跟进、订单协同、佣金六态对账、合规分享</div><div class="e-c">12 屏可点击 →</div></a>
     <a class="entry" data-go="ipad/i01"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="13" rx="2"/><line x1="10.5" y1="21" x2="13.5" y2="21"/></svg></div><b>顾问 iPad 面谈</b><div class="e-d">需求采集、项目并排比较、方案共读；演示/工作双模式一键切换</div><div class="e-c">2 屏可点击 →</div></a>
-    <a class="entry" data-go="admin"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><b>统一总后台</b><div class="e-d">控制台、前后台控制矩阵、内容/供给/案件/财务/通知/权限/合规 A01–A12</div><div class="e-c">Pass 1 · 14 视图可点击 →</div></a>
+    <a class="entry" data-go="admin"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><b>统一总后台</b><div class="e-d">控制台、前后台控制矩阵、内容/供给/案件/财务/通知/权限/合规 A01–A12</div><div class="e-c">14 视图可点击（含销售治理）→</div></a>
   </div>
 
   <div class="panel">
@@ -730,7 +730,7 @@ const SM=[
  ["P-19","全球通行·我的护照","client/global-home"],["P-20","签证要求查询","client/visa-check"],["P-21","护照对比与通行力","client/passport-compare"]
 ];
 document.getElementById("sitemap").innerHTML=SM.map(x=>'<a class="sm" data-go="'+x[2]+'"><span class="pid">'+x[0]+"</span>"+x[1]+"</a>").join("")+
- '<a class="sm" data-go="admin/home"><span class="pid">A</span>总后台 Pass 1 · 14 视图可点击</a><a class="sm" data-go="advisor/workbench"><span class="pid">S</span>销售展业端 · 12 屏可点击</a><a class="sm" data-go="ipad/i01"><span class="pid">I</span>iPad 面谈 · 2 屏（演示/工作双模式）</a>';
+ '<a class="sm" data-go="admin/home"><span class="pid">A</span>统一总后台 · 14 视图（Pass 1+2）</a><a class="sm" data-go="advisor/workbench"><span class="pid">S</span>销售展业端 · 12 屏可点击</a><a class="sm" data-go="ipad/i01"><span class="pid">I</span>iPad 面谈 · 2 屏（演示/工作双模式）</a>';
 
 /* ================= 总后台 Pass 1 ================= */
 const ANAV=[
@@ -753,7 +753,7 @@ const PREVIEWBTN='<a class="abtn ghost sm" data-go="client/home-active">'+ic("ey
 
 const AV={};
 /* ---------- A00 控制台 ---------- */
-AV.home=atop("履约治理控制台","统一管理客户端展示内容、供给核验、案件履约、资金、通知与合规。当前为 <b>Pass 1</b>：以“控制客户端 + A0 供给核验底座”为范围；销售治理视图在销售端上线后补齐。",ENVPILL+PREVIEWBTN)+
+AV.home=atop("履约治理控制台","一个后台控制两端：客户端展示内容、顾问展业边界、供给核验、案件履约、资金结算与合规。<b>Pass 1</b> 控客户端与 A0 核验底座，<b>Pass 2</b> 控销售展业（授权学习、关系分配、佣金结算、分享物审核、业绩质量）。",ENVPILL+PREVIEWBTN)+
  akpis([["待核验事实","12","3 项阻断发布","warn"],["待发布复核","3","含 1 篇合规稿","warn"],["凭据门待办","5","核验人≠发起人",""],["T0 临期/超时","2","1 条已升级","bad"],["未决投诉","1","已隔离被诉顾问","warn"],["数据源异常","0","签证数据源在线","up"]])+
  '<div class="agrid"><div>'+
  acard("今日待办队列","inbox",
@@ -762,14 +762,20 @@ AV.home=atop("履约治理控制台","统一管理客户端展示内容、供给
   qrow("#B45309","B 地区投资居留项目 3 项事实缺核验记录","不能提交发布复核，客户端暂不展示","admin/a01")+
   qrow("#B45309","顾问 林某 人员备案 9/30 到期","到期未续将自动暂停新业务（停新接旧）","admin/a03")+
   qrow("#1D5F8A","初评问卷 v4 待合规审核","合规通过后客户端才更新","admin/a12")+
+  qrow("#B45309","陈某 B 地区投资居留授权申请待审","必读已确认，A03 审核通过才可展业","admin/a03")+
+  qrow("#1D5F8A","3 份顾问分享素材待合规审核","通过后进入 S-05 核准库，过期素材停分享","admin/a12")+
+  qrow("#1D5F8A","ORD-2407 佣金结算处理中 · 1 笔异议待复核","六态对账，双人复核，异币种分列","admin/a07")+
   qrow("#1D5F8A","1 条 T0 通知短信未达，已换通道","送达回执与升级记录见通知中心","admin/a09"))+
  "</div><div>"+
- acard("后台动作如何影响客户端","eye",
+ acard("后台动作如何影响两端","eye",
   '<div class="wl no">'+ic("ban")+"<span>项目未过发布复核 → 客户端“找项目 / 详情”<b>不展示</b></span></div>"+
   '<div class="wl no">'+ic("ban")+"<span>顾问资质到期未续 → 名片<b>自动置灰</b>、不可新接咨询</span></div>"+
   '<div class="wl no">'+ic("ban")+"<span>签证数据源授权失效 → “全球通行”<b>自动下架</b>并公告</span></div>"+
-  '<div class="wl yes">'+ic("check")+"<span>收费改价未复核 → 客户端仍展示<b>上一已发布版本</b></span></div>"+
-  '<div class="wl yes">'+ic("check")+"<span>官方凭据未核验 → 进度停在“公司审核”，<b>不显示已受理</b></span></div>")+
+  '<div class="wl no">'+ic("ban")+"<span>授权未审核通过 → 销售端项目超市<b>锁佣金、不可报价</b></span></div>"+
+  '<div class="wl no">'+ic("ban")+"<span>素材未过审 / 已过期 → S-05 <b>停止生成分享</b></span></div>"+
+  '<div class="wl yes">'+ic("check")+"<span>收费改价未复核 → 两端仍展示<b>上一已发布版本</b></span></div>"+
+  '<div class="wl yes">'+ic("check")+"<span>官方凭据未核验 → 进度停在“公司审核”，<b>不显示已受理</b></span></div>"+
+  '<div class="wl yes">'+ic("check")+"<span>无佣金规则 / 规则未发布 → <b>不产生任何应计佣金</b></span></div>")+
  agate("info","lock","控制边界",'后台权限是“<b>配置 / 核验 / 发布 / 留痕</b>”。官方审理进度、付款到账、签证决定、获批结果等外部事实，只能登记凭据并核验，<b>不能在后台编造或改写成承诺</b>。')+
  "</div></div>";
 
@@ -793,7 +799,20 @@ AV.matrix=atop("前后台控制矩阵","客户端每一块内容由哪个后台�
    ["<span class='nm'>P-19/20/21 全球通行</span>","数据源、授权、免责文案","A01·A12","第三方署名；授权失效自动下架","<a class='matrix-go' data-go='client/global-home'>查看 ›</a>"],
    ["<span class='nm'>登录 / 账号 / 角色</span>","RBAC、数据范围","A10","服务端逐项校验，不靠隐藏按钮","<a class='matrix-go' data-go='client/login'>查看 ›</a>"]
   ]))+
- agate("block","ban","后台也不能控制的事",'官方审理进度与结果、付款是否到账、签证/免签决定、是否获批——<b>只能登记凭据并核验，不能手工改写</b>。任何“把状态改成已受理 / 已到账 / 已获批”的操作在系统中不存在。');
+ acard("销售展业端 / iPad × 后台控制（Pass 2）","users",atbl(
+  ["销售端页面 / 能力","受控字段","后台模块","控制动作与规则","销售端"],
+  [
+   ["<span class='nm'>S-01 工作台 / 任务</span>","T0 任务、客户队列、升级","A04·A06·A09","按关系范围下发；T0 未达自动升级","<a class='matrix-go' data-go='advisor/workbench'>查看 ›</a>"],
+   ["<span class='nm'>S-02/03 项目超市 / 内部规则</span>","授权范围、可讲 / 禁表述、交付边界","A01·A12·A03","未授权锁佣金、不可报价；词库实时校验","<a class='matrix-go' data-go='advisor/market'>查看 ›</a>"],
+   ["<span class='nm'>S-04/S-10 授权学习闭环</span>","必读版本、确认记录、授权有效期","A03","学习→确认→申请→审核；到期停新接旧","<a class='matrix-go' data-go='advisor/authorize'>查看 ›</a>"],
+   ["<span class='nm'>S-05 合规分享 / 名片</span>","素材版本、名片白名单字段","A12·A03","仅核准素材可生成；过期停分享","<a class='matrix-go' data-go='advisor/share'>查看 ›</a>"],
+   ["<span class='nm'>S-06/07 客户与详情</span>","关系归属、冲突、原件可见范围","A04·A10","一名主责；原件逐案授权、水印留痕","<a class='matrix-go' data-go='advisor/clients'>查看 ›</a>"],
+   ["<span class='nm'>S-08 订单协同</span>","主体三要素、金额、合同模板","A05·A07","不一致即阻断；顾问不可改价 / 到账 / 进度","<a class='matrix-go' data-go='advisor/order'>查看 ›</a>"],
+   ["<span class='nm'>S-09 佣金六态对账</span>","规则版本、结算、异议、调整","A07","下单锁版本；仅登记订单；双人复核","<a class='matrix-go' data-go='advisor/commission'>查看 ›</a>"],
+   ["<span class='nm'>顾问业绩与质量</span>","履约质量、合规事件、对账差异","A11·A08","不考核获批率；线索不推断跳单","<span class='small muted'>A11 / A08</span>"],
+   ["<span class='nm'>iPad I-01/I-02 面谈</span>","演示模式、禁表述校验、方案版本","A12·A05","演示态隐藏佣金 / 备注 / 其他客户","<a class='matrix-go' data-go='ipad/i02'>查看 ›</a>"]
+  ]))+
+ agate("block","ban","后台也不能控制的事",'官方审理进度与结果、付款是否到账、签证/免签决定、是否获批——<b>只能登记凭据并核验，不能手工改写</b>。任何“把状态改成已受理 / 已到账 / 已获批”的操作在系统中不存在；后台同样不能手工调增顾问佣金，结算只走规则版本与复核。');
 
 /* ---------- A01 项目与内容治理 ---------- */
 AV.a01=atop("A01 · 项目与内容治理","项目库、核验台账、收费方案、发布复核、护照/签证数据源。客户端所有项目与事实内容的唯一事实源。",ENVPILL)+
@@ -858,37 +877,66 @@ AV.a02=atop("A02 · 服务方管理","境内签约 / 备案主体与境外持牌
  ]))+"</div></div>";
 
 /* ---------- A03 顾问与授权 ---------- */
-AV.a03=atop("A03 · 顾问与授权","顾问入驻审核、资质与人员备案、项目授权、名片字段白名单、到期处置。控制客户端 P-07 顾问名片与“联系顾问”。",ENVPILL)+
- akpis([["在册顾问","18","",""],["授权正常","15","","up"],["授权临期","1","9/30 到期","warn"],["暂停 / 交接","2","含调查 1","bad"]])+
- acard("顾问列表","users",atbl(["顾问（示例）","人员备案","从业 / 执业资质","授权项目","状态","操作"],[
+AV.a03=atop("A03 · 顾问与授权","顾问入驻审核、资质与人员备案、项目授权学习闭环、名片字段白名单、到期处置。控制客户端 P-07 名片与销售端 S-02/S-04/S-05/S-10。",ENVPILL)+
+ akpis([["在册顾问","18","",""],["授权正常","15","","up"],["授权申请待审","1","陈某·B 地区","warn"],["暂停 / 交接","2","含调查 1","bad"]])+
+ atabs("a03",[["roster","顾问与备案"],["learn","授权学习运营（S-04/S-10）"],["card","名片字段白名单（P-07/S-05）"]])+
+ apanels("a03",[
+  ["roster",acard("顾问列表","users",atbl(["顾问（示例）","人员备案","从业 / 执业资质","授权项目","状态","操作"],[
   ["<span class='nm'>林某</span>","<span class='tag verified'>已备案</span>","<span class='tag verified'>已核验</span>","3 项","<span class='tag pending'>备案 9/30 到期</span>","<a class='abtn ghost sm' data-toast='演示：续期通过则恢复；逾期自动暂停'>续期</a>"],
   ["<span class='nm'>陈某</span>","<span class='tag verified'>已备案</span>","<span class='tag verified'>已核验</span>","5 项","<span class='tag verified'>正常</span>","<a class='abtn ghost sm' data-toast='演示：顾问详情与授权范围'>详情</a>"],
   ["<span class='nm'>王某</span>","<span class='tag pending'>审核中</span>","<span class='tag pending'>待核验</span>","0 项","<span class='tag info'>入驻审核</span>","<a class='abtn sm' data-toast='演示：入驻资质审核（未通过不可见客户业务）'>审核</a>"],
   ["<span class='nm'>赵某</span>","<span class='tag danger'>暂停</span>","调查中","2 项","<span class='tag danger'>停新接旧</span>","<a class='abtn danger sm' data-go='admin/a04'>交接客户</a>"]
  ]))+
- agate("warn","clock","到期处置自动化","资质 / 备案 / 项目授权到期未续 → 系统自动暂停其新业务（停新接旧），名片置灰、不可被选择；存量客户进入交接队列（A04），全程通知客户。")+
- '<div class="agrid"><div>'+acard("名片字段白名单（控制 P-07）","idcard",
+ agate("warn","clock","到期处置自动化","资质 / 备案 / 项目授权到期未续 → 系统自动暂停其新业务（停新接旧），名片置灰、不可被选择、超市锁定；存量客户进入交接队列（A04），全程通知客户。")],
+  ["learn",'<div class="agrid"><div>'+acard("项目必读版本库（驱动 S-10/S-04）","book",atbl(["项目","必读资料","版本","顾问确认","状态"],[
+   ["A 国技术居留","规则 / 禁表述 / 收费 3 份","v3.2","15/15 已确认","<span class='tag verified'>现行</span>"],
+   ["B 地区投资居留","规则 / 禁表述 / 收费 3 份","v0.9","6/18 已确认","<span class='tag pending'>推广中</span>"],
+   ["A 国雇主担保","规则 1 份","v2.1","已随项目暂停","<span class='tag gray'>已停用</span>"]
+  ]))+agate("info","clock","版本即授权","资料改版后旧确认自动失效，顾问须重新确认才可继续展业；未确认全部必读，授权申请按钮在销售端不可提交。")+"</div><div>"+
+  acard("授权申请审批队列","gavel",atbl(["顾问","项目","必读确认","申请时间","操作"],[
+   ["陈某","B 地区投资居留","3/3 已确认","09-19","<a class='abtn sm' data-toast='演示：通过 → 绑定资质有效期，销售端解锁展业'>通过</a><a class='abtn ghost sm' data-toast='演示：驳回须填原因并通知顾问'>驳回</a>"],
+   ["王某","A 国技术居留","入驻未完成","—","<span class='small muted'>入驻审核后才可申请</span>"]
+  ]))+
+  acard("授权状态机（自动执行）","shieldcheck",
+   '<div class="stepper stepsmini" style="margin-top:4px;"><div class="step done"><div class="dotn">'+ic("check")+'</div><div class="stt">学习必读</div></div><div class="step done"><div class="dotn">'+ic("check")+'</div><div class="stt">阅读确认</div></div><div class="step cur"><div class="dotn">3</div><div class="stt">申请 → A03 审核</div></div><div class="step"><div class="dotn">4</div><div class="stt">授权生效·绑定有效期</div></div><div class="step"><div class="dotn">5</div><div class="stt">到期停新接旧 / 交接</div></div></div>')+
+  "</div></div>"],
+  ["card",acard("名片字段白名单（控制 P-07 / S-05）","idcard",
   '<div class="wl yes">'+ic("check")+"<span>可上墙：姓名、人员备案编号、从业年限、所属机构、已授权项目、标准化擅长标签、核验状态</span></div>"+
   '<div class="wl no">'+ic("ban")+"<span>禁止：成功率 / 获批率、私人联系方式、投资回报或保本承诺、“包过 / 内部渠道”话术、未核验头衔</span></div>"+
-  '<div class="wl no">'+ic("ban")+"<span>名片仅展示<b>已核验</b>字段；资质状态变化实时驱动可见性</span></div>")+"</div><div>"+
- acard("授权学习闭环","book",
-  agate("info","book","与销售端 S-04 联动","完整“必读资料→确认→申请授权→审核→绑定有效期”闭环随销售端批次上线。Pass 1 后台先维护授权状态、有效期与项目可读范围。",
-   '<a class="abtn sm gray" data-toast="演示：Pass 2 随销售端开放学习/考试闭环">查看规则</a>'))+"</div></div>";
+  '<div class="wl no">'+ic("ban")+"<span>名片仅展示<b>已核验</b>字段；资质状态变化实时驱动可见性；字段模板变更须经 A12 审核</span></div>")+
+  agate("info","eye","与销售端一致","顾问在 S-05 生成的名片只能取白名单字段，端内不可自行编辑；本页修改模板 → 复核 → 发布后两端同步。")]
+ ]);
 
 /* ---------- A04 客户关系与咨询 ---------- */
-AV.a04=atop("A04 · 客户关系与咨询","咨询分配、关系归属、重复与冲突复核、换顾问与协作授权。",ENVPILL)+
- akpis([["待分配咨询","2","","warn"],["服务中关系","134","",""],["冲突待复核","1","","bad"],["本周换顾问","1","已客户确认",""]])+
- acard("咨询分配队列","chat",atbl(["来源","客户（脱敏）","需求标签","提交时间","状态","操作"],[
+AV.a04=atop("A04 · 客户关系与咨询","咨询分配、关系归属、重复与冲突复核、换顾问五步交接、协作授权。控制销售端 S-06/S-07。",ENVPILL)+
+ akpis([["待分配咨询","2","","warn"],["服务中关系","134","",""],["冲突待复核","1","","bad"],["交接中","2","含赵某停新接旧","warn"]])+
+ atabs("a04",[["queue","分配与冲突"],["handoff","换顾问 / 退出交接"]])+
+ apanels("a04",[
+  ["queue",acard("咨询分配队列","chat",atbl(["来源","客户（脱敏）","需求标签","提交时间","状态","操作"],[
   ["初步评估 P-06","客 #2051","技术居留 / 单人","09-18","<span class='tag pending'>待分配</span>","<a class='abtn sm' data-toast='演示：按授权项目+容量+回避规则分配'>自动分配</a>"],
   ["名片·联系顾问","客 #2049","随行子女","09-18","<span class='tag pending'>待分配</span>","<a class='abtn ghost sm' data-toast='演示：人工指派主责顾问'>人工指派</a>"]
  ]))+
- agate("info","users","分配与归属规则","按“已授权项目 + 承接容量 + 利益回避”分配；<b>来源 ≠ 归属</b>；每个客户一名主责顾问，协作方需授权；顾问不可检索全平台客户，仅见本人关系内。")+
+ agate("info","users","分配与归属规则","按“已授权项目 + 承接容量 + 利益回避”分配；<b>客户明确选择 / 同意 ＋ 顾问接受才成立服务关系</b>；来源 ≠ 归属；每个客户一名主责顾问，协作方需授权；顾问不可检索全平台客户。")+
  acard("关系与冲突复核","scale",atbl(["客户","主责顾问","协作 / 重复","关系状态","操作"],[
   ["客 #1980","陈某","—","<span class='tag verified'>服务中</span>","<span class='small muted'>—</span>"],
   ["客 #2010","林某 / 赵某（重复线索）","双方均跟进","<span class='tag danger'>冲突待复核</span>","<a class='abtn sm danger' data-toast='演示：人工确认唯一主责，另一方停止接触并留痕'>人工复核</a>"],
   ["客 #1902","由林某 → 陈某","客户申请换顾问","<span class='tag info'>交接中</span>","<a class='abtn ghost sm' data-toast='演示：交接记录与客户确认凭证'>交接单</a>"]
  ]))+
- agate("block","ban","冲突期间的硬约束","同一客户被多人重复承接时系统不自动归并；冲突未裁决前<b>禁止发起方案与订单</b>，避免重复收费与口径冲突。");
+ agate("block","ban","冲突期间的硬约束","同一客户被多人重复承接时系统不自动归并；冲突未裁决前<b>禁止发起方案与订单</b>，避免重复收费与口径冲突。")],
+  ["handoff",'<div class="agrid"><div>'+acard("换顾问五步交接（客户确认留痕）","scale",
+   '<div class="timeline2"><div class="tl"><div class="tt">1 · 客户发起 / 同意</div><div class="tm">客户端申请或顾问触发，均须客户明确确认</div></div>'+
+   '<div class="tl"><div class="tt">2 · 冻结新分配</div><div class="tm">原顾问停止新动作，在办事项列清单</div></div>'+
+   '<div class="tl"><div class="tt">3 · 资料与在办交接</div><div class="tm">方案 / 订单 / 案件 / 材料权限移交，原件授权不自动继承</div></div>'+
+   '<div class="tl"><div class="tt">4 · 新顾问接受</div><div class="tm">新主责确认承接容量与授权项目匹配</div></div>'+
+   '<div class="tl"><div class="tt">5 · 关系切换并通知</div><div class="tm">客户收到确认；历史记录不隐藏、不物理删除</div></div></div>')+"</div><div>"+
+  acard("交接单队列","folder",atbl(["客户","去向","触发原因","进度","操作"],[
+   ["客 #1902","林某 → 陈某","客户申请","<span class='tag info'>第 4 步·待新顾问接受</span>","<a class='abtn sm' data-toast='演示：推进交接并通知客户'>推进</a>"],
+   ["客 #2011","赵某 → 陈某","赵某停新接旧（调查）","<span class='tag pending'>第 2 步·冻结中</span>","<a class='abtn sm danger' data-toast='演示：合规暂停触发的强制交接'>交接</a>"],
+   ["客 #2017","赵某 → 林某","赵某停新接旧（调查）","<span class='tag pending'>第 2 步·冻结中</span>","<a class='abtn sm danger' data-toast='演示：合规暂停触发的强制交接'>交接</a>"]
+  ]))+
+  agate("info","users","三类记录分别保存","<b>推荐来源、服务关系、佣金归因</b>分别记录；V1 不做多级分佣；顾问退出 / 资质到期视同暂停，停新接旧、存量交接；撤回授权不承诺一键清除履约记录。")+
+  "</div></div>"]
+ ]);
 
 /* ---------- A05 方案报价与合同订单 ---------- */
 AV.a05=atop("A05 · 方案·报价·合同订单","报价复核、主体一致性校验门、合同模板、订单变更留痕。",ENVPILL)+
@@ -935,8 +983,8 @@ AV.a06=atop("A06 · 案件与材料","案件工作台、材料审核、凭据核
  agate("info","shieldcheck","职责分离（硬规则）","凭据核验人不能是该案件的办理发起人；官方凭据核验通过，进度时间线才从“公司审核”推进到“已核验官方凭据”。");
 
 /* ---------- A07 财务与收费 ---------- */
-AV.a07=atop("A07 · 财务与收费","Pass 1：收费方案落地、付款核验 / 到账、收据、代收代付。佣金规则与结算随销售端批次开放。",ENVPILL)+
- atabs("a07",[["pay","收费与到账（Pass 1）"],["comm","佣金规则与结算（Pass 2）"]])+
+AV.a07=atop("A07 · 财务与收费","收费方案落地、付款核验 / 到账、收据、代收代付；佣金规则版本库、六态结算、异议与调整。控制销售端 S-09。",ENVPILL)+
+ atabs("a07",[["pay","收费与到账"],["comm","佣金规则与结算"]])+
  apanels("a07",[
   ["pay",agate("info","lock","财务权限边界","财务默认<b>无权查看证件原件</b>，仅依据银行 / 支付渠道凭据核验到账；客户上传水单不等于到账。")+
    acard("付款核验 / 到账","coins",atbl(["订单","费项","币种金额（示例）","客户凭证","渠道到账","收据","状态"],[
@@ -947,11 +995,27 @@ AV.a07=atop("A07 · 财务与收费","Pass 1：收费方案落地、付款核验
     ["官方申请费（外币示例）","官方票据待回传","多退少补","<span class='tag pending'>待票据</span>"],
     ["官方费差额","—","退还客 #1980","<span class='tag info'>退款审批中</span>"]
    ]))+agate("warn","alert","不混同原则","代收代付官方费与平台服务费分账记录、票据对应；异币种不相加；退款走双人复核并回写订单。")],
-  ["comm",agate("info","clock","随销售端批次开放","佣金“六态对账、规则快照、应计 / 可结算、异议、退款调整”对应销售端 S-09，将在销售端上线时补齐；Pass 1 仅预留规则版本库，<b>不做任何结算动作</b>。")+
-   acard("佣金规则版本库（预留）","coins",atbl(["规则版本","适用项目","状态"],[
-    ["v1（草稿）","A 国技术居留","<span class='tag gray'>未启用</span>"],
-    ["—","异币种订单","<span class='tag gray'>不合并 / 仅登记订单</span>"]
-   ]))]
+  ["comm",agate("info","shieldcheck","佣金产生的前置条件","仅<b>平台登记订单</b>进入佣金流程；下单时锁定规则版本快照；点击 / 咨询 / 方案确认<b>不产生可提现佣金</b>；无已发布规则 → 不产生任何应计佣金；异币种分列、不相加、不折人民币。")+
+   '<div class="agrid"><div>'+acard("佣金规则版本库","coins",atbl(["规则版本","适用项目","状态","操作"],[
+    ["v1","A 国技术居留 / 随行子女","<span class='tag verified'>已发布·下单锁定</span>","<span class='small muted'>存量单仍按 v1</span>"],
+    ["v2（草案）","拟含 B 地区投资居留","<span class='tag pending'>双人复核中</span>","<a class='abtn ghost sm' data-toast='演示：规则改价类变更须双人复核，未通过不生效'>复核</a>"]
+   ]))+
+   acard("六态结算队列","scale",atbl(["订单 / 顾问","币种金额（示例）","状态","规则","动作"],[
+    ["ORD-2401 / 陈某","CNY 示例","<span class='tag verified'>已结算</span>","v1","<span class='small muted'>凭据已归档</span>"],
+    ["ORD-2407 / 陈某","CNY 示例","<span class='tag info'>结算处理中</span>","v1","<a class='abtn ghost sm' data-toast='演示：付款批次与回单登记'>跟进</a>"],
+    ["ORD-2409 / 林某","CNY 示例","<span class='tag pending'>应计待核验</span>","v1","<a class='abtn sm' data-toast='演示：服务节点核验通过后转可结算（非本人复核）'>核验</a>"],
+    ["ORD-2401 外币段 / 陈某","USD 示例","<span class='tag verified'>已结算</span>","v1","<span class='small muted'>异币种单列</span>"],
+    ["PROP-309 / 陈某","—","<span class='tag gray'>待触发</span>","v1","<span class='small muted'>方案确认不产生佣金</span>"],
+    ["ORD-2388 / 林某","CNY 示例","<span class='tag danger'>冻结·退款调整</span>","v1","<a class='abtn danger sm' data-go='admin/a08'>争议关联</a>"]
+   ]))+"</div><div>"+
+   acard("异议与调整 / 追回","gavel",atbl(["事项","关联","状态"],[
+    ["陈某对账异议 1 笔","ORD-2407","<span class='tag pending'>双人复核中</span>"],
+    ["部分退款佣金调减","ORD-2388","<span class='tag info'>按 v1 规则重算</span>"],
+    ["多结追回（若发生）","—","<span class='small muted'>留痕、通知、不从后续工资静默扣除</span>"]
+   ]))+
+   agate("block","ban","平台外成交与私收款（联动 A03/A12）",'平台外成交不产生平台佣金、不纳入平台保障；<b>私收客户款项一经核实 → 冻结新增授权、进入 A12 合规事件处置</b>；已发生的合规佣金按原规则结算，<b>不连坐清零</b>。不监控私人通讯、不要求排他。',
+    '<a class="abtn sm" data-go="admin/a12">合规事件</a><a class="abtn sm gray" data-go="advisor/commission">销售端视角</a>')+
+   "</div></div>"]
  ]);
 
 /* ---------- A08 服务质量 ---------- */
@@ -967,7 +1031,18 @@ AV.a08=atop("A08 · 服务质量","工单队列、投诉与争议处理、合规
   '<div class="tl"><div class="tt">独立调查（A12 协同）</div><div class="tm">被投诉顾问不得参与、不能关闭工单</div></div>'+
   '<div class="tl"><div class="tt">处理方案与客户确认</div><div class="tm">含补救 / 退款 / 交接，记录送达回执</div></div>'+
   '<div class="tl"><div class="tt">关闭与回访</div><div class="tm">满意度独立回访，结果进入质量基线</div></div></div>')+"</div></div>"+
- agate("block","ban","回避原则","被投诉顾问不独占工单、不能自行关闭；调查人与被调查顾问分离；涉嫌违规线索同步 A12 合规工作台。");
+ agate("block","ban","回避原则","被投诉顾问不独占工单、不能自行关闭；调查人与被调查顾问分离；涉嫌违规线索同步 A12 合规工作台。")+
+ '<div class="agrid"><div>'+acard("平台外成交线索（内部监测）","filter",atbl(["监测信号","对象（脱敏）","状态","处置"],[
+  ["登记咨询后长期无下文，服务方侧出现同客户案件","客 #1877","<span class='tag pending'>待核实</span>","<a class='abtn ghost sm' data-toast='演示：线索不等于结论，先由合规人工核实'>核实</a>"],
+  ["客户投诉“顾问让我转私人账户”","客 #2032 / 顾问赵","<span class='tag danger'>高·已转 A12</span>","<a class='abtn sm danger' data-go='admin/a12'>合规事件</a>"],
+  ["登记订单外的同名收费凭证","ORD 外 ×1","<span class='tag info'>核对中</span>","<span class='small muted'>不自动处罚</span>"]
+ ]))+"</div><div>"+
+ acard("处置原则与满意度回访","shieldcheck",
+  '<div class="wl no">'+ic("ban")+"<span>不监控私人通讯、不要求排他、不限制客户正当选择权</span></div>"+
+  '<div class="wl yes">'+ic("check")+"<span>线索只触发<b>人工核实</b>；核实为私收款 → A03 冻结新增授权、A12 立案，合规佣金不连坐清零</span></div>"+
+  '<div class="wl yes">'+ic("check")+"<span>价值钩子在客户侧：未登记订单不享合同核验、凭据存档、材料托管、退款受理</span></div>"+
+  atbl(["回访节点","样本","满意度"],[["方案确认后","12","基线采集中"],["案件阶段完成","8","样本不足不公布"],["投诉关闭后","1","100% 跟进回访"]]))+
+ "</div></div>";
 
 /* ---------- A09 通知与运营内容 ---------- */
 AV.a09=atop("A09 · 通知与运营内容","多通道模板、送达回执看板、失败换通道 / 升级、首页与运营内容位编排。",ENVPILL)+
@@ -1014,8 +1089,10 @@ AV.a10=atop("A10 · 权限·安全·审计","账号角色、跨境共享审批�
  agate("info","shieldcheck","服务端逐项校验","权限在服务端逐动作校验，不靠前端隐藏按钮；批量导出须审批、加水印、留登记，敏感字段默认脱敏。");
 
 /* ---------- A11 经营与质量报表 ---------- */
-AV.a11=atop("A11 · 经营与质量报表","影子运行期先建基线、后定目标。展示履约质量与数据质量，不把未验证转化率当成绩。",ENVPILL)+
- '<div class="agrid"><div>'+acard("履约 / 合规基线（示例）","chart",
+AV.a11=atop("A11 · 经营与质量报表","影子运行期先建基线、后定目标。展示履约质量、数据质量与顾问展业质量，不把未验证转化率当成绩。",ENVPILL)+
+ atabs("a11",[["base","平台质量基线"],["perf","顾问业绩与对账（Pass 2）"]])+
+ apanels("a11",[
+  ["base",'<div class="agrid"><div>'+acard("履约 / 合规基线（示例）","chart",
   [["通知送达率",96.4,""],["T0 按时回执率",92,"amber"],["凭据核验中位时长（≤1.2 工作日）",78,""],["主体校验一次通过率",97,""],["对账差异（应为 0）",100,"up"]].map(b=>
    '<div class="bar-row"><span>'+b[0]+'</span><div class="bart"><div class="barf '+b[2]+'" style="width:'+b[1]+'%"></div></div><b>'+(b[0].indexOf("差异")>=0?"0 笔":b[1]+"%")+"</b></div>").join("")+
   '<div class="bar-row"><span>资质 / 备案临期</span><div class="bart"><div class="barf red" style="width:18%"></div></div><b>1 项</b></div>')+
@@ -1026,7 +1103,24 @@ AV.a11=atop("A11 · 经营与质量报表","影子运行期先建基线、后定
   ["缺核验记录的事实项","12（3 项阻断发布）"],
   ["签证数据差异（本月）","2，已修正"],
   ["材料一次提交完整率","81%"]
- ]))+"</div></div>";
+ ]))+"</div></div>"],
+  ["perf",akpis([["在册展业顾问","15","",""],["T0 按时率（团队）","92%","基线",""],["对账差异","0 笔","应为 0","up"],["合规事件（月）","1 调查中","","bad"]])+
+   acard("顾问业绩与履约质量（示例口径）","chart",atbl(["顾问","授权项目","服务中客户","登记订单","T0 按时率","材料一次完整率","对账差异","合规事件"],[
+    ["陈某","5","12","8","<span class='tag verified'>96%</span>","86%","0","0"],
+    ["林某","3","9","6","<span class='tag verified'>90%</span>","79%","0","0"],
+    ["赵某","2（冻结中）","停新接旧","—","<span class='tag danger'>74%</span>","—","0","<span class='tag danger'>1 调查</span>"]
+   ]))+
+   '<div class="agrid"><div>'+acard("业绩口径（不考核什么）","ban",
+    '<div class="wl no">'+ic("ban")+"<span>不统计、不考核获批率 / 成功率 / 官方审理速度（非顾问可控）</span></div>"+
+    '<div class="wl no">'+ic("ban")+"<span>不以成交额单一排名，不诱导多签 / 签大单</span></div>"+
+    '<div class="wl no">'+ic("ban")+"<span>平台外线索只作核实输入，<b>不据此自动扣罚</b></span></div>")+"</div><div>"+
+   acard("业绩口径（考核什么）","shieldcheck",
+    '<div class="wl yes">'+ic("check")+"<span>T0 响应 / 回执按时率、材料一次完整率、费用理解正确率</span></div>"+
+    '<div class="wl yes">'+ic("check")+"<span>投诉率、禁表述命中、分享物合规率、客户独立回访满意度</span></div>"+
+    '<div class="wl yes">'+ic("check")+"<span>佣金对账差异（应为 0）；结算明细见 A07</span></div>")+
+   agate("info","filter","先基线后奖惩","试运行期只采集与校准口径，不设奖惩阈值；口径稳定后再与团队约定目标，避免数字诱导动作变形。")+
+   "</div></div>"]
+ ]);
 
 /* ---------- A12 合规工作台 ---------- */
 AV.a12=atop("A12 · 合规工作台","机构 / 人员备案台账、素材与问卷审核、禁表述词库、合规事件、同意与跨境审计。合规不背销售指标。",ENVPILL)+
@@ -1039,16 +1133,30 @@ AV.a12=atop("A12 · 合规工作台","机构 / 人员备案台账、素材与问
    ]))+agate("warn","alert","到期联动","人员备案到期未续 → 联动 A03 自动暂停新业务；境外机构不得在境内直接提供中介服务的口径纳入巡查。")],
   ["rev",acard("待审素材 / 模板","gavel",atbl(["对象","类型","提交","状态","操作"],[
     ["初步评估问卷 v4","问卷模板","产品","<span class='tag pending'>待合规审核</span>","<a class='abtn sm' data-toast='演示：通过后客户端问卷更新；驳回须填原因'>审核</a>"],
-    ["防骗教育《5 种“包过”话术》","教育内容","内容","<span class='tag pending'>待审</span>","<a class='abtn ghost sm' data-toast='演示：审核消费者教育内容'>审核</a>"],
-    ["顾问分享海报 ×3","分享素材","市场","<span class='tag info'>销售端上线后高频</span>","<span class='small muted'>Pass 2</span>"]
-   ]))],
+    ["防骗教育《5 种“包过”话术》","教育内容","内容","<span class='tag pending'>待审</span>","<a class='abtn ghost sm' data-toast='演示：审核消费者教育内容（游客可见）'>审核</a>"],
+    ["A 国项目介绍链接 / 海报 ×3","顾问分享素材","陈某","<span class='tag pending'>待合规审核</span>","<a class='abtn sm' data-toast='演示：通过后进入 S-05 核准素材库，带版本与顾问标识'>通过</a><a class='abtn ghost sm' data-toast='演示：驳回须填原因，通知顾问'>驳回</a>"],
+    ["名片模板 v3（白名单字段）","名片模板","产品","<span class='tag info'>变更审核</span>","<a class='abtn ghost sm' data-toast='演示：字段增删须合规审核，两端同步'>审核</a>"]
+   ]))+
+   acard("素材版本与过期处置（控制 S-05）","clock",atbl(["素材","适用项目版本","状态","销售端表现"],[
+    ["A 国项目介绍 v3.2","A 国技术居留 v3.2","<span class='tag verified'>核准·现行</span>","可生成分享"],
+    ["旧版项目海报 v2.4","已被 v3.2 取代","<span class='tag gray'>已过期</span>","<b>停止生成新分享</b>，旧链接挂更新提示"],
+    ["B 地区项目预热图","项目未发布","<span class='tag danger'>禁用</span>","未发布项目不得对外分享"]
+   ]))+
+   agate("block","ban","分享物红线（硬规则）","顾问<b>仅可生成经核准的素材与链接</b>；分享物不得含佣金、内部备注、其他客户资料；不得私加成功率 / 保本 / 内部渠道表述；过期素材停分享，违规命中进入合规事件并联动 A03 授权处置。",
+    '<a class="abtn sm" data-go="advisor/share">销售端 S-05</a>')],
   ["words",acard("禁表述 / 高风险词库","ban",'<div class="pillset">'+
     ["包过","100% 成功","成功率第一","官方内部渠道","保证获批","投资保本 / 稳赚","低价全包无隐形费","包规避移民监","可做虚假材料"].map(w=>'<span class="kword">'+w+"</span>").join("")+
-   '</div>')+agate("info","shieldcheck","分级处置","命中分级处理：提示修改 → 强制修改才能保存 → 拦截发布；词库辅助审核，<b>不替代人工合规判断</b>，覆盖项目描述、顾问话术与分享素材。")],
+   '</div>')+agate("info","shieldcheck","分级处置","命中分级处理：提示修改 → 强制修改才能保存 → 拦截发布；词库辅助审核，<b>不替代人工合规判断</b>，覆盖项目描述、iPad 方案共读、顾问话术与分享素材。")+
+   acard("实时校验命中记录（近 7 日）","ban",atbl(["来源","命中内容（示例）","级别","处置"],[
+    ["iPad I-02 方案共读","“包过 / 内部渠道”","<span class='tag danger'>强制修改</span>","客户确认按钮被拦截，已改后确认"],
+    ["S-05 分享文案","“成功率第一”","<span class='tag pending'>提示修改</span>","顾问已替换，待复核"],
+    ["项目详情草稿","“投资保本”","<span class='tag danger'>拦截发布</span>","退回 A01 补核验"]
+   ]))],
   ["evt",acard("合规事件","gavel",atbl(["事件","级别","调查人","状态 / 处置"],[
     ["顾问赵某涉嫌夸大承诺","<span class='tag danger'>高</span>","合规-周（非其主管）","调查中，已暂停新业务（A03）"],
+    ["客 #2032 投诉“顾问让我转私人账户”","<span class='tag danger'>高</span>","合规-吴 + 财务","已冻结赵某新增授权；已发生合规佣金按原规则结算，不连坐清零（A07）"],
     ["B 地区项目事实缺核验即报审","<span class='tag pending'>中</span>","合规-吴","已拦截发布，补核验"]
-   ]))+agate("block","scale","独立性","合规不背销售指标；调查人与被调查顾问分离；合规可对内容、人员、项目一票暂停，处置记录进入审计。")],
+   ]))+agate("block","scale","独立性","合规不背销售指标；调查人与被调查顾问分离；合规可对内容、人员、项目一票暂停，处置记录进入审计；私收款核实走 A03 冻结授权，佣金不连坐。")],
   ["con",acard("同意与跨境共享审计","key",atbl(["客户","授权对象","数据范围","有效期","状态"],[
     ["客 #1980","示例律所 A","案件材料清单（不含原件）","7 天批次","<span class='tag verified'>有效</span>"],
     ["客 #2051","家庭成员（配偶）","进度只读","长期（可撤回）","<span class='tag verified'>有效</span>"],
