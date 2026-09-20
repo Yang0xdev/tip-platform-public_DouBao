@@ -345,6 +345,28 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
 .jgate.warn{color:#8a5312;background:var(--amber-bg);} .jgate.info{color:#1D5F8A;background:#E9F2F8;}
 .jgatesum{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:4px;}
 @media(max-width:760px){.jnode{grid-template-columns:32px 1fr;gap:4px 12px;}.jtag{justify-self:start;}.jgo{grid-column:2;text-align:left;}}
+/* ================= 服务方受控门户 ================= */
+.pwrap{max-width:1180px;margin:0 auto;padding:22px 26px 70px;}
+.phead{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px 20px;box-shadow:var(--sh);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
+.phead h1{font-size:17px;color:var(--brand-d);} .phead .pmeta{font-size:12px;color:var(--t2);margin-top:5px;line-height:1.7;}
+.pbadge{background:var(--brand-50);color:var(--brand-d);font-size:12px;font-weight:600;padding:7px 13px;border-radius:20px;white-space:nowrap;}
+.portal-wm{position:fixed;top:56px;left:0;right:0;bottom:0;pointer-events:none;z-index:55;display:none;background-repeat:repeat;}
+#view-portal.on .portal-wm{display:block;}
+.reader{position:relative;border:1.5px dashed var(--line);border-radius:12px;height:176px;overflow:hidden;background:repeating-linear-gradient(0deg,#fafcfc,#fafcfc 25px,#f1f5f5 26px);display:flex;align-items:center;justify-content:center;color:var(--t2);font-size:13px;margin-top:10px;}
+.reader .rwm{position:absolute;inset:0;background-repeat:repeat;opacity:.9;}
+.reader .rtools{position:absolute;top:8px;right:10px;display:flex;gap:6px;z-index:2;}
+.rbtn{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.92);color:var(--t2);display:flex;align-items:center;justify-content:center;}
+.rbtn.off{color:var(--red);}
+.pnote{font-size:11.5px;color:var(--t2);margin-top:7px;line-height:1.6;}
+.fl{display:block;font-size:12.5px;font-weight:600;color:var(--t1);margin-bottom:11px;}
+.ain{display:block;width:100%;box-sizing:border-box;margin-top:6px;border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:13px;font-family:inherit;color:var(--ink);background:#FCFEFD;}
+.ain:focus{outline:none;border-color:var(--brand);}
+.tl-log{border-left:2px solid var(--line);margin-left:6px;padding-left:16px;}
+.tl-log .li{position:relative;padding:0 0 14px;}
+.tl-log .li:before{content:"";position:absolute;left:-23px;top:3px;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid var(--brand);}
+.tl-log .li.fail:before{border-color:var(--red);}
+.tl-log .li.up:before{border-color:var(--amber);background:var(--amber-bg);}
+.tl-log .lt{font-size:12.5px;font-weight:600;} .tl-log .lm{font-size:11.5px;color:var(--t2);margin-top:2px;line-height:1.6;}
 </style>
 </head>
 <body>
@@ -355,10 +377,11 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
     <a data-go="client/home-visitor">客户端</a>
     <a data-go="advisor">销售端</a>
     <a data-go="ipad">iPad 面谈</a>
+    <a data-go="portal">服务方门户</a>
     <a data-go="journey">端到端主线</a>
     <a data-go="admin">总后台</a>
   </div>
-  <div class="stage-note">高保真可点击原型 · 依据 G-P2 页面目录 V0.2 · 全部为虚构示例数据，不构成移民/法律建议 · 已交付：客户端 23 屏 + 销售展业端 12 屏 + iPad 面谈 2 屏 + 统一总后台 14 视图（Pass 1+2）+ 端到端主线（14 节点跨三端、五道硬闸门），形成「一后台控两端」闭环</div>
+  <div class="stage-note">高保真可点击原型 · 依据 G-P2 页面目录 V0.2 · 全部为虚构示例数据，不构成移民/法律建议 · 已交付：客户端 23 屏 + 销售展业端 12 屏 + iPad 面谈 2 屏 + 服务方受控门户 4 页签 + 统一总后台 14 视图（Pass 1+2，含模板编辑器/回执升级）+ 端到端主线（14 节点跨三端、五道硬闸门），形成「一后台控两端 + B2B 受控协作」闭环</div>
 </div>
 
 <!-- ============ 启动总览 ============ -->
@@ -372,6 +395,7 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
     <a class="entry" data-go="client/home-visitor"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="2" width="10" height="20" rx="2.5"/><line x1="10.5" y1="18.5" x2="13.5" y2="18.5"/></svg></div><b>客户服务端</b><div class="e-d">游客免留资浏览 → 初评 → 选顾问 → 方案/订单 → 办理可视 → 全球通行查询</div><div class="e-c">23 屏可点击 →</div></a>
     <a class="entry" data-go="advisor/workbench"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3 3-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/><circle cx="17.5" cy="9" r="2.4"/><path d="M16 14.6c2.6.2 4 1.7 4.5 3.9"/></svg></div><b>销售展业端（手机）</b><div class="e-d">工作台、项目超市、授权学习闭环、客户跟进、订单协同、佣金六态对账、合规分享</div><div class="e-c">12 屏可点击 →</div></a>
     <a class="entry" data-go="ipad/i01"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="13" rx="2"/><line x1="10.5" y1="21" x2="13.5" y2="21"/></svg></div><b>顾问 iPad 面谈</b><div class="e-d">需求采集、项目并排比较、方案共读；演示/工作双模式一键切换</div><div class="e-c">2 屏可点击 →</div></a>
+    <a class="entry" data-go="portal"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg></div><b>服务方门户（B2B）</b><div class="e-d">境外持牌方受控只读视角：分派案件、批次授权材料、全屏水印、报告凭据提交、到期回收</div><div class="e-c">4 页签可点击 →</div></a>
     <a class="entry" data-go="journey"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><circle cx="18" cy="6" r="2.2"/><path d="M8 7.2 16 16.8M16 8.2 8 15.8"/></svg></div><b>端到端主线（推荐先看）</b><div class="e-d">一单从游客浏览到结算归档，14 个节点跨三端流转，逐节点打开对应屏；含五道硬闸门</div><div class="e-c">跨三端旅程图 →</div></a>
     <a class="entry" data-go="admin"><div class="e-ic"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><b>统一总后台</b><div class="e-d">控制台、前后台控制矩阵、内容/供给/案件/财务/通知/权限/合规 A01–A12</div><div class="e-c">14 视图可点击（含销售治理）→</div></a>
   </div>
@@ -441,7 +465,7 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
    <h3><span class="pn">3</span>履约、通知与结算 <span class="psub">四级来源凭据、T0 时限升级、六态佣金；外部事实只能核验不能编造</span></h3>
    <div class="jnode"><div class="jnum">10</div><div class="jtag c">客户端</div><div class="jbody"><b>材料准备、提交与退回</b><div class="jd">按申请人 / 授权组织清单；退回原因可见、可重试；家庭成员材料须本人授权。</div><div class="jgate"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><span>授权门：未授权材料服务端直接拒绝，不靠隐藏入口</span></div></div><a class="jgo" data-go="client/materials">打开 P-12 / A06 ›</a></div>
    <div class="jnode"><div class="jnum">11</div><div class="jtag a">总后台</div><div class="jbody"><b>官方受理凭据核验（T0）</b><div class="jd">服务方报告不等于官方受理；凭据核验人不能是案件发起人；App+短信+电话多通道，未达升级。</div><div class="jgate"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><span>凭据门：核验人≠发起人；T0 未回执升级主管 / 合规</span></div></div><a class="jgo" data-go="admin/a06">打开 A06 / A09 ›</a></div>
-   <div class="jnode"><div class="jnum">12</div><div class="jtag a">总后台</div><div class="jbody"><b>境外段交付（受控服务方门户）</b><div class="jd">境外持牌方经批次授权访问案件材料，默认只读、全屏水印、访问到期回收。</div><div class="jgate info"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></svg><span>跨境共享逐项审批、最小化、留痕（A02/A10）</span></div></div><a class="jgo" data-go="admin/a02">打开 A02 ›</a></div>
+   <div class="jnode"><div class="jnum">12</div><div class="jtag a">总后台</div><div class="jbody"><b>境外段交付（受控服务方门户）</b><div class="jd">境外持牌方经批次授权访问案件材料，默认只读、全屏水印、访问到期回收。</div><div class="jgate info"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></svg><span>跨境共享逐项审批、最小化、留痕（A02/A10）</span></div></div><a class="jgo" data-go="portal/home">打开服务方门户 ›</a></div>
    <div class="jnode"><div class="jnum">13</div><div class="jtag s">顾问手机</div><div class="jbody"><b>佣金六态对账与结算</b><div class="jd">预估→待触发→应计待核验→可结算→处理中→已结算；下单锁定规则版本，异币种分列。</div><div class="jgate"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><span>仅登记订单进入；无规则不产生应计；结算双人复核</span></div></div><a class="jgo" data-go="advisor/commission">打开 S-09 / A07 ›</a></div>
    <div class="jnode"><div class="jnum">14</div><div class="jtag c">客户端</div><div class="jbody"><b>投诉 / 争议独立受理（若发生）</b><div class="jd">工单独立调查，被投诉顾问不独占、不能关闭；私收款核实走合规处置，合规佣金不连坐清零。</div><div class="jgate"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><span>回避门：调查人与被调查顾问分离（A08/A12）</span></div></div><a class="jgo" data-go="client/ticket">打开 P-15 / A08 ›</a></div>
   </div>
@@ -458,6 +482,11 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
    <div class="notice" style="margin:12px 0 4px;">后台能力边界是「<b>配置 / 核验 / 发布 / 留痕</b>」：官方进度、到账、签证决定、获批结果只能登记凭据并核验，任何终端都不能手工改写成承诺或结果。</div>
   </div>
  </div>
+</section>
+<!-- ============ 服务方受控门户（B2B 只读） ============ -->
+<section class="view" id="view-portal">
+ <div class="portal-wm" id="portalWm"></div>
+ <div class="pwrap" id="portal-wrap"></div>
 </section>
 <section class="view" id="view-admin">
  <div class="adm">
@@ -808,7 +837,7 @@ const SM=[
  ["P-19","全球通行·我的护照","client/global-home"],["P-20","签证要求查询","client/visa-check"],["P-21","护照对比与通行力","client/passport-compare"]
 ];
 document.getElementById("sitemap").innerHTML=SM.map(x=>'<a class="sm" data-go="'+x[2]+'"><span class="pid">'+x[0]+"</span>"+x[1]+"</a>").join("")+
- '<a class="sm" data-go="journey"><span class="pid">J</span>端到端主线 · 14 节点跨三端</a><a class="sm" data-go="admin/home"><span class="pid">A</span>统一总后台 · 14 视图（Pass 1+2）</a><a class="sm" data-go="advisor/workbench"><span class="pid">S</span>销售展业端 · 12 屏可点击</a><a class="sm" data-go="ipad/i01"><span class="pid">I</span>iPad 面谈 · 2 屏（演示/工作双模式）</a>';
+ '<a class="sm" data-go="portal"><span class="pid">P</span>服务方门户 · 4 页签（只读受控）</a><a class="sm" data-go="journey"><span class="pid">J</span>端到端主线 · 14 节点跨三端</a><a class="sm" data-go="admin/home"><span class="pid">A</span>统一总后台 · 14 视图（Pass 1+2）</a><a class="sm" data-go="advisor/workbench"><span class="pid">S</span>销售展业端 · 12 屏可点击</a><a class="sm" data-go="ipad/i01"><span class="pid">I</span>iPad 面谈 · 2 屏（演示/工作双模式）</a>';
 
 /* ================= 总后台 Pass 1 ================= */
 const ANAV=[
@@ -890,6 +919,14 @@ AV.matrix=atop("前后台控制矩阵","客户端每一块内容由哪个后台�
    ["<span class='nm'>顾问业绩与质量</span>","履约质量、合规事件、对账差异","A11·A08","不考核获批率；线索不推断跳单","<span class='small muted'>A11 / A08</span>"],
    ["<span class='nm'>iPad I-01/I-02 面谈</span>","演示模式、禁表述校验、方案版本","A12·A05","演示态隐藏佣金 / 备注 / 其他客户","<a class='matrix-go' data-go='ipad/i02'>查看 ›</a>"]
   ]))+
+ acard("服务方门户（B2B）× 后台控制（Pass 3）","building",atbl(
+  ["门户能力","受控字段","后台模块","控制动作与规则","门户"],
+  [
+   ["<span class='nm'>分派案件只读列表</span>","机构归属、脱敏范围","A02·A06","仅本机构承接案件；联系方式 / 证件号默认不可见","<a class='matrix-go' data-go='portal/home'>查看 ›</a>"],
+   ["<span class='nm'>批次授权材料阅读器</span>","案件 × 材料 × 动作 × 有效期、水印","A10·A06","逐项审批、全屏水印、禁下载、到期自动回收","<a class='matrix-go' data-go='portal/home'>查看 ›</a>"],
+   ["<span class='nm'>报告 / 凭据提交</span>","提交物、官方凭据","A06","报告≠官方状态；核验人≠发起人，核验后才上时间线","<a class='matrix-go' data-go='portal/home'>查看 ›</a>"],
+   ["<span class='nm'>资质与协议</span>","持牌有效期、协议版本","A02·A03","到期停新案件、历史只读；境外主体须关联境内主体","<a class='matrix-go' data-go='admin/a02'>A02 ›</a>"]
+  ]))+
  agate("block","ban","后台也不能控制的事",'官方审理进度与结果、付款是否到账、签证/免签决定、是否获批——<b>只能登记凭据并核验，不能手工改写</b>。任何“把状态改成已受理 / 已到账 / 已获批”的操作在系统中不存在；后台同样不能手工调增顾问佣金，结算只走规则版本与复核。');
 
 /* ---------- A01 项目与内容治理 ---------- */
@@ -945,7 +982,8 @@ AV.a02=atop("A02 · 服务方管理","境内签约 / 备案主体与境外持牌
   '<div class="wl yes">'+ic("check")+"<span>按批次上传服务方报告 / 凭据</span></div>"+
   '<div class="wl no">'+ic("ban")+"<span>客户证件原件默认不可见，须逐案批次授权（A06/A10）</span></div>"+
   '<div class="wl no">'+ic("ban")+"<span>不可下载、不可见其他客户、不可见佣金</span></div>"+
-  '<div class="wl no">'+ic("ban")+"<span>不可修改金额、官方进度或对客承诺</span></div>")+"</div><div>"+
+  '<div class="wl no">'+ic("ban")+"<span>不可修改金额、官方进度或对客承诺</span></div>"+
+ '<div style="margin-top:12px;"><a class="abtn sm" data-go="portal/home">'+ic("eye")+"&nbsp;模拟登录服务方门户（境外持牌方视角）</a></div>")+"</div><div>"+
  acard("协议与条款","doccheck",atbl(["条款","状态"],[
   ["服务委托与交付边界","<span class='tag verified'>已签</span>"],
   ["保密与个人信息处理","<span class='tag verified'>已签</span>"],
@@ -1131,12 +1169,37 @@ AV.a09=atop("A09 · 通知与运营内容","多通道模板、送达回执看板
     ["补料通知（24h）","<span class='tag info'>业务·T0</span>","材料退回","<span class='tag verified'>已发布</span>"],
     ["资金到账 / 收据","<span class='tag info'>业务</span>","到账核验","<span class='tag verified'>已发布</span>"],
     ["新项目上线介绍","<span class='tag gray'>营销</span>","运营","<span class='tag pending'>单独同意+可退订</span>"]
-   ]))+agate("info","send","业务与营销分离","T0 / 合同 / 资金类业务消息不受营销退订影响，必须送达；营销消息须单独同意、一键退订，两类不混发。")],
+   ]))+agate("info","send","业务与营销分离","T0 / 合同 / 资金类业务消息不受营销退订影响，必须送达；营销消息须单独同意、一键退订，两类不混发。")+
+   '<div class="agrid" style="margin-top:14px;"><div>'+acard("模板编辑器 · 官方受理回执提醒（T0）","edit",
+    '<div class="chips" data-select style="margin-bottom:10px;"><span class="chip on">App 推送</span><span class="chip">短信</span><span class="chip">人工电话脚本</span></div>'+
+    '<label class="fl">模板名称<input class="ain" value="官方受理回执提醒（T0）"></label>'+
+    '<label class="fl">消息类别<span class="tag info" style="margin-left:6px;">业务 · T0（不受营销退订影响）</span></label>'+
+    '<label class="fl">标题<input class="ain" value="{{节点名称}}：官方已受理（案号 {{案号}}）"></label>'+
+    '<label class="fl">正文<textarea class="ain" rows="5" style="resize:vertical;line-height:1.7;">{{客户称呼}}您好，您的 {{项目名称}} 案件已于 {{官方受理日期}} 获官方受理，受理回执编号 {{官方回执编号}}。请在 {{T0截止时间}} 前于 App 查看并确认。本通知由 {{办理员姓名}} 发出；如非本人操作或有疑问，请立即联系平台（不经过顾问个人渠道）。</textarea></label>'+
+    '<div class="pnote" style="color:var(--t2);">可插入变量：<span class="tag gray">客户称呼</span> <span class="tag gray">案号</span> <span class="tag gray">节点名称</span> <span class="tag gray">T0截止时间</span> <span class="tag gray">办理员</span> ｜ 锁屏推送不显示案号与项目详情。</div>'+
+    '<div class="wl yes" style="margin-top:8px;">'+ic("shieldcheck")+"<span>禁表述实时校验：0 命中（包过 / 内部渠道 / 成功率等词不可保存）</span></div>"+
+    '<div style="display:flex;gap:8px;margin-top:12px;"><a class="abtn ghost sm" data-toast="演示：保存为草稿 v4，不影响线上 v3">保存草稿</a><a class="abtn sm" data-toast="演示：提交合规复核；复核通过后发布，旧版留痕可回滚">提交复核</a></div>')+"</div><div>"+
+   acard("版本与审核流","doccheck",atbl(["版本","状态","复核 / 发布","变更"],[
+    ["v3","<span class='tag verified'>线上</span>","合规-吴 / 09-10","当前生效，App+短信共用"],
+    ["v4","<span class='tag pending'>草稿</span>","—","新增 T0 截止时间变量"],
+    ["v2","<span class='tag gray'>已归档</span>","合规-周 / 08-20","措辞调整，可回溯"]
+   ]))+
+   agate("block","ban","编辑 ≠ 发布","模板保存只生成草稿；T0 / 资金类模板须合规复核通过才能发布；发布按通道分别生效，电话脚本另需话术确认录音抽检。")+
+   "</div></div>"],
   ["rcpt",acard("送达回执看板（近 7 日）","bell",atbl(["消息","App","短信","人工电话","结果"],[
     ["CASE-A02 受理回执提醒","<span class='tag verified'>已达·已读</span>","<span class='tag danger'>未达</span>","<span class='tag verified'>已接通</span>","<span class='tag pending'>已升级主管</span>"],
     ["客 #2051 补料通知","<span class='tag verified'>已达</span>","<span class='tag verified'>已达</span>","—","<span class='tag verified'>完成</span>"],
     ["ORD-2401 到账收据","<span class='tag verified'>已达·已读</span>","—","—","<span class='tag verified'>完成</span>"]
-   ]))+agate("block","alert","T0 未达必须升级","不能只显示“已发送”。失败按 App→短信→人工电话逐级换通道，仍未达升级主管 / 合规，并形成升级记录回写案件。")],
+   ]))+agate("block","alert","T0 未达必须升级","不能只显示“已发送”。失败按 App→短信→人工电话逐级换通道，仍未达升级主管 / 合规，并形成升级记录回写案件。")+
+   acard("升级记录 · CASE-A02（受理回执，T0 剩余 4h）","clock",
+    '<div class="tl-log">'+
+    '<div class="li"><div class="lt">16:20 凭据核验通过，触发 T0 通知（App + 短信）</div><div class="lm">触发人：核验员（≠案件发起人）；模板 v3</div></div>'+
+    '<div class="li"><div class="lt">16:20 App 已送达 · 16:42 已读</div><div class="lm">锁屏未展示案号与项目详情</div></div>'+
+    '<div class="li fail"><div class="lt">16:21 短信未达</div><div class="lm">网关回执：接收方关机 / 不可达；系统自动排队换通道</div></div>'+
+    '<div class="li"><div class="lt">16:25 转人工电话外呼 · 16:40 接通</div><div class="lm">家属代接，本人未确认理解；通话记录留痕</div></div>'+
+    '<div class="li up"><div class="lt">16:45 升级主管 + 办理员</div><div class="lm">客户未在 App 确认且 T0 剩余 4h；升级记录已回写案件 P-11，<b>原截止时间不因升级而改写</b>；次日 09:00 前未确认将再升级合规</div></div>'+
+    "</div>")+
+   agate("info","eye","客户侧可见","客户在 P-13 消息中心看到同样的通道与送达状态、失败原因和升级结果；不允许后台显示“已通知”而客户侧只看到“发送中”。")],
   ["home",acard("首页内容位编排（控制 P-01）","grid",atbl(["内容位","当前内容","状态","操作"],[
     ["主 Banner","身份规划，从看清条件和费用开始","<span class='tag verified'>已发布</span>","<a class='abtn ghost sm' data-toast='演示：编辑生成草稿，复核后发布'>编辑</a>"],
     ["人群分区","子女随行 / 雇主技能 / 长居与财税","<span class='tag verified'>已发布</span>","<a class='abtn ghost sm' data-toast='演示：调整排序与上下架'>编排</a>"],
@@ -1248,6 +1311,61 @@ function renderAdmin(sk){
  sk=AV[sk]?sk:"home";
  document.getElementById("adm-content").innerHTML=AV[sk];
  document.querySelectorAll("#adm-nav .adm-ni").forEach(a=>a.classList.toggle("on",a.dataset.am===sk));
+ window.scrollTo(0,0);
+}
+
+/* ================= 服务方受控门户（B2B，境外持牌方视角） ================= */
+const PV={};
+function phead(){return '<div class="phead"><div><h1>持牌方协作门户 · 受控只读</h1><div class="pmeta">示例境外律所 · A 国（境外持牌方，持牌有效期 2027-05）｜境内协作主体：示例出入境咨询（北京）有限公司<br>本门户由境内平台授权开通，仅用于 B2B 境外段协作；会话 15 分钟无操作自动退出，全程访问留痕。</div></div><span class="pbadge">'+ic("lock")+'&nbsp;只读 · 全屏水印 · 不可下载</span></div>';}
+PV.home=phead()+
+ atabs("pv",[["cases","分派给我的案件"],["grants","批次授权与材料"],["reports","报告 / 凭据提交"],["profile","资质与协议"]])+
+ apanels("pv",[
+  ["cases",acard("分派给本机构的案件（只读）","briefcase",atbl(["平台案号","主申请人（脱敏）","项目 / 版本","境内协作主体","当前阶段","批次授权","操作"],[
+   ["CASE-A03","主申 王**（家庭 3 人）","A 国技术居留 v3.2","示例出入境咨询（北京）","材料准备中","<span class='tag verified'>有效 · 至 09-23</span>","<a class='abtn ghost sm' data-jumptab='pv:grants'>查看授权材料</a>"],
+   ["CASE-A02","主申 李**（随行子女）","A 国随行子女 v1.4","示例出入境咨询（北京）","已递交待受理","<span class='tag gray'>已过期 · 需重新申请</span>","<a class='abtn sm' data-toast='演示：向境内办理员发起批次授权申请，说明用途与范围'>申请授权</a>"],
+   ["CASE-A11","主申 陈**","A 国技术居留 v3.2","示例出入境咨询（北京）","待受理回执","<span class='tag pending'>原件查看待审批</span>","<a class='abtn ghost sm' data-toast='演示：原件查看须 A06/A10 逐项审批'>查看进度</a>"]
+  ]))+
+  agate("block","ban","你看不到什么","仅见<b>本机构承接</b>的案件；客户联系方式、证件号、完整证件原件默认不可见；不可见其他客户、其他机构、平台佣金与顾问信息；不可修改金额、官方进度或任何对客承诺。")],
+  ["grants",'<div class="agrid"><div>'+acard("批次授权（由境内 A06/A10 逐项审批）","key",atbl(["授权批次","案件","可见范围（最小化）","有效期","状态"],[
+   ["B-2409-07","CASE-A03","护照影印件 + 亲属关系影印件","至 09-23 23:59","<span class='tag verified'>有效</span>"],
+   ["B-2408-31","CASE-A02","全套申请材料影印件","已过期 09-07","<span class='tag gray'>已回收</span>"],
+   ["B-2409-12","CASE-A03","护照原件（核验收件用）","待审批","<span class='tag pending'>A06/A10 审批中</span>"]
+  ]))+
+  agate("info","clock","到期自动回收","授权按「案件 × 材料范围 × 动作 × 有效期」授予；到期访问自动回收，不可续用；每次打开、翻页、尝试另存均写入访问审计（A10）。")+"</div><div>"+
+  acard("受控阅读器（演示）","eye",
+   '<div class="reader"><div class="rwm" id="readerWm"></div><div style="position:relative;z-index:2;text-align:center;">'+ic("files")+'<div style="margin-top:6px;">CASE-A03 · 护照影印件（水印预览）</div></div><div class="rtools"><span class="rbtn off" data-toast="演示：下载已被禁用（只读授权）">'+ic("ban")+'</span><span class="rbtn off" data-toast="演示：另存 / 打印已被禁用">'+ic("files")+'</span><span class="rbtn" data-toast="演示：全屏水印含机构名与时间，截屏可追溯">'+ic("eye")+'</span></div></div>'+
+   '<div class="pnote">影印件仅用于本批次授权用途；全屏水印含机构名称、案号与查看时间。发现材料与清单不符时，只能在「报告提交」中书面说明，不能直接联系客户。</div>')+
+  "</div></div>"],
+  ["reports",acard("提交服务方报告 / 凭据","doccheck",
+   '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;"><a class="abtn" data-toast="演示：上传服务方报告（PDF/图片），提交后状态为“待平台核验”">'+ic("upload")+'&nbsp;提交服务方报告</a><a class="abtn ghost" data-toast="演示：上传官方回执 / 凭据扫描件，须含官方编号与日期">'+ic("mail")+'&nbsp;上传官方凭据</a></div>'+
+   atbl(["提交物","案件","类型","提交时间","平台状态"],[
+    ["官方受理回执扫描件","CASE-A02","官方凭据","09-19 16:20","<span class='tag pending'>待核验（核验人≠发起人）</span>"],
+    ["材料核对报告 v2","CASE-A03","服务方报告","09-18 11:02","<span class='tag verified'>已核验采纳</span>"],
+    ["补料说明（随行子女）","CASE-A02","服务方报告","09-15 09:40","<span class='tag verified'>已转客户补件</span>"]
+   ]))+
+   agate("warn","alert","报告 ≠ 官方状态","服务方报告只作为线索进入平台核验流程，<b>不会直接显示为客户案件的官方进度</b>；官方节点以经核验的凭据为准。不得绕过平台向客户作受理 / 获批承诺。")],
+  ["profile",'<div class="agrid"><div>'+acard("机构资质（只读，来源 A02）","building",atbl(["项目","信息","状态"],[
+   ["境外持牌编号","示例 RCIC-XXXX（虚构）","<span class='tag verified'>有效至 2027-05</span>"],
+   ["执业范围","A 国居留 / 签证境外段","与承接项目一致"],
+   ["境内协作主体","示例出入境咨询（北京）","<span class='tag verified'>已关联</span>"],
+   ["门户账号","2 个（承办人，实名备案）","人员变更须报备"]
+  ]))+"</div><div>"+
+  acard("协议与承诺","doccheck",atbl(["文件","状态"],[
+   ["B2B 服务委托与交付边界","<span class='tag verified'>已签</span>"],
+   ["保密与个人信息处理协议","<span class='tag verified'>已签</span>"],
+   ["跨境数据共享清单（最小化）","<span class='tag verified'>已确认</span>"],
+   ["禁止夸大误导 / 协助虚假材料承诺","<span class='tag verified'>已承诺</span>"]
+  ]))+
+  agate("info","clock","到期联动","资质或协议到期前 60 天提醒；到期未续，门户自动降级为停止接收新案件、历史案件只读，状态由 A02/A03 强制控制。")+
+  "</div></div>"]
+ ]);
+function renderPortal(){
+ document.getElementById("portal-wrap").innerHTML=PV.home;
+ const wm="示例境外律所·A国 受控只读 "+new Date().toISOString().slice(0,10);
+ const svg="<svg xmlns='http://www.w3.org/2000/svg' width='280' height='180'><text x='30' y='95' fill='rgba(14,94,99,0.08)' font-size='15' font-family='sans-serif' transform='rotate(-24 140 90)'>"+wm+"</text></svg>";
+ const url="url(\"data:image/svg+xml;utf8,"+encodeURIComponent(svg).replace(/'/g,"%27")+"\")";
+ const w=document.getElementById("portalWm"); if(w)w.style.backgroundImage=url;
+ const r=document.getElementById("readerWm"); if(r)r.style.backgroundImage=url;
  window.scrollTo(0,0);
 }
 
@@ -1511,14 +1629,15 @@ function toast(m){const t=document.getElementById("toast");t.textContent=m;t.cla
 function route(h){
  const key=(h||location.hash.replace("#/","")||"launcher");
  const seg=key.split("/")[0];
- ["launcher","client","advisor","ipad","journey","admin"].forEach(v=>document.getElementById("view-"+v).classList.toggle("on",v===seg));
- const segMap={launcher:"launcher",client:"client/home-visitor",advisor:"advisor",ipad:"ipad",journey:"journey",admin:"admin"};
+ ["launcher","client","advisor","ipad","portal","journey","admin"].forEach(v=>document.getElementById("view-"+v).classList.toggle("on",v===seg));
+ const segMap={launcher:"launcher",client:"client/home-visitor",advisor:"advisor",ipad:"ipad",portal:"portal",journey:"journey",admin:"admin"};
  document.querySelectorAll(".seg a").forEach(a=>a.classList.toggle("on",a.dataset.go===(segMap[seg]||"launcher")));
  document.querySelectorAll(".screen-page").forEach(s=>s.classList.remove("on"));
  if(seg==="client"){const sk=key.split("/")[1]||"home-visitor";const el=document.getElementById("cs-"+sk);if(el){el.classList.add("on");const ph=el.querySelector(".pbody");if(ph)ph.scrollTop=0;}}
  if(seg==="admin"){renderAdmin(key.split("/")[1]||"home");}
  if(seg==="advisor"){const sk=key.split("/")[1]||"workbench";const el=document.getElementById("as-"+sk);if(el)el.classList.add("on");}
  if(seg==="ipad"){const sk=key.split("/")[1]||"i01";const el=document.getElementById("is-"+sk);if(el)el.classList.add("on");}
+ if(seg==="portal"){renderPortal();}
  window.scrollTo(0,0);
 }
 window.addEventListener("hashchange",()=>route());
@@ -1529,6 +1648,8 @@ document.addEventListener("click",e=>{
  if(tt){toast(tt.dataset.toast);return;}
  const sel=e.target.closest("[data-select] .chip,[data-select] .r");
  if(sel){const box=sel.parentElement;box.querySelectorAll(".chip,.r").forEach(x=>x.classList.remove("on"));sel.classList.add("on");return;}
+ const jt=e.target.closest("[data-jumptab]");
+ if(jt){const [g,t]=jt.dataset.jumptab.split(":");const h=document.querySelector('[data-tabs="'+g+'"] [data-tab="'+t+'"]');if(h)h.click();return;}
  const tab=e.target.closest("[data-tabs] [data-tab]");
  if(tab){const box=tab.closest("[data-tabs]");box.querySelectorAll("[data-tab]").forEach(x=>x.classList.remove("on"));tab.classList.add("on");document.querySelectorAll('[data-panelgroup="'+box.dataset.tabs+'"] [data-panel]').forEach(p=>p.classList.toggle("on",p.dataset.panel===tab.dataset.tab));return;}
  const dm=e.target.closest("[data-demo]");
