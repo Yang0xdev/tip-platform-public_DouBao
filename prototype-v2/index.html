@@ -1255,28 +1255,41 @@ AV.a07=atop("A07 · 财务与收费","收费方案落地、付款核验 / 到账
 /* ---------- A08 服务质量 ---------- */
 AV.a08=atop("A08 · 服务质量","工单队列、投诉与争议处理、合规事件路由、满意度基线。",ENVPILL)+
  akpis([["未决工单","7","",""],["投诉处理中","1","独立调查","warn"],["超时未响应","0","","up"],["满意度","基线采集中","样本不足不公布",""]])+
- '<div class="agrid"><div>'+acard("工单 / 投诉队列","headset",atbl(["单号","类型","关联","渠道","处理人","状态"],[
-  ["T-1042","退款争议","ORD-2409 / 顾问林","App+电话","<b>客服主管（非顾问林）</b>","<span class='tag pending'>处理中</span>"],
-  ["T-1051","材料疑问","CASE-A03 / 顾问陈","App","客服-周","<span class='tag info'>已分派</span>"],
-  ["T-1055","进度质疑","CASE-A02","App","办理员+主管","<span class='tag pending'>核实中</span>"]
+ atabs("a08",[["queue","工单队列"],["invest","投诉独立调查"],["sat","回访与平台外线索"]])+
+ apanels("a08",[
+  ["queue",'<div class="agrid"><div>'+acard("工单 / 投诉队列","headset",atbl(["单号","类型","关联","渠道","处理人","状态","操作"],[
+  ["T-1042","退款争议","ORD-2409 / 顾问林","App+电话","<b>客服主管（非顾问林）</b>","<span class='tag pending'>处理中</span>","<a class='abtn ghost sm' data-jumptab='a08:invest'>查看调查</a>"],
+  ["T-1051","材料疑问","CASE-A03 / 顾问陈","App","客服-周","<span class='tag info'>已分派</span>","<a class='abtn ghost sm' data-toast='演示：工单详情与处理记录'>处理</a>"],
+  ["T-1055","进度质疑","CASE-A02","App","办理员+主管","<span class='tag pending'>核实中</span>","<a class='abtn ghost sm' data-toast='演示：工单详情与处理记录'>处理</a>"],
+  ["#TK-0919-006","疑问（客户端演示单）","CASE-A03","App","客服-周","<span class='tag verified'>已受理</span>","<a class='abtn ghost sm' data-toast='演示：与客户端 P-15b 同源'>查看</a>"]
  ]))+"</div><div>"+
- acard("投诉处理闭环","shieldcheck",
-  '<div class="timeline2"><div class="tl"><div class="tt">受理与登记</div><div class="tm">自动关联订单/案件/顾问，告知处理时限</div></div>'+
-  '<div class="tl"><div class="tt">独立调查（A12 协同）</div><div class="tm">被投诉顾问不得参与、不能关闭工单</div></div>'+
-  '<div class="tl"><div class="tt">处理方案与客户确认</div><div class="tm">含补救 / 退款 / 交接，记录送达回执</div></div>'+
-  '<div class="tl"><div class="tt">关闭与回访</div><div class="tm">满意度独立回访，结果进入质量基线</div></div></div>')+"</div></div>"+
- agate("block","ban","回避原则","被投诉顾问不独占工单、不能自行关闭；调查人与被调查顾问分离；涉嫌违规线索同步 A12 合规工作台。")+
- '<div class="agrid"><div>'+acard("平台外成交线索（内部监测）","filter",atbl(["监测信号","对象（脱敏）","状态","处置"],[
+ acard("分派与时限规则","clock",
+  '<div class="wl yes">'+ic("check")+"<span>预约 / 疑问自动分派客服；资料变更转办理员；投诉强制进独立队列</span></div>"+
+  '<div class="wl yes">'+ic("check")+"<span>涉合同 / 费用 / 申请人的变更不“提交即生效”，转 A05/A06 重新确认留痕</span></div>"+
+  '<div class="wl no">'+ic("ban")+"<span>顾问只能看到本人关系内工单的<b>协同项</b>，看不到投诉正文、不能关闭</span></div>"+
+  '<div class="wl no">'+ic("ban")+"<span>顾问离职 / 被暂停不影响受理，自动改派责任人（见 #TK-0917）</span></div>")+
+ "</div></div>"],
+  ["invest",acard("投诉调查 · #TK-0915「被要求私下转账」","shieldcheck",
+  '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;"><span class="tag danger">高风险 · 私收款线索</span><span class="tag gray">被投诉人：顾问赵（已暂停新业务）</span><span class="tag info">调查人：合规-吴（与赵某无汇报关系）</span></div>'+
+  '<div class="tl-log">'+
+  '<div class="li"><div class="lt">客户提交投诉与转账截图</div><div class="lm">09-15 20:12 · 客户端独立受理，顾问侧不可见</div></div>'+
+  '<div class="li up"><div class="lt">自动路由合规，顾问赵某即时停新接旧</div><div class="lm">在办客 #2011 / #2017 转交接队列（A03/A04）</div></div>'+
+  '<div class="li"><div class="lt">资金与账户比对（A07/A10）</div><div class="lm">收款账户非签约主体账户；登记订单外同名凭证核对中</div></div>'+
+  '<div class="li"><div class="lt">双方陈述与材料固定</div><div class="lm">调查人分离；客服主管可补救但不能定性</div></div>'+
+  '<div class="li"><div class="lt gray">待结论：退款 / 补救 / 交接 / 资格处置 / 移送</div><div class="lm">结论须双人复核并向客户反馈，不以“和解”销案</div></div>'+
+  "</div>")+
+  agate("block","ban","回避原则","被投诉顾问不独占工单、不能自行关闭；调查人与被调查顾问分离；涉嫌违规线索同步 A12 合规工作台；核实为私收款 → A03 冻结新增授权，合规佣金不连坐清零。")+
+  '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;"><a class="abtn sm" data-go="admin/a12">转 A12 合规事件</a><a class="abtn ghost sm" data-go="admin/a03">查看顾问暂停 / 交接</a><a class="abtn ghost sm" data-toast="演示：处置结论双人复核后向客户送达">拟处置结论</a></div>'],
+  ["sat",'<div class="agrid"><div>'+acard("平台外成交线索（内部监测）","filter",atbl(["监测信号","对象（脱敏）","状态","处置"],[
   ["登记咨询后长期无下文，服务方侧出现同客户案件","客 #1877","<span class='tag pending'>待核实</span>","<a class='abtn ghost sm' data-toast='演示：线索不等于结论，先由合规人工核实'>核实</a>"],
-  ["客户投诉“顾问让我转私人账户”","客 #2032 / 顾问赵","<span class='tag danger'>高·已转 A12</span>","<a class='abtn sm danger' data-go='admin/a12'>合规事件</a>"],
+  ["客户投诉“顾问让我转私人账户”","客 #2032 / 顾问赵","<span class='tag danger'>高·已转 A12</span>","<a class='abtn sm danger' data-jumptab='a08:invest'>调查详情</a>"],
   ["登记订单外的同名收费凭证","ORD 外 ×1","<span class='tag info'>核对中</span>","<span class='small muted'>不自动处罚</span>"]
- ]))+"</div><div>"+
- acard("处置原则与满意度回访","shieldcheck",
-  '<div class="wl no">'+ic("ban")+"<span>不监控私人通讯、不要求排他、不限制客户正当选择权</span></div>"+
-  '<div class="wl yes">'+ic("check")+"<span>线索只触发<b>人工核实</b>；核实为私收款 → A03 冻结新增授权、A12 立案，合规佣金不连坐清零</span></div>"+
-  '<div class="wl yes">'+ic("check")+"<span>价值钩子在客户侧：未登记订单不享合同核验、凭据存档、材料托管、退款受理</span></div>"+
-  atbl(["回访节点","样本","满意度"],[["方案确认后","12","基线采集中"],["案件阶段完成","8","样本不足不公布"],["投诉关闭后","1","100% 跟进回访"]]))+
- "</div></div>";
+ ]))+
+ agate("info","eye","D5 边界","不监控私人通讯、不要求排他、不限制客户正当选择权；线索只触发人工核实。价值钩子在客户侧：未登记订单不享合同核验、凭据存档、材料托管、退款受理。")+"</div><div>"+
+ acard("满意度独立回访","headset",atbl(["回访节点","样本","满意度","执行方"],[["方案确认后","12","基线采集中","客服（非顾问）"],["案件阶段完成","8","样本不足不公布","客服（非顾问）"],["投诉关闭后","1","100% 跟进回访","合规 + 客服"]]))+
+ agate("warn","chart","样本不足不公布","满意度由独立于顾问的角色回访；早期只建基线，不把小样本数字用于考核或宣传。")+
+ "</div></div>"]
+ ]);
 
 /* ---------- A09 通知与运营内容 ---------- */
 AV.a09=atop("A09 · 通知与运营内容","多通道模板、送达回执看板、失败换通道 / 升级、首页与运营内容位编排。",ENVPILL)+
@@ -1328,24 +1341,56 @@ AV.a09=atop("A09 · 通知与运营内容","多通道模板、送达回执看板
 
 /* ---------- A10 权限安全与审计 ---------- */
 AV.a10=atop("A10 · 权限·安全·审计","账号角色、跨境共享审批、水印 / 下载审批、Consent 查询、访问审计、导出限制。",ENVPILL)+
- '<div class="agrid"><div>'+acard("账号与角色（RBAC）","key",atbl(["角色","关键权限","数据范围 / 约束"],[
+ atabs("a10",[["roles","账号与角色"],["approval","共享 / 下载审批"],["consent","Consent 查询"],["audit","访问审计与导出"]])+
+ apanels("a10",[
+  ["roles",'<div class="agrid"><div>'+acard("角色权限矩阵（RBAC）","key",atbl(["角色","关键权限","数据范围 / 约束"],[
   ["运营编辑","项目 / 内容草稿","不可发布"],
   ["内容复核","发布复核","不可自审"],
   ["核验员","凭据核验","不可核验本人发起案件"],
   ["办理员","案件 / 材料","按授权范围"],
   ["财务","到账核验 / 收据","不可见证件原件"],
   ["合规","备案 / 词库 / 事件 / 审计","不背销售指标，可一票暂停"],
+  ["门户账号（外部/自营）","仅本机构 / 本组案件","只读 + 水印，15 分钟超时"],
   ["管理员","账号 / 角色","双人操作 + 全审计"]
  ]))+"</div><div>"+
- acard("待审批","lock",atbl(["申请","类型","状态"],[
-  ["示例律所 A · CASE-A03 原件访问","跨境共享 / 批次","<span class='tag pending'>待审批</span>"],
-  ["办理员下载含证件 PDF","水印 / 下载","<span class='tag pending'>待审批</span>"],
-  ["客 #1980 家庭授权查询","Consent 核验","<span class='tag verified'>已授权</span>"]
- ]))+"</div></div>"+
- acard("Consent 查询与访问审计","files",
-  '<div class="notice" style="margin-bottom:10px;">Consent 以“人员 × 案件 × 动作 × 有效期”记录，可按客户 / 案件检索；授权撤回实时生效，门户访问随即关闭。</div>'+
-  '<div class="audit-log"><div class="al"><span class="alt">09-18 16:02</span><span>核验员 王 · 核验 CASE-A02 回执 · 允许</span></div><div class="al"><span class="alt">09-18 15:40</span><span>门户 示例律所A · 查看 CASE-A03 清单（水印）· 允许</span></div><div class="al"><span class="alt">09-18 14:11</span><span>办理员 赵 · 批量导出客户列表 · <b style="color:var(--red)">拒绝（未走审批）</b></span></div><div class="al"><span class="alt">09-18 11:05</span><span>顾问 林 · 访问非本人客户 #1942 · <b style="color:var(--red)">拒绝并告警</b></span></div></div>')+
- agate("info","shieldcheck","服务端逐项校验","权限在服务端逐动作校验，不靠前端隐藏按钮；批量导出须审批、加水印、留登记，敏感字段默认脱敏。");
+ acard("账号台账","users",atbl(["账号","角色","状态","最近登录 / 处置"],[
+  ["周（客服）","客服","<span class='tag verified'>在职</span>","09-20 09:12"],
+  ["赵（办理员）","办理员","<span class='tag danger'>暂停（调查中）</span>","停新接旧，客户交接中"],
+  ["示例律所 · 承办人 ×2","门户-外部","<span class='tag verified'>有效</span>","批次授权内可见"],
+  ["自营交付组 ×3","门户-内部","<span class='tag verified'>岗位授权</span>","离职 / 转岗即时回收"],
+  ["前员工 钱","办理员","<span class='tag gray'>已注销</span>","会话与令牌已失效，历史留痕"]
+ ]))+
+ agate("block","users","职责分离硬约束","核验人≠案件发起人；财务≠证件原件；发布复核≠编辑本人；管理员增删角色须双人确认；门户账号实名备案、人员变更即报备。")+
+ "</div></div>"],
+  ["approval",acard("待审批队列（跨境共享 / 原件 / 下载 / 导出）","lock",atbl(["申请","类型","最小化范围","申请人","状态","操作"],[
+  ["示例律所 A · CASE-A03 护照原件","原件查看","核验收件，现场查看不留存","门户-外部","<span class='tag pending'>待审批</span>","<a class='abtn sm' data-toast='演示：批准后生成限时批次，到期自动回收'>批准</a> <a class='abtn ghost sm' data-toast='演示：驳回并记录原因'>驳回</a>"],
+  ["批次 B-2409-15 · CASE-A11 全套影印件","跨境共享","仅本案件、72 小时","门户-外部","<span class='tag pending'>合规复核</span>","<a class='abtn ghost sm' data-toast='演示：查看跨境数据共享清单'>查看清单</a>"],
+  ["办理员下载含证件 PDF","水印 / 下载","1 个案件、加水印、禁转发","办理员-孙","<span class='tag pending'>待审批</span>","<a class='abtn sm' data-toast='演示：批准下载额度并登记'>批准</a>"],
+  ["自营交付组 · CASE-A02 报告上传权限","内部岗位","仅上传、不可见联系方式","门户-内部","<span class='tag verified'>已批准</span>","<span class='small muted'>至 09-25</span>"]
+ ]))+
+ agate("block","key","授权四要素","所有授权按「案件 × 材料范围 × 动作 × 有效期」授予，外部持牌方与自营部门同一标准；到期自动回收、不可续用；原件查看默认不批准，须说明不可替代用途。")],
+  ["consent",acard("Consent 查询（人员 × 案件 × 动作 × 有效期）","files",
+  '<div class="qrow"><input class="ain" placeholder="按客户 / 案号检索，如 CASE-A03 / 客 #1980"><a class="abtn sm" data-toast="演示：检索授权记录">查询</a></div>'+
+  atbl(["授权主体","案件","动作","有效期","状态 / 来源"],[
+   ["配偶 张某某（本人授权）","CASE-A03","查看 / 提交本人材料","12 个月","<span class='tag verified'>有效 · App 本人确认</span>"],
+   ["主申 王某某","CASE-A03","信息处理 + 跨境共享清单","至案件结束","<span class='tag verified'>有效 · 合同签署登记时</span>"],
+   ["成年父母","CASE-A03","—","—","<span class='tag gray'>从未授权</span>"],
+   ["客 #1902（前顾问关系）","历史案件","资料查看","已撤回","<span class='tag gray'>撤回实时生效，旧访问留痕</span>"]
+  ]))+
+  agate("info","shieldcheck","撤回即关闭","授权撤回 / 过期实时生效，门户与顾问端访问随即关闭；已履约所必需的法定记录保留，但不再产生新访问；成年成员必须本人授权，服务端逐项校验。")],
+  ["audit",acard("访问审计（实时流，不可删改）","files",
+  '<div class="audit-log"><div class="al"><span class="alt">09-20 10:24</span><span>客服-周 · 打开工单 #TK-0919-006 · 允许（投诉正文对顾问隔离）</span></div><div class="al"><span class="alt">09-18 16:02</span><span>核验员 王 · 核验 CASE-A02 回执 · 允许</span></div><div class="al"><span class="alt">09-18 15:40</span><span>门户 示例律所A · 查看 CASE-A03 清单（水印）· 允许</span></div><div class="al"><span class="alt">09-18 14:11</span><span>办理员 赵 · 批量导出客户列表 · <b style="color:var(--red)">拒绝（未走审批）</b></span></div><div class="al"><span class="alt">09-18 11:05</span><span>顾问 林 · 访问非本人客户 #1942 · <b style="color:var(--red)">拒绝并告警</b></span></div><div class="al"><span class="alt">09-17 17:30</span><span>门户 批次 B-2408-31 到期 · <b>访问自动回收（3 次尝试已记录）</b></span></div></div>')+
+  '<div class="agrid" style="margin-top:14px;"><div>'+acard("导出限制策略","ban",
+  '<div class="wl no">'+ic("ban")+"<span>敏感字段默认脱敏；批量导出默认关闭，逐次审批</span></div>"+
+  '<div class="wl no">'+ic("ban")+"<span>导出文件强制水印（姓名 + 时间 + 用途）、限制转发、登记份数</span></div>"+
+  '<div class="wl no">'+ic("ban")+"<span>证件原件、全量客户列表、佣金明细不可自助导出</span></div>")+"</div><div>"+
+  acard("告警与复核","alert",atbl(["规则","动作"],[
+   ["非关系内访问 / 越权下载","实时拒绝 + 告警合规"],
+   ["同一账号异常时段大量查看","二次验证 + 冻结待核"],
+   ["水印截屏外泄追溯","按机构 / 部门 + 时间定位"],
+   ["审计日志","只追加，管理员也不可删改"]
+  ]))+"</div></div>"]
+ ]);
 
 /* ---------- A11 经营与质量报表 ---------- */
 AV.a11=atop("A11 · 经营与质量报表","影子运行期先建基线、后定目标。展示履约质量、数据质量与顾问展业质量，不把未验证转化率当成绩。",ENVPILL)+
