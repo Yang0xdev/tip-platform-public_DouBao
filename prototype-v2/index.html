@@ -381,7 +381,7 @@ table.kv th{background:var(--line-2);font-weight:600;color:var(--t1);}
     <a data-go="journey">端到端主线</a>
     <a data-go="admin">总后台</a>
   </div>
-  <div class="stage-note">高保真可点击原型 · 依据 G-P2 页面目录 V0.2 · 全部为虚构示例数据，不构成移民/法律建议 · 已交付：客户端 23 屏 + 销售展业端 12 屏 + iPad 面谈 2 屏 + 服务方受控门户 4 页签 + 统一总后台 14 视图（Pass 1+2，含模板编辑器/回执升级）+ 端到端主线（14 节点跨三端、五道硬闸门），形成「一后台控两端 + B2B 受控协作」闭环</div>
+  <div class="stage-note">高保真可点击原型 · 依据 G-P2 页面目录 V0.2 · 全部为虚构示例数据，不构成移民/法律建议 · 已交付：客户端 23 屏 + 销售展业端 12 屏 + iPad 面谈 2 屏 + 服务方受控门户 4 页签 + 统一总后台 14 视图（Pass 1 内容履约 / Pass 2 销售治理 / Pass 3 门户与通知 / Pass 4 订单与案件闸门深化）+ 端到端主线（14 节点跨三端、五道硬闸门），形成「一后台控两端 + B2B 受控协作」闭环</div>
 </div>
 
 <!-- ============ 启动总览 ============ -->
@@ -1055,48 +1055,96 @@ AV.a04=atop("A04 · 客户关系与咨询","咨询分配、关系归属、重复
  ]);
 
 /* ---------- A05 方案报价与合同订单 ---------- */
-AV.a05=atop("A05 · 方案·报价·合同订单","报价复核、主体一致性校验门、合同模板、订单变更留痕。",ENVPILL)+
- agate("block","ban","订单 ORD-2409-018 主体一致性校验未通过",'对客签约主体＝示例出入境咨询（北京）、境外交付＝示例律所 A，但<b>收款账户归属另一第三方</b>，三要素不一致。系统已<b>阻断下单与收款</b>。',
-  '<a class="abtn sm" data-toast="演示：并列展示签约主体/交付方/收款账户三要素与凭证">查看三要素</a><a class="abtn sm gray" data-toast="演示：退回顾问修正，客户端不可见此单">退回修正</a>')+
- '<div class="agrid"><div>'+acard("报价复核队列","doccheck",atbl(["方案 / 订单","客户","收费方案","主体校验","金额复核","状态"],[
-  ["PROP-312","客 #2051","v3 已发布","<span class='tag verified'>一致</span>","<span class='tag pending'>待双人复核</span>","<a class='abtn sm' data-toast='演示：第二人复核（本人提交不可自审）'>复核</a>"],
-  ["PROP-309","客 #1980","v3 已发布","<span class='tag verified'>一致</span>","<span class='tag verified'>已通过</span>","<span class='small muted'>已转订单</span>"],
-  ["ORD-2409-018","客 #2010","—","<span class='tag danger'>不一致</span>","—","<span class='tag danger'>已阻断</span>"]
- ]))+"</div><div>"+
- acard("下单校验门","shieldcheck",
-  '<div class="wl yes">'+ic("check")+"<span>对客签约方＝境内备案主体</span></div>"+
-  '<div class="wl yes">'+ic("check")+"<span>境外段交付方＝已关联的持牌方</span></div>"+
-  '<div class="wl yes">'+ic("check")+"<span>收款账户＝签约主体账户</span></div>"+
-  '<div class="wl no">'+ic("ban")+"<span>任一不一致 → 阻断，不能生成订单 / 收款</span></div>"+
-  '<div class="wl no">'+ic("ban")+"<span>金额类修改双人复核；异币种不相加、不折总价</span></div>")+"</div></div>"+
- acard("合同模板与订单留痕","files",
-  atbl(["模板 / 单据","版本","审核状态","用途"],[
+AV.a05=atop("A05 · 方案·报价·合同订单","报价复核、主体一致性校验门、合同模板与签署登记、订单变更留痕。",ENVPILL)+
+ atabs("a05",[["queue","报价复核与订单"],["gate","主体一致性校验"],["tpl","合同模板与签署"],["log","订单变更留痕"]])+
+ apanels("a05",[
+  ["queue",akpis([["待复核报价","1","PROP-312","warn"],["主体阻断","1","ORD-2409-018","bad"],["进行中订单","6","",""],["本月退款调整","1","ORD-2388",""]])+
+   acard("报价复核队列","doccheck",atbl(["方案 / 订单","客户","收费方案","主体校验","金额复核","状态"],[
+    ["PROP-312","客 #2051","Fee v3 已发布","<span class='tag verified'>一致</span>","<span class='tag pending'>待双人复核</span>","<a class='abtn sm' data-toast='演示：第二人复核（提交人不可自审）'>复核</a>"],
+    ["PROP-309 / ORD-2401","客 #1980","Fee v3 已发布","<span class='tag verified'>一致</span>","<span class='tag verified'>已通过</span>","<span class='small muted'>已转订单并签约</span>"],
+    ["ORD-2409-018","客 #2010","—","<span class='tag danger'>不一致</span>","—","<span class='tag danger'>已阻断</span>"]
+   ]))+
+   agate("info","shieldcheck","复核口径","复核只核：收费方案版本、费用分项与收取方、币种（异币种分列不相加、不折人民币总价）、主体三要素；复核人不能是报价提交人，复核记录写入订单快照。")],
+  ["gate",agate("block","ban","订单 ORD-2409-018 主体一致性校验未通过",'对客签约主体＝示例出入境咨询（北京）、境外交付＝示例律所 A，但<b>收款账户归属另一第三方</b>，三要素不一致。系统已<b>阻断下单与收款</b>，无任何后台“强制通过”入口。',
+    '<a class="abtn sm" data-toast="演示：并列展示签约主体/交付方/收款账户三要素与凭证">查看三要素凭证</a><a class="abtn sm gray" data-toast="演示：退回顾问修正；修正后重新走校验，客户端始终不可见此单">退回修正</a>')+
+   '<div class="agrid"><div>'+acard("三要素对照（系统登记 × 凭证核验）","scale",atbl(["要素","系统登记","凭证核验","结果"],[
+    ["对客签约主体","示例出入境咨询（北京）有限公司","营业执照 + 备案信息一致","<span class='tag verified'>一致</span>"],
+    ["境外段交付方","示例境外律所 · A 国","持牌有效，已关联境内主体、协议已签","<span class='tag verified'>一致</span>"],
+    ["收款账户户名","某第三方商务公司","银行户名 ≠ 签约主体","<span class='tag danger'>不一致</span>"]
+   ]))+"</div><div>"+
+   acard("阻断后会发生什么","ban",
+    '<div class="wl no">'+ic("ban")+"<span>不生成合同、不向客户推送付款指引</span></div>"+
+    '<div class="wl no">'+ic("ban")+"<span>顾问端订单停在“校验失败”，不可改金额绕过</span></div>"+
+    '<div class="wl no">'+ic("ban")+"<span>客户端不出现该订单；不产生佣金应计</span></div>"+
+    '<div class="wl yes">'+ic("check")+"<span>仅可退回顾问修正后重新提交，全程留痕</span></div>")+
+   "</div></div>"],
+  ["tpl",'<div class="agrid"><div>'+acard("合同 / 告知模板（A12 审核发布）","files",atbl(["模板 / 单据","版本","审核状态","用途"],[
     ["服务协议（境内主体）","v5","<span class='tag verified'>合规已审</span>","对客签约"],
-    ["重要事项告知书","v3","<span class='tag verified'>合规已审</span>","风险与边界告知"],
-    ["数据授权 / 跨境共享同意书","v2","<span class='tag verified'>合规已审</span>","Consent 凭证"]
-  ])+
-  '<div class="timeline2" style="margin-top:12px;"><div class="tl"><div class="tt">方案生成 → 主体校验 → 双人复核 → 签约 → 收款核验</div><div class="tm">订单全链路状态机；任何金额/主体变更均留痕、可回溯、不可物理删除</div></div><div class="tl"><div class="tt">最近变更：PROP-309 境外律师费由“估算”改为合同载明金额</div><div class="tm">变更人 顾问陈 · 复核人 财务李 · 客户已重新确认 · 09-16</div></div></div>');
+    ["重要事项告知书","v3","<span class='tag verified'>合规已审</span>","风险与边界告知确认"],
+    ["数据授权 / 跨境共享同意书","v2","<span class='tag verified'>合规已审</span>","Consent 凭证，逐项可撤"],
+    ["退款与保障条款附件","v2","<span class='tag verified'>合规已审</span>","随订单版本快照留存"]
+   ]))+"</div><div>"+
+   acard("签署与告知确认登记","doccheck",atbl(["订单","服务协议","重要事项告知","数据授权","签署方式 / 登记"],[
+    ["ORD-2401","<span class='tag verified'>已签</span>","<span class='tag verified'>已逐条确认</span>","<span class='tag verified'>已采集</span>","线下签署，核验人王某某"],
+    ["ORD-2407","<span class='tag verified'>已签</span>","<span class='tag verified'>已确认</span>","<span class='tag pending'>配偶项待本人授权</span>","电子签，待家庭授权齐套"],
+    ["ORD-2409-018","—","—","—","<span class='tag danger'>主体阻断，未生成</span>"]
+   ]))+
+   agate("block","ban","不齐套不进入履约","告知确认、必要 Consent 缺失时，案件不能发起材料流程；成年家庭成员授权必须本人完成，不能由主申请人代签。")+
+   "</div></div>"],
+  ["log",acard("订单变更留痕台账（不可物理删除）","clock",atbl(["时间","订单","变更项","变更前 → 后","发起人","复核人","客户重新确认"],[
+   ["09-16","PROP-309","境外律师费","估算 → 合同载明金额","顾问陈","财务李","<span class='tag verified'>已确认</span>"],
+   ["09-12","ORD-2407","分期付款计划","2 期 → 3 期","顾问陈","财务李","<span class='tag verified'>已确认</span>"],
+   ["09-08","ORD-2388","退款调整","服务费部分退款","客服周","财务主管","<span class='tag info'>处理中·冻结结算</span>"],
+   ["09-05","ORD-2401","收款账户核验","水单待核验 → 渠道到账一致","财务张","财务主管","—"]
+  ]))+
+  agate("block","ban","变更规则","金额、收费主体、币种、收费方案版本的任何变更必须：双人复核 ＋ 客户重新确认 ＋ 生成新版本快照；旧版本只读留痕；进行中订单的变更同步暂停对应佣金结算。")]
+ ]);
 
 /* ---------- A06 案件与材料 ---------- */
-AV.a06=atop("A06 · 案件与材料","案件工作台、材料审核、凭据核验门、门户批次授权、T0 时限配置。",ENVPILL)+
+AV.a06=atop("A06 · 案件与材料","案件工作台、材料审核、凭据核验门、门户批次授权、T0 时限与升级配置。",ENVPILL)+
  akpis([["进行中案件","42","",""],["凭据门待办","5","","warn"],["T0 临期","1","","warn"],["T0 超时","0（1 升级中）","","bad"]])+
- agate("block","clock","CASE-A02 · 官方受理回执 T0 剩余 4 小时","回执尚未取得官方凭据；App 已达、短信未达并已转人工电话。仍未回执将升级主管并通知客户。<b>不允许把“公司已递交”展示为“官方已受理”。</b>",
-  '<a class="abtn sm" data-toast="演示：登记官方受理凭据（须核验人，非案件发起人）">登记凭据</a><a class="abtn sm gray" data-go="admin/a09">查看通知升级</a>')+
- '<div class="agrid"><div>'+acard("材料审核与凭据核验门","folder",atbl(["材料 / 凭据","来源","提交","状态","核验人"],[
-  ["无犯罪记录公证","<span class='src cu'>客户提交</span>","客 #2051","<span class='tag pending'>待审核</span>","—"],
-  ["官方受理回执","<span class='src off'>官方凭据</span>","CASE-A02","<span class='tag danger'>待核验</span>","须非发起人"],
-  ["境外律所工作报告","<span class='src sp'>服务方报告</span>","门户批次","<span class='tag info'>已接收</span>","办理员"],
-  ["护照首页","<span class='src cu'>客户提交</span>","客 #1980","<span class='tag verified'>已核验</span>","王核验"]
- ]))+"</div><div>"+
- acard("门户批次授权 / T0 配置","settings",
-  atbl(["案件","服务方","范围 / 有效期","水印"],[["CASE-A03","示例律所 A","材料清单+报告 / 7 天","全屏水印"],["CASE-A02","示例律所 A","仅回执上传 / 3 天","全屏水印"]])+
-  '<div class="cat-sec">T0 时限配置</div>'+
-  atbl(["关键节点","时限","通道","升级"],[
-    ["收款核验","1 工作日","App+短信","主管"],
-    ["官方受理回执","2 工作日","App+短信+电话","主管+合规"],
-    ["补料通知","24 小时","App+短信","顾问主管"]
-  ]))+"</div></div>"+
- agate("info","shieldcheck","职责分离（硬规则）","凭据核验人不能是该案件的办理发起人；官方凭据核验通过，进度时间线才从“公司审核”推进到“已核验官方凭据”。");
+ atabs("a06",[["board","案件工作台"],["cred","材料与凭据核验门"],["portal","门户批次授权"],["t0","T0 时限与升级"]])+
+ apanels("a06",[
+  ["board",agate("block","clock","CASE-A02 · 官方受理回执 T0 剩余 4 小时","回执尚未取得官方凭据；App 已达、短信未达并已转人工电话。仍未回执将升级主管并通知客户。<b>不允许把“公司已递交”展示为“官方已受理”。</b>",
+    '<a class="abtn sm" data-jumptab="a06:cred">登记 / 核验凭据</a><a class="abtn sm gray" data-go="admin/a09">查看通知升级</a>')+
+   acard("案件工作台（示例 3 件）","briefcase",atbl(["案号","主申（脱敏）","项目","当前阶段","办理发起人","当前待办","T0 倒计时"],[
+    ["CASE-A02","主申 李**","A 国随行子女 v1.4","已递交·待官方受理回执","周办理","<span class='tag danger'>官方回执待核验</span>","<span class='tag danger'>剩 4h · 已升级</span>"],
+    ["CASE-A03","主申 王**","A 国技术居留 v3.2","材料准备","王办理","<span class='tag pending'>1 项退回待客户补</span>","补料 T0 18h"],
+    ["CASE-A11","主申 陈**","A 国技术居留 v3.2","受理后审理中","周办理","服务方报告待核","—"]
+   ]))+
+   agate("info","eye","四级来源在客户侧同源呈现","客户 P-11 时间线与本工作台共用同一事实源：客户提交 / 公司审核 / 服务方报告 / 已核验官方凭据；公司内部动作不会显示为官方状态。")],
+  ["cred",'<div class="agrid"><div>'+acard("材料审核与凭据核验门","folder",atbl(["材料 / 凭据","来源","案件","状态","核验人"],[
+    ["无犯罪记录公证","<span class='src cu'>客户提交</span>","CASE-A03","<span class='tag pending'>待审核</span>","—"],
+    ["官方受理回执","<span class='src off'>官方凭据</span>","CASE-A02","<span class='tag danger'>待核验</span>","须非发起人"],
+    ["境外律所工作报告","<span class='src sp'>服务方报告</span>","门户批次 B-2409-07","<span class='tag info'>已接收待核</span>","办理员"],
+    ["护照首页","<span class='src cu'>客户提交</span>","CASE-A03","<span class='tag verified'>已核验</span>","王核验"]
+   ]))+"</div><div>"+
+   acard("凭据核验动作 · CASE-A02 受理回执","doccheck",
+    '<label class="fl">官方回执编号<input class="ain" placeholder="以回执原件为准，示例留空"></label>'+
+    '<label class="fl">出具机关 / 出具日期<input class="ain" placeholder="如：A 国移民局 / 待核验"></label>'+
+    '<label class="fl">核验方式<select class="ain"><option>官方渠道复核（电话 / 在线系统）</option><option>原件比对 + 渠道复核</option></select></label>'+
+    '<div class="wl no" style="margin:4px 0 10px;">'+ic("ban")+"<span>本案发起人：周办理 —— 不可担任核验人</span></div>"+
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;"><a class="abtn sm" data-toast="演示：王核验复核通过，时间线推进为“已核验官方凭据”，T0 计时关闭">'+ic("shieldcheck")+'&nbsp;核验通过（王核验）</a><a class="abtn ghost sm" data-toast="演示：退回补正并写明原因，通知客户/服务方">退回补正</a><a class="abtn ghost sm" data-toast="演示：存疑转主管，不改变客户侧状态">存疑转主管</a></div>')+
+   "</div></div>"+
+   agate("block","ban","凭据门硬规则","核验人不能是案件办理发起人；服务方报告、客户转述、水单都不能推进官方节点；凭据核验通过后客户时间线才出现「已核验官方凭据」，且附核验人与时间。")],
+  ["portal",'<div class="agrid"><div>'+acard("生效中的批次授权","key",atbl(["授权批次","案件 / 服务方","可见范围","有效期","状态"],[
+    ["B-2409-07","CASE-A03 / 示例律所 A","护照 + 亲属关系影印件、报告上传","至 09-23 23:59","<span class='tag verified'>有效</span>"],
+    ["B-2408-31","CASE-A02 / 示例律所 A","仅回执上传","已过期 09-07","<span class='tag gray'>已回收</span>"]
+   ]))+"</div><div>"+
+   acard("授权申请审批队列","inbox",atbl(["申请","服务方 / 案件","申请范围","申请时间","审批"],[
+    ["B-2409-12","示例律所 A / CASE-A03","护照<b>原件</b>现场核验收件","09-19","<a class='abtn sm' data-toast='演示：可缩小范围、设有效期后批准；原件查看为特殊审批'>批准</a><a class='abtn ghost sm' data-toast='演示：驳回并说明原因'>驳回</a>"],
+    ["B-2409-15","示例律所 A / CASE-A11","全套影印件 7 天","09-20","<a class='abtn sm' data-toast='演示：批准批次授权，门户即时可见、到期自动回收'>批准</a><a class='abtn ghost sm' data-toast='演示：缩小范围或驳回'>调整</a>"]
+   ]))+
+   agate("info","lock","最小化与可追溯","默认只给影印件 + 全屏水印 + 禁下载；原件查看须特殊审批并记录用途；授权到期自动回收，门户侧同步失效；全部动作进入 A10 审计。")+
+   "</div></div>"],
+  ["t0",acard("T0 时限与升级链配置","clock",atbl(["关键节点","承诺时限","通知通道序列","一级升级","二级升级","回执要求"],[
+    ["付款到账核验","1 个工作日","App + 短信","财务主管","运营负责人","渠道到账凭据"],
+    ["官方受理回执","2 个工作日","App + 短信 + 人工电话","案件主管","合规","官方凭据核验通过"],
+    ["补料通知送达","24 小时","App + 短信","顾问主管","运营主管","客户已读 / 电话确认"],
+    ["重要节点结果告知","1 个工作日","App + 短信 + 电话","主管","合规","凭据 + 双轨留痕"]
+   ]))+
+   agate("block","ban","时限规则","T0 从“触发事件被系统确认”起算；通知未达按通道序列自动换道并升级；<b>超期只产生升级记录与处置，绝不改写或延长对客户承诺的原截止时间</b>；升级结果在客户 P-13 与案件时间线同源可见（A09）。")]
+ ]);
 
 /* ---------- A07 财务与收费 ---------- */
 AV.a07=atop("A07 · 财务与收费","收费方案落地、付款核验 / 到账、收据、代收代付；佣金规则版本库、六态结算、异议与调整。控制销售端 S-09。",ENVPILL)+
