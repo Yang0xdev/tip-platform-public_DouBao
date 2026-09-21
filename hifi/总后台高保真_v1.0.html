@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>总后台管理系统高保真 · v1.0</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23002661'/%3E%3Cpath d='M8 20l5-6 4 3 7-9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --navy:#002661;--navy-700:#1E3E78;--navy-100:#DCE4F2;--navy-50:#EDF1F8;--berry:#AF2D67;
+  --grad:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);
+  --ink:#1B2433;--mut:#5E6B7E;--faint:#8A95A6;--line:#E5E9F0;--line-2:#F0F3F8;--paper:#F5F7FA;
+  --green:#177A5B;--green-bg:#E6F4EE;--amber:#B45309;--amber-bg:#FBF1E2;--red:#C03221;--red-bg:#FCEBEA;--blue:#1D5F8A;--blue-bg:#E9F2F8;--purple:#6B5AA8;--purple-bg:#EFECF7;
+  --sh1:0 1px 2px rgba(16,32,67,.05),0 4px 14px rgba(16,32,67,.06);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+body{font-family:"Manrope","Noto Sans SC",-apple-system,"PingFang SC",sans-serif;background:var(--paper);color:var(--ink);font-size:13px;}
+.st{font-size:10.5px;font-weight:600;border-radius:6px;padding:3px 8px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
+.st .d{width:6px;height:6px;border-radius:50%;background:currentColor;}
+.st.g{background:var(--green-bg);color:var(--green);}.st.a{background:var(--amber-bg);color:var(--amber);}
+.st.r{background:var(--red-bg);color:var(--red);}.st.b{background:var(--blue-bg);color:var(--blue);}.st.p{background:var(--purple-bg);color:var(--purple);}
+.st.n{background:var(--line-2);color:var(--mut);}
+/* login */
+.login{position:fixed;inset:0;display:flex;z-index:50;}
+.login .lp{flex:1.1;background:var(--grad);background-size:170% 170%;animation:drift 16s ease-in-out infinite alternate;color:#fff;padding:60px;display:flex;flex-direction:column;justify-content:center;}
+@keyframes drift{0%{background-position:0 30%}100%{background-position:100% 70%}}
+.login .lp h1{font-size:30px;font-weight:800;line-height:1.4;}.login .lp p{opacity:.88;margin-top:14px;line-height:1.9;font-size:13.5px;max-width:420px;}
+.login .rp{width:430px;background:#fff;display:flex;flex-direction:column;justify-content:center;padding:0 52px;}
+.login .rp h2{font-size:19px;font-weight:800;margin-bottom:22px;}
+.fld{height:46px;border:1.5px solid var(--line);border-radius:12px;display:flex;align-items:center;padding:0 14px;margin-bottom:13px;font-size:14px;color:var(--faint);background:#fff;}
+.btn{border:0;font-family:inherit;font-weight:700;border-radius:12px;height:42px;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:13.5px;cursor:pointer;padding:0 18px;transition:transform .13s,background .2s;}
+.btn:active{transform:scale(.98);}
+.btn.navy{background:var(--navy);color:#fff;}.btn.ghost{background:#fff;border:1.5px solid var(--navy);color:var(--navy);}
+.btn.quiet{background:var(--navy-50);color:var(--navy);}
+.btn.sm{height:32px;font-size:12px;border-radius:9px;padding:0 12px;}
+.btn.block{width:100%;}
+/* console */
+.app{display:none;min-height:100vh;}
+.app.on{display:flex;}
+.side{width:222px;flex:none;background:#fff;border-right:1px solid var(--line);height:100vh;position:sticky;top:0;display:flex;flex-direction:column;overflow-y:auto;scrollbar-width:none;}
+.side::-webkit-scrollbar{display:none;}
+.brand{display:flex;align-items:center;gap:10px;padding:20px 18px 16px;font-weight:800;font-size:14px;color:var(--navy);}
+.brand .mk{width:30px;height:30px;border-radius:9px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;flex:none;}
+.navgroup{font-size:10.5px;color:var(--faint);font-weight:700;padding:14px 18px 5px;letter-spacing:.5px;}
+.nav a{display:flex;align-items:center;gap:10px;padding:8.5px 18px;font-size:12.5px;color:var(--mut);cursor:pointer;border-left:3px solid transparent;}
+.nav a.on{background:var(--navy-50);color:var(--navy);font-weight:700;border-left-color:var(--navy);}
+.nav svg{width:17px;height:17px;flex:none;}
+.main{flex:1;min-width:0;display:flex;flex-direction:column;}
+.top{height:58px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 24px;position:sticky;top:0;z-index:10;}
+.top h2{font-size:16px;font-weight:800;flex:1;}
+.content{padding:22px 24px 60px;}
+.viewp{display:none;}.viewp.on{display:block;animation:fi .28s var(--ease-out);}
+@keyframes fi{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:16px;}
+.kpi{background:#fff;border-radius:15px;box-shadow:var(--sh1);padding:16px 18px;}
+.kpi b{font-size:24px;font-weight:800;display:block;color:var(--navy);font-variant-numeric:tabular-nums;}
+.kpi span{font-size:11.5px;color:var(--faint);}
+.kpi .st{margin-top:8px;}
+.card{background:#fff;border-radius:15px;box-shadow:var(--sh1);padding:18px;margin-bottom:15px;}
+.card h4{font-size:14px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:9px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{color:var(--faint);font-weight:600;text-align:left;padding:9px 9px;border-bottom:1px solid var(--line);font-size:11px;white-space:nowrap;}
+td{padding:11px 9px;border-bottom:1px solid var(--line-2);vertical-align:middle;}
+tr:last-child td{border-bottom:0;}
+.tabs{display:flex;gap:4px;background:var(--line-2);border-radius:11px;padding:4px;margin-bottom:16px;width:fit-content;}
+.tabs button{border:0;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--mut);background:transparent;padding:8px 16px;border-radius:8px;cursor:pointer;}
+.tabs button.on{background:#fff;color:var(--navy);box-shadow:var(--sh1);}
+.tpane{display:none;}.tpane.on{display:block;}
+.gate{border:1.5px dashed #B9847C;background:var(--red-bg);border-radius:12px;padding:13px 15px;font-size:12px;color:#8a261c;line-height:1.8;}
+.note{background:var(--navy-50);border-radius:12px;padding:12px 15px;font-size:12px;color:var(--navy);line-height:1.8;display:flex;gap:10px;align-items:flex-start;margin-bottom:14px;}
+.switch2{position:relative;width:38px;height:22px;border-radius:12px;background:var(--line);cursor:pointer;flex:none;transition:background .2s;}
+.switch2.on{background:var(--navy);}
+.switch2::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .22s var(--ease-out);box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.switch2.on::after{left:18px;}
+.matrix-tbl td:first-child{font-weight:600;background:var(--line-2);}
+.matrix-tbl td{text-align:center;}
+.matrix-tbl .yes{color:var(--green);font-weight:700;}.matrix-tbl .no{color:var(--faint);}
+.badge-ctrl{font-size:10px;border-radius:5px;padding:2px 7px;font-weight:700;}
+.bc-v{background:var(--navy-50);color:var(--navy);}.bc-e{background:var(--amber-bg);color:var(--amber);}.bc-r{background:var(--red-bg);color:var(--red);}
+.pbar{height:7px;background:var(--line-2);border-radius:5px;overflow:hidden;width:110px;display:inline-block;vertical-align:middle;}
+.pbar i{display:block;height:100%;background:var(--navy);border-radius:5px;}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important;}}
+</style>
+</head>
+<body>
+
+<!-- 登录（后台唯一允许渐变处） -->
+<div class="login" id="login">
+  <div class="lp">
+    <div style="width:52px;height:52px;border-radius:15px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;margin-bottom:26px;">
+      <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>
+    </div>
+    <h1>透明身份规划平台<br>运营管理控制台</h1>
+    <p>一个后台控制两个终端：项目与收费、顾问授权、案件与 T0、服务方门户、财务佣金、投诉合规、内容素材，全部操作留痕、双人复核、最小权限。</p>
+    <p style="opacity:.7;font-size:11.5px;margin-top:30px;">示例环境 · 数据均为虚构【示例】</p>
+  </div>
+  <div class="rp">
+    <h2>员工登录</h2>
+    <div class="fld">工号 / 企业邮箱</div>
+    <div class="fld">密码 + 动态验证码</div>
+    <button class="btn navy block" onclick="document.getElementById('login').style.display='none';document.getElementById('app').classList.add('on');">登录控制台</button>
+    <div style="font-size:11px;color:var(--faint);margin-top:16px;line-height:1.8;">仅限授权员工；登录即接受操作审计。敏感操作二次验证，异常登录自动冻结。</div>
+  </div>
+</div>
+
+<div class="app" id="app">
+  <aside class="side">
+    <div class="brand"><span class="mk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg></span>控制台</div>
+    <nav class="nav" id="nav">
+      <div class="navgroup">总览</div>
+      <a data-v="home" class="on">运营总览</a>
+      <a data-v="matrix">一后台控两端 · 控制矩阵</a>
+      <div class="navgroup">供给与交易</div>
+      <a data-v="a01">A01 项目 · 核验 · 收费 · 发布</a>
+      <a data-v="a02">A02 签约主体与跨境</a>
+      <a data-v="a07">A07 财务与佣金</a>
+      <div class="navgroup">人与交付</div>
+      <a data-v="a03">A03 顾问资质与授权</a>
+      <a data-v="a04">A04 客户与顾问关系</a>
+      <a data-v="a05">A05 案件与 T0 时限</a>
+      <a data-v="a06">A06 服务方与受控门户</a>
+      <div class="navgroup">治理与内容</div>
+      <a data-v="a08">A08 投诉与合规事件</a>
+      <a data-v="a09">A09 通知模板与送达</a>
+      <a data-v="a12">A12 内容素材与分享</a>
+      <a data-v="a10">A10 角色 · 审批 · 审计</a>
+      <a data-v="a11">A11 基础数据与数据源</a>
+    </nav>
+  </aside>
+  <div class="main">
+    <div class="top"><h2 id="ptitle">运营总览</h2><span class="st g"><span class="d"></span>影子运行环境</span><span style="font-size:11.5px;color:var(--faint);">合规主管 · 周某</span></div>
+    <div class="content" id="content"><!--VIEWS-->
+    </div>
+  </div>
+</div>
+<script>
+const I={home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',scale:'<path d="M12 3v18M7 21h10M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/>',coins:'<ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3"/><path d="M15 10c3.3 0 6-1.3 6-3v5c0 1.7-2.7 3-6 3"/><path d="M3 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/>',shield:'<path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/>',users:'<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5 6-5s6 1.7 6 5"/><path d="M16 5.2a3.2 3.2 0 0 1 0 5.6M17.5 15.4c2 .7 3.5 2.2 3.5 4.6"/>',case:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 4v5M16 4v5"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',alert:'<path d="M12 8v5M12 16.5v.5"/><path d="M10.3 3.9 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',bell:'<path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>',doc:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/>',settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 2.6 14H2.5a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 2.6V2.5a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V8a1.6 1.6 0 0 0 1.5 1h.1a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/>',globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/>'};
+function ic(k,s){s=s||17;return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+I[k]+'</svg>';}
+function kpi(v,l,tag,cls){return '<div class="kpi"><b>'+v+'</b><span>'+l+'</span>'+(tag?'<div class="st '+(cls||'n')+'"><span class="d"></span>'+tag+'</div>':'')+'</div>';}
+function card(h,inner,extra){return '<div class="card" '+(extra||'')+'><h4>'+h+'</h4>'+inner+'</div>';}
+const T={
+ th:'<tr><th>对象</th><th>状态</th><th>关键事实 / 金额</th><th>责任人</th><th>动作</th></tr>'
+};
+const V={};
+/* 总览 */
+V.home='<div class="kpis">'+kpi('24','在办案件','2 个今日到期','a')+kpi('3','付款待核验','待核验≠到账','a')+kpi('1','T0 时限预警','CASE-A02 剩 4h','r')+kpi('2','授权 / 发布待审','双人复核中','p')+'</div>'+
+ '<div class="grid2">'+
+ card('硬闸门待处理队列','<table><tr><th>闸门</th><th>对象</th><th>动作</th></tr>'+
+ '<tr><td><span class="st r"><span class="d"></span>主体不一致</span></td><td>ORD-2409-018 收款户名为第三方公司</td><td><button class="btn sm navy">去复核</button></td></tr>'+
+ '<tr><td><span class="st a"><span class="d"></span>T0 未达</span></td><td>CASE-A02 短信未达，已转人工/升级主管</td><td><button class="btn sm navy">看处置</button></td></tr>'+
+ '<tr><td><span class="st a"><span class="d"></span>发布复核</span></td><td>B 地区投资居留 3 项事实无核验</td><td><button class="btn sm ghost">阻止发布</button></td></tr>'+
+ '<tr><td><span class="st p"><span class="d"></span>资质到期</span></td><td>林某备案 9/30 到期，客户交接中</td><td><button class="btn sm navy">看交接</button></td></tr></table>')+
+ card('发布与数据源开关','<table><tr><th>内容</th><th>终端</th><th>状态 / 开关</th></tr>'+
+ '<tr><td>A 国技术居留 v3.2 + Fee v3</td><td>客户端 / 顾问端</td><td><span class="st g"><span class="d"></span>已发布</span></td></tr>'+
+ '<tr><td>C 国数字游民 v0.3</td><td>客户端</td><td><span class="st a"><span class="d"></span>核验中·不可见</span></td></tr>'+
+ '<tr><td>护照/签证数据源（第三方授权）</td><td>客户端全球通行</td><td><div class="switch2" onclick="this.classList.toggle(\'on\')"></div> <span style="font-size:11px;color:var(--faint);">授权未落实，保持关闭，自动下架</span></td></tr></table>')+
+ '</div>'+
+ card('今日关键留痕','<table><tr><th>时间</th><th>事件</th><th>留痕</th></tr>'+
+ '<tr><td>10:24</td><td>CASE-A03 官方受理回执核验（核验人≠发起人）</td><td><span class="st g"><span class="d"></span>凭据留痕</span></td></tr>'+
+ '<tr><td>09:50</td><td>门户批次 B-2409-12 护照原件查看申请待审批</td><td><span class="st a"><span class="d"></span>特殊审批</span></td></tr>'+
+ '<tr><td>09:12</td><td>客 #2032 投诉顾问私收款 #TK-0915（独立受理）</td><td><span class="st r"><span class="d"></span>合规事件</span></td></tr></table>');
+
+/* 控制矩阵 */
+V.matrix=card('一后台控两端 · 内容控制矩阵（节选）','<table class="matrix-tbl" style="table-layout:fixed;"><colgroup><col style="width:24%"><col style="width:12%"><col style="width:12%"><col style="width:14%"><col style="width:14%"><col style="width:14%"></colgroup>'+
+ '<tr><th style="text-align:left;">前端内容 / 能力</th><th>客户端</th><th>顾问端</th><th>后台编辑</th><th>发布审核</th><th>远程开关 / 下架</th></tr>'+
+ '<tr><td style="text-align:left;">首页 Banner / 推荐位 / 防骗提示</td><td class="yes">可见</td><td class="no">—</td><td><span class="badge-ctrl bc-v">A12/A09</span></td><td class="yes">双人</td><td><div class="switch2 on" onclick="this.classList.toggle(\'on\')"></div></td></tr>'+
+ '<tr><td style="text-align:left;">项目库版本与可见范围</td><td class="yes">已发布可见</td><td class="yes">按授权</td><td><span class="badge-ctrl bc-v">A01</span></td><td class="yes">发布复核</td><td><div class="switch2 on" onclick="this.classList.toggle(\'on\')"></div></td></tr>'+
+ '<tr><td style="text-align:left;">收费方案 / 费用项与收取方</td><td class="yes">只读</td><td class="yes">只读</td><td><span class="badge-ctrl bc-a">A01 Fee</span></td><td class="yes">版本快照</td><td><div class="switch2" onclick="this.classList.toggle(\'on\')"></div></td></tr>'+
+ '<tr><td style="text-align:left;">顾问可见项目 / 报价范围</td><td class="no">—</td><td class="yes">授权内</td><td><span class="badge-ctrl bc-v">A03</span></td><td class="yes">审核绑定</td><td><div class="switch2 on" onclick="this.classList.toggle(\'on\')"></div></td></tr>'+
+ '<tr><td style="text-align:left;">分享素材与名片字段</td><td class="yes">客户接收</td><td class="yes">白名单</td><td><span class="badge-ctrl bc-v">A12</span></td><td class="yes">核准制</td><td><div class="switch2 on" onclick="this.classList.toggle(\'on\')"></div> 过期自动停</td></tr>'+
+ '<tr><td style="text-align:left;">通知模板 / T0 通道</td><td class="yes">接收</td><td class="yes">接收</td><td><span class="badge-ctrl bc-v">A09</span></td><td class="yes">模板审核</td><td><div class="switch2 on" onclick="this.classList.toggle(\'on\')"></div></td></tr>'+
+ '<tr><td style="text-align:left;">全球通行护照/签证数据</td><td class="yes">授权后</td><td class="no">—</td><td><span class="badge-ctrl bc-a">A11/A01</span></td><td class="yes">授权核验</td><td><div class="switch2" onclick="this.classList.toggle(\'on\')"></div> 失效自动下架</td></tr>'+
+ '<tr><td style="text-align:left;">订单 / 合同 / 支付入口</td><td class="yes">本人</td><td class="yes">只读</td><td><span class="badge-ctrl bc-r">A02/A07</span></td><td class="yes">主体门+双人</td><td>无强制通过入口</td></tr>'+
+ '</table><div class="note" style="margin-top:14px;">'+ic('shield')+'<div>原则：前端没有任何脱离后台的内容源；所有可见内容可编辑、可审核、可远程下架。资金、合同、闸门类控制不提供“强制通过”开关，只能由有权角色按流程解除并留痕。</div></div>');
+
+/* A01 */
+V.a01='<div class="tabs" data-g="a01"><button class="on" data-t="p">项目库</button><button data-t="v">核验台账</button><button data-t="f">收费方案</button><button data-t="r">发布复核</button><button data-t="d">护照签证数据源</button></div>'+
+ '<div class="tpane on" data-p="p"><table><tr><th>项目</th><th>版本</th><th>授权供给</th><th>状态</th><th>动作</th></tr>'+
+ '<tr><td>A 国技术居留</td><td>v3.2</td><td><span class="st g"><span class="d"></span>境外律所 A 持牌有效</span></td><td><span class="st g"><span class="d"></span>已发布</span></td><td><button class="btn sm ghost">编辑版本</button></td></tr>'+
+ '<tr><td>A 国随行子女</td><td>v1.4</td><td><span class="st g"><span class="d"></span>随主案</span></td><td><span class="st g"><span class="d"></span>已发布</span></td><td><button class="btn sm ghost">编辑版本</button></td></tr>'+
+ '<tr><td>B 地区投资居留</td><td>v0.9</td><td><span class="st a"><span class="d"></span>陈某授权申请待审</span></td><td><span class="st r"><span class="d"></span>3 项事实无核验·不可发布</span></td><td><button class="btn sm navy">去核验</button></td></tr>'+
+ '<tr><td>C 国数字游民</td><td>v0.3</td><td><span class="st n">未锁定</span></td><td><span class="st a"><span class="d"></span>核验中</span></td><td><button class="btn sm ghost">核验台账</button></td></tr>'+
+ '<tr><td>A 国雇主担保</td><td>—</td><td><span class="st r"><span class="d"></span>供给暂停</span></td><td><span class="st n">已下架新签</span></td><td><div class="switch2" onclick="this.classList.toggle(\'on\')"></div></td></tr></table></div>'+
+ '<div class="tpane" data-p="v">'+card('事实核验台账（官方凭据优先）','<table><tr><th>事实项</th><th>来源等级</th><th>核验人</th><th>有效期</th><th>状态</th></tr>'+
+ '<tr><td>A 国 B1 语言门槛</td><td><span class="st g"><span class="d"></span>官方渠道</span></td><td>核验岗（非发起人）</td><td>90 天复核</td><td><span class="st g"><span class="d"></span>已核验</span></td></tr>'+
+ '<tr><td>B 地区投资款监管账户</td><td><span class="st a"><span class="d"></span>服务方报告</span></td><td>待官方凭据</td><td>—</td><td><span class="st r"><span class="d"></span>不可作为发布依据</span></td></tr>'+
+ '<tr><td>境外律所 A 牌照</td><td><span class="st g"><span class="d"></span>官方注册查验</span></td><td>合规岗</td><td>至 2027-02</td><td><span class="st g"><span class="d"></span>有效</span></td></tr></table>')+'</div>'+
+ '<div class="tpane" data-p="f">'+card('收费方案版本（FeeScheduleVersion）','<table><tr><th>项目</th><th>版本</th><th>费项 / 收取方</th><th>状态</th><th>动作</th></tr>'+
+ '<tr><td>A 国技术居留</td><td>Fee v3</td><td>平台 CNY / 境内机构 CNY / 境外持牌 USD / 官方代收（待确认）</td><td><span class="st g"><span class="d"></span>已发布·下单快照</span></td><td><button class="btn sm ghost">改价（需重确认）</button></td></tr>'+
+ '<tr><td>C 国数字游民</td><td>Fee v0.3 草案</td><td>官方费待确认，禁止显示为 0</td><td><span class="st a"><span class="d"></span>草案不可报价</span></td><td><button class="btn sm navy">补费项</button></td></tr></table><div class="note">'+ic('coins')+'<div>改价后在途订单走重确认；异币种不相加、不折总价；「待确认」在前端显式展示，不等于 0。</div></div>')+'</div>'+
+ '<div class="tpane" data-p="r">'+card('发布复核（双人）','<table><tr><th>提交</th><th>内容</th><th>校验</th><th>状态</th></tr>'+
+ '<tr><td>运营 09-18</td><td>A 国 v3.2 + Fee v3</td><td>事实齐 / 收费主体齐 / 无成功率表述</td><td><span class="st g"><span class="d"></span>双人通过已发布</span></td></tr>'+
+ '<tr><td>运营 09-20</td><td>B 地区 v0.9</td><td>3 项事实无核验、收费方案缺境外段</td><td><span class="st r"><span class="d"></span>阻止发布</span></td></tr></table>')+'</div>'+
+ '<div class="tpane" data-p="d">'+card('护照 / 签证第三方数据源（DataSourceAuthorization）','<table><tr><th>数据源</th><th>覆盖</th><th>授权状态</th><th>客户端开关</th></tr>'+
+ '<tr><td>IATA Timatic 类（待签约）</td><td>签证要求 / 护照通行</td><td><span class="st r"><span class="d"></span>未授权</span></td><td><div class="switch2" onclick="this.classList.toggle(\'on\')"></div> 关闭</td></tr>'+
+ '<tr><td>通行力排名（示例）</td><td>排名对比</td><td><span class="st a"><span class="d"></span>仅示例数据</span></td><td><div class="switch2" onclick="this.classList.toggle(\'on\')"></div> 框架展示</td></tr></table><div class="gate">授权未落实前全球通行仅提供框架与【示例】数据，不对客作为出行依据；授权失效自动下架并留痕。</div>')+'</div>';
+
+/* A02 */
+V.a02='<div class="tabs" data-g="a02"><button class="on" data-t="in">境内主体（对客签约）</button><button data-t="ext">境外主体（B2B 交付）</button></div>'+
+ '<div class="tpane on" data-p="in"><div class="kpis"><div class="kpi"><b>1</b><span>境内备案主体</span></div><div class="kpi"><b>已备案</b><span>国务院令 841 号 · 15 日内</span></div><div class="kpi"><b>90 日</b><span>既有机构补办窗口（示例倒计时）</span></div><div class="kpi"><b>2</b><span>对公收款账户</span></div></div>'+
+ card('签约 / 收费主体台账','<table><tr><th>主体</th><th>备案</th><th>经营范围</th><th>收款账户户名</th><th>状态</th></tr>'+
+ '<tr><td>示例出入境咨询（北京）</td><td><span class="st g"><span class="d"></span>已备案</span></td><td>咨询/流程协助（不含法律意见）</td><td>与主体一致</td><td><span class="st g"><span class="d"></span>可签约</span></td></tr></table>')+
+ '<div class="gate"><b>ORD-2409-018 阻断反例：</b>收款户名=某第三方商务公司，与签约主体不一致 → 付款入口关闭，无强制通过通道；更正须走 A02/A07 流程并双人复核。</div></div>'+
+ '<div class="tpane" data-p="ext">'+card('境外持牌方受控台账','<table><tr><th>机构</th><th>辖区牌照</th><th>关联项目</th><th>门户权限</th><th>状态</th></tr>'+
+ '<tr><td>示例境外律所 A</td><td><span class="st g"><span class="d"></span>牌照已查验（至 2027-02）</span></td><td>A 国技术居留</td><td>受控门户·批次授权</td><td><span class="st g"><span class="d"></span>合作中</span></td></tr>'+
+ '<tr><td>示例代理 B（加）</td><td><span class="st a"><span class="d"></span>CICC/RCIC 待补号</span></td><td>—</td><td>无</td><td><span class="st r"><span class="d"></span>不可交付</span></td></tr></table><div class="note">'+ic('globe')+'<div>境外企业不得在境内直接对客提供中介服务；境外段只能 B2B 委托持牌方，或由自营交付部在受控门户内作业（自营不豁免控制点、不替代法定持牌环节）。跨境共享材料须单独同意。</div></div>')+'</div>';
+
+/* A03 */
+V.a03=card('顾问名册与授权（授权闭环：学习→确认→申请→审核→绑定有效期）','<table><tr><th>顾问</th><th>备案</th><th>授权项目</th><th>学习 / 合规</th><th>状态与动作</th></tr>'+
+ '<tr><td>陈某</td><td>BJ-2026-018 至 2027-03</td><td>3 项（A 国技术/随行子女等）</td><td><span class="st g"><span class="d"></span>全部完成</span></td><td><span class="st g"><span class="d"></span>正常展业</span></td></tr>'+
+ '<tr><td>林某</td><td><span class="st r"><span class="d"></span>9/30 到期</span></td><td>3 项</td><td><span class="st a"><span class="d"></span>续训待完成</span></td><td><span class="st a"><span class="d"></span>到期停新接旧</span> <button class="btn sm ghost">交接看板</button></td></tr>'+
+ '<tr><td>王某</td><td>入驻审核中</td><td>0</td><td>必读未完成</td><td><span class="st p"><span class="d"></span>入驻审核</span> <button class="btn sm navy">审核</button></td></tr>'+
+ '<tr><td>赵某</td><td>暂停 / 调查</td><td>冻结新增授权</td><td><span class="st r"><span class="d"></span>私收款投诉核查</span></td><td><span class="st r"><span class="d"></span>停新接旧·客#2011/#2017交接</span></td></tr></table>'+
+ '<div class="note" style="margin-top:14px;">'+ic('shield')+'<div>到期自动停新报价/新签，在途案件交接不失联（AT22）；合规佣金不因私收款核查连坐清零；凭据核验人不得是案件发起人。</div></div>');
+
+/* A04 */
+V.a04='<div class="grid2">'+card('关系变更 / 交接五步','<table><tr><th>客户</th><th>阶段</th><th>处理</th></tr>'+
+ '<tr><td>客 #1902</td><td><span class="st b"><span class="d"></span>资料在办交接</span></td><td><button class="btn sm navy">推进</button></td></tr>'+
+ '<tr><td>客 #2011 / #2017</td><td><span class="st a"><span class="d"></span>赵某暂停后待新顾问接受</span></td><td><button class="btn sm navy">分配（冻结中）</button></td></tr>'+
+ '<tr><td>客 #2049</td><td><span class="st n">顾问请求待客户接受</span></td><td>关系未成立，不分配资源</td></tr></table><div class="note">'+ic('users')+'<div>客户选择 + 顾问接受才成立关系；一名主责顾问；来源/关系/佣金归因三分离；不做多级分佣。</div></div>')+
+ card('家庭授权核验（人员×案件×动作×有效期）','<table><tr><th>成员</th><th>案件</th><th>授权</th><th>状态</th></tr>'+
+ '<tr><td>配偶（成年）</td><td>CASE-A03</td><td>材料查看/提交</td><td><span class="st a"><span class="d"></span>待本人授权</span></td></tr>'+
+ '<tr><td>随行子女（未成年）</td><td>CASE-A03</td><td>监护材料</td><td><span class="st b"><span class="d"></span>监护证据审核中</span></td></tr></table><div class="gate">成年成员代勾选、监护争议一律服务端拦截转人工；不靠隐藏入口放行（AT20）。</div>')+'</div>';
+/* A05 */
+V.a05='<div class="kpis">'+kpi('24','在办案件','','')+kpi('1','T0 剩 4h','短信未达转人工','r')+kpi('2','补件待客户','','a')+kpi('3','官方凭据待核验','','p')+'</div>'+
+ '<div class="grid2">'+card('T0 时限看板（超期只升级，不改写截止时间）','<table><tr><th>案件</th><th>T0 事项</th><th>通道送达</th><th>处置</th></tr>'+
+ '<tr><td>CASE-A02</td><td><span class="st r"><span class="d"></span>受理回执剩 4h</span></td><td>App 已读 / 短信未达 / 邮件已达</td><td>人工电话中·已升级主管</td></tr>'+
+ '<tr><td>CASE-A03</td><td>补件截止 09-23 18:00</td><td>App+短信已达</td><td><span class="st g"><span class="d"></span>客户已读</span></td></tr>'+
+ '<tr><td>CASE-A11</td><td>原件查看窗口 2h</td><td>门户批次 B-2409-15</td><td><span class="st a"><span class="d"></span>待特殊审批</span></td></tr></table>')+
+ card('四级来源与凭据核验','<table><tr><th>来源</th><th>写入权限</th><th>示例</th></tr>'+
+ '<tr><td><span class="st g"><span class="d"></span>官方凭据</span></td><td>凭据核验岗（≠发起人）</td><td>受理回执 09-21</td></tr>'+
+ '<tr><td><span class="st a"><span class="d"></span>服务方报告</span></td><td>门户受控录入</td><td>已递交（待核验）</td></tr>'+
+ '<tr><td><span class="st p"><span class="d"></span>公司审核</span></td><td>材料/方案岗</td><td>材料通过</td></tr>'+
+ '<tr><td><span class="st b"><span class="d"></span>客户提交</span></td><td>客户本人/授权人</td><td>公证上传</td></tr></table>')+
+ card('T0 规则与模板','<div class="note">'+ic('bell')+'<div>App 推送 2h 未读 → 短信；当日未达 → 人工电话；剩 ≤4h 直升级主管。锁屏不显案号；DeliveryRecord 记录每一次送达；失败必须换道，不得静默。</div></div>')+'</div>';
+
+/* A06 */
+V.a06='<div class="tabs" data-g="a06"><button class="on" data-t="b">服务方与门户批次</button><button data-t="c">凭据与原件审批</button><button data-t="t">T0/越权审计</button></div>'+
+ '<div class="tpane on" data-p="b"><table><tr><th>批次</th><th>机构</th><th>授权范围（案件×材料×动作×有效期）</th><th>水印</th><th>状态</th></tr>'+
+ '<tr><td>B-2409-07</td><td>示例境外律所 A</td><td>CASE-A03 × 影印件 × 只读 × 至 09-23</td><td>机构名+日期全屏</td><td><span class="st g"><span class="d"></span>有效</span></td></tr>'+
+ '<tr><td>B-2408-31</td><td>示例境外律所 A</td><td>已过期</td><td>—</td><td><span class="st n">已回收</span></td></tr>'+
+ '<tr><td>B-2409-12</td><td>示例境外律所 A</td><td>CASE-A11 × 护照原件 × 查看</td><td>特殊</td><td><span class="st a"><span class="d"></span>待审批</span></td></tr>'+
+ '<tr><td>B-2409-15</td><td>示例境外律所 A</td><td>CASE-A11 × 全套影印件</td><td>全屏</td><td><span class="st a"><span class="d"></span>待审批</span></td></tr></table>'+
+ '<div class="gate">门户只读：禁下载/另存/打印；到期自动回收；越权由服务端拒绝并写 A10 审计；跨境共享单独同意（AT25）。</div></div>'+
+ '<div class="tpane" data-p="c">'+card('原件查看特殊审批','<table><tr><th>申请</th><th>窗口</th><th>审批人</th><th>状态</th></tr><tr><td>B-2409-12 护照原件</td><td>批准后 2 小时</td><td>合规主管（示例 1 工作日内）</td><td><span class="st a"><span class="d"></span>待批</span></td></tr></table>')+'</div>'+
+ '<div class="tpane" data-p="t">'+card('越权与水印审计','<table><tr><th>时间</th><th>事件</th><th>处置</th></tr><tr><td>09-19</td><td>尝试访问非授权案件 CASE-A09</td><td><span class="st r"><span class="d"></span>服务端拒绝·已记录</span></td></tr><tr><td>09-18</td><td>原件窗口超时未关闭</td><td><span class="st g"><span class="d"></span>自动回收</span></td></tr></table>')+'</div>';
+
+/* A07 */
+V.a07='<div class="tabs" data-g="a07"><button class="on" data-t="p">收款与核验</button><button data-t="c">佣金六态</button></div>'+
+ '<div class="tpane on" data-p="p"><table><tr><th>订单</th><th>客户</th><th>金额 / 币种</th><th>户名校验</th><th>到账状态</th></tr>'+
+ '<tr><td>ORD-2401</td><td>#1980</td><td>CNY 示例</td><td><span class="st g"><span class="d"></span>一致</span></td><td><span class="st g"><span class="d"></span>已到账·收据 RC-2401</span></td></tr>'+
+ '<tr><td>ORD-2407</td><td>#1966</td><td>分期 2→3 期</td><td><span class="st g"><span class="d"></span>一致</span></td><td><span class="st a"><span class="d"></span>结算处理中·1 异议</span></td></tr>'+
+ '<tr><td>ORD-2409</td><td>#2010</td><td>CNY 示例</td><td><span class="st g"><span class="d"></span>一致</span></td><td><span class="st a"><span class="d"></span>应计待核验</span></td></tr>'+
+ '<tr><td>ORD-2409-018</td><td>#2010</td><td>—</td><td><span class="st r"><span class="d"></span>户名=第三方商务公司</span></td><td><span class="st r"><span class="d"></span>主体阻断·不得记账</span></td></tr>'+
+ '<tr><td>ORD-2388</td><td>#1877</td><td>退款争议</td><td>—</td><td><span class="st r"><span class="d"></span>退款冻结</span></td></tr></table>'+
+ '<div class="note">'+ic('lock')+'<div>财务不见证件原件；待核验≠到账；公司动作≠官方受理；退款/争议分类走 A08 工单。</div></div></div>'+
+ '<div class="tpane" data-p="c">'+card('佣金六态台账（下单锁规则版本快照）','<table><tr><th>状态</th><th>单数</th><th>规则</th></tr>'+
+ '<tr><td><span class="st n">预估</span></td><td>—</td><td>点击/咨询/方案确认不产生可提现佣金</td></tr>'+
+ '<tr><td><span class="st n">待触发</span></td><td>—</td><td>仅平台登记订单可见</td></tr>'+
+ '<tr><td><span class="st a"><span class="d"></span>应计待核验</span></td><td>2（ORD-2409 等）</td><td>无规则不产生应计</td></tr>'+
+ '<tr><td><span class="st b"><span class="d"></span>可结算/处理中</span></td><td>1（ORD-2407）</td><td>双人复核·异币种不合并</td></tr>'+
+ '<tr><td><span class="st g"><span class="d"></span>已结算</span></td><td>ORD-2401</td><td>结算留痕</td></tr>'+
+ '<tr><td><span class="st r"><span class="d"></span>冻结/调整</span></td><td>ORD-2388 / 赵某</td><td>私收款核实冻结新增授权，合规佣金不连坐清零</td></tr></table>')+'</div>';
+
+/* A08 */
+V.a08='<div class="grid2">'+card('投诉独立受理（不经被投诉人）','<table><tr><th>工单</th><th>事由</th><th>受理</th><th>状态</th></tr>'+
+ '<tr><td>#TK-0915</td><td>客 #2032 投诉赵某私收款</td><td>独立合规岗</td><td><span class="st r"><span class="d"></span>调查中·赵某停新接旧</span></td></tr>'+
+ '<tr><td>#TK-0919-006</td><td>补件指引咨询</td><td>服务保障组</td><td><span class="st b"><span class="d"></span>处理中</span></td></tr></table>')+
+ card('合规事件队列','<table><tr><th>事件</th><th>联动</th></tr>'+
+ '<tr><td>私收款线索</td><td>冻结新增授权 + 门户权限复核 + 保障边界出示</td></tr>'+
+ '<tr><td>平台外承诺话术</td><td>素材下架 + 顾问学习重考</td></tr>'+
+ '<tr><td>虚假材料风险</td><td>案件挂起 + 客户告知 + 官方指引（不教唆规避）</td></tr></table>')+'</div>'+
+ card('满意度与复盘','<table><tr><th>口径</th><th>示例值</th></tr><tr><td>工单首次响应达标率（1 工作日）</td><td>影子期采集，基线待定</td></tr><tr><td>投诉独立受理率</td><td>100%（规则要求）</td></tr></table><div class="note">'+ic('scale')+'<div>调查结论与授权处置分离；保障边界（哪些受平台保障、平台外成交不受保障）可随时向客户出示。</div></div>');
+
+/* A09 */
+V.a09='<div class="grid2">'+card('通知模板（审核版本 + 人工署名例外）','<table><tr><th>模板</th><th>通道</th><th>状态</th></tr>'+
+ '<tr><td>T0 受理回执提醒</td><td>App+短信+邮件</td><td><span class="st g"><span class="d"></span>已审核 v3</span></td></tr>'+
+ '<tr><td>付款核验结果</td><td>App+短信</td><td><span class="st g"><span class="d"></span>已审核</span></td></tr>'+
+ '<tr><td>顾问超模板话术</td><td>—</td><td><span class="st r"><span class="d"></span>须人工署名并审核（AT23）</span></td></tr></table>')+
+ card('送达回执 DeliveryRecord','<table><tr><th>记录</th><th>App</th><th>短信</th><th>邮件</th></tr>'+
+ '<tr><td>CASE-A02 T0</td><td><span class="st g"><span class="d"></span>已读</span></td><td><span class="st r"><span class="d"></span>未达</span></td><td><span class="st g"><span class="d"></span>已达</span></td></tr>'+
+ '<tr><td>ORD-2401 收据</td><td><span class="st g"><span class="d"></span>已达</span></td><td><span class="st g"><span class="d"></span>已达</span></td><td>—</td></tr></table>')+'</div>'+
+ card('客户端首页公告位','<table><tr><th>公告</th><th>终端</th><th>开关</th></tr><tr><td>防骗提示：不向个人账户转账</td><td>客户端首页</td><td><div class="switch2 on" onclick="this.classList.toggle(\'on\')"></div></td></tr><tr><td>全球通行数据授权说明</td><td>全球通行 tab</td><td><div class="switch2 on" onclick="this.classList.toggle(\'on\')"></div></td></tr></table>');
+
+/* A12 */
+V.a12='<div class="tabs" data-g="a12"><button class="on" data-t="f">素材库与核准</button><button data-t="w">禁用语 / 话术</button><button data-t="e">分享事件</button><button data-t="c">客户端内容配置</button></div>'+
+ '<div class="tpane on" data-p="f"><table><tr><th>素材</th><th>适用项目</th><th>核准</th><th>有效期 / 动作</th></tr>'+
+ '<tr><td>A 国讲解卡 v3</td><td>A 国技术居留</td><td><span class="st g"><span class="d"></span>已核准</span></td><td>至 12-31　<button class="btn sm ghost">下架</button></td></tr>'+
+ '<tr><td>费用收取方说明（对客）</td><td>通用</td><td><span class="st g"><span class="d"></span>已核准</span></td><td>长期</td></tr>'+
+ '<tr><td>B 地区投资长图</td><td>B 地区（未发布）</td><td><span class="st r"><span class="d"></span>驳回</span></td><td>含暗示成功率表述</td></tr></table></div>'+
+ '<div class="tpane" data-p="w">'+card('禁用 / 规范用语库','<table><tr><th>禁用</th><th>替代表述</th></tr><tr><td>包成功 / 获批率 99%</td><td>不承诺获批，结果以官方审理为准</td></tr><tr><td>永久居留（实际为工作居留）</td><td>长期工作居留（非永居）</td></tr><tr><td>费用总价（异币种相加）</td><td>分项收取方，异币种不相加</td></tr></table>')+'</div>'+
+ '<div class="tpane" data-p="e">'+card('分享事件留痕（AT24）','<table><tr><th>时间</th><th>顾问</th><th>素材</th><th>校验</th></tr><tr><td>09-20</td><td>陈某</td><td>A 国讲解卡 v3</td><td><span class="st g"><span class="d"></span>核准素材·链接含有效期</span></td></tr><tr><td>09-19</td><td>赵某</td><td>尝试分享含佣金备注名片</td><td><span class="st r"><span class="d"></span>拦截·非白名单字段</span></td></tr></table>')+'</div>'+
+ '<div class="tpane" data-p="c">'+card('客户端内容位总控','<table><tr><th>内容位</th><th>编辑</th><th>开关</th></tr><tr><td>首页推荐项目 / 快捷入口 / 防骗条</td><td><button class="btn sm navy">编辑</button></td><td><div class="switch2 on" onclick="this.classList.toggle(\'on\')"></div></td></tr><tr><td>找项目筛选 chips / 排序</td><td><button class="btn sm navy">编辑</button></td><td><div class="switch2 on" onclick="this.classList.toggle(\'on\')"></div></td></tr><tr><td>防骗教育专区文章</td><td><button class="btn sm navy">编辑</button></td><td><div class="switch2 on" onclick="this.classList.toggle(\'on\')"></div></td></tr></table>')+'</div>';
+
+/* A10 */
+V.a10='<div class="grid2">'+card('角色与最小权限','<table><tr><th>角色</th><th>关键权限边界</th></tr>'+
+ '<tr><td>顾问</td><td>不可改金额/到账/官方进度；仅授权项目可见</td></tr>'+
+ '<tr><td>凭据核验岗</td><td>核验人≠案件发起人</td></tr>'+
+ '<tr><td>财务</td><td>不见证件原件；结算双人复核</td></tr>'+
+ '<tr><td>合规岗</td><td>独立受理投诉；门户/原件特殊审批</td></tr>'+
+ '<tr><td>服务方账号</td><td>门户只读、批次授权、全屏水印</td></tr></table>')+
+ card('待审批','<table><tr><th>事项</th><th>类型</th><th>动作</th></tr><tr><td>B-2409-12 原件查看</td><td>特殊审批</td><td><button class="btn sm navy">审批</button></td></tr><tr><td>PROP-312 双人复核</td><td>方案复核</td><td><button class="btn sm navy">复核</button></td></tr><tr><td>王某入驻</td><td>资质审核</td><td><button class="btn sm navy">审核</button></td></tr></table>')+'</div>'+
+ card('跨境同意与授权','<table><tr><th>同意项</th><th>口径</th></tr><tr><td>跨境材料共享</td><td>单独同意 + 目的/接收方/留存期告知，可撤回</td></tr><tr><td>家庭授权</td><td>人员×案件×动作×有效期，逐项校验</td></tr></table>')+
+ card('审计日志（节选）','<table><tr><th>时间</th><th>操作</th><th>人</th></tr><tr><td>10:24</td><td>官方回执核验</td><td>核验岗</td></tr><tr><td>09:50</td><td>原件查看申请</td><td>服务方 A</td></tr><tr><td>09:12</td><td>投诉受理（独立）</td><td>合规岗</td></tr></table>');
+
+/* A11 */
+V.a11='<div class="grid2">'+card('基础数据字典','<table><tr><th>字典</th><th>维护</th></tr><tr><td>材料清单 / 费项收取方 / 币种</td><td>版本化，变更留痕</td></tr><tr><td>T0 时限与升级阈值（暂定默认）</td><td>App 2h / 当日人工 / ≤4h 主管；待影子期校准</td></tr><tr><td>授权续期提醒</td><td>60/30/7 天（暂定）</td></tr><tr><td>材料规格</td><td>JPG/PDF · 20MB（暂定）</td></tr></table>')+
+ card('运行与性能','<table><tr><th>指标</th><th>影子期口径</th></tr><tr><td>通知到达率 / 换道成功率</td><td>基线采集中</td></tr><tr><td>闸门拦截准确率</td><td>逐笔复核</td></tr><tr><td>门户越权拦截</td><td>服务端拒绝即记录</td></tr></table>')+'</div>'+
+ '<div class="note">'+ic('settings')+'<div>所有暂定阈值（SLA、提醒周期、窗口时长）均为影子期待校准默认值，不视为已确认运营承诺；调整需留版本与原因。</div></div>';
+
+/* render */
+const titles={home:'运营总览',matrix:'一后台控两端 · 控制矩阵',a01:'A01 项目 · 核验 · 收费 · 发布',a02:'A02 签约主体与跨境交付',a03:'A03 顾问资质与授权',a04:'A04 客户与顾问关系',a05:'A05 案件与 T0 时限',a06:'A06 服务方与受控门户',a07:'A07 财务与佣金',a08:'A08 投诉与合规事件',a09:'A09 通知模板与送达',a12:'A12 内容素材与分享',a10:'A10 角色 · 审批 · 审计',a11:'A11 基础数据与数据源'};
+const content=document.getElementById('content');
+Object.keys(V).forEach(k=>{const d=document.createElement('div');d.className='viewp';d.id='p-'+k;d.innerHTML=V[k];content.appendChild(d);});
+function go(k){document.querySelectorAll('.viewp').forEach(v=>v.classList.remove('on'));document.getElementById('p-'+k).classList.add('on');document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.v===k));document.getElementById('ptitle').textContent=titles[k]||k;content.scrollTop=0;window.scrollTo(0,0);}
+document.getElementById('nav').addEventListener('click',e=>{const a=e.target.closest('[data-v]');if(a)go(a.dataset.v);});
+document.addEventListener('click',e=>{
+ const g=e.target.closest('[data-g]');
+ const b=e.target.closest('[data-t]');
+ if(b){const wrap=b.closest('[data-g]');wrap.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');const key=wrap.dataset.g;document.querySelectorAll('.tpane[data-p]').forEach(p=>{if(p.closest('.card, .grid2')||p.parentElement===wrap||true){}});
+  wrap.parentElement.querySelectorAll(':scope > .tpane').forEach(p=>p.classList.toggle('on',p.dataset.p===b.dataset.t));
+ }
+});
+go('home');
+
+</script>
+</body>
+</html>
