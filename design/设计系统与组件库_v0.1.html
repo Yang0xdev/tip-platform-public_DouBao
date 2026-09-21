@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>设计系统与组件库 v0.1 · 透明身份规划平台</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23AF2D67'/%3E%3Cstop offset='1' stop-color='%23002661'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M8 20l5-6 4 3 7-9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+:root{
+  /* brand */
+  --navy:#002661; --navy-800:#16326B; --navy-700:#1E3E78; --navy-600:#2E5296;
+  --navy-100:#DCE4F2; --navy-50:#EDF1F8;
+  --berry:#AF2D67; --berry-600:#C63D80; --berry-50:#FAEEF4; --berry-100:#F3D9E6;
+  --grad:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);
+  /* neutral */
+  --ink:#1B2433; --mut:#5E6B7E; --faint:#8A95A6;
+  --line:#E5E9F0; --line-2:#F0F3F8; --paper:#F5F7FA; --card:#FFFFFF;
+  /* semantic */
+  --green:#177A5B; --green-bg:#E6F4EE; --amber:#B45309; --amber-bg:#FBF1E2;
+  --red:#C03221; --red-bg:#FCEBEA; --blue:#1D5F8A; --blue-bg:#E9F2F8; --purple:#6B5AA8; --purple-bg:#EFECF7;
+  /* shape */
+  --r-card:18px; --r-ctl:12px; --r-pill:22px;
+  --sh-1:0 1px 2px rgba(16,32,67,.05),0 4px 14px rgba(16,32,67,.06);
+  --sh-2:0 8px 28px rgba(16,32,67,.12); --sh-sheet:0 -10px 36px rgba(16,32,67,.16);
+  /* motion */
+  --ease:cubic-bezier(.22,.61,.36,1); --ease-out:cubic-bezier(.16,1,.3,1); --ease-spring:cubic-bezier(.34,1.4,.5,1);
+  --d1:130ms; --d2:220ms; --d3:340ms;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+html{scroll-behavior:smooth;}
+body{font-family:"Manrope","Noto Sans SC",-apple-system,"PingFang SC",sans-serif;background:var(--paper);color:var(--ink);}
+.wrap{max-width:1080px;margin:0 auto;padding:0 26px;}
+/* hero */
+.hero{position:relative;overflow:hidden;color:#fff;padding:60px 0 70px;background:var(--grad);background-size:180% 180%;animation:gradDrift 16s ease-in-out infinite alternate;}
+@keyframes gradDrift{0%{background-position:0% 30%}100%{background-position:100% 70%}}
+.hero .kicker{font-size:12px;letter-spacing:3px;text-transform:uppercase;opacity:.82;font-weight:600;}
+.hero h1{font-size:34px;font-weight:800;margin:14px 0 12px;}
+.hero p{font-size:14.5px;line-height:1.9;opacity:.93;max-width:720px;}
+.mark{width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;margin-bottom:18px;backdrop-filter:blur(4px);}
+/* nav */
+.toc{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);}
+.toc .wrap{display:flex;gap:4px;overflow-x:auto;}
+.toc a{font-size:12.5px;color:var(--mut);text-decoration:none;padding:13px 12px;white-space:nowrap;border-bottom:2px solid transparent;transition:color var(--d1) var(--ease),border-color var(--d1);}
+.toc a:hover{color:var(--navy);}
+section{padding:46px 0 8px;}
+h2{font-size:21px;font-weight:800;display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+h2 .idx{font-size:12px;background:var(--navy);color:#fff;border-radius:6px;padding:3px 8px;}
+.sec-sub{color:var(--mut);font-size:13px;line-height:1.8;margin-bottom:20px;max-width:760px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:24px;box-shadow:var(--sh-1);margin-bottom:18px;}
+.card h3{font-size:14px;font-weight:700;margin-bottom:16px;color:var(--ink);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.label{font-size:11px;color:var(--faint);letter-spacing:1px;text-transform:uppercase;margin:22px 0 9px;font-weight:600;}
+/* tokens color chips */
+.chips-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
+.swatch{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#fff;}
+.swatch .c{height:64px;display:flex;align-items:flex-end;padding:8px 10px;color:#fff;font-size:11px;font-weight:700;font-family:"Manrope",monospace;}
+.swatch .m{padding:7px 10px;font-size:10.5px;color:var(--mut);line-height:1.5;}
+/* type scale */
+.tr{display:grid;grid-template-columns:130px 1fr 120px;gap:14px;align-items:baseline;padding:12px 0;border-bottom:1px dashed var(--line);}
+.tr:last-child{border:0;} .tr .n{font-size:11.5px;color:var(--faint);} .tr .spec{font-size:11px;color:var(--faint);font-family:"Manrope",monospace;text-align:right;}
+/* spacing */
+.sp{display:flex;align-items:flex-end;gap:14px;height:70px;}
+.sp .b{background:var(--navy-100);border-radius:4px 4px 0 0;position:relative;} .sp .b span{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--faint);white-space:nowrap;}
+/* components */
+.demo{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px;}
+.demo + .demo{margin-top:14px;}
+.btn{height:46px;border-radius:var(--r-pill);border:0;font-family:inherit;font-size:15px;font-weight:700;padding:0 26px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:transform var(--d1) var(--ease),box-shadow var(--d2) var(--ease),background var(--d1),opacity var(--d1);}
+.btn:active{transform:scale(.97);}
+.btn.navy{background:var(--navy);color:#fff;box-shadow:0 4px 14px rgba(0,38,97,.22);} .btn.navy:hover{background:var(--navy-700);box-shadow:0 6px 20px rgba(0,38,97,.28);}
+.btn.berry{background:var(--berry);color:#fff;box-shadow:0 4px 14px rgba(175,45,103,.22);}
+.btn.grad{background:var(--grad);background-size:160% 160%;color:#fff;box-shadow:0 6px 18px rgba(94,36,107,.28);transition:background-position var(--d3) var(--ease-out),transform var(--d1);}
+.btn.grad:hover{background-position:100% 60%;}
+.btn.ghost{background:#fff;border:1.5px solid var(--navy);color:var(--navy);}
+.btn.quiet{background:var(--navy-50);color:var(--navy);}
+.btn.danger{background:#fff;border:1.5px solid var(--red);color:var(--red);}
+.btn[disabled]{background:var(--line-2);color:var(--faint);box-shadow:none;cursor:not-allowed;}
+.btn.sm{height:36px;font-size:13px;padding:0 16px;border-radius:18px;}
+/* segmented sliding */
+.seg{position:relative;display:inline-flex;background:var(--line-2);border-radius:var(--r-pill);padding:4px;}
+.seg button{position:relative;z-index:2;border:0;background:none;font-family:inherit;font-size:13px;font-weight:600;color:var(--mut);padding:8px 18px;border-radius:var(--r-pill);cursor:pointer;transition:color var(--d2) var(--ease);}
+.seg button.on{color:var(--navy);}
+.seg .ind{position:absolute;z-index:1;top:4px;bottom:4px;background:#fff;border-radius:var(--r-pill);box-shadow:var(--sh-1);transition:left var(--d3) var(--ease-spring),width var(--d3) var(--ease-spring);}
+/* inputs */
+.field{margin-top:12px;} .field label{display:block;font-size:12.5px;font-weight:600;color:var(--mut);margin-bottom:6px;}
+.input{height:48px;border:1.5px solid var(--line);border-radius:var(--r-ctl);display:flex;align-items:center;padding:0 15px;font-size:16px;color:var(--ink);background:#fff;transition:border-color var(--d1),box-shadow var(--d1);}
+.input.ph{color:var(--faint);} .input:focus-within,.input.focus{border-color:var(--navy);box-shadow:0 0 0 3px var(--navy-50);}
+.input.err{border-color:var(--red);box-shadow:0 0 0 3px var(--red-bg);}
+.hint{font-size:11.5px;margin-top:6px;color:var(--faint);} .hint.bad{color:var(--red);}
+/* switch */
+.sw{width:46px;height:28px;border-radius:14px;background:var(--line);position:relative;cursor:pointer;transition:background var(--d2) var(--ease);flex:none;}
+.sw i{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left var(--d2) var(--ease-spring);}
+.sw.on{background:var(--navy);} .sw.on i{left:21px;}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line-2);font-size:13.5px;}
+.row:last-child{border:0;}
+/* tags */
+.st{font-size:11.5px;font-weight:600;border-radius:7px;padding:4px 10px;display:inline-flex;align-items:center;gap:5px;}
+.st.g{background:var(--green-bg);color:var(--green);} .st.a{background:var(--amber-bg);color:var(--amber);}
+.st.r{background:var(--red-bg);color:var(--red);} .st.b{background:var(--blue-bg);color:var(--blue);} .st.p{background:var(--purple-bg);color:var(--purple);}
+.st .d{width:6px;height:6px;border-radius:50%;background:currentColor;}
+.chip{font-size:12.5px;border:1px solid var(--line);background:#fff;color:var(--mut);border-radius:16px;padding:7px 14px;cursor:pointer;transition:all var(--d1);}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy);}
+/* gate */
+.gate{border:1.5px dashed #B9847C;background:var(--red-bg);border-radius:var(--r-ctl);padding:15px 16px;font-size:12.5px;color:#8a261c;line-height:1.8;}
+.gate b{display:block;font-size:13.5px;margin-bottom:4px;}
+.t0{background:var(--red-bg);border:1px solid #f0c4bf;border-radius:var(--r-ctl);padding:13px 15px;font-size:12.5px;color:#8a261c;display:flex;gap:11px;align-items:flex-start;line-height:1.7;}
+/* timeline */
+.tl{position:relative;padding-left:6px;}
+.tli{display:flex;gap:13px;position:relative;padding-bottom:18px;}
+.tli:last-child{padding-bottom:0;}
+.tli .rail{display:flex;flex-direction:column;align-items:center;width:14px;flex:none;}
+.tli .dot{width:11px;height:11px;border-radius:50%;margin-top:4px;z-index:1;}
+.tli .vl{position:absolute;left:11px;top:18px;bottom:0;width:2px;background:var(--line);}
+.tli:last-child .vl{display:none;}
+.tli .tc{flex:1;border:1px solid var(--line);border-radius:11px;padding:10px 12px;background:#fff;}
+.tli .tt{font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.tli .td{font-size:11.5px;color:var(--mut);margin-top:4px;line-height:1.6;}
+/* empty */
+.empty{text-align:center;padding:34px 20px;border:1.5px dashed var(--line);border-radius:var(--r-card);background:#fff;}
+.empty .ei{width:56px;height:56px;border-radius:18px;background:var(--navy-50);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;color:var(--navy);}
+.empty b{font-size:14px;} .empty p{font-size:12px;color:var(--mut);margin:6px 0 14px;line-height:1.7;}
+/* toast */
+.toast-demo{position:relative;height:120px;background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+.toast{position:absolute;left:50%;bottom:18px;transform:translate(-50%,140%);background:var(--ink);color:#fff;font-size:13px;padding:12px 20px;border-radius:24px;box-shadow:var(--sh-2);transition:transform var(--d3) var(--ease-spring);white-space:nowrap;}
+.toast.show{transform:translate(-50%,0);}
+/* sheet */
+.sheet-demo{position:relative;height:300px;background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+.scrim{position:absolute;inset:0;background:rgba(15,25,45,.4);opacity:0;pointer-events:none;transition:opacity var(--d3);}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:20px 20px 0 0;box-shadow:var(--sh-sheet);padding:10px 20px 22px;transform:translateY(105%);transition:transform var(--d3) var(--ease-out);}
+.sheet.open{transform:translateY(0);} .scrim.open{opacity:1;pointer-events:auto;}
+.grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:4px auto 14px;}
+/* skeleton */
+.sk{height:11px;border-radius:5px;background:linear-gradient(90deg,#eef1f5 25%,#e2e7ee 37%,#eef1f5 63%);background-size:400% 100%;animation:shimmer 1.4s ease infinite;}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+/* motion principles */
+.motion-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.mp{background:#fff;border:1px solid var(--line);border-radius:14px;padding:17px;}
+.mp .n{font-family:"Manrope",monospace;font-size:11px;color:var(--berry);font-weight:700;}
+.mp b{display:block;font-size:13.5px;margin:7px 0 5px;} .mp span{font-size:11.5px;color:var(--mut);line-height:1.7;}
+/* pressable list */
+.lst .li{display:flex;align-items:center;gap:12px;padding:14px 4px;border-bottom:1px solid var(--line-2);cursor:pointer;transition:background var(--d1),padding-left var(--d2) var(--ease);border-radius:8px;}
+.lst .li:hover{background:var(--navy-50);padding-left:12px;}
+.lst .li:active{background:var(--navy-100);}
+.lst .li .ic{width:34px;height:34px;border-radius:10px;background:var(--navy-50);color:var(--navy);display:flex;align-items:center;justify-content:center;flex:none;}
+.lst .li .tx{flex:1;} .lst .li .tx b{font-size:13.5px;display:block;} .lst .li .tx span{font-size:11.5px;color:var(--faint);}
+.lst .li .ar{color:var(--faint);}
+footer{padding:40px 0 60px;text-align:center;font-size:12px;color:var(--faint);line-height:1.9;}
+@media(max-width:860px){.grid2,.grid3{grid-template-columns:1fr;}.chips-grid{grid-template-columns:repeat(3,1fr);}.motion-grid{grid-template-columns:1fr 1fr;}.tr{grid-template-columns:1fr;gap:4px;}.tr .spec{text-align:left;}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important;}html{scroll-behavior:auto;}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="mark"><svg width="28" height="28" viewBox="0 0 32 32"><path d="M7 20l5-6 4 3 9-10" stroke="white" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="kicker">Design System · v0.1</div>
+    <h1>设计系统与组件库</h1>
+    <p>方向 C「双色签名」的标准件库：颜色、字体、间距、圆角、阴影、动效 Token 与可交互组件。所有高保真屏与未来前端开发只从这里取件，保证三端一致。组件均可点按体验真实反馈。</p>
+  </div>
+</div>
+
+<div class="toc"><div class="wrap">
+  <a href="#motion">动效原则</a><a href="#color">色彩</a><a href="#type">字体</a><a href="#space">间距/圆角/阴影</a><a href="#button">按钮</a><a href="#form">表单/开关</a><a href="#nav">导航/标签</a><a href="#status">状态/时间线</a><a href="#feedback">反馈/弹层</a><a href="#list">列表/空态</a>
+</div></div>
+
+<div class="wrap">
+
+<!-- 动效 -->
+<section id="motion">
+  <h2><span class="idx">01</span>动效原则与 Token</h2>
+  <div class="sec-sub">高级感来自"有目的的动"：动效只回答三件事——元素从哪来、状态怎么变、手指往哪走。装饰性动效一律不要；全局尊重系统"减弱动态效果"。</div>
+  <div class="motion-grid">
+    <div class="mp"><div class="n">130ms</div><b>即时反馈</b><span>按钮按压、勾选、标签切换：缩放 .97、颜色过渡，手指落下即回应。</span></div>
+    <div class="mp"><div class="n">220ms</div><b>状态变化</b><span>开关、展开折叠、Toast、输入聚焦，ease-out，轻快不拖沓。</span></div>
+    <div class="mp"><div class="n">340ms</b><span>空间移动</b><span>页面推入、底部抽屉、分段指示块滑动，带轻微回弹曲线。</span></div>
+    <div class="mp"><div class="n">16s · ambient</div><b>流动渐变</b><span>仅启动页/签名卡做极慢渐变漂移；页面滚动时签名卡轻微视差。</span></div>
+  </div>
+  <div class="card" style="margin-top:16px;">
+    <h3>典型交互（都可在下方组件中体验）</h3>
+    <div style="font-size:12.5px;color:var(--mut);line-height:2.1;">
+      · 页面转场：新页从右侧滑入（340ms ease-out），返回时原页缩放回位；<br>
+      · 分段/Tab：指示块以弹簧曲线滑动到目标，内容淡入上移 8px；<br>
+      · 底部抽屉：遮罩淡入 + 抽屉上滑，下拉/点遮罩关闭；<br>
+      · 列表：点击有按压底色与轻微右移；卡片加载用骨架屏微光，不用转圈；<br>
+      · 成功：勾选描边动画（220ms）；T0/阻断不使用弹跳与红色闪烁，避免焦虑；<br>
+      · 渐变：品牌签名区背景位置缓慢漂移（16s alternate），数据与操作区无动效。
+    </div>
+  </div>
+</section>
+
+<!-- 色彩 -->
+<section id="color">
+  <h2><span class="idx">02</span>色彩 Token</h2>
+  <div class="sec-sub">Navy 操作与信任、Berry 品牌能量、语义色独立；同一颜色在三端含义唯一。</div>
+  <div class="card">
+    <h3>品牌色</h3>
+    <div class="chips-grid">
+      <div class="swatch"><div class="c" style="background:#002661;">#002661</div><div class="m">Navy 主操作</div></div>
+      <div class="swatch"><div class="c" style="background:#1E3E78;">#1E3E78</div><div class="m">Hover</div></div>
+      <div class="swatch"><div class="c" style="background:#2E5296;">#2E5296</div><div class="m">按压/辅助</div></div>
+      <div class="swatch"><div class="c" style="background:#AF2D67;">#AF2D67</div><div class="m">Berry 获客行动</div></div>
+      <div class="swatch"><div class="c" style="background:var(--grad);">Gradient</div><div class="m">签名时刻</div></div>
+      <div class="swatch"><div class="c" style="background:#EDF1F8;color:#1E3E78;">#EDF1F8</div><div class="m">Navy-50 浅底</div></div>
+    </div>
+    <h3 style="margin-top:20px;">中性色</h3>
+    <div class="chips-grid">
+      <div class="swatch"><div class="c" style="background:#1B2433;">#1B2433</div><div class="m">Ink 正文</div></div>
+      <div class="swatch"><div class="c" style="background:#5E6B7E;color:#fff;">#5E6B7E</div><div class="m">次级文字</div></div>
+      <div class="swatch"><div class="c" style="background:#8A95A6;color:#fff;">#8A95A6</div><div class="m">弱化/图标</div></div>
+      <div class="swatch"><div class="c" style="background:#E5E9F0;color:#5E6B7E;">#E5E9F0</div><div class="m">描边</div></div>
+      <div class="swatch"><div class="c" style="background:#F5F7FA;color:#5E6B7E;">#F5F7FA</div><div class="m">纸面</div></div>
+      <div class="swatch"><div class="c" style="background:#FFFFFF;color:#8A95A6;border-bottom:1px solid var(--line);">White</div><div class="m">卡片</div></div>
+    </div>
+    <h3 style="margin-top:20px;">语义色（四级来源 / 状态 / T0）</h3>
+    <div class="chips-grid" style="grid-template-columns:repeat(4,1fr);">
+      <div class="swatch"><div class="c" style="background:#177A5B;">成功/官方</div><div class="m">#177A5B · #E6F4EE</div></div>
+      <div class="swatch"><div class="c" style="background:#B45309;">警告/服务方</div><div class="m">#B45309 · #FBF1E2</div></div>
+      <div class="swatch"><div class="c" style="background:#C03221;">阻断/T0</div><div class="m">#C03221 · #FCEBEA</div></div>
+      <div class="swatch"><div class="c" style="background:#6B5AA8;">公司审核</div><div class="m">#6B5AA8 · #EFECF7</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 字体 -->
+<section id="type">
+  <h2><span class="idx">03</span>字体排印</h2>
+  <div class="card">
+    <div class="tr"><div class="n">大标题</div><div style="font-size:28px;font-weight:800;letter-spacing:.3px;">办理进度，一目了然</div><div class="spec">28/800 · Manrope+思源</div></div>
+    <div class="tr"><div class="n">页面标题</div><div style="font-size:20px;font-weight:700;">A 国技术工作居留</div><div class="spec">20/700</div></div>
+    <div class="tr"><div class="n">卡片标题</div><div style="font-size:15px;font-weight:700;">付款计划与收据</div><div class="spec">15/700</div></div>
+    <div class="tr"><div class="n">正文</div><div style="font-size:15px;line-height:1.7;color:var(--ink);">费用按收取方分项列示，不同币种不相加、不折算总价。</div><div class="spec">15/400 · lh1.7</div></div>
+    <div class="tr"><div class="n">辅助说明</div><div style="font-size:12.5px;color:var(--mut);line-height:1.7;">参考周期 9–14 个月，非承诺，以官方审理为准。</div><div class="spec">12.5/400</div></div>
+    <div class="tr"><div class="n">金额数字</div><div style="font-family:'Manrope';font-weight:800;font-size:22px;font-variant-numeric:tabular-nums;">¥ 38,000.00</div><div class="spec">22/800 · tnum</div></div>
+  </div>
+</section>
+
+<!-- 间距 -->
+<section id="space">
+  <h2><span class="idx">04</span>间距 · 圆角 · 阴影</h2>
+  <div class="grid2">
+    <div class="card"><h3>间距（4 的倍数）</h3>
+      <div class="sp"><div class="b" style="width:4px;height:24px;"><span>4</span></div><div class="b" style="width:8px;height:32px;"><span>8</span></div><div class="b" style="width:12px;height:40px;"><span>12</span></div><div class="b" style="width:16px;height:48px;"><span>16</span></div><div class="b" style="width:24px;height:40px;"><span>24</span></div><div class="b" style="width:32px;height:30px;"><span>32</span></div></div>
+      <div style="height:26px;"></div>
+      <div class="label" style="margin-top:14px;">圆角</div>
+      <div style="font-size:12.5px;color:var(--mut);line-height:2;">控件 12 · 卡片 18 · 按钮/胶囊 22 · 手机框 30</div>
+    </div>
+    <div class="card"><h3>阴影层级</h3>
+      <div style="display:grid;gap:14px;margin-top:6px;">
+        <div style="background:#fff;border-radius:12px;padding:16px;box-shadow:var(--sh-1);font-size:12.5px;">Elevation 1 · 静态卡片（极轻）</div>
+        <div style="background:#fff;border-radius:12px;padding:16px;box-shadow:var(--sh-2);font-size:12.5px;">Elevation 2 · 悬浮/弹层</div>
+        <div style="background:#fff;border-radius:12px 12px 0 0;box-shadow:var(--sh-sheet);padding:16px;font-size:12.5px;">Sheet · 底部抽屉（上方投影）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 按钮 -->
+<section id="button">
+  <h2><span class="idx">05</span>按钮</h2>
+  <div class="card">
+    <div class="grid3" style="margin-bottom:16px;">
+      <button class="btn navy" style="width:100%;">主操作 · Navy</button>
+      <button class="btn ghost" style="width:100%;">次操作 · 描边</button>
+      <button class="btn quiet" style="width:100%;">弱操作 · 浅底</button>
+      <button class="btn berry" style="width:100%;">获客行动 · Berry</button>
+      <button class="btn grad" style="width:100%;">品牌时刻 · 渐变</button>
+      <button class="btn danger" style="width:100%;">危险/撤销</button>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+      <button class="btn navy sm">小按钮</button>
+      <button class="btn" disabled>不可用（校验未通过）</button>
+      <span class="hint">资金/合同/闸门动作用 Navy；Berry 仅"开始评估/找顾问"；渐变一屏至多一处。</span>
+    </div>
+  </div>
+</section>
+
+<!-- 表单 -->
+<section id="form">
+  <h2><span class="idx">06</span>表单与开关</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>输入状态（点按聚焦查看）</h3>
+      <div class="field"><label>手机号</label><div class="input">138 0000 2051</div></div>
+      <div class="field"><label>验证码</label><div class="input ph">输入 6 位验证码</div><div class="hint">字号 16px，防止 iOS 聚焦缩放</div></div>
+      <div class="field"><label>收款户名不一致</label><div class="input err">某第三方商务公司</div><div class="hint bad">收款户名必须与签约主体一致</div></div>
+    </div>
+    <div class="card">
+      <h3>开关 / 行选项（点按）</h3>
+      <div class="row"><span>App 推送（T0 不可关闭）</span><div class="sw on" onclick="this.classList.toggle('on')"><i></i></div></div>
+      <div class="row"><span>短信通道</span><div class="sw on" onclick="this.classList.toggle('on')"><i></i></div></div>
+      <div class="row"><span>项目更新资讯（T2 可退订）</span><div class="sw" onclick="this.classList.toggle('on')"><i></i></div></div>
+      <div class="row" style="margin-top:8px;">
+        <span class="chip" onclick="pickChip(this)">免签</span><span class="chip on" onclick="pickChip(this)">电子签</span><span class="chip" onclick="pickChip(this)">落地签</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 导航 -->
+<section id="nav">
+  <h2><span class="idx">07</span>分段控件（滑动指示块）</h2>
+  <div class="card">
+    <div class="seg" id="seg1" style="margin-bottom:18px;">
+      <span class="ind"></span><button class="on" data-i="0">时间线</button><button data-i="1">T0 时限</button><button data-i="2">消息</button>
+    </div>
+    <div id="segPanel" style="font-size:13px;color:var(--mut);line-height:1.9;min-height:60px;transition:opacity var(--d2);">
+      切换时指示块以弹簧曲线滑动（340ms），面板内容淡入并上移 8px；这是全平台 Tab/分段的统一运动方式。
+    </div>
+  </div>
+</section>
+
+<!-- 状态/时间线 -->
+<section id="status">
+  <h2><span class="idx">08</span>状态标签与四级来源时间线</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>语义标签（颜色+文字+圆点）</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:9px;margin-bottom:16px;">
+        <span class="st g"><span class="d"></span>已核验官方凭据</span><span class="st p"><span class="d"></span>公司审核</span>
+        <span class="st a"><span class="d"></span>服务方报告·未核验</span><span class="st b"><span class="d"></span>客户提交</span>
+        <span class="st r"><span class="d"></span>主体校验阻断</span>
+      </div>
+      <div class="t0">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C03221" stroke-width="2" style="flex:none;margin-top:1px;"><path d="M12 8v5M12 16.5v.5"/><path d="M10.3 3.9 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+        <div><b>T0 · 受理回执剩余 4 小时</b><br>短信未达已转人工电话；未回执将升级主管，<b>原截止时间不因通知问题改写</b>。</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>进度时间线</h3>
+      <div class="tl">
+        <div class="tli"><div class="rail"><span class="dot" style="background:var(--green);"></span><span class="vl"></span></div><div class="tc"><div class="tt">官方受理回执 <span class="st g"><span class="d"></span>官方凭据</span></div><div class="td">核验人：核验岗（非案件发起人）· 今日 10:24</div></div></div>
+        <div class="tli"><div class="rail"><span class="dot" style="background:var(--amber);"></span><span class="vl"></span></div><div class="tc"><div class="tt">服务方已递交 <span class="st a"><span class="d"></span>服务方报告</span></div><div class="td">未经官方核验，不作为官方状态</div></div></div>
+        <div class="tli"><div class="rail"><span class="dot" style="background:var(--purple);"></span><span class="vl"></span></div><div class="tc"><div class="tt">材料审核通过 <span class="st p"><span class="d"></span>公司审核</span></div><div class="td">无犯罪公证 · 昨日 16:02</div></div></div>
+        <div class="tli"><div class="rail"><span class="dot" style="background:var(--blue);"></span></div><div class="tc"><div class="tt">客户提交护照 <span class="st b"><span class="d"></span>客户提交</span></div><div class="td">待审核</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>阻断态（无绕过入口）</h3>
+    <div class="gate">
+      <b>主体三要素校验未通过，暂不能下单与付款</b>
+      收款账户户名「某第三方商务公司」与签约主体「示例出入境咨询（北京）」不一致。请停止向客户收款；如已收款，原路退回并转 A05/合规复核。本页没有"强制通过"入口。
+      <div style="margin-top:11px;display:flex;gap:9px;"><button class="btn navy sm">转复核</button><button class="btn ghost sm">查看处理指引</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 反馈 -->
+<section id="feedback">
+  <h2><span class="idx">09</span>Toast 与底部抽屉</h2>
+  <div class="grid2">
+    <div class="card"><h3>Toast（轻反馈，1.9s 自动消失）</h3>
+      <div class="toast-demo" id="td1"><button class="btn navy sm" style="position:absolute;top:16px;left:16px;" onclick="showToast('已记录阅读确认（3/3）')">触发 Toast</button><div class="toast" id="toast1">已记录阅读确认（3/3）</div></div>
+    </div>
+    <div class="card"><h3>底部抽屉（选择/确认）</h3>
+      <div class="sheet-demo" id="sd1">
+        <button class="btn navy sm" style="position:absolute;top:16px;left:16px;z-index:2;" onclick="setSheet(1)">打开选择器</button>
+        <div class="scrim" onclick="setSheet(0)"></div>
+        <div class="sheet"><div class="grab"></div><b style="font-size:14px;">选择申请人</b>
+          <div class="row" style="margin-top:8px;"><span>主申请人 · 王某某</span><span class="st g"><span class="d"></span>本人</span></div>
+          <div class="row"><span>配偶（需本人授权）</span><span class="st a"><span class="d"></span>待授权</span></div>
+          <button class="btn quiet sm" style="width:100%;margin-top:12px;" onclick="setSheet(0)">取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 列表/空态/骨架 -->
+<section id="list">
+  <h2><span class="idx">10</span>列表、骨架屏与空态</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>可按列表（按压/悬停反馈）</h3>
+      <div class="lst">
+        <div class="li"><div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#002661" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h8"/></svg></div><div class="tx"><b>补料清单待审核</b><span>客 #2051 · 今日 18:00 前</span></div><span class="ar">›</span></div>
+        <div class="li"><div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#002661" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="tx"><b>方案 PROP-309 待客户确认</b><span>跟进 · v3</span></div><span class="ar">›</span></div>
+        <div class="li"><div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#002661" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg></div><div class="tx"><b>A 国项目 v3.2 必读未确认</b><span>授权前置</span></div><span class="ar">›</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>加载骨架（微光，不转圈）</h3>
+      <div style="padding:6px 0;">
+        <div class="sk" style="width:45%;margin-bottom:12px;"></div>
+        <div class="sk" style="width:100%;margin-bottom:8px;"></div>
+        <div class="sk" style="width:88%;margin-bottom:18px;"></div>
+        <div class="sk" style="width:70%;margin-bottom:8px;"></div>
+      </div>
+      <h3 style="margin-top:8px;">空态（行动邀请）</h3>
+      <div class="empty" style="padding:22px 16px;">
+        <div class="ei"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#002661" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></div>
+        <b>还没有在办案件</b>
+        <p>完成一次初步评估，或联系顾问获取方案。</p>
+        <button class="btn berry sm">开始初步评估</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+设计系统与组件库 v0.1（方向 C）· 高保真屏只使用本库 Token 与组件。<br>
+下一步：客户端主链路 9 屏高保真（可点击），随后顾问端/iPad、后台。示例数据均为虚构【示例】。
+</footer>
+
+</div>
+
+<script>
+function pickChip(el){[...el.parentNode.children].forEach(c=>c.classList.remove('on'));el.classList.add('on');}
+// segmented sliding
+document.querySelectorAll('.seg').forEach(seg=>{
+  const ind=seg.querySelector('.ind'),btns=[...seg.querySelectorAll('button')];
+  const panels=[
+    '切换时指示块以弹簧曲线滑动（340ms），面板内容淡入并上移 8px；这是全平台 Tab/分段的统一运动方式。',
+    'T0 标签使用语义红，但不闪烁、不弹跳；剩余时间数字等宽，超时只升级不改期。',
+    '消息分 T0/T1/T2，业务与营销分离；列表项左滑可处理，新内容以高度展开+淡入呈现。'
+  ];
+  function move(i){btns.forEach((b,j)=>b.classList.toggle('on',j===i));ind.style.left=btns[i].offsetLeft+'px';ind.style.width=btns[i].offsetWidth+'px';
+    const p=document.getElementById('segPanel');p.style.opacity=0;setTimeout(()=>{p.textContent=panels[i];p.style.opacity=1;},140);}
+  btns.forEach((b,i)=>b.addEventListener('click',()=>move(i)));
+  requestAnimationFrame(()=>move(0));window.addEventListener('resize',()=>move(btns.findIndex(b=>b.classList.contains('on'))));
+});
+// toast
+let tt;function showToast(m){const t=document.getElementById('toast1');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1900);}
+// sheet
+function setSheet(open){const d=document.getElementById('sd1');d.querySelector('.sheet').classList.toggle('open',open===1);d.querySelector('.scrim').classList.toggle('open',open===1);}
+</script>
+</body>
+</html>
