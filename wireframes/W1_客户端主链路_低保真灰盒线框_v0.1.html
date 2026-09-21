@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>低保真灰盒线框 · 客户端主链路 v0.1</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2346545b'/%3E%3Cpath d='M8 20l5-6 4 3 7-9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --ink:#2f3a3f; --mut:#6b7a81; --line:#b9c5ca; --blk:#d3dcdf; --blk2:#e3e9eb;
+    --paper:#eef1f2; --card:#ffffff; --dark:#46545b; --hatch:#c7d1d5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--paper);color:var(--ink);padding:32px 28px 80px;}
+  header.cover{max-width:1180px;margin:0 auto 36px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px 34px;}
+  header.cover h1{font-size:24px;font-weight:700;letter-spacing:.5px;}
+  header.cover .sub{color:var(--mut);font-size:13.5px;margin-top:8px;line-height:1.8;}
+  .legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+  .lg{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--mut);border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:#fafbfc;}
+  .sw{width:22px;height:14px;border-radius:3px;border:1px solid #aebabe;}
+  .sw.block{background:var(--blk);}.sw.line2{background:linear-gradient(to bottom,transparent 60%,var(--line) 60%);}
+  .sw.cta{background:var(--dark);}.sw.gate{background:repeating-linear-gradient(45deg,#fff,#fff 4px,var(--hatch) 4px,var(--hatch) 8px);}
+  .sw.tab{background:#cdd6d9;}
+  .ia{margin-top:20px;border-top:1px dashed var(--line);padding-top:16px;font-size:12.5px;color:var(--mut);line-height:2;}
+  .ia b{color:var(--ink);}
+  .grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:26px;}
+  .wf{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 20px 24px;}
+  .wf h3{font-size:15px;font-weight:700;display:flex;align-items:center;gap:9px;margin-bottom:4px;}
+  .wf h3 .no{background:var(--dark);color:#fff;width:23px;height:23px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex:none;}
+  .wf .code{font-size:11.5px;color:var(--mut);margin-bottom:14px;}
+  .phone{width:300px;height:620px;margin:0 auto;border:2px solid #8fa0a7;border-radius:30px;background:#fff;overflow:hidden;display:flex;flex-direction:column;position:relative;}
+  .statusbar{height:22px;background:#f3f6f7;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:9px;color:var(--mut);flex:none;}
+  .topbar{height:38px;background:var(--blk2);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 12px;gap:8px;flex:none;}
+  .topbar .t{height:9px;width:90px;background:var(--line);border-radius:4px;}
+  .topbar .back{width:9px;height:9px;border-left:2px solid var(--mut);border-bottom:2px solid var(--mut);transform:rotate(45deg);}
+  .pbody{flex:1;padding:11px;overflow:hidden;display:flex;flex-direction:column;gap:9px;}
+  .blk{background:var(--blk);border-radius:7px;min-height:30px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#54646b;text-align:center;padding:5px 8px;line-height:1.5;}
+  .blk.soft{background:var(--blk2);border:1px dashed var(--line);}
+  .rowline{border:1px solid var(--line);border-radius:7px;padding:8px 9px;display:flex;flex-direction:column;gap:6px;background:#fff;}
+  .ln{height:7px;background:var(--blk2);border-radius:4px;}
+  .ln.w70{width:70%;}.ln.w50{width:50%;}.ln.w40{width:40%;}.ln.w90{width:90%;}.ln.w30{width:30%;}
+  .gate{background:repeating-linear-gradient(45deg,#fff,#fff 5px,var(--hatch) 5px,var(--hatch) 10px);border:1px dashed #7e8e95;border-radius:7px;min-height:30px;display:flex;align-items:center;justify-content:center;font-size:9.5px;color:#54646b;text-align:center;padding:5px;line-height:1.5;}
+  .cta-row{display:flex;gap:7px;}
+  .btn{flex:1;height:32px;border-radius:16px;font-size:10px;display:flex;align-items:center;justify-content:center;}
+  .btn.pri{background:var(--dark);color:#fff;}.btn.sec{border:1.5px solid var(--dark);color:var(--dark);background:#fff;}
+  .chips{display:flex;gap:5px;flex-wrap:wrap;}
+  .chip{font-size:8.5px;border:1px solid var(--line);border-radius:10px;padding:3px 8px;color:var(--mut);background:#fff;}
+  .chip.on{background:var(--blk);color:#46545b;border-color:var(--blk);}
+  .tabbar{height:46px;background:var(--blk2);border-top:1px solid var(--line);display:flex;flex:none;}
+  .tabbar .tb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:7.5px;color:var(--mut);}
+  .tabbar .tb i{width:13px;height:13px;border-radius:4px;background:var(--line);display:block;}
+  .tabbar .tb.on i{background:var(--dark);}.tabbar .tb.on{color:var(--ink);font-weight:700;}
+  .steps{display:flex;gap:4px;align-items:center;}
+  .steps .s{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--line);font-size:8px;display:flex;align-items:center;justify-content:center;color:var(--mut);}
+  .steps .s.on{background:var(--dark);color:#fff;border-color:var(--dark);}
+  .steps .bar{flex:1;height:1.5px;background:var(--line);}
+  .tl{display:flex;gap:8px;}
+  .tl .rail{width:12px;display:flex;flex-direction:column;align-items:center;}
+  .tl .dot{width:9px;height:9px;border-radius:50%;background:var(--dark);margin-top:3px;flex:none;}
+  .tl .vline{width:1.5px;flex:1;background:var(--line);}
+  .tl .tc{flex:1;border:1px solid var(--line);border-radius:6px;padding:6px 8px;margin-bottom:8px;}
+  .srctag{font-size:7.5px;border:1px solid var(--line);border-radius:3px;padding:1px 4px;color:var(--mut);}
+  .notes{margin:14px auto 0;max-width:300px;border-top:1px dashed var(--line);padding-top:11px;display:flex;flex-direction:column;gap:7px;}
+  .nt{font-size:11px;line-height:1.65;color:var(--mut);display:flex;gap:7px;}
+  .nt b{color:var(--ink);font-weight:700;flex:none;}
+  .nt .k{flex:none;font-weight:700;color:var(--ink);}
+  footer{max-width:1180px;margin:40px auto 0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 28px;font-size:12.5px;color:var(--mut);line-height:2;}
+  footer b{color:var(--ink);}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <h1>低保真灰盒线框 · 客户端主链路 v0.1</h1>
+  <div class="sub">阶段：G-P5 低保真（功能布局确认，非视觉稿）。只表达信息层级、导航、一页一主动作、闸门与状态位置；不含品牌色、字体风格与真实文案。<br>范围：客户端主链路 9 屏（浏览 → 评估 → 选人 → 方案 → 订单 → 办理 → 进度）。依据：G-P3 功能卡 C01–C13、G-P4 对象与状态机。</div>
+  <div class="legend">
+    <span class="lg"><span class="sw block"></span>内容/信息块</span>
+    <span class="lg"><span class="sw line2"></span>文字行（示意）</span>
+    <span class="lg"><span class="sw cta"></span>主操作按钮</span>
+    <span class="lg"><span class="sw gate"></span>系统闸门/硬规则位</span>
+    <span class="lg"><span class="sw tab"></span>底部导航</span>
+  </div>
+  <div class="ia">
+    <b>底部信息架构（6 tab）：</b>首页 · 找项目 · 全球通行 · 我的办理 · 服务 · 我的　|　
+    <b>主链路：</b>① 登录 → ② 首页 → ③ 找项目 → ④ 项目详情 → ⑤ 初步评估 → ⑥ 我的方案 → ⑦ 订单与费用 → ⑧ 案件材料 → ⑨ 进度消息。<br>
+    <b>布局原则：</b>每页只有一个主 CTA（次操作弱化）；闸门在动作发生前出现、不在结果页才报错；空态是"下一步邀请"而非空白；T0/状态/凭据位置全局一致。
+  </div>
+</header>
+
+<div class="grid">
+
+<!-- W1 -->
+<div class="wf">
+  <h3><span class="no">1</span>登录 / 游客进入</h3>
+  <div class="code">P-00 · 入口屏</div>
+  <div class="phone">
+    <div class="statusbar"><span>9:41</span><span>● ● ●</span></div>
+    <div class="pbody" style="justify-content:center;gap:14px;">
+      <div class="blk" style="height:54px;">品牌标识位（灰盒）</div>
+      <div class="ln w50" style="align-self:center;"></div>
+      <div class="rowline"><div class="ln w90"></div><div class="ln w70"></div></div>
+      <div class="rowline" style="flex-direction:row;gap:7px;"><div class="blk soft" style="flex:1;">验证码输入</div><div class="blk soft" style="width:70px;">获取</div></div>
+      <div class="btn pri">登录 / 注册</div>
+      <div class="chips" style="justify-content:center;"><span class="chip">微信</span><span class="chip">Apple</span></div>
+      <div class="ln w70" style="align-self:center;margin-top:auto;"></div>
+      <div class="blk soft">协议勾选（默认不勾）＋游客先逛逛</div>
+    </div>
+  </div>
+  <div class="notes">
+    <div class="nt"><span class="k">主动作</span>手机号验证登录；游客浏览为次动作。</div>
+    <div class="nt"><span class="k">规则</span>协议未勾选不可登录；提交类动作（评估/收藏/联系顾问）才弹登录门，浏览不拦。</div>
+    <div class="nt"><span class="k">空态</span>验证码失败内联提示，不清空已填。</div>
+  </div>
+</div>
+
+<!-- W2 -->
+<div class="wf">
+  <h3><span class="no">2</span>首页（已登录）</h3>
+  <div class="code">P-01b · 首页 tab</div>
+  <div class="phone">
+    <div class="statusbar"><span>9:41</span><span>● ● ●</span></div>
+    <div class="pbody">
+      <div class="rowline" style="flex-direction:row;align-items:center;"><div style="flex:1;"><div class="ln w50"></div><div class="ln w30" style="margin-top:5px;"></div></div><div class="blk" style="width:34px;height:34px;border-radius:50%;">头像</div></div>
+      <div class="blk" style="height:26px;">搜索框</div>
+      <div class="rowline"><div class="ln w70"></div><div class="chips" style="margin-top:3px;"><span class="chip on">阶段</span><span class="chip">待办 2</span></div><div class="ln w90" style="margin-top:4px;"></div></div>
+      <div class="chips"><span class="chip">初评</span><span class="chip">项目</span><span class="chip">签证</span><span class="chip">工单</span></div>
+      <div class="blk soft" style="height:46px;">防骗教育横幅（核验收费主体）</div>
+      <div class="rowline"><div class="ln w70"></div><div class="ln w90" style="margin-top:5px;"></div><div class="ln w50" style="margin-top:5px;"></div></div>
+      <div class="rowline"><div class="ln w70"></div><div class="ln w90" style="margin-top:5px;"></div></div>
+    </div>
+    <div class="tabbar"><div class="tb on"><i></i>首页</div><div class="tb"><i></i>找项目</div><div class="tb"><i></i>通行</div><div class="tb"><i></i>办理</div><div class="tb"><i></i>服务</div><div class="tb"><i></i>我的</div></div>
+  </div>
+  <div class="notes">
+    <div class="nt"><span class="k">主动作</span>从"我的办理"卡进入在办案件；无案件时此卡变为"开始初评"。</div>
+    <div class="nt"><span class="k">规则</span>游客态与登录态双版本；营销位与业务待办视觉分区，不混排。</div>
+    <div class="nt"><span class="k">空态</span>无在办：只给"了解项目 / 联系顾问"两个动作。</div>
+  </div>
+</div>
+
+<!-- W3 -->
+<div class="wf">
+  <h3><span class="no">3</span>找项目</h3>
+  <div class="code">P-02 · 找项目 tab</div>
+  <div class="phone">
+    <div class="statusbar"><span>9:41</span><span>● ● ●</span></div>
+    <div class="pbody">
+      <div class="blk" style="height:26px;">搜索（目的地 / 身份性质）</div>
+      <div class="chips"><span class="chip on">全部</span><span class="chip">工作居留</span><span class="chip">随行子女</span><span class="chip">数字游民</span><span class="chip">筛选</span></div>
+      <div class="rowline" style="flex-direction:row;align-items:center;gap:8px;"><div style="flex:1;"><div class="ln w80"></div><div class="ln w50" style="margin-top:5px;"></div><div class="ln w40" style="margin-top:5px;"></div></div><span class="srctag">已发布</span></div>
+      <div class="rowline" style="flex-direction:row;align-items:center;gap:8px;"><div style="flex:1;"><div class="ln w70"></div><div class="ln w50" style="margin-top:5px;"></div><div class="ln w30" style="margin-top:5px;"></div></div><span class="srctag">已发布</span></div>
+      <div class="rowline" style="opacity:.55;flex-direction:row;align-items:center;gap:8px;"><div style="flex:1;"><div class="ln w60"></div><div class="ln w40" style="margin-top:5px;"></div></div><span class="srctag">暂停</span></div>
+      <div class="blk soft" style="margin-top:auto;">比较夹入口（最多 4 个）</div>
+    </div>
+    <div class="tabbar"><div class="tb"><i></i>首页</div><div class="tb on"><i></i>找项目</div><div class="tb"><i></i>通行</div><div class="tb"><i></i>办理</div><div class="tb"><i></i>服务</div><div class="tb"><i></i>我的</div></div>
+  </div>
+  <div class="notes">
+    <div class="nt"><span class="k">主动作</span>进入项目详情；次动作收藏/加比较。</div>
+    <div class="nt"><span class="k">规则</span>仅展示"已发布+已授权供给"项目；暂停项灰显且不可进新签。</div>
+    <div class="nt"><span class="k">空态</span>筛选无结果：给清除筛选与初评入口，不硬凑项目。</div>
+  </div>
+</div>
+
+<!-- W4 -->
+<div class="wf">
+  <h3><span class="no">4</span>项目详情</h3>
+  <div class="code">P-03 · 浏览→评估桥</div>
+  <div class="phone">
+    <div class="statusbar"><span>9:41</span><span>● ● ●</span></div>
+    <div class="topbar"><span class="back"></span><span class="t"></span></div>
+    <div class="pbody">
+      <div class="blk" style="height:64px;">项目头区（身份性质标签）</div>
+      <div class="chips"><span class="chip on">条件</span><span class="chip">流程</span><span class="chip">材料</span><span class="chip">费用</span><span class="chip">责任</span></div>
+      <div class="rowline"><div class="ln w90"></div><div class="ln w90" style="margin-top:5px;"></div><div class="ln w70" style="margin-top:5px;"></div></div>
+      <div class="rowline">
+        <div class="ln w60"></div>
+        <div class="chips" style="margin-top:6px;"><span class="chip">费项</span><span class="chip">收取方</span><span class="chip">币种</span><span class="chip">确定/估算</span></div>
+        <div class="ln w90" style="margin-top:5px;"></div><div class="ln w80" style="margin-top:5px;"></div>
+      </div>
+      <div class="gate">固定提示位：不承诺获批/时限；参考周期非承诺；以官方为准</div>
+    </div>
+    <div class="pbody" style="flex:none;padding:8px 11px 10px;border-top:1px solid var(--line);">
+      <div class="cta-row"><div class="btn sec">收藏比较</div><div class="btn pri">初步评估</div></div>
+      <div class="blk soft" style="height:24px;margin-top:7px;">或：联系顾问（需登录）</div>
+    </div>
+  </div>
+  <div class="notes">
+    <div class="nt"><span class="k">主动作</span>初步评估；联系顾问为并行次动作（借友邦双按钮结构）。</div>
+    <div class="nt"><span class="k">规则</span>费用必列收取方/币种/确定性，异币种不相加，"待确认"≠0；无成功率。</div>
+    <div class="nt"><span class="k">状态</span>项目暂停：整页只读+暂停说明，双按钮收起。</div>
+  </div>
+</div>
+
+<!-- W5 -->
+<div class="wf">
+  <h3><span class="no">5</span>初步评估（问卷 / 结果）</h3>
+  <div class="code">P-05 问卷 · P-06 结果</div>
+  <div class="phone">
+    <div class="statusbar"><span>9:41</span><span>● ● ●</span></div>
+    <div class="topbar"><span class="back"></span><span class="t"></span></div>
+    <div class="pbody">
+      <div class="steps"><span class="s on">1</span><span class="bar"></span><span class="s">2</span><span class="bar"></span><span class="s">3</span><span class="bar"></span><span class="s">4</span></div>
+      <div class="rowline"><div class="ln w70"></div><div class="ln w50" style="margin-top:6px;"></div></div>
+      <div class="blk soft" style="min-height:64px;flex-direction:column;gap:7px;">
+        <div class="chips"><span class="chip on">选项 A</span><span class="chip">选项 B</span><span class="chip">选项 C</span></div>
+        <div class="chips"><span class="chip">选项 D</span><span class="chip">不确定</span></div>
+      </div>
+      <div class="gate" style="margin-top:auto;">结果态固定四区：符合 / 差距 / 待确认 / 信息来源与时间</div>
+      <div class="ln w90"></div>
+      <div class="blk soft" style="height:30px;">性质提示：信息整理，非资格认定/法律意见</div>
+      <div class="cta-row"><div class="btn sec">上一步</div><div class="btn pri">下一步 / 查看结果</div></div>
+    </div>
+  </div>
+  <div class="notes">
+    <div class="nt"><span class="k">主动作</span>逐题作答 → 查看结果 →（登录后）请求顾问。</div>
+    <div class="nt"><span class="k">规则</span>无评分/概率/成功率；超模板判断转人工署名；"不确定"是合法答案。</div>
+    <div class="nt"><span class="k">空态</span>信息不足：结果显"待确认"清单，不猜测结论。</div>
+  </div>
+</div>
+
+<!-- W6 -->
+<div class="wf">
+  <h3><span class="no">6</span>我的方案</h3>
+  <div class="code">P-08 · 版本化确认</div>
+  <div class="phone">
+    <div class="statusbar"><span>9:41</span><span>● ● ●</span></div>
+    <div class="topbar"><span class="back"></span><span class="t"></span></div>
+    <div class="pbody">
+      <div class="rowline" style="flex-direction:row;align-items:center;gap:8px;"><div style="flex:1;"><div class="ln w60"></div><div class="ln w40" style="margin-top:5px;"></div></div><span class="srctag">v3 · 待确认</span></div>
+      <div class="rowline"><div class="ln w50"></div><div class="ln w90" style="margin-top:5px;"></div><div class="ln w80" style="margin-top:5px;"></div></div>
+      <div class="rowline"><div class="ln w50"></div><div class="chips" style="margin-top:6px;"><span class="chip">平台</span><span class="chip">境内</span><span class="chip">境外持牌</span><span class="chip">官方</span></div><div class="ln w90" style="margin-top:5px;"></div></div>
+      <div class="rowline"><div class="ln w50"></div><div class="ln w90" style="margin-top:5px;"></div><div class="ln w60" style="margin-top:5px;"></div></div>
+      <div class="gate">不承诺事项摘要（详见订单前共读）</div>
+    </div>
+    <div class="pbody" style="flex:none;padding:8px 11px 10px;border-top:1px solid var(--line);">
+      <div class="cta-row"><div class="btn sec">请求修改</div><div class="btn pri">确认本版本</div></div>
+    </div>
+  </div>
+  <div class="notes">
+    <div class="nt"><span class="k">主动作</span>确认本版本（生成订单草稿）；修改走留痕、出新版本。</div>
+    <div class="nt"><span class="k">闸门</span>未过 A05 复核/已过期版本：确认按钮不可用并说明原因。</div>
+    <div class="nt"><span class="k">规则</span>确认≠签署≠付款；改价/改范围旧确认失效。</div>
+  </div>
+</div>
+
+<!-- W7 -->
+<div class="wf">
+  <h3><span class="no">7</span>订单与费用</h3>
+  <div class="code">P-09 / P-09a · 三态分离</div>
+  <div class="phone">
+    <div class="statusbar"><span>9:41</span><span>● ● ●</span></div>
+    <div class="topbar"><span class="back"></span><span class="t"></span></div>
+    <div class="pbody">
+      <div class="rowline" style="flex-direction:row;gap:6px;">
+        <div class="blk soft" style="flex:1;flex-direction:column;gap:4px;"><span class="srctag">合同</span><div class="ln w70"></div></div>
+        <div class="blk soft" style="flex:1;flex-direction:column;gap:4px;"><span class="srctag">到账</span><div class="ln w70"></div></div>
+        <div class="blk soft" style="flex:1;flex-direction:column;gap:4px;"><span class="srctag">服务</span><div class="ln w70"></div></div>
+      </div>
+      <div class="gate">主体三要素校验位：签约方 / 境外交付 / 收款户名一致，才出现付款指引</div>
+      <div class="rowline"><div class="ln w60"></div><div class="ln w90" style="margin-top:5px;"></div><div class="ln w80" style="margin-top:5px;"></div></div>
+      <div class="blk soft" style="height:42px;">付款凭证上传（提交后显"待核验"）</div>
+      <div class="rowline"><div class="ln w50"></div><div class="ln w80" style="margin-top:5px;"></div></div>
+      <div class="chips"><span class="chip">合同五要素</span><span class="chip">告知确认</span><span class="chip">收据</span><span class="chip">退款/调整</span></div>
+    </div>
+    <div class="pbody" style="flex:none;padding:8px 11px 10px;border-top:1px solid var(--line);">
+      <div class="btn pri">按指引付款（仅主体一致时可点）</div>
+    </div>
+  </div>
+  <div class="notes">
+    <div class="nt"><span class="k">主动作</span>付款（仅校验通过）；查看合同/收据/退款为次级入口。</div>
+    <div class="nt"><span class="k">闸门</span>三要素不一致：付款入口与顾问端同时关闭，无绕过路径（S-08a）。</div>
+    <div class="nt"><span class="k">规则</span>待核验≠到账；退款走独立工单+双人复核，顾问无权承诺。</div>
+  </div>
+</div>
+
+<!-- W8 -->
+<div class="wf">
+  <h3><span class="no">8</span>案件与材料</h3>
+  <div class="code">P-10 / P-12 / P-12a</div>
+  <div class="phone">
+    <div class="statusbar"><span>9:41</span><span>● ● ●</span></div>
+    <div class="topbar"><span class="back"></span><span class="t"></span></div>
+    <div class="pbody">
+      <div class="blk soft" style="height:34px;">阶段步骤条（合同/材料/受理/结果，非百分比）</div>
+      <div class="chips"><span class="chip on">主申 王某某</span><span class="chip">配偶</span><span class="chip">子女</span></div>
+      <div class="rowline" style="flex-direction:row;align-items:center;gap:8px;"><div class="ln" style="flex:1;"></div><span class="srctag">待提交</span></div>
+      <div class="rowline" style="flex-direction:row;align-items:center;gap:8px;"><div class="ln w80" style="flex:1;"></div><span class="srctag">待审核</span></div>
+      <div class="rowline" style="flex-direction:row;align-items:center;gap:8px;"><div class="ln w70" style="flex:1;"></div><span class="srctag">需补充（原因）</span></div>
+      <div class="rowline" style="flex-direction:row;align-items:center;gap:8px;"><div class="ln w90" style="flex:1;"></div><span class="srctag">已通过</span></div>
+      <div class="gate">他人材料行：锁定 → P-12a 服务端拦截说明 → 发本人授权邀请</div>
+      <div class="btn pri" style="height:30px;">上传 / 补交材料</div>
+    </div>
+    <div class="tabbar"><div class="tb"><i></i>首页</div><div class="tb"><i></i>找项目</div><div class="tb"><i></i>通行</div><div class="tb on"><i></i>办理</div><div class="tb"><i></i>服务</div><div class="tb"><i></i>我的</div></div>
+  </div>
+  <div class="notes">
+    <div class="nt"><span class="k">主动作</span>上传/补交本人材料；T0 补件从通知直达具体材料行。</div>
+    <div class="nt"><span class="k">闸门</span>成年成员须本人授权、未成年须监护证据；越权服务端拒绝并留痕。</div>
+    <div class="nt"><span class="k">空态</span>合同未生效：显"核验后开放清单"，不放空清单。</div>
+  </div>
+</div>
+
+<!-- W9 -->
+<div class="wf">
+  <h3><span class="no">9</span>进度与消息</h3>
+  <div class="code">P-11 / P-13 / P-13a</div>
+  <div class="phone">
+    <div class="statusbar"><span>9:41</span><span>● ● ●</span></div>
+    <div class="topbar"><span class="back"></span><span class="t"></span></div>
+    <div class="pbody">
+      <div class="chips"><span class="chip on">时间线</span><span class="chip">消息 T0</span><span class="chip">T1</span><span class="chip">T2</span></div>
+      <div class="tl">
+        <div class="rail"><span class="dot"></span><span class="vline"></span></div>
+        <div class="tc"><div style="display:flex;gap:5px;align-items:center;"><span class="srctag">官方凭据·绿</span><div class="ln w40"></div></div><div class="ln w90" style="margin-top:5px;"></div><div class="ln w60" style="margin-top:5px;"></div></div>
+      </div>
+      <div class="tl">
+        <div class="rail"><span class="dot" style="background:#93a2a8;"></span><span class="vline"></span></div>
+        <div class="tc"><span class="srctag">服务方报告·琥珀（未核验）</span><div class="ln w80" style="margin-top:5px;"></div></div>
+      </div>
+      <div class="tl">
+        <div class="rail"><span class="dot" style="background:#93a2a8;"></span></div>
+        <div class="tc"><span class="srctag">公司审核·紫</span><div class="ln w70" style="margin-top:5px;"></div></div>
+      </div>
+      <div class="gate">T0 卡：事项 + 原截止时间（不改写）+ 三通道送达回执 + 未达升级状态</div>
+      <div class="blk soft" style="height:26px;">消息详情：去补件 / 去确认 / 联系平台</div>
+    </div>
+    <div class="tabbar"><div class="tb"><i></i>首页</div><div class="tb"><i></i>找项目</div><div class="tb"><i></i>通行</div><div class="tb on"><i></i>办理</div><div class="tb"><i></i>服务</div><div class="tb"><i></i>我的</div></div>
+  </div>
+  <div class="notes">
+    <div class="nt"><span class="k">主动作</span>处理 T0 待办（补件/确认/付款）。</div>
+    <div class="nt"><span class="k">规则</span>四级来源措辞不混淆；无凭据不发布官方节点；锁屏不显案号。</div>
+    <div class="nt"><span class="k">异常</span>通道全未达：显"已转人工/已升级"，不静默。</div>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  <b>本稿确认什么：</b>每页的信息分区顺序、主动作位置、闸门出现时机、状态/空态占位、6 tab 归属。<br>
+  <b>本稿不决定什么：</b>颜色、字体、圆角、插画、组件质感——这些在《品牌与视觉方向》中确定（莓红 #AF2D67 → 深海军蓝 #002661 撞色渐变将作为品牌签名元素，克制使用于品牌时刻，操作与状态色保持安静、可信）。<br>
+  <b>下一步：</b>① 你确认/批注本稿布局；② 输出《品牌与视觉方向 v0.1》：设计原则、色彩 token、字体、组件库、3 个方向样张（取同一关键屏对比）；③ 方向选定后逐屏高保真。
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>品牌与视觉方向 v0.1 · 透明身份规划平台</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23AF2D67'/%3E%3Cstop offset='1' stop-color='%23002661'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M8 20l5-6 4 3 7-9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --navy:#002661; --navy-700:#1E3E78; --navy-50:#EDF1F8; --navy-100:#DCE4F2;
+  --berry:#AF2D67; --berry-600:#C63D80; --berry-50:#FAEEF4; --berry-100:#F3D9E6;
+  --grad:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);
+  --ink:#1B2433; --mut:#5E6B7E; --faint:#8A95A6;
+  --line:#E5E9F0; --paper:#F5F7FA; --card:#FFFFFF;
+  --green:#177A5B; --green-bg:#E6F4EE; --amber:#B45309; --amber-bg:#FBF1E2;
+  --red:#C03221; --red-bg:#FCEBEA; --blue:#1D5F8A; --blue-bg:#E9F2F8; --purple:#6B5AA8; --purple-bg:#EFECF7;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+body{font-family:"Manrope","Noto Sans SC",-apple-system,"PingFang SC",sans-serif;background:var(--paper);color:var(--ink);padding:0 0 70px;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 26px;}
+/* cover */
+.hero{background:var(--grad);color:#fff;padding:54px 0 64px;margin-bottom:34px;}
+.hero .kicker{font-size:12px;letter-spacing:3px;text-transform:uppercase;opacity:.82;font-weight:600;}
+.hero h1{font-size:34px;font-weight:800;margin:12px 0 10px;letter-spacing:.5px;}
+.hero p{font-size:14.5px;line-height:1.9;opacity:.92;max-width:760px;}
+.hero .mark{width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
+section{margin-bottom:46px;}
+h2{font-size:20px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+h2 .idx{font-size:12px;background:var(--navy);color:#fff;border-radius:6px;padding:3px 8px;font-weight:700;}
+.sec-sub{color:var(--mut);font-size:13px;line-height:1.8;margin-bottom:18px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+/* principles */
+.princ{display:flex;gap:13px;align-items:flex-start;}
+.princ .ic{width:38px;height:38px;border-radius:11px;background:var(--navy-50);color:var(--navy);display:flex;align-items:center;justify-content:center;flex:none;}
+.princ b{display:block;font-size:14.5px;margin-bottom:3px;}
+.princ span{font-size:12.5px;color:var(--mut);line-height:1.7;}
+/* color */
+.swatch{border-radius:12px;overflow:hidden;border:1px solid var(--line);}
+.swatch .c{height:74px;display:flex;align-items:flex-end;padding:9px 12px;color:#fff;font-size:12px;font-weight:700;font-family:"Manrope",monospace;}
+.swatch .meta{padding:9px 12px;font-size:11.5px;color:var(--mut);line-height:1.6;background:#fff;}
+.grad-card{border-radius:14px;background:var(--grad);color:#fff;padding:22px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;}
+.grad-card .hex{font-family:"Manrope",monospace;font-size:12.5px;opacity:.9;}
+.grad-card b{font-size:15.5px;line-height:1.6;}
+.rule-list{font-size:12.5px;color:var(--mut);line-height:2;}
+.rule-list li{margin-left:18px;}
+.tag-use{display:inline-block;font-size:11px;border-radius:5px;padding:2px 8px;margin:2px 4px 2px 0;}
+/* type */
+.typerow{display:flex;align-items:baseline;gap:18px;padding:13px 0;border-bottom:1px dashed var(--line);}
+.typerow:last-child{border-bottom:0;}
+.typerow .lbl{width:120px;flex:none;font-size:11.5px;color:var(--faint);}
+.typerow .demo{flex:1;}
+/* components */
+.comp{display:flex;flex-direction:column;gap:13px;}
+.btnx{height:42px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;}
+.btnx.pri{background:var(--navy);color:#fff;}
+.btnx.berry{background:var(--berry);color:#fff;}
+.btnx.ghost{border:1.5px solid var(--navy);color:var(--navy);}
+.btnx.grad{background:var(--grad);color:#fff;}
+.btnx.quiet{background:var(--navy-50);color:var(--navy);}
+.chipx{display:inline-flex;align-items:center;font-size:11.5px;border-radius:11px;padding:4px 11px;margin:0 5px 5px 0;border:1px solid var(--line);color:var(--mut);background:#fff;}
+.chipx.on{background:var(--navy);color:#fff;border-color:var(--navy);}
+.stat{font-size:11.5px;border-radius:6px;padding:3px 9px;display:inline-block;font-weight:600;}
+.s-green{background:var(--green-bg);color:var(--green);} .s-amber{background:var(--amber-bg);color:var(--amber);}
+.s-red{background:var(--red-bg);color:var(--red);} .s-blue{background:var(--blue-bg);color:var(--blue);}
+.s-purple{background:var(--purple-bg);color:var(--purple);}
+.t0bar{background:var(--red-bg);border:1px solid #f2c8c3;border-radius:11px;padding:11px 13px;font-size:12px;color:#8a261c;line-height:1.6;}
+.inputx{height:44px;border:1.5px solid var(--line);border-radius:12px;display:flex;align-items:center;padding:0 14px;font-size:13.5px;color:var(--faint);}
+/* phones */
+.dir{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 18px 18px;display:flex;flex-direction:column;}
+.dir h3{font-size:15px;font-weight:800;}
+.dir .tagline{font-size:11.5px;color:var(--mut);line-height:1.7;margin:5px 0 14px;min-height:46px;}
+.phone{width:264px;height:560px;border-radius:30px;overflow:hidden;display:flex;flex-direction:column;margin:0 auto;position:relative;box-shadow:0 10px 30px rgba(15,35,80,.12);border:1px solid #dfe4ee;flex:none;}
+.pst{height:20px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:8.5px;flex:none;}
+.pbody{flex:1;padding:12px;overflow:hidden;display:flex;flex-direction:column;gap:9px;}
+.ptab{height:44px;display:flex;flex:none;}
+.ptab .t{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:7px;}
+.ptab .t i{width:11px;height:11px;border-radius:3.5px;display:block;}
+.hrow{display:flex;align-items:center;gap:8px;}
+.ava{width:32px;height:32px;border-radius:50%;flex:none;}
+.line{height:7px;border-radius:4px;background:#e7ebf1;}
+.mini-card{border-radius:11px;padding:10px 11px;}
+.q4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.q4 .q{border-radius:9px;height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:7.5px;}
+.q .di{width:15px;height:15px;border-radius:5px;display:block;}
+.proj{border-radius:10px;padding:9px 10px;border:1px solid #e7ebf1;}
+.verdict{margin-top:14px;border-top:1px dashed var(--line);padding-top:14px;font-size:12px;line-height:1.8;color:var(--mut);}
+.verdict b{color:var(--ink);}
+.rec{border:2px solid var(--berry);position:relative;}
+.rec .ribbon{position:absolute;top:-11px;right:14px;background:var(--berry);color:#fff;font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:9px;}
+/* direction A theme */
+.a .pst,.a .ptab{background:#fff;}
+.a .pbody{background:#fff;}
+.a .case-card{background:var(--navy-50);}
+.a .q .di{background:var(--navy-100);}
+.a .ptab .t.on i{background:var(--navy);} .a .ptab .t.on{color:var(--navy);font-weight:700;}
+.a .ptab .t{color:#9aa4b6;} .a .ptab .t i{background:#cdd5e4;}
+.a .brandstrip{height:4px;background:var(--grad);border-radius:3px;}
+.a .cta{background:var(--navy);color:#fff;}
+/* direction B */
+.b .phone{background:var(--berry-50);}
+.b .pbody{background:var(--berry-50);}
+.b .pst,.b .ptab{background:#fff;}
+.b .case-card{background:var(--grad);color:#fff;}
+.b .q .di{background:var(--berry-100);}
+.b .ptab .t.on i{background:var(--berry);} .b .ptab .t.on{color:var(--berry);font-weight:700;}
+.b .ptab .t{color:#a98fa0;} .b .ptab .t i{background:#e6cdda;}
+.b .cta{background:var(--berry);color:#fff;}
+/* direction C */
+.c .phone{background:#F5F7FA;}
+.c .pbody{background:#F5F7FA;}
+.c .pst{background:var(--grad);color:#fff;} .c .ptab{background:#fff;}
+.c .sig{background:var(--grad);color:#fff;border-radius:14px;padding:13px;}
+.c .q .di{background:var(--navy-100);}
+.c .ptab .t.on i{background:var(--grad);} .c .ptab .t.on{color:var(--navy);font-weight:700;}
+.c .ptab .t{color:#9aa4b6;} .c .ptab .t i{background:#cdd5e4;}
+.c .cta{background:var(--navy);color:#fff;}
+.dosdonts{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.dd{border-radius:12px;padding:15px 17px;font-size:12.5px;line-height:1.9;}
+.dd.ok{background:var(--green-bg);color:#1c5e47;} .dd.no{background:var(--red-bg);color:#8a261c;}
+.dd b{display:block;margin-bottom:4px;font-size:13px;}
+footer{font-size:12.5px;color:var(--mut);line-height:2;text-align:center;margin-top:30px;}
+.typerow .demo{min-width:0;overflow-wrap:break-word;word-break:break-word;}
+@media(max-width:900px){.grid3{grid-template-columns:1fr;}.grid2{grid-template-columns:1fr;}
+  .wrap{padding:0 16px;} .hero{padding:40px 0 48px;} .hero h1{font-size:26px;}
+  .card{padding:17px;} .typerow{flex-wrap:wrap;gap:6px;} .typerow .lbl{width:100%;}
+  .swatch .c{font-size:11px;}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="mark"><svg width="28" height="28" viewBox="0 0 32 32"><path d="M7 20l5-6 4 3 9-10" stroke="white" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="kicker">Brand & Visual Direction · v0.1</div>
+    <h1>品牌与视觉方向</h1>
+    <p>工作名：透明身份规划平台（产品名待定）。品牌气质取 Wise 的克制、Monzo 的友好直接、友邦"友享"的从容——让一个高焦虑、高信息不对称的决策，变得安静、清楚、人人可用。你提供的莓红 → 深海军蓝撞色渐变，作为品牌"签名时刻"被有纪律地使用，而不是铺满操作界面。</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- 1 原则 -->
+<section>
+  <h2><span class="idx">01</span>设计原则（先于颜色）</h2>
+  <div class="sec-sub">所有页面、组件、文案服从这五条；它们也是后续 UI 评审的标准。</div>
+  <div class="card grid3" style="grid-template-columns:repeat(3,1fr);gap:20px;">
+    <div class="princ"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#002661" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg></div><div><b>安静，不紧张</b><span>大量留白与柔和纸面，品牌色只在关键时刻出现；不用倒计时、红色感叹号制造焦虑。</span></div></div>
+    <div class="princ"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#002661" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg></div><div><b>一页一主动作</b><span>每页一个高权重主按钮，次操作弱化；复杂流程拆成清晰的单步。</span></div></div>
+    <div class="princ"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#002661" stroke-width="2"><path d="M4 12l5 5L20 6"/></svg></div><div><b>诚实可核验</b><span>状态、来源、收取方、待确认项如实呈现；不承诺结果、不做伪精确进度。</span></div></div>
+    <div class="princ"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#002661" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div><div><b>人人可用</b><span>大字号、高对比、口语化标签、空态即指引；为家庭中年龄较大的成员而设计。</span></div></div>
+    <div class="princ"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#002661" stroke-width="2"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg></div><div><b>状态即设计</b><span>四级来源、六态佣金、T0 时限用统一的语义色彩系统，全平台一眼可辨。</span></div></div>
+    <div class="princ"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#002661" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 4v16"/></svg></div><div><b>签名要克制</b><span>渐变是品牌资产，只用于品牌时刻；操作、数据、状态区域保持中性可信。</span></div></div>
+  </div>
+</section>
+
+<!-- 2 色彩 -->
+<section>
+  <h2><span class="idx">02</span>色彩系统（Token）</h2>
+  <div class="sec-sub">深海军蓝承担"信任与操作"，莓红承担"品牌能量"，功能色独立、不被品牌色侵占。</div>
+  <div class="grid2">
+    <div class="grad-card">
+      <div class="hex">#AF2D67 → #5E246B → #002661 · 132°</div>
+      <b>品牌签名渐变<br>Signature Gradient</b>
+      <div style="font-size:11.5px;opacity:.85;line-height:1.7;">仅用于：启动页、登录品牌区、空态插画、品牌签名卡、App 图标、市场物料。</div>
+    </div>
+    <div class="card" style="padding:18px;">
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px;">渐变使用纪律</div>
+      <ul class="rule-list">
+        <li>不用于常态按钮、表格、时间线、输入框等操作区；</li>
+        <li>不承载任何状态语义（成功/警告/危险各有专色）；</li>
+        <li>同一屏最多一处渐变；不做全屏渐变阅读背景；</li>
+        <li>顾问端/iPad 内部工作界面不使用渐变（专业、专注）；</li>
+        <li>后台管理端仅登录页与左上角品牌标识使用。</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card" style="margin-top:18px;">
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;">
+      <div class="swatch"><div class="c" style="background:#002661;">#002661</div><div class="meta">Navy · 主品牌/主操作</div></div>
+      <div class="swatch"><div class="c" style="background:#1E3E78;">#1E3E78</div><div class="meta">Navy-700 · 按压态</div></div>
+      <div class="swatch"><div class="c" style="background:#AF2D67;color:#fff;">#AF2D67</div><div class="meta">Berry · 强调/品牌行动</div></div>
+      <div class="swatch"><div class="c" style="background:#1B2433;">#1B2433</div><div class="meta">Ink · 正文/标题</div></div>
+      <div class="swatch"><div class="c" style="background:#5E6B7E;color:#fff;">#5E6B7E</div><div class="meta">次级文字</div></div>
+      <div class="swatch"><div class="c" style="background:#F5F7FA;color:#5E6B7E;border-bottom:1px solid var(--line);">Paper</div><div class="meta">纸面背景（冷调浅灰）</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px;">
+      <div class="swatch"><div class="c" style="background:#177A5B;">成功/已核验</div><div class="meta">#177A5B / bg #E6F4EE · 官方凭据绿</div></div>
+      <div class="swatch"><div class="c" style="background:#B45309;">警告/待办</div><div class="meta">#B45309 / bg #FBF1E2 · 服务方报告琥珀</div></div>
+      <div class="swatch"><div class="c" style="background:#C03221;">危险/T0</div><div class="meta">#C03221 / bg #FCEBEA · 阻断与时限</div></div>
+      <div class="swatch"><div class="c" style="background:#6B5AA8;">公司审核</div><div class="meta">#6B5AA8 / bg #EFECF7 · 四级来源紫</div></div>
+    </div>
+    <div style="font-size:11.5px;color:var(--faint);margin-top:12px;line-height:1.7;">客户提交蓝 #1D5F8A/#E9F2F8 保留。功能色在三端与门户完全一致；色弱友好：状态同时带文字标签与图标，不只靠颜色。</div>
+  </div>
+</section>
+
+<!-- 3 字体 -->
+<section>
+  <h2><span class="idx">03</span>字体与排印</h2>
+  <div class="card">
+    <div class="typerow"><div class="lbl">西文/数字</div><div class="demo" style="font-family:'Manrope';font-weight:800;font-size:24px;">Manrope Semibold/Extrabold</div></div>
+    <div class="typerow"><div class="lbl">中文</div><div class="demo" style="font-size:19px;font-weight:700;">思源黑体 Noto Sans SC（系统回退苹方）</div></div>
+    <div class="typerow"><div class="lbl">数字/金额</div><div class="demo" style="font-family:'Manrope';font-variant-numeric:tabular-nums;font-size:18px;font-weight:700;">¥ 38,000.00　USD 4,500.00（等宽数字，不跳动）</div></div>
+    <div class="typerow"><div class="lbl">正文/辅助</div><div class="demo" style="font-size:14px;color:var(--ink);">正文 15–16px / 辅助 13px / 标签 12px；正文行高 1.7；中文行长约 40 全角字。</div></div>
+    <div class="typerow"><div class="lbl">层级手段</div><div class="demo" style="font-size:13px;color:var(--mut);">靠字重、字号、留白建立层级；不堆字体、不用全大写眉标、不用斜体强调。</div></div>
+  </div>
+</section>
+
+<!-- 4 组件 -->
+<section>
+  <h2><span class="idx">04</span>核心组件（节选）</h2>
+  <div class="grid2">
+    <div class="card comp">
+      <div style="font-size:13px;font-weight:700;">按钮</div>
+      <div class="btnx pri">主操作（Navy）</div>
+      <div class="btnx ghost">次操作（描边）</div>
+      <div class="btnx quiet">弱操作（浅底）</div>
+      <div class="btnx grad">品牌时刻（渐变，极少用）</div>
+      <div style="font-size:11.5px;color:var(--faint);">Berry 按钮仅用于"找顾问/开始评估"等获客动作；资金与闸门动作用 Navy。</div>
+    </div>
+    <div class="card comp">
+      <div style="font-size:13px;font-weight:700;">状态标签（语义统一）</div>
+      <div><span class="stat s-green">已核验官方凭据</span> <span class="stat s-purple">公司审核</span></div>
+      <div><span class="stat s-amber">服务方报告 · 未核验</span> <span class="stat s-blue">客户提交</span></div>
+      <div><span class="stat s-red">主体校验阻断</span></div>
+      <div class="t0bar"><b>T0 · 受理回执剩余 4 小时</b><br>短信未达已转人工电话，未回执将升级主管（原截止时间不变）</div>
+      <div class="inputx">输入框：16px 字号，圆角 12，聚焦时 Navy 描边</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 三方向样张 -->
+<section>
+  <h2><span class="idx">05</span>三个视觉方向（同一屏：首页·已登录）</h2>
+  <div class="sec-sub">用同一张屏、同一套示例内容对比，避免被不同布局干扰判断。</div>
+  <div class="grid3">
+
+    <!-- A -->
+    <div class="dir a">
+      <h3>方向 A · 深海蓝</h3>
+      <div class="tagline">Navy 主导、近白纸面，渐变只在启动页与一条 4px 品牌线出现。最安静、最"银行级可信"，品牌记忆点偏弱。</div>
+      <div class="phone">
+        <div class="pst"><span>9:41</span><span>● ● ●</span></div>
+        <div class="pbody">
+          <div class="brandstrip"></div>
+          <div class="hrow"><div style="flex:1;"><div style="font-size:13px;font-weight:700;">王某某，下午好</div><div style="font-size:9px;color:#8a95a6;margin-top:2px;">我的办理 · 1 个在办案件</div></div><div class="ava" style="background:var(--navy-100);"></div></div>
+          <div class="mini-card case-card"><div style="font-size:9.5px;font-weight:700;color:var(--navy);">A 国技术居留 · CASE-A03</div><div style="font-size:8.5px;color:#4a5a78;margin:4px 0 6px;">阶段：材料准备 · 待办 2</div><div class="line" style="background:#c3cfe6;height:5px;"></div></div>
+          <div class="q4">
+            <div class="q"><span class="di" style="border-radius:6px;"></span>初评</div><div class="q"><span class="di"></span>项目</div><div class="q"><span class="di"></span>签证</div><div class="q"><span class="di"></span>工单</div>
+          </div>
+          <div class="mini-card" style="background:var(--amber-bg);font-size:8.5px;color:#8a5a1e;line-height:1.6;">防骗教育：先核验收费主体再付款</div>
+          <div class="proj"><div style="font-size:9.5px;font-weight:700;">A 国 · 随行子女路径</div><div style="font-size:8px;color:#8a95a6;margin-top:3px;">v1.4 · 已发布</div></div>
+          <div class="proj"><div style="font-size:9.5px;font-weight:700;">C 国 · 数字游民</div><div style="font-size:8px;color:#8a95a6;margin-top:3px;">收费方案待发布</div></div>
+        </div>
+        <div class="ptab"><div class="t on"><i></i>首页</div><div class="t"><i></i>项目</div><div class="t"><i></i>通行</div><div class="t"><i></i>办理</div><div class="t"><i></i>服务</div><div class="t"><i></i>我的</div></div>
+      </div>
+      <div class="verdict"><b>气质：</b>克制、可信、低风险。<br><b>适合：</b>资金/合同/后台等信任密集界面作为<b>基底</b>。</div>
+    </div>
+
+    <!-- B -->
+    <div class="dir b">
+      <h3>方向 B · 莓果</h3>
+      <div class="tagline">Berry 主导，首页头部整卡渐变，热情有记忆点。但大面积暖色在高客单、长周期决策中容易显得"营销感"，长期使用偏疲劳。</div>
+      <div class="phone">
+        <div class="pst"><span>9:41</span><span>● ● ●</span></div>
+        <div class="pbody">
+          <div class="hrow"><div style="flex:1;"><div style="font-size:13px;font-weight:700;">王某某，下午好</div><div style="font-size:9px;opacity:.75;margin-top:2px;">1 个在办案件</div></div><div class="ava" style="background:rgba(255,255,255,.35);"></div></div>
+          <div class="mini-card case-card"><div style="font-size:9.5px;font-weight:700;">A 国技术居留 · CASE-A03</div><div style="font-size:8.5px;opacity:.9;margin:4px 0 6px;">阶段：材料准备 · 待办 2</div><div class="line" style="background:rgba(255,255,255,.35);height:5px;"></div></div>
+          <div class="q4">
+            <div class="q"><span class="di" style="border-radius:6px;"></span>初评</div><div class="q"><span class="di"></span>项目</div><div class="q"><span class="di"></span>签证</div><div class="q"><span class="di"></span>工单</div>
+          </div>
+          <div class="mini-card" style="background:#fff;font-size:8.5px;color:#8a4a68;line-height:1.6;border:1px solid #f0d3e1;">防骗教育：先核验收费主体再付款</div>
+          <div class="proj" style="background:#fff;"><div style="font-size:9.5px;font-weight:700;">A 国 · 随行子女路径</div><div style="font-size:8px;color:#a98fa0;margin-top:3px;">v1.4 · 已发布</div></div>
+          <div class="proj" style="background:#fff;"><div style="font-size:9.5px;font-weight:700;">C 国 · 数字游民</div><div style="font-size:8px;color:#a98fa0;margin-top:3px;">收费方案待发布</div></div>
+        </div>
+        <div class="ptab"><div class="t on"><i></i>首页</div><div class="t"><i></i>项目</div><div class="t"><i></i>通行</div><div class="t"><i></i>办理</div><div class="t"><i></i>服务</div><div class="t"><i></i>我的</div></div>
+      </div>
+      <div class="verdict"><b>气质：</b>温暖、主动、有冲劲。<br><b>风险：</b>营销感、与"不承诺/防骗"的诚实调性冲突。</div>
+    </div>
+
+    <!-- C recommended -->
+    <div class="dir c rec">
+      <span class="ribbon">推荐</span>
+      <h3>方向 C · 双色签名</h3>
+      <div class="tagline">冷静纸面 + Navy 操作体系，把渐变收敛为首页顶部一张"签名卡"（问候+办理概览）。品牌一眼可辨，操作区依然安静可信。</div>
+      <div class="phone">
+        <div class="pst"><span>9:41</span><span>● ● ●</span></div>
+        <div class="pbody">
+          <div class="sig">
+            <div style="font-size:13px;font-weight:800;">王某某，下午好</div>
+            <div style="font-size:8.5px;opacity:.88;margin:3px 0 8px;">你的 A 国技术居留正在办理</div>
+            <div style="background:rgba(255,255,255,.18);border-radius:6px;height:5px;"></div>
+            <div style="font-size:8px;opacity:.9;margin-top:6px;">材料准备 · 2 项待办 · 无 T0 超时</div>
+          </div>
+          <div class="q4">
+            <div class="q"><span class="di" style="border-radius:6px;"></span>初评</div><div class="q"><span class="di"></span>项目</div><div class="q"><span class="di"></span>签证</div><div class="q"><span class="di"></span>工单</div>
+          </div>
+          <div class="mini-card" style="background:var(--amber-bg);font-size:8.5px;color:#8a5a1e;line-height:1.6;">防骗教育：先核验收费主体再付款</div>
+          <div class="proj"><div style="font-size:9.5px;font-weight:700;">A 国 · 随行子女路径</div><div style="font-size:8px;color:#8a95a6;margin-top:3px;">v1.4 · 已发布</div></div>
+          <div class="proj"><div style="font-size:9.5px;font-weight:700;">C 国 · 数字游民</div><div style="font-size:8px;color:#8a95a6;margin-top:3px;">收费方案待发布</div></div>
+        </div>
+        <div class="ptab"><div class="t on"><i></i>首页</div><div class="t"><i></i>项目</div><div class="t"><i></i>通行</div><div class="t"><i></i>办理</div><div class="t"><i></i>服务</div><div class="t"><i></i>我的</div></div>
+      </div>
+      <div class="verdict"><b>气质：</b>品牌感与可信度兼得。<br><b>建议：</b>选定 C；A 作为后台/顾问端基底；B 仅用于市场获客页。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 do/dont -->
+<section>
+  <h2><span class="idx">06</span>视觉红线</h2>
+  <div class="dosdonts">
+    <div class="dd ok"><b>这样做</b>
+      · 渐变只出现在签名时刻，一屏至多一处<br>
+      · 资金/合同/闸门用 Navy + 语义状态色<br>
+      · 所有状态同时有颜色+文字+图标<br>
+      · 圆角统一（卡片 16 / 按钮 22 / 输入 12）<br>
+      · 空态给下一步，错误态给修复方法
+    </div>
+    <div class="dd no"><b>不要这样做</b>
+      · 不用渐变做按钮、表格、进度条<br>
+      · 不用红色/倒计时制造焦虑<br>
+      · 不出现百分比办理进度、成功率<br>
+      · 不做毛玻璃、发光描边、粒子背景<br>
+      · 顾问端不使用莓红与渐变（保持专业中立）
+    </div>
+  </div>
+</section>
+
+<footer>
+品牌与视觉方向 v0.1 · 待你确认方向（建议 C）后，输出完整设计 Token 与组件库，并按"客户端 → 顾问端/iPad → 后台"逐屏高保真。<br>
+产品名、Logo 图形为占位提案，可另行命名与设计。示例数据均为虚构【示例】。
+</footer>
+
+</div>
+</body>
+</html>
