@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>顾问 iPad 面谈端高保真 · v1.0</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23002661'/%3E%3Cpath d='M8 20l5-6 4 3 7-9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --navy:#002661;--navy-700:#1E3E78;--navy-100:#DCE4F2;--navy-50:#EDF1F8;--berry:#AF2D67;--berry-50:#FAEEF4;
+  --grad:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);
+  --ink:#1B2433;--mut:#5E6B7E;--faint:#8A95A6;--line:#E5E9F0;--line-2:#F0F3F8;--paper:#F5F7FA;
+  --green:#177A5B;--green-bg:#E6F4EE;--amber:#B45309;--amber-bg:#FBF1E2;--red:#C03221;--red-bg:#FCEBEA;--blue:#1D5F8A;--blue-bg:#E9F2F8;--purple:#6B5AA8;--purple-bg:#EFECF7;
+  --sh1:0 1px 2px rgba(16,32,67,.05),0 4px 14px rgba(16,32,67,.06);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+body{font-family:"Manrope","Noto Sans SC",-apple-system,"PingFang SC",sans-serif;background:#E9EDF3;color:var(--ink);min-height:100vh;}
+.stage{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:30px 16px 56px;}
+.stage-head{text-align:center;margin-bottom:18px;}
+.stage-head h1{font-size:20px;font-weight:800;}
+.stage-head p{font-size:12.5px;color:var(--mut);margin-top:6px;line-height:1.7;}
+.switch{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:22px;padding:4px;margin-top:12px;box-shadow:var(--sh1);}
+.switch button{border:0;font-family:inherit;font-size:13px;font-weight:700;padding:8px 20px;border-radius:18px;background:transparent;color:var(--mut);cursor:pointer;transition:all .22s var(--ease-out);}
+.switch button.on{background:var(--navy);color:#fff;}
+.ipad{width:1080px;max-width:96vw;height:780px;border-radius:34px;background:#11262B;padding:10px;box-shadow:0 30px 70px rgba(10,25,60,.35);position:relative;flex:none;}
+.screen{position:absolute;inset:10px;border-radius:25px;overflow:hidden;background:var(--paper);}
+.mode{position:absolute;inset:0;display:none;flex-direction:column;}
+.ipad.show-work .m-work{display:flex;}.ipad.show-demo .m-demo{display:flex;}
+.topbar{height:54px;flex:none;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 20px;}
+.topbar .logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:14px;color:var(--navy);}
+.logo .mk{width:28px;height:28px;border-radius:8px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;}
+.topbar .sp{flex:1;}
+.pill{font-size:11px;background:var(--line-2);border-radius:14px;padding:5px 12px;color:var(--mut);font-weight:600;}
+.st{font-size:10.5px;font-weight:600;border-radius:7px;padding:3px 8px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
+.st .d{width:6px;height:6px;border-radius:50%;background:currentColor;}
+.st.g{background:var(--green-bg);color:var(--green);}.st.a{background:var(--amber-bg);color:var(--amber);}
+.st.r{background:var(--red-bg);color:var(--red);}.st.b{background:var(--blue-bg);color:var(--blue);}.st.p{background:var(--purple-bg);color:var(--purple);}
+.st.n{background:var(--line-2);color:var(--mut);}
+.work-body{flex:1;display:grid;grid-template-columns:250px 1fr 290px;min-height:0;}
+.pane{overflow-y:auto;padding:16px;border-right:1px solid var(--line);scrollbar-width:none;}
+.pane:last-child{border-right:0;}.pane::-webkit-scrollbar{display:none;}
+.pane h5{font-size:12px;color:var(--faint);font-weight:700;margin:4px 2px 10px;text-transform:none;}
+.cli{background:#fff;border-radius:13px;padding:11px 12px;margin-bottom:8px;cursor:pointer;box-shadow:var(--sh1);border:2px solid transparent;}
+.cli.on{border-color:var(--navy);}
+.cli b{font-size:12.5px;display:block;}.cli span{font-size:10.5px;color:var(--faint);}
+.kanban{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;height:100%;}
+.kcol{background:var(--line-2);border-radius:13px;padding:9px;overflow-y:auto;scrollbar-width:none;}
+.kcol h6{font-size:11px;color:var(--mut);margin:2px 2px 8px;font-weight:700;}
+.kcard{background:#fff;border-radius:10px;padding:9px 10px;margin-bottom:7px;box-shadow:var(--sh1);font-size:11px;line-height:1.5;}
+.kcard b{font-size:11.5px;display:block;margin-bottom:3px;}
+.kcard .st{font-size:9.5px;padding:2px 6px;}
+.alertcard{background:var(--red-bg);border:1px solid #f0c4bf;border-radius:13px;padding:12px 13px;font-size:11.5px;color:#8a261c;line-height:1.65;margin-bottom:11px;}
+.task{background:#fff;border-radius:12px;padding:10px 12px;margin-bottom:8px;box-shadow:var(--sh1);font-size:11.5px;line-height:1.5;}
+.task b{font-size:12px;display:block;}
+.btn{border:0;font-family:inherit;font-weight:700;border-radius:18px;height:38px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:12.5px;cursor:pointer;padding:0 16px;}
+.btn.navy{background:var(--navy);color:#fff;}.btn.berry{background:var(--berry);color:#fff;}.btn.ghost{background:#fff;border:1.5px solid var(--navy);color:var(--navy);}
+.block{width:100%;}
+.internal-tag{font-size:9.5px;background:var(--navy);color:#fff;border-radius:5px;padding:2px 6px;}
+/* demo mode */
+.demo-body{flex:1;display:grid;grid-template-columns:230px 1fr;min-height:0;}
+.demo-nav{background:var(--navy);color:#fff;padding:22px 16px;display:flex;flex-direction:column;gap:4px;}
+.demo-nav .brand{font-weight:800;font-size:15px;margin-bottom:22px;line-height:1.5;}
+.demo-nav a{display:flex;gap:10px;align-items:center;padding:11px 13px;border-radius:11px;font-size:13px;color:rgba(255,255,255,.78);cursor:pointer;}
+.demo-nav a.on{background:rgba(255,255,255,.15);color:#fff;font-weight:700;}
+.demo-main{overflow-y:auto;padding:30px 38px;position:relative;scrollbar-width:none;}
+.demo-main::-webkit-scrollbar{display:none;}
+.hero{background:var(--grad);background-size:170% 170%;animation:drift 16s ease-in-out infinite alternate;color:#fff;border-radius:20px;padding:30px 32px;box-shadow:0 14px 32px rgba(94,36,107,.25);}
+@keyframes drift{0%{background-position:0 30%}100%{background-position:100% 70%}}
+.hero h2{font-size:27px;font-weight:800;margin-bottom:8px;}
+.hero p{font-size:13px;opacity:.9;line-height:1.8;}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;}
+.dcard{background:#fff;border-radius:16px;box-shadow:var(--sh1);padding:18px 20px;}
+.dcard h4{font-size:14px;font-weight:700;margin-bottom:10px;}
+.dcard .small{font-size:11.5px;color:var(--mut);line-height:1.8;}
+.fee-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.fee-tbl th{color:var(--faint);font-weight:600;text-align:left;padding:7px 5px;border-bottom:1px solid var(--line);font-size:10.5px;}
+.fee-tbl td{padding:9px 5px;border-bottom:1px solid var(--line-2);}
+.flowline{display:flex;align-items:center;margin:10px 0;}
+.fnode{flex:1;text-align:center;position:relative;font-size:11px;color:var(--mut);}
+.fnode .n{width:34px;height:34px;border-radius:50%;background:var(--navy-50);color:var(--navy);font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 7px;}
+.fnode:not(:last-child)::after{content:"";position:absolute;top:17px;left:60%;width:80%;height:2px;background:var(--line);}
+.demo-bar{flex:none;background:#fff;border-top:1px solid var(--line);padding:12px 24px;display:flex;align-items:center;gap:12px;}
+.wm{position:absolute;right:26px;bottom:76px;font-size:11px;color:var(--faint);opacity:.75;pointer-events:none;}
+.notebar{max-width:1080px;width:96vw;margin-top:16px;background:#fff;border:1px dashed var(--line);border-radius:13px;padding:13px 18px;font-size:11.5px;color:var(--mut);line-height:1.9;}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important;}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="stage-head">
+    <h1>顾问 iPad 面谈端高保真 · v1.0（I-01 / I-02 双模式）</h1>
+    <p>工作模式：客户看板 + 案件流水线 + T0 预警（内部信息）；客户演示模式：仅核准素材、脱敏、无内部信息，借鉴友邦 iPad 展业但不复制其品牌与流程。</p>
+    <div class="switch">
+      <button id="sw-work" class="on" onclick="setMode('work')">I-01 顾问工作模式</button>
+      <button id="sw-demo" onclick="setMode('demo')">I-02 客户演示模式</button>
+    </div>
+  </div>
+  <div class="ipad show-work" id="ipad">
+    <div class="screen">
+      <!-- 工作模式 -->
+      <div class="mode m-work">
+        <div class="topbar">
+          <div class="logo"><span class="mk">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg>
+          </span>顾问工作台</div>
+          <span class="pill">陈某 · 备案 BJ-2026-018 有效</span><div class="sp"></div>
+          <span class="internal-tag">内部 · 不对客</span>
+          <span class="pill">9:41</span>
+        </div>
+        <div class="work-body">
+          <div class="pane">
+            <h5>我的客户（12）</h5>
+            <div class="cli on"><b>客 #1980 王某某</b><span>CASE-A03 材料准备</span><div style="margin-top:6px;"><span class="st p"><span class="d"></span>在办</span></div></div>
+            <div class="cli"><b>客 #2051</b><span>PROP-312 待双人复核</span><div style="margin-top:6px;"><span class="st a"><span class="d"></span>待复核</span></div></div>
+            <div class="cli"><b>客 #1902</b><span>换顾问交接中</span><div style="margin-top:6px;"><span class="st b"><span class="d"></span>交接</span></div></div>
+            <div class="cli"><b>客 #2049</b><span>顾问请求待接受</span><div style="margin-top:6px;"><span class="st n">待接受</span></div></div>
+            <div class="cli"><b>客 #2011</b><span>赵某暂停后交接分配</span><div style="margin-top:6px;"><span class="st r"><span class="d"></span>交接</span></div></div>
+          </div>
+          <div class="pane" style="background:var(--paper);">
+            <h5>案件流水线（阶段指引，非百分比）</h5>
+            <div class="kanban">
+              <div class="kcol"><h6>初评 / 方案</h6>
+                <div class="kcard"><b>客 #2051</b>PROP-312<span class="st a" style="margin-top:6px;"><span class="d"></span>待双人复核</span></div>
+                <div class="kcard"><b>客 #2077</b>初评待确认项 2 个</div></div>
+              <div class="kcol"><h6>合同 / 订单</h6>
+                <div class="kcard"><b>客 #2032</b>合同五要素待签<span class="st b" style="margin-top:6px;"><span class="d"></span>待签署</span></div></div>
+              <div class="kcol"><h6>材料准备</h6>
+                <div class="kcard"><b>客 #1980</b>CASE-A03 待补 2 项<span class="st p" style="margin-top:6px;"><span class="d"></span>准备中</span></div>
+                <div class="kcard"><b>客 #2017</b>配偶授权待本人确认</div></div>
+              <div class="kcol"><h6>递交 / 审理</h6>
+                <div class="kcard"><b>客 #1966</b>服务方已递交<span class="st a" style="margin-top:6px;"><span class="d"></span>待官方核验</span></div></div>
+              <div class="kcol"><h6>结果 / 保障</h6>
+                <div class="kcard"><b>客 #1901</b>已获受理回执<span class="st g" style="margin-top:6px;"><span class="d"></span>官方凭据</span></div></div>
+            </div>
+          </div>
+          <div class="pane">
+            <h5>T0 与今日待办</h5>
+            <div class="alertcard"><b style="font-size:12px;">CASE-A02 回执 T0 剩 4h</b><br>App 已读、短信未达，已转人工电话并升级主管；原截止时间不改写，锁屏不显案号。</div>
+            <div class="task"><b>PROP-312 双人复核</b><span style="color:var(--faint);">复核通过后方可发送客户</span></div>
+            <div class="task"><b>B 地区授权申请审核中</b><span style="color:var(--faint);">通过前不可报价、不锁佣</span></div>
+            <div class="task"><b>林某备案 9/30 到期</b><span style="color:var(--faint);">联动客户交接，停新接旧不失联</span></div>
+            <h5 style="margin-top:16px;">只读红线</h5>
+            <div class="task" style="color:var(--mut);">不可改金额 / 到账 / 官方进度；越权操作服务端拒绝并审计。</div>
+          </div>
+        </div>
+      </div>
+      <!-- 演示模式 -->
+      <div class="mode m-demo">
+        <div class="demo-nav">
+          <div class="brand">透明身份<br>规划服务</div>
+          <a class="on">项目概览</a><a>费用与收取方</a><a>办理流程</a><a>初步评估</a><a>保障与防骗</a>
+          <div style="flex:1;"></div>
+          <div style="font-size:10.5px;color:rgba(255,255,255,.6);line-height:1.7;padding:0 13px;">客户演示模式<br>仅展示核准素材</div>
+        </div>
+        <div style="display:flex;flex-direction:column;flex:1;min-height:0;position:relative;">
+          <div class="demo-main">
+            <div class="hero">
+              <h2>A 国 · 技术工作居留</h2>
+              <p>长期工作居留（非永居）· 参考周期 9–14 个月（非承诺）<br>每一笔费用标明收取方，每一步进度标明来源。</p>
+            </div>
+            <div class="dgrid">
+              <div class="dcard"><h4>费用分项（按收取方）</h4>
+                <table class="fee-tbl"><tr><th>费项</th><th>收取方</th><th>币种</th></tr>
+                <tr><td>平台服务费</td><td>平台</td><td>CNY</td></tr>
+                <tr><td>公证翻译</td><td>境内机构</td><td>CNY 估算</td></tr>
+                <tr><td>境外法律服务</td><td>境外持牌方</td><td>USD</td></tr>
+                <tr><td>官方申请费</td><td>官方代收代付</td><td>待确认</td></tr></table>
+                <div class="small" style="margin-top:8px;">异币种不相加、不折算总价；「待确认」不等于 0。</div></div>
+              <div class="dcard"><h4>办理流程与责任分工</h4>
+                <div class="flowline"><div class="fnode"><div class="n">1</div>材料准备<br><span class="st b" style="margin-top:4px;display:inline-flex;">客户/平台</span></div><div class="fnode"><div class="n">2</div>境外递交<br><span class="st a" style="margin-top:4px;display:inline-flex;">持牌方</span></div><div class="fnode"><div class="n">3</div>官方审理<br><span class="st g" style="margin-top:4px;display:inline-flex;">目的地官方</span></div></div>
+                <div class="small">审批决定由官方作出；平台不承诺获批、不承诺时限。</div></div>
+              <div class="dcard"><h4>初步评估（四类结果）</h4>
+                <div class="small">符合项 / 明显差距 / 待确认项 / 信息来源与时间——<b>无评分、无成功率</b>，待确认由顾问跟进。</div></div>
+              <div class="dcard"><h4>透明保障</h4>
+                <div class="small">主体三要素一致才可付款；T0 多通道必达；凭据核验人与案件发起人分离；私收款投诉独立受理。</div></div>
+            </div>
+          </div>
+          <div class="demo-bar">
+            <span style="font-size:10.5px;color:var(--faint);">客户演示 · 核准素材 v3 · 顾问陈某 · 2026-09-21</span>
+            <button class="btn ghost" style="margin-left:14px;">收藏 / 比较</button>
+            <div style="flex:1;"></div>
+            <button class="btn berry">开始免费初步评估</button>
+            <button class="btn navy">联系我的顾问</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="notebar">
+    <b style="color:var(--ink);">双模式五条硬规则：</b>① 演示模式隐藏全部内部信息（佣金、其他客户、内部备注、T0 内部处置）；② 仅可展示 A12 核准素材，过期素材不可打开；③ 模式切换需顾问本人确认（演示为点击模拟）；④ 演示中客户数据脱敏，不显示真实案号；⑤ 退出演示回到工作模式需重新确认，演示痕迹不带回客户隐私页。工作界面不使用签名渐变，渐变仅出现在客户演示画面。
+  </div>
+</div>
+<script>
+function setMode(m){
+  const ip=document.getElementById('ipad');
+  ip.className='ipad '+(m==='work'?'show-work':'show-demo');
+  document.getElementById('sw-work').className=m==='work'?'on':'';
+  document.getElementById('sw-demo').className=m==='demo'?'on':'';
+}
+</script>
+</body>
+</html>
