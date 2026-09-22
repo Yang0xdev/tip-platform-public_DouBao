@@ -54,3 +54,10 @@
 - 模块页全部改为真实接口读取（项目版本台账/收费版本/Q6 数据源、境内机构台账、入驻审核与授权五步、质量基线、问卷模板与规则集）；空态显式"影子期种子为空，由真实操作产生"。
 - 修复 Vite 代理遗漏 /admin、/advisor（此前后台接口返回 index.html）；新增 services/api/scripts/dev-seed.sh（虚构【示例】数据，仅 dev，走完整四眼发布链；重跑内存仓储重启即清空）。
 - Playwright 五页+工作台截图验证零控制台错误；种子走查中验证词库拦截"成功率"（种子文案被 M1-06 正确拒绝后修正）。
+
+## 切片 6：客户端 RN（M1-12～M1-16）✅（代码门）
+- React Navigation 7（bottom-tabs + native-stack），M1 仅 4 tab：首页/项目/全球通行/我的；办理中、服务等随 M3/M4 加入，不放假入口。
+- 页面：首页（签名渐变 hero + 已发布项目 + 全球通行维护卡 + 收藏入口）、发现（搜索）、项目详情（版本/核验标识/费用分项 FeeLine 无总价/收藏/初评 CTA）、初步评估（问卷 single/choice/number/text、必填校验、四结果 met/gap/unconfirmed + 固定免责声明 + 版本号）、全球通行（三页签骨架，读 visa_passport_data/status，零国别数据）、本机收藏与 2–3 项并列比较（AsyncStorage，不产生画像/归属/佣金）、我的（游客态+承诺）。
+- 金额展示复用 @tip/core（CURRENCY_DECIMALS/fromMinor），UI 组件复用 @tip/ui-native token 与动效契约（rise 分层、按钮按压 spring）。
+- 验证门：`pnpm --filter @tip/client-app typecheck` 通过；全仓 CI 六阶段通过（7 类型任务/59 core/19 api/构建）。
+- **诚实限制**：本 VM 无 iOS/Android 模拟器与真机，RN 运行时视觉与手势验收未执行，留待模拟器/真机（视觉契约以 04-UI设计/hifi 客户端高保真 v1.3 为准）。
