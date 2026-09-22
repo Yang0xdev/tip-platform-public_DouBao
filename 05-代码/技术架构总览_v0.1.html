@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>透明身份规划平台 · 技术架构总览 v0.1</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23002661'/%3E%3Cpath d='M10 16.5l4 4 8-9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+ --navy:#002661;--navy2:#0B3A82;--navy50:#EDF1F8;--navy100:#DCE4F2;
+ --berry:#AF2D67;--berry2:#C63D80;--berry50:#FAEEF4;
+ --ink:#1B2433;--mut:#5E6B7E;--faint:#8A95A6;--line:#E5E9F0;--line2:#F0F3F8;--paper:#F5F7FA;--card:#fff;
+ --g:#177A5B;--ge:#E6F4EE;--a:#B45309;--ae:#FBF1E2;--r:#C03221;--re:#FCEBEA;--b:#1D5F8A;--be:#E9F2F8;--p:#6B5AA8;--pe:#EFECF7;
+ --sh1:0 1px 2px rgba(16,32,67,.05),0 6px 18px -8px rgba(16,32,67,.12);
+ --sh2:0 2px 6px rgba(16,32,67,.05),0 20px 44px -14px rgba(15,35,80,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Manrope','Noto Sans SC',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--paper);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px 80px}
+.hero{background:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);background-size:170% 170%;color:#fff;border-radius:0 0 28px 28px;padding:54px 48px 46px;margin-bottom:34px;box-shadow:var(--sh2);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 82% -20%,rgba(255,255,255,.20),transparent 55%)}
+.hero h1{font-size:30px;font-weight:800;letter-spacing:.5px;position:relative}
+.hero p{margin-top:12px;font-size:14.5px;opacity:.92;max-width:760px;position:relative}
+.hero .tags{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap;position:relative}
+.hero .tags span{font-size:12px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:4px 12px;border-radius:20px}
+h2{font-size:19px;font-weight:800;color:var(--navy);margin:42px 0 6px;display:flex;align-items:center;gap:10px}
+h2 .no{font-size:12px;font-weight:700;color:#fff;background:linear-gradient(180deg,#0B3A82,#002661);border-radius:8px;padding:3px 9px}
+.sub{font-size:13px;color:var(--mut);margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh1);padding:22px}
+/* layered architecture */
+.layer{border-radius:14px;padding:14px 16px;margin-bottom:10px;display:grid;gap:10px}
+.layer .lt{font-size:12px;font-weight:700;letter-spacing:.5px;display:flex;align-items:center;gap:8px}
+.l-term{background:var(--navy50);border:1px solid var(--navy100)}
+.l-gw{background:var(--berry50);border:1px solid #f0d3e1}
+.l-mod{background:#fff;border:1px solid var(--line)}
+.l-data{background:var(--line2);border:1px solid var(--line)}
+.nodes{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.node{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:12px}
+.node b{display:block;font-size:12.5px;color:var(--navy);margin-bottom:2px}
+.node span{color:var(--mut);font-size:11px}
+.l-gw .node{background:#fff;border-color:#f0d3e1}
+.l-term .node{background:#fff}
+.l-data .node{background:#fff}
+.arrow{text-align:center;color:var(--faint);font-size:16px;line-height:1;margin:-4px 0 6px}
+.modgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.mod{border-radius:10px;padding:10px 11px;font-size:11.5px;border:1px solid var(--line);background:#fff}
+.mod b{display:block;font-size:12px;color:var(--navy);margin-bottom:3px}
+.mod em{font-style:normal;color:var(--berry);font-size:10.5px}
+/* pipeline */
+.pipe{display:grid;grid-template-columns:repeat(8,1fr);gap:0}
+.step{position:relative;background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px 9px;text-align:center;font-size:11px;font-weight:600;color:var(--navy);margin-right:14px;box-shadow:var(--sh1)}
+.step:last-child{margin-right:0}
+.step::after{content:"›";position:absolute;right:-13px;top:50%;transform:translateY(-50%);color:var(--berry);font-size:19px;font-weight:700;z-index:2}
+.step:last-child::after{display:none}
+.step span{display:block;font-weight:500;color:var(--mut);font-size:10px;margin-top:3px}
+.step.gate{border-color:#f0d3e1;background:linear-gradient(180deg,#fff,#fdf4f8)}
+/* event sourcing */
+.esc{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.esc .box{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff}
+.esc h4{font-size:13px;color:var(--navy);margin-bottom:8px}
+.ev{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;background:var(--line2);border-radius:7px;padding:6px 8px;margin-bottom:6px;color:var(--ink)}
+.ev b{color:var(--berry)}
+/* data classification */
+.dl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.dc{border-radius:13px;padding:15px;border:1px solid var(--line)}
+.dc h4{font-size:13.5px;margin-bottom:6px}
+.dc ul{list-style:none;font-size:11.5px;color:var(--mut)}
+.dc li{padding-left:13px;position:relative;margin-bottom:4px}
+.dc li::before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;border-radius:50%;background:var(--berry)}
+.d1{background:var(--ge);border-color:#bfe3d3}.d1 h4{color:var(--g)}
+.d2{background:var(--be);border-color:#c7dfee}.d2 h4{color:var(--b)}
+.d3{background:var(--re);border-color:#f3cfc9}.d3 h4{color:var(--r)}
+/* timeline */
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:0;position:relative;margin-top:10px}
+.tl::before{content:"";position:absolute;top:15px;left:4%;right:4%;height:3px;background:linear-gradient(90deg,#AF2D67,#5E246B,#002661);border-radius:2px}
+.ms{position:relative;padding:0 8px}
+.ms .dot{width:13px;height:13px;border-radius:50%;background:#fff;border:3px solid var(--navy);margin:9px auto 12px;position:relative;z-index:2}
+.ms:nth-child(-n+2) .dot{border-color:var(--berry)}
+.ms .mc{background:#fff;border:1px solid var(--line);border-radius:11px;padding:11px;box-shadow:var(--sh1);font-size:11px}
+.ms .mc b{display:block;font-size:12.5px;color:var(--navy);margin-bottom:4px}
+.ms .mc span{color:var(--mut);font-size:10.5px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--mut);margin-top:14px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.note{font-size:12px;color:var(--mut);background:var(--navy50);border:1px solid var(--navy100);border-radius:11px;padding:12px 15px;margin-top:16px}
+.foot{margin-top:46px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media(max-width:860px){
+ .pipe{grid-template-columns:repeat(2,1fr);gap:10px}.step{margin-right:0}.step::after{display:none}
+ .esc,.dl{grid-template-columns:1fr}.tl{grid-template-columns:repeat(2,1fr);gap:14px}.tl::before{display:none}
+ .modgrid{grid-template-columns:repeat(2,1fr)}
+ .hero{padding:38px 26px}
+}
+</style>
+</head>
+<body>
+<div class="hero">
+ <h1>技术架构总览 · v0.1</h1>
+ <p>一个统一总后台 + 两个移动终端（客户 / 顾问手机与 iPad）+ 一个 B2B 受控门户。闸门服务端强制、状态事件化、L3 数据最小可见、内容后台全可控，支撑"受控透明 → 有限开放 → 平台化"三阶段演进。</p>
+ <div class="tags"><span>TypeScript 全栈 monorepo</span><span>React Native × React</span><span>NestJS 模块化单体</span><span>PostgreSQL + 事件溯源</span><span>Casbin 关系授权</span><span>哈希链审计</span></div>
+</div>
+<div class="wrap">
+
+ <h2><span class="no">01</span>系统分层：五端 · 接入 · 领域模块 · 数据</h2>
+ <div class="sub">前端不持有任何放行权；所有业务内容由后台版本化配置下发。</div>
+ <div class="card">
+  <div class="layer l-term">
+   <div class="lt">终端层</div>
+   <div class="nodes">
+    <div class="node"><b>客户端 App</b><span>浏览 · 初评 · 方案 · 订单 · 案件 · 全球通行 · 工单</span></div>
+    <div class="node"><b>顾问展业端</b><span>手机 5 Tab + iPad 工作/客户演示双模式</span></div>
+    <div class="node"><b>总后台 Web</b><span>A01–A12 运营 / 合规 / 财务 / 控制矩阵</span></div>
+    <div class="node"><b>服务方门户</b><span>只读 · 水印 · 批次授权 · 报告提交</span></div>
+   </div>
+  </div>
+  <div class="arrow">↓</div>
+  <div class="layer l-gw">
+   <div class="lt">接入层（API 网关 / BFF）</div>
+   <div class="nodes">
+    <div class="node"><b>OIDC 鉴权</b><span>员工 MFA · 客户验证码 · 门户机构隔离</span></div>
+    <div class="node"><b>限流 / 幂等</b><span>设备与版本 · 重复凭证拦截</span></div>
+    <div class="node"><b>灰度与开关</b><span>特性开关 · 数据源授权门 · 一键下架</span></div>
+    <div class="node"><b>审计入口</b><span>请求留痕 · traceId 串联</span></div>
+   </div>
+  </div>
+  <div class="arrow">↓</div>
+  <div class="layer l-mod">
+   <div class="lt" style="color:var(--navy)">领域模块（NestJS 模块化单体，按限界上下文分包，未来可抽服务）</div>
+   <div class="modgrid">
+    <div class="mod"><b>iam 身份与关系</b><span>账号/人员/资质/服务关系/家庭授权</span><br><em>A03·A04·A10</em></div>
+    <div class="mod"><b>catalog 内容项目</b><span>版本/核验/收费/发布/词库/数据源</span><br><em>A01·A11·A12</em></div>
+    <div class="mod"><b>transaction 交易</b><span>初评/方案/订单/主体门/合同/收据</span><br><em>A07 交易侧</em></div>
+    <div class="mod"><b>delivery 交付</b><span>案件/T0/材料/四级来源/门户批次</span><br><em>A05·A06</em></div>
+    <div class="mod"><b>engagement 通知工单</b><span>多通道送达/升级/投诉/合规事件</span><br><em>A08·A09</em></div>
+    <div class="mod"><b>settlement 佣金</b><span>规则快照/六态/双人复核/冻结</span><br><em>A07 佣金侧</em></div>
+    <div class="mod"><b>governance 治理</b><span>审计哈希链/配置/策略/数据字典</span><br><em>A10·控制矩阵</em></div>
+   </div>
+  </div>
+  <div class="arrow">↓</div>
+  <div class="layer l-data">
+   <div class="lt">数据与基础设施</div>
+   <div class="nodes">
+    <div class="node"><b>PostgreSQL</b><span>业务表 + 事件表 + 审计哈希链 · RLS</span></div>
+    <div class="node"><b>Redis / BullMQ</b><span>缓存 · 幂等锁 · T0 定时升级 · 到期回收</span></div>
+    <div class="node"><b>OSS + KMS</b><span>L3 独立加密桶 · 预签名 · 水印视图 · WORM</span></div>
+    <div class="node"><b>外部适配器</b><span>电子签 · 短信/推送/邮件 · OCR · 签证数据 · 支付(后装)</span></div>
+   </div>
+  </div>
+ </div>
+
+ <h2><span class="no">02</span>一次写请求如何穿过闸门</h2>
+ <div class="sub">认证 → 授权 → 校验 → 状态机守卫 → 事务（业务表 + 事件 + outbox）→ 审计。任一环节拒绝即返回并留痕。</div>
+ <div class="card">
+  <div class="pipe">
+   <div class="step">认证<span>OIDC · MFA · 设备</span></div>
+   <div class="step">限流幂等<span>版本 · 重复拦截</span></div>
+   <div class="step gate">授权 PEP<span>身份×关系×动作×分级</span></div>
+   <div class="step gate">应用校验<span>金额 · 词库 · 同意</span></div>
+   <div class="step gate">状态机守卫<span>合法迁移 · 职责分离</span></div>
+   <div class="step">事务执行<span>投影 + 事件追加</span></div>
+   <div class="step">Outbox<span>通知/佣金/回收</span></div>
+   <div class="step">哈希链审计<span>前后值 · 原因</span></div>
+  </div>
+  <div class="legend">
+   <span><i style="background:linear-gradient(180deg,#fff,#fdf4f8);border:1px solid #f0d3e1"></i>红色边框 = 业务红线闸门，服务端唯一裁决，前端置灰仅为体验</span>
+  </div>
+  <div class="note">硬编码在守卫层的职责分离：核验人 ≠ 案件发起人；编辑 ≠ 核验 ≠ 发布；结算双人复核；财务不见证件原件；投诉调查人 ≠ 被投诉顾问。主体三要素不一致时，客户下单/付款、顾问发起、财务核验四个入口共享同一阻断判定，无强制通过参数。</div>
+ </div>
+
+ <h2><span class="no">03</span>状态机 + 事件溯源（不静默改写）</h2>
+ <div class="sub">状态迁移规则集中在共享 core 包（纯函数），后端裁决、移动端演示同一份；更正以更正事件保留原值。</div>
+ <div class="card">
+  <div class="esc">
+   <div class="box">
+    <h4>只追加的事件流</h4>
+    <div class="ev">&lt;agg&gt;_events：<b>from→to · actor · reason · prev_event_id</b></div>
+    <div class="ev">case.submitted · co 公司动作</div>
+    <div class="ev">case.<b>accepted_off</b> · 凭据+核验人</div>
+    <div class="ev">material.corrected · 原值/新值/审批</div>
+    <div class="ev">grant.expired · 调度器自动回收</div>
+   </div>
+   <div class="box">
+    <h4>投影（当前状态）</h4>
+    <div class="ev" style="background:var(--navy50)">reducer(state, event) 事务内维护主表</div>
+    <div class="ev">订单：合同态 / 到账态 / 服务态<b>三态分离</b></div>
+    <div class="ev">佣金：六态，<b>不可跳步</b></div>
+    <div class="ev">授权：五步，到期停新接旧</div>
+   </div>
+   <div class="box">
+    <h4>Outbox 外发（同事务）</h4>
+    <div class="ev" style="background:var(--berry50)">通知 · 佣金应计 · 门户回收 · 审计归档</div>
+    <div class="ev">T0：App 未读 → 短信 → 人工电话 → 主管</div>
+    <div class="ev"><b>升级绝不改写原截止时间</b></div>
+    <div class="ev">Worker 轮询，至少一次 + 幂等消费</div>
+   </div>
+  </div>
+ </div>
+
+ <h2><span class="no">04</span>数据分级与 L3 隔离</h2>
+ <div class="sub">默认最小可见：顾问只见材料状态，服务方只在线看水印影印件，跨境共享单独同意且法定路径确认前 L3 不出境。</div>
+ <div class="card">
+  <div class="dl">
+   <div class="dc d1"><h4>L1 公开内容</h4><ul>
+    <li>已发布项目、名片白名单字段</li><li>防骗教育、核准素材</li><li>CDN 缓存，下架转历史只读</li></ul></div>
+   <div class="dc d2"><h4>L2 业务数据</h4><ul>
+    <li>方案、订单、工单、跟进</li><li>按服务关系 / 岗位行级过滤</li><li>内部备注不对客投影</li></ul></div>
+   <div class="dc d3"><h4>L3 高敏信息</h4><ul>
+    <li>证件 / 资产 / 监护材料 / 无犯罪 / 凭证</li><li>独立加密桶 + KMS，字段级加密掩码</li><li>查看授权、下载审批、水印、留痕、到期回收</li></ul></div>
+  </div>
+ </div>
+
+ <h2><span class="no">05</span>研发里程碑（闸门先行，红线用例先红后绿）</h2>
+ <div class="sub">与产品三阶段对齐；D2/D8/D9 是 M2/M3 的硬前置，Q6 只影响全球通行，不阻塞主线。</div>
+ <div class="card">
+  <div class="tl">
+   <div class="ms"><div class="dot"></div><div class="mc"><b>M0 地基</b><span>monorepo · CI/CD · 四端骨架 · OIDC · Casbin · 审计链 · token 落库 · 动效 Spike</span></div></div>
+   <div class="ms"><div class="dot"></div><div class="mc"><b>M1 内容初评</b><span>A01 四眼发布 · A12 词库素材 · 浏览/初评 · 顾问授权五步</span></div></div>
+   <div class="ms"><div class="dot"></div><div class="mc"><b>M2 方案交易</b><span>方案复核 · 订单三态 · 主体门 · 合同登记 · 凭证核验收据</span></div></div>
+   <div class="ms"><div class="dot"></div><div class="mc"><b>M3 交付门户</b><span>案件/材料/四级来源 · T0 换道 · 家庭授权 · 门户水印 · iPad 双模式</span></div></div>
+   <div class="ms"><div class="dot"></div><div class="mc"><b>M4 保障结算</b><span>工单/投诉回避 · 送达回执 · 佣金六态双人 · 控制矩阵 · 影子看板</span></div></div>
+   <div class="ms"><div class="dot"></div><div class="mc"><b>M5 开放准备</b><span>安全测试 · 隐私交付物 · 灰度邀请制 · 签证数据源（随授权）</span></div></div>
+  </div>
+  <div class="note">环境链路 dev → test → shadow（影子，只内部看）→ prod（邀请制灰度）；内容发布不随 App 发版，全部后台版本化、可回滚；示例数据带【示例】标识，仅允许进入 dev/test。</div>
+ </div>
+
+ <div class="foot">
+  <span>透明身份规划平台 · 技术架构总览 v0.1（2026-09-22）· 配套《技术路线与架构方案 v0.1》</span>
+  <span>示意结构，非最终部署拓扑 · 示例数据均为虚构</span>
+ </div>
+</div>
+</body>
+</html>
