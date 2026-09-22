@@ -7,6 +7,8 @@
 | Monorepo | pnpm workspaces + Turborepo；apps/services/packages/infra/e2e/docs 骨架 | `pnpm install` 通过 |
 | @tip/core 领域内核 | 19 台状态机、金额铁律、词库引擎、初评四结果引擎 | **45 条单测全过**、`tsc` 构建通过 |
 | @tip/api 后端骨架 | NestJS；健康检查、realm 守卫（四类账号白名单）、审计留痕、状态机只读端点 | 构建通过；实跑冒烟：无身份 401 且审计 deny、staff/customer 访问 allow 且审计、19 台状态机可查 |
+| 审计哈希链 | core 追加/校验纯函数（可注入哈希，Node 注入 sha256）；api 内存链 + /audit/verify、/audit/tail（仅 staff/service） | 50 条单测全过；冒烟：anon 401、customer 403、staff 校验 `{ok:true}` |
+| Prisma 地基 | schema.prisma：audit_events / outbox_events / feature_flags（六门）；金额/事件溯源/L3 约定注释 | `prisma validate` 通过、client 生成成功；.env.example 就位 |
 
 ### 红线在代码层的落点（首批）
 

@@ -7,3 +7,4 @@ export * from "./money.js";
 export * from "./banned-words.js";
 export * from "./assessment.js";
 export * from "./machines.js";
+export * from "./audit-chain.js";

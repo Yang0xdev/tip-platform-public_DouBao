@@ -1,0 +1,82 @@
+// 透明身份规划平台 —— Prisma schema（PostgreSQL 15）
+// 冻结基线：PRD v1.0 / GP4 18 核心对象 / 技术方案 §5 事件溯源
+// 约定：
+// 1. 金额一律 Decimal(14,2) 等按币种最小精度 + currency 分列；禁止跨币种总价列；tbc 金额为 null 而非 0
+// 2. 业务聚合以 <agg>_events 只追加事件表 + reducer 维护投影；状态迁移白名单在 @tip/core
+// 3. L3 数据不进主库明文（证件影像等存独立加密桶，库内只存对象键与 KMS 密钥版本）
+// 4. 所有表带 created_at/updated_at；关键表带 created_by；不做物理删除，作废用状态标记
+// 5. 本文件 M0 只落地审计链、outbox、特性开关三张地基表；M1 起按 PRD 逐里程碑增量迁移
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Realm {
+  staff
+  customer
+  partner
+  service
+}
+
+enum AuditResult {
+  allow
+  deny
+  info
+}
+
+/// 审计哈希链（只追加；每日 verifyChain 校验，断链告警；归档走 WORM Object Lock）
+model AuditEvent {
+  seq         BigInt      @id @unique
+  at          DateTime
+  actor       String // Keycloak subject 或系统账号；不存姓名
+  realm       Realm
+  action      String
+  resource    String
+  result      AuditResult
+  reason      String?
+  subjectRef  String? // 订单号/案件号等业务引用，不含 L3 原文
+  prevHash    String
+  hash        String
+  createdAt   DateTime    @default(now())
+
+  @@index([at])
+  @@index([actor, at])
+  @@index([resource])
+  @@map("audit_events")
+}
+
+/// 事务性发件箱：业务事务与事件同库提交，投递器负责发布到队列/通知，保证至少一次
+model OutboxEvent {
+  id            BigInt   @id @default(autoincrement())
+  aggregate     String // project_version / proposal / order / case / consent ...
+  aggregateId   String
+  eventType     String
+  payload       Json
+  occurredAt    DateTime @default(now())
+  publishedAt   DateTime?
+  retryCount    Int      @default(0)
+  lastError     String?
+  createdAt     DateTime @default(now())
+
+  @@index([publishedAt, occurredAt])
+  @@index([aggregate, aggregateId])
+  @@map("outbox_events")
+}
+
+/// 特性开关（六门：交易/门户跨境/结算/电子签/全球通行/T2；off|shadow|on）
+model FeatureFlag {
+  key         String   @id // transaction / portal_cross_border / settlement / esign / global_access / t2_marketing
+  state       String   @default("off") // off | shadow | on
+  doorRef     String? // 对应决策门：D2/D6/D8/D9/Q6
+  note        String?
+  updatedBy   String
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+
+  @@map("feature_flags")
+}
