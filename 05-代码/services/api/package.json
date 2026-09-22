@@ -12,7 +12,11 @@
     "prisma:migrate": "prisma migrate dev",
     "test": "node --test \"dist/**/*.test.js\"",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "lint": "tsc -p tsconfig.json --noEmit"
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "pg:start": "node scripts/dev-pg.mjs start",
+    "pg:stop": "node scripts/dev-pg.mjs stop",
+    "migrate:deploy": "prisma migrate deploy",
+    "test:pg": "DATABASE_URL=${DATABASE_URL:-postgresql://tip:tip@127.0.0.1:55432/tip} prisma migrate deploy && TIP_TEST_PG=1 DATABASE_URL=${DATABASE_URL:-postgresql://tip:tip@127.0.0.1:55432/tip} node --test \"dist/persistence/*.test.js\""
   },
   "dependencies": {
     "@nestjs/common": "^10.4.15",
@@ -26,6 +30,7 @@
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^22.10.2",
+    "embedded-postgres": "15.18.0-beta.17",
     "prisma": "^6.1.0",
     "typescript": "^5.7.2"
   }

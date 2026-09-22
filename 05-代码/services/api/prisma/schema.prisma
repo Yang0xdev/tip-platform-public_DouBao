@@ -80,3 +80,21 @@ model FeatureFlag {
 
   @@map("feature_flags")
 }
+
+/// M1 聚合投影快照（事件溯源的投影层；kind 如 project_version/fee_schedule/verification/
+/// entity/onboarding/grant/assessment_template/ruleset/data_source；snapshot 为完整聚合 JSONB）。
+/// 只追加修订通过 version 递增保留历史；当前态取同 (kind,aggregate_id) 最大 version。
+model AggregateSnapshot {
+  kind        String   @map("kind")
+  aggregateId String   @map("aggregate_id")
+  version     Int
+  state       String
+  snapshot    Json
+  createdBy   String?  @map("created_by")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@id([kind, aggregateId, version])
+  @@index([kind, state])
+  @@index([kind, aggregateId, version])
+  @@map("aggregate_snapshots")
+}

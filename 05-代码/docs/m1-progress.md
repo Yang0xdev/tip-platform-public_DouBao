@@ -61,3 +61,11 @@
 - 金额展示复用 @tip/core（CURRENCY_DECIMALS/fromMinor），UI 组件复用 @tip/ui-native token 与动效契约（rise 分层、按钮按压 spring）。
 - 验证门：`pnpm --filter @tip/client-app typecheck` 通过；全仓 CI 六阶段通过（7 类型任务/59 core/19 api/构建）。
 - **诚实限制**：本 VM 无 iOS/Android 模拟器与真机，RN 运行时视觉与手势验收未执行，留待模拟器/真机（视觉契约以 04-UI设计/hifi 客户端高保真 v1.3 为准）。
+
+## 切片 8：Prisma 持久化地基（真实 PG15 验证）✅（部分范围，见结转）
+- 本机无 Docker，引入 embedded-postgres 15.18（devDependency，仅开发/集成测试）：`scripts/dev-pg.mjs`（pg:start/pg:stop），数据目录 .embedded-pg（gitignore）；生产仍走 docker-compose/托管 PG。
+- 新增迁移 `20260922104057_m1_aggregate_snapshots`：aggregate_snapshots 投影表（kind+aggregate_id+version 复合主键、JSONB snapshot、state 索引），已对真实 PG15 `migrate dev/deploy` 验证。
+- PrismaService（DATABASE_URL 存在才连接，否则内存降级并告警）；SnapshotStore（save 版本化 upsert / latest / listLatest DISTINCT ON）。
+- **审计链完整持久化**：AuditService 启动从 audit_events 重放重建哈希链，断链拒绝启动；record 串行队列只追加落库；flush 供停机/测试。HTTP 实测：带 DATABASE_URL 启动→留痕→杀进程重启→链连续 verify ok。
+- 集成测试 `src/persistence/persistence.pg.test.ts`（`pnpm --filter @tip/api test:pg`，真实 PG15）：重启连续性+seq 接续、快照版本化、无库降级，3/3 通过；默认 CI 无库时自动 skip（api 22 测试 20 过 2 skip）。
+- **结转 M2-0**：catalog/advisors/assessment/globalaccess 等 M1 内存聚合尚未逐一改走 SnapshotStore（读多写少、影子前不阻塞）；M2 交易类聚合从第一行代码起直接采用 SnapshotStore，M2-0 顺带回填 M1 聚合。

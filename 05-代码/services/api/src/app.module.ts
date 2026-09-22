@@ -24,6 +24,8 @@ import { RuleSetService } from "./assessment/ruleset.service.js";
 import { DataSourceService } from "./globalaccess/data-source.service.js";
 import { QualityService } from "./quality/quality.service.js";
 import { RealmGuard } from "./realm.guard.js";
+import { PrismaService } from "./persistence/prisma.service.js";
+import { SnapshotStore } from "./persistence/snapshot.store.js";
 
 @Module({
   imports: [],
@@ -46,6 +48,8 @@ import { RealmGuard } from "./realm.guard.js";
     QualityController
   ],
   providers: [
+    PrismaService,
+    SnapshotStore,
     AuditService,
     FeatureFlagService,
     VerificationService,
