@@ -24,6 +24,10 @@ import { RuleSetService } from "./assessment/ruleset.service.js";
 import { DataSourceService } from "./globalaccess/data-source.service.js";
 import { QualityService } from "./quality/quality.service.js";
 import { RealmGuard } from "./realm.guard.js";
+import { EngagementService } from "./engagement/engagement.service.js";
+import { EngagementCustomerController } from "./engagement/engagement-customer.controller.js";
+import { EngagementAdvisorController } from "./engagement/engagement-advisor.controller.js";
+import { EngagementAdminController } from "./engagement/engagement-admin.controller.js";
 import { PrismaService } from "./persistence/prisma.service.js";
 import { SnapshotStore } from "./persistence/snapshot.store.js";
 
@@ -45,7 +49,10 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     PublicAssessmentController,
     AdminDataSourceController,
     PublicDataSourceController,
-    QualityController
+    QualityController,
+    EngagementCustomerController,
+    EngagementAdvisorController,
+    EngagementAdminController
   ],
   providers: [
     PrismaService,
@@ -62,7 +69,8 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     RuleSetService,
     DataSourceService,
     QualityService,
-    RealmGuard
+    RealmGuard,
+    EngagementService
   ]
 })
 export class AppModule {}
