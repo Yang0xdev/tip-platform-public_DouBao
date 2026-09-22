@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api, LS_ACTOR, type Actor, type MachinesMeta, type AuditVerify, type FeatureFlag } from "./api.js";
+import { A01Content, A02Supply, A03Advisors, A11Quality, A12Compliance } from "./modules.js";
 
 /* ---------------- 模块地图（与总后台高保真、PRD 一致） ---------------- */
 const MODULES = [
@@ -13,8 +14,8 @@ const MODULES = [
   { code: "A08", name: "工单投诉", prd: "M4", desc: "独立队列 · 回避分派 · SLA 升级 · 回访" },
   { code: "A09", name: "通知治理", prd: "M3/M4", desc: "模板审核 · 送达回执 · 换道升级 · T2 退订" },
   { code: "A10", name: "权限审计", prd: "M4", desc: "角色矩阵 · 审批中心 · Consent 台账 · 哈希链" },
-  { code: "A11", name: "质量基线", prd: "M4", desc: "送达率 · 核验节拍 · 回避执行 · 参数校准" },
-  { code: "A12", name: "合规工作台", prd: "M4", desc: "词库 · 合规事件分级 · 处置申诉 · 备案台账" }
+  { code: "A11", name: "质量基线", prd: "M1", desc: "核验覆盖率 · 临期率 · 授权节拍 · 初评漏斗（只读基线）" },
+  { code: "A12", name: "合规工作台", prd: "M1", desc: "问卷/结论模板 · 规则集四眼 · 词库（M1 子集）" }
 ];
 
 const DOOR_LABELS: Record<string, string> = {
@@ -149,7 +150,7 @@ function Shell({ actor, onLogout }: { actor: Actor; onLogout: () => void }) {
         <header className="h-[64px] bg-white border-b border-line px-7 flex items-center justify-between shrink-0">
           <div>
             <div className="text-[15px] font-bold">{active === "home" ? "运营工作台" : MODULES.find((m) => m.code === active)?.name}</div>
-            <div className="text-[11.5px] text-faint">M0 地基阶段 · 内容按冻结 PRD v1.0 里程碑交付</div>
+            <div className="text-[11.5px] text-faint">M1 内容治理与初评 · 冻结 PRD v1.0 · 影子环境</div>
           </div>
           <div className="flex items-center gap-3 text-[12px] text-mut">
             <span className="px-2.5 py-1 rounded-full bg-navy-50 text-navy font-semibold">影子环境</span>
@@ -161,7 +162,13 @@ function Shell({ actor, onLogout }: { actor: Actor; onLogout: () => void }) {
           {apiError && (
             <div className="mb-5 rounded-card border border-bad/30 bg-bad-bg px-4 py-3 text-[13px] text-bad">后端连接失败：{apiError}（状态机与审计数据不可用，不使用模拟数据顶替）</div>
           )}
-          {active === "home" ? <Home meta={meta} audit={audit} flags={flags} /> : <ModulePlaceholder code={active} />}
+          {active === "home" && <Home meta={meta} audit={audit} flags={flags} />}
+          {active === "A01" && <A01Content actor={actor} />}
+          {active === "A02" && <A02Supply actor={actor} />}
+          {active === "A03" && <A03Advisors actor={actor} />}
+          {active === "A11" && <A11Quality actor={actor} />}
+          {active === "A12" && <A12Compliance actor={actor} />}
+          {!["home", "A01", "A02", "A03", "A11", "A12"].includes(active) && <ModulePlaceholder code={active} />}
         </div>
       </main>
     </div>
@@ -176,7 +183,7 @@ function Home({ meta, audit, flags }: { meta: MachinesMeta | null; audit: AuditV
         <Stat label="领域状态机（@tip/core）" value={meta ? String(meta.machines.length) : "—"} sub="前后端共用唯一真源" tone="navy" />
         <Stat label="审计哈希链校验" value={audit?.ok ? "完整" : audit ? "断链" : "—"} sub={audit?.ok ? `${audit.count} 条记录` : "每日自动校验"} tone={audit?.ok ? "ok" : "warn"} />
         <Stat label="合规决策门开启" value={flags ? `${onCount} / ${flags.length}` : "—"} sub="D 门/Q6 拍板前默认全关" tone="berry" />
-        <Stat label="当前阶段" value="M0" sub="地基：认证/数据层/CI" tone="navy" />
+        <Stat label="当前阶段" value="M1" sub="内容治理与初步评估" tone="navy" />
       </div>
 
       <div className="grid grid-cols-3 gap-5">
