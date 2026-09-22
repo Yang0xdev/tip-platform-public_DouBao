@@ -64,6 +64,11 @@ h4{font-size:15px;font-weight:700;}
 .sec-t{font-size:13px;font-weight:700;margin:16px 2px 10px;color:var(--ink);}
 .cta-bar{background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:10px 16px 14px;display:flex;gap:9px;flex:none;}
 .gradband{background:var(--grad);background-size:170% 170%;animation:drift 16s ease-in-out infinite alternate;color:#fff;border-radius:20px;padding:18px;box-shadow:0 12px 28px rgba(94,36,107,.25);}
+.gtop{background:var(--grad);background-size:170% 170%;animation:drift 16s ease-in-out infinite alternate;color:#fff;border-radius:0 0 22px 22px;margin:-4px -18px 14px;padding:15px 20px 17px;}
+.gtop .tt{font-size:19px;font-weight:800;}.gtop .st{background:rgba(255,255,255,.2);color:#fff;}
+.gbar{background:var(--grad);background-size:170% 170%;animation:drift 16s ease-in-out infinite alternate;color:#fff;border-radius:18px;padding:12px 14px;margin-bottom:13px;display:flex;align-items:center;gap:10px;box-shadow:0 10px 24px rgba(94,36,107,.22);}
+.gbar .tt{font-size:16px;font-weight:800;flex:1;}.gbar .gbk{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex:none;cursor:pointer;}
+.gbar .st,.gtop .chip{background:rgba(255,255,255,.2);color:#fff;border:0;}
 @keyframes drift{0%{background-position:0 30%}100%{background-position:100% 70%}}
 .fee-tbl{width:100%;border-collapse:collapse;font-size:12px;}
 .fee-tbl th{color:var(--faint);font-weight:600;text-align:left;padding:7px 6px;border-bottom:1px solid var(--line);font-size:10.5px;}
@@ -194,7 +199,7 @@ V.home=view('home',
 V.projects=view('projects',
  sb()+
  '<div class="body">'+
- '<div class="appbar"><div class="tt">找项目</div></div>'+
+ '<div class="gtop"><div class="tt">找项目</div><div class="small" style="opacity:.85;margin-top:4px;">按目的地与身份性质，比较已核验项目</div></div>'+
  '<div style="height:44px;background:#fff;border:1px solid var(--line);border-radius:22px;display:flex;align-items:center;gap:9px;padding:0 16px;color:var(--faint);font-size:13px;margin-bottom:12px;">'+ic('search',18)+'<span>搜索目的地 / 身份性质</span></div>'+
  '<div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px;"><span class="chip on">全部</span><span class="chip">工作居留</span><span class="chip">随行子女</span><span class="chip">数字游民</span><span class="chip">长居养老</span></div>'+
  '<div class="proj-row" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">【示例】A 国 · 技术工作居留</b><div class="small mut" style="margin-top:3px;">长期工作居留（非永居）· 参考 9–14 个月</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
@@ -230,7 +235,7 @@ V.project=view('project',
 V.assessment=view('assessment',
  sb()+
  '<div class="body">'+
- '<div class="appbar"><div class="bk" data-go="project">'+ic('back',18)+'</div><div class="tt">初步评估</div></div>'+
+ '<div class="gbar"><div class="gbk" data-go="project">'+ic('back',18)+'</div><div class="tt">初步评估</div></div>'+
  '<div class="steps"><span class="s done">✓</span><span class="bar done"></span><span class="s on">2</span><span class="bar"></span><span class="s">3</span><span class="bar"></span><span class="s">4</span></div>'+
  '<div class="card"><div class="small mut">第 2 题 / 共 4 题</div><div style="font-size:16px;font-weight:700;margin:8px 0 14px;line-height:1.5;">你的主申请人语言水平目前是？</div>'+
  '<div class="qopt on"><span class="rd"></span>英语 B1 及以上（有成绩或可考）</div>'+
@@ -242,7 +247,7 @@ V.assessment=view('assessment',
 V.assessmentResult=view('assessmentResult',
  sb()+
  '<div class="body">'+
- '<div class="appbar"><div class="bk" data-go="assessment">'+ic('back',18)+'</div><div class="tt">初步评估结果</div></div>'+
+ '<div class="gbar"><div class="gbk" data-go="assessment">'+ic('back',18)+'</div><div class="tt">初步评估结果</div></div>'+
  '<div class="card" style="border-left:4px solid var(--green);"><div style="display:flex;gap:9px;align-items:center;margin-bottom:7px;">'+ic('check',18).replace('stroke="currentColor"','stroke="#177A5B"')+'<b style="color:var(--green);">已知符合项</b></div><div class="small mut" style="line-height:1.8;">职业在示例清单内；语言达到 B1；年龄与学历满足基础门槛。</div></div>'+
  '<div class="card" style="border-left:4px solid var(--red);"><div style="display:flex;gap:9px;align-items:center;margin-bottom:7px;">'+ic('alert',18).replace('stroke="currentColor"','stroke="#C03221"')+'<b style="color:var(--red);">明显差距</b></div><div class="small mut" style="line-height:1.8;">资金证明尚未达到示例要求，需提前规划存款与来源说明。</div></div>'+
  '<div class="card" style="border-left:4px solid var(--amber);"><div style="display:flex;gap:9px;align-items:center;margin-bottom:7px;">'+ic('clock',18).replace('stroke="currentColor"','stroke="#B45309"')+'<b style="color:var(--amber);">待确认项</b></div><div class="small mut" style="line-height:1.8;">随行子女年龄与在学证明；雇主 offer 路径可行性。</div></div>'+
@@ -254,7 +259,7 @@ V.assessmentResult=view('assessmentResult',
 V.proposal=view('proposal',
  sb()+
  '<div class="body">'+
- '<div class="appbar"><div class="bk" data-go="home">'+ic('back',18)+'</div><div class="tt">我的方案</div><span class="st p"><span class="d"></span>v3 待确认</span></div>'+
+ '<div class="gbar"><div class="gbk" data-go="home">'+ic('back',18)+'</div><div class="tt">我的方案</div><span class="st" style="background:rgba(255,255,255,.22);color:#fff;"><span class="d"></span>v3 待确认</span></div>'+
  '<div class="card"><h4>个性化建议</h4><div style="font-size:12.5px;color:var(--mut);line-height:1.9;margin-top:8px;">1. 先补配偶语言成绩，再一并递交；<br>2. 资金证明提前 3 个月规划来源说明；<br>3. 子女路径随主案，可先办公证。</div></div>'+
  '<div class="card"><h4 style="margin-bottom:10px;">费用分项与收取方</h4><table class="fee-tbl"><tr><th>费项</th><th>收取方</th><th>币种</th></tr>'+
  '<tr><td>平台服务费</td><td>平台</td><td>CNY 示例</td></tr><tr><td>境外法律服务</td><td>境外持牌方</td><td>USD 示例</td></tr><tr><td>官方申请费</td><td>官方代收代付</td><td>待确认</td></tr></table></div>'+
@@ -287,7 +292,7 @@ V.order=view('order',
 V.cases=view('cases',
  sb()+
  '<div class="body">'+
- '<div class="appbar"><div class="tt">我的案件与材料</div></div>'+
+ '<div class="gtop"><div class="tt">我的案件与材料</div><div class="small" style="opacity:.85;margin-top:4px;">阶段指引与材料状态，每一步标明来源</div></div>'+
  '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><b style="font-size:13.5px;">A 国技术居留 · CASE-A03</b><span class="st p"><span class="d"></span>材料准备</span></div>'+
  '<div class="steps"><span class="s done">✓</span><span class="bar done"></span><span class="s on">2</span><span class="bar"></span><span class="s">3</span><span class="bar"></span><span class="s">4</span></div><div class="small mut" style="text-align:center;">合同生效 · 材料准备 · 递交受理 · 审理结果（阶段指引，非百分比）</div></div>'+
  '<div style="display:flex;gap:7px;margin:4px 0 10px;"><span class="chip on">主申 王某某</span><span class="chip">配偶（待授权）</span><span class="chip">子女（监护）</span></div>'+
@@ -304,7 +309,7 @@ V.cases=view('cases',
 V.progress=view('progress',
  sb()+
  '<div class="body">'+
- '<div class="appbar"><div class="bk" data-go="home">'+ic('back',18)+'</div><div class="tt">办理进度</div><span class="chip" data-go="messages">消息</span></div>'+
+ '<div class="gbar"><div class="gbk" data-go="home">'+ic('back',18)+'</div><div class="tt">办理进度</div><span class="chip" data-go="messages">消息</span></div>'+
  '<div class="tli"><div class="rail"><span class="dot" style="background:var(--green);"></span><span class="vl"></span></div><div class="tc"><div class="tt">官方受理回执 <span class="st g"><span class="d"></span>官方凭据</span></div><div class="td">核验人：凭据核验岗（非案件发起人）· 09-21 10:24 · 可查看水印凭据</div></div></div>'+
  '<div class="tli"><div class="rail"><span class="dot" style="background:var(--amber);"></span><span class="vl"></span></div><div class="tc"><div class="tt">服务方已递交 <span class="st a"><span class="d"></span>服务方报告</span></div><div class="td">来自境外律所 A，未经官方核验，不作为官方状态</div></div></div>'+
  '<div class="tli"><div class="rail"><span class="dot" style="background:var(--purple);"></span><span class="vl"></span></div><div class="tc"><div class="tt">材料审核通过 <span class="st p"><span class="d"></span>公司审核</span></div><div class="td">护照影印件 · 09-20 16:02</div></div></div>'+
@@ -319,7 +324,7 @@ V.progress=view('progress',
 /* 其余 tab 占位（Pass 2 完整） */
 /* ===== 全球通行 P-19/20/21 ===== */
 V.global=view('global',sb()+'<div class="body">'+
- '<div class="appbar"><div class="tt">全球通行</div></div>'+
+ '<div class="gtop"><div class="tt">全球通行</div><div class="small" style="opacity:.85;margin-top:4px;">护照 · 签证要求 · 通行力对比（示例数据）</div></div>'+
  '<div class="gradband" data-go="passport" style="cursor:pointer;padding:16px 18px;"><div style="display:flex;align-items:center;gap:12px;"><div style="width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;">'+ic('book',22)+'</div><div style="flex:1;"><b style="font-size:14px;">我的护照</b><div class="small" style="opacity:.85;margin-top:2px;">中国 · 普通护照 · 有效期至 2030-06</div></div>'+ic('chevron',18)+'</div></div>'+
  '<div class="qgrid" style="grid-template-columns:repeat(3,1fr);"><div class="q" data-go="visa" style="height:74px;"><i></i>签证要求</div><div class="q" data-go="passportCompare" style="height:74px;"><i></i>护照对比</div><div class="q" data-go="passportCompare" style="height:74px;"><i></i>通行力排名</div></div>'+
  '<div class="hintbar">'+ic('info',18)+'<div><b>演示数据：</b>签证与通行力来自第三方授权数据源（如 IATA Timatic 类）。授权正式落实前仅展示示例，不对客作为出行依据；授权失效将自动下架。</div></div>'+
@@ -328,14 +333,14 @@ V.global=view('global',sb()+'<div class="body">'+
  '<div class="proj-row" data-go="visa"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">B 地区</b><div class="small mut" style="margin-top:3px;">短期旅游示例免签</div></div><span class="st g"><span class="d"></span>免签</span></div>'+
  '</div>'+tb('global'));
 
-V.passport=view('passport',sb()+'<div class="body"><div class="appbar"><div class="bk" data-go="global">'+ic('back',18)+'</div><div class="tt">我的护照</div></div>'+
+V.passport=view('passport',sb()+'<div class="body"><div class="gbar"><div class="gbk" data-go="global">'+ic('back',18)+'</div><div class="tt">我的护照</div></div>'+
  '<div class="card"><div style="display:flex;gap:12px;align-items:center;"><div style="width:46px;height:46px;border-radius:13px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;">'+ic('book',23)+'</div><div style="flex:1;"><b>王某某</b><div class="small mut" style="margin-top:3px;">中国 · 普通护照　E1234****</div></div><span class="st g"><span class="d"></span>已核验</span></div><div class="small mut" style="margin-top:10px;line-height:1.7;">签发日 2020-06 · 有效期至 2030-06；出行前请确认目的地要求剩余有效期 6 个月以上。</div></div>'+
  '<div class="card"><div style="display:flex;gap:12px;align-items:center;opacity:.75;"><div style="width:46px;height:46px;border-radius:13px;background:var(--navy-100);color:var(--navy);display:flex;align-items:center;justify-content:center;">'+ic('users',23)+'</div><div style="flex:1;"><b>家庭成员护照</b><div class="small mut" style="margin-top:3px;">需成员本人授权 / 监护证据后可见</div></div><span class="st n">待授权</span></div></div>'+
  '<a class="btn quiet block sm" data-go="family">管理家庭成员与授权</a>'+
  '<div class="hintbar" style="background:var(--navy-50);color:var(--navy);margin-top:12px;">'+ic('lock',17)+'<div>护照号属敏感信息，默认脱敏显示，仅在办理必需范围内使用。</div></div>'+
  '</div>'+tb('global'));
 
-V.visa=view('visa',sb()+'<div class="body"><div class="appbar"><div class="bk" data-go="global">'+ic('back',18)+'</div><div class="tt">签证要求查询</div></div>'+
+V.visa=view('visa',sb()+'<div class="body"><div class="gbar"><div class="gbk" data-go="global">'+ic('back',18)+'</div><div class="tt">签证要求查询</div></div>'+
  '<div class="card"><div class="small mut">持护照</div><div style="font-weight:700;margin:3px 0 12px;">中国 · 普通护照</div>'+
  '<div class="small mut">目的地</div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:6px;"><span class="chip on">A 国</span><span class="chip">B 地区</span><span class="chip">C 国</span></div></div>'+
  '<div class="card"><h4 style="margin-bottom:11px;">按出行目的（示例）</h4>'+
@@ -347,7 +352,7 @@ V.visa=view('visa',sb()+'<div class="body"><div class="appbar"><div class="bk" d
  '<a class="btn navy block" data-go="project">查看匹配的身份项目</a>'+
  '</div>'+tb('global'));
 
-V.passportCompare=view('passportCompare',sb()+'<div class="body"><div class="appbar"><div class="bk" data-go="global">'+ic('back',18)+'</div><div class="tt">护照对比与通行力</div></div>'+
+V.passportCompare=view('passportCompare',sb()+'<div class="body"><div class="gbar"><div class="gbk" data-go="global">'+ic('back',18)+'</div><div class="tt">护照对比与通行力</div></div>'+
  '<div class="hintbar">'+ic('info',17)+'<div>排名与数字为<b>示例演示</b>，正式版接入授权数据源并标注更新日期。</div></div>'+
  '<div class="card" style="padding:6px 14px;">'+
  '<div class="mat-row" style="background:var(--navy-50);border-radius:12px;padding:10px 12px;"><div style="width:34px;font-weight:800;color:var(--navy);">—</div><div class="mt"><b>中国（我的护照）</b><span>普通护照</span></div><b style="font-size:15px;color:var(--navy);">示例 86</b></div>'+
@@ -361,7 +366,7 @@ V.passportCompare=view('passportCompare',sb()+'<div class="body"><div class="app
  '</div>'+tb('global'));
 
 /* ===== 服务目录与工单 P-14/15 ===== */
-V.services=view('services',sb()+'<div class="body"><div class="appbar"><div class="tt">全部服务</div></div>'+
+V.services=view('services',sb()+'<div class="body"><div class="gtop"><div class="tt">全部服务</div><div class="small" style="opacity:.85;margin-top:4px;">预约、疑问、变更、退款，投诉独立受理</div></div>'+
  '<div class="card" style="padding:6px 14px;">'+
  [['预约顾问沟通','clock'],['办理疑问咨询','headset'],['进度异常反馈','alert'],['退款 / 费用争议','coins'],['资料与关系变更','edit'],['凭证与合同索取','doc']].map(x=>'<div class="mat-row" data-go="ticketCreate" style="cursor:pointer;"><div class="mi">'+ic(x[1],18)+'</div><div class="mt"><b>'+x[0]+'</b></div><span style="color:var(--faint);">'+ic('chevron',17)+'</span></div>').join('')+'</div>'+
  '<div class="card" style="border-left:4px solid var(--red);"><div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">'+ic('shield',19).replace('stroke="currentColor"','stroke="#C03221"')+'<b style="color:var(--red);font-size:13.5px;">投诉与合规举报（独立受理）</b></div><div class="small mut" style="line-height:1.8;">顾问私收款、平台外承诺、误导宣传等，由不经手该顾问的独立合规岗受理；你的保障边界可随时出示。</div><a class="btn ghost sm" style="margin-top:11px;border-color:var(--red);color:var(--red);" data-go="ticketCreate">发起独立投诉</a></div>'+
@@ -437,7 +442,7 @@ V.family=view('family',sb()+'<div class="body"><div class="appbar"><div class="b
  '</div>'+tb('me'));
 
 /* ===== 项目比较 P-05 ===== */
-V.compare=view('compare',sb()+'<div class="body"><div class="appbar"><div class="bk" data-go="projects">'+ic('back',18)+'</div><div class="tt">项目比较</div></div>'+
+V.compare=view('compare',sb()+'<div class="body"><div class="gbar"><div class="gbk" data-go="projects">'+ic('back',18)+'</div><div class="tt">项目比较</div></div>'+
  '<div class="card" style="padding:0;overflow:hidden;"><table class="fee-tbl" style="font-size:12px;"><tr><th style="width:30%;">维度</th><th>A 国技术居留</th><th>C 国数字游民</th></tr>'+
  '<tr><td>身份性质</td><td>长期工作居留（非永居）</td><td>临时数字游民许可</td></tr>'+
  '<tr><td>参考周期</td><td>9–14 个月（非承诺）</td><td>2–4 个月（示例）</td></tr>'+
@@ -458,7 +463,7 @@ V.education=view('education',sb()+'<div class="body"><div class="appbar"><div cl
  '<a class="btn berry block" data-go="ticketCreate">我遇到了可疑情况，立即反馈</a>'+
  '</div>'+tb('me'));
 
-V.advisorCard=view('advisorCard',sb()+'<div class="body"><div class="appbar"><div class="bk" data-go="assessmentResult">'+ic('back',18)+'</div><div class="tt">顾问名片</div></div><div class="card" style="text-align:center;padding:30px 22px;"><div style="width:72px;height:72px;border-radius:50%;background:var(--navy-100);margin:0 auto 12px;"></div><b style="font-size:17px;">陈某</b><div class="small mut" style="margin-top:4px;">身份规划顾问 · 示例出入境咨询（北京）</div><div style="display:flex;gap:7px;justify-content:center;margin:14px 0;flex-wrap:wrap;"><span class="st g"><span class="d"></span>资质已核验</span><span class="st n">备案 BJ-2026-018</span></div><div class="small mut" style="line-height:1.9;">已授权 A 国技术居留等 3 个项目；名片仅展示白名单核验字段，无成功率类表述。</div><a class="btn berry block" style="margin-top:18px;" data-toast="请求已发送，顾问接受后服务关系成立">请求该顾问服务</a></div></div>');
+V.advisorCard=view('advisorCard',sb()+'<div class="body"><div class="gbar"><div class="gbk" data-go="assessmentResult">'+ic('back',18)+'</div><div class="tt">顾问名片</div></div><div class="card" style="text-align:center;padding:30px 22px;"><div style="width:72px;height:72px;border-radius:50%;background:var(--grad);margin:0 auto 12px;box-shadow:0 8px 20px rgba(94,36,107,.3);"></div><b style="font-size:17px;">陈某</b><div class="small mut" style="margin-top:4px;">身份规划顾问 · 示例出入境咨询（北京）</div><div style="display:flex;gap:7px;justify-content:center;margin:14px 0;flex-wrap:wrap;"><span class="st g"><span class="d"></span>资质已核验</span><span class="st n">备案 BJ-2026-018</span></div><div class="small mut" style="line-height:1.9;">已授权 A 国技术居留等 3 个项目；名片仅展示白名单核验字段，无成功率类表述。</div><a class="btn berry block" style="margin-top:18px;" data-toast="请求已发送，顾问接受后服务关系成立">请求该顾问服务</a></div></div>');
 
 /* render */
 const root=document.getElementById('root');

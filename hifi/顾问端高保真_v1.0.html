@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap">
 <style>
 :root{
-  --navy:#002661;--navy-700:#1E3E78;--navy-100:#DCE4F2;--navy-50:#EDF1F8;--berry:#AF2D67;--berry-50:#FAEEF4;
+  --navy:#002661;--navy-700:#1E3E78;--navy-100:#DCE4F2;--navy-50:#EDF1F8;--berry:#AF2D67;--berry-50:#FAEEF4;--grad:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);
   --ink:#1B2433;--mut:#5E6B7E;--faint:#8A95A6;--line:#E5E9F0;--line-2:#F0F3F8;--paper:#F5F7FA;
   --green:#177A5B;--green-bg:#E6F4EE;--amber:#B45309;--amber-bg:#FBF1E2;--red:#C03221;--red-bg:#FCEBEA;--blue:#1D5F8A;--blue-bg:#E9F2F8;--purple:#6B5AA8;--purple-bg:#EFECF7;
   --sh1:0 1px 2px rgba(16,32,67,.05),0 4px 14px rgba(16,32,67,.06);
@@ -90,6 +90,7 @@ h4{font-size:15px;font-weight:700;}
 .ck .box{width:20px;height:20px;border-radius:6px;border:2px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;margin-top:1px;}
 .ck.y .box{background:var(--navy);border-color:var(--navy);color:#fff;}
 .fade-up{animation:fadeUp .34s var(--ease-out) both;}
+@keyframes drift{0%{background-position:0 30%}100%{background-position:100% 70%}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 .devnote{max-width:760px;margin:26px auto 0;background:#fff;border:1px dashed var(--line);border-radius:14px;padding:16px 20px;font-size:12px;color:var(--mut);line-height:2;}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important;}}
@@ -99,7 +100,7 @@ h4{font-size:15px;font-weight:700;}
 <div class="stage">
   <div class="stage-head">
     <h1>顾问展业端高保真 · v1.0（手机 13 屏）</h1>
-    <p>工作界面不使用签名渐变（纪律：渐变只属于客户端签名时刻）；Navy 操作体系 + 语义状态色。<br>覆盖授权闭环、客户 360、项目授权、合规分享、订单只读、主体阻断警示、佣金六态、学习合规。示例数据均为虚构。</p>
+    <p>签名渐变仅出现在登录与「我的」两处品牌时刻；工作台/客户/订单/佣金等作业界面保持 Navy 与语义色，不分散判断。<br>覆盖授权闭环、客户 360、项目授权、合规分享、订单只读、主体阻断警示、佣金六态、学习合规。示例数据均为虚构。</p>
     <span class="pill">与客户端同一套 Token · 底部 5 tab</span>
   </div>
   <div class="phone"><div class="screens" id="root"></div></div>
@@ -130,7 +131,7 @@ const V={};
 
 /* 01 登录与身份 */
 V.onboard=view('onboard',sb()+
- '<div style="background:var(--navy);color:#fff;padding:42px 24px 40px;border-radius:0 0 28px 28px;"><div style="width:50px;height:50px;border-radius:15px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;margin-bottom:18px;">'+ic('shield',26)+'</div>'+
+ '<div style="background:var(--grad);background-size:170% 170%;animation:drift 16s ease-in-out infinite alternate;color:#fff;padding:42px 24px 40px;border-radius:0 0 28px 28px;"><div style="width:50px;height:50px;border-radius:15px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;margin-bottom:18px;">'+ic('shield',26)+'</div>'+
  '<div style="font-size:22px;font-weight:800;">顾问展业端</div><div class="small" style="opacity:.85;margin-top:8px;line-height:1.7;">合规先行：先完成资质核验与项目授权，再展业。</div></div>'+
  '<div class="body" style="padding-top:20px;"><div style="height:48px;border:1.5px solid var(--line);border-radius:13px;display:flex;align-items:center;padding:0 14px;background:#fff;font-size:15px;">顾问陈某 · 138****0188</div>'+
  '<div class="card" style="margin-top:16px;"><h4>今日展业前请确认</h4>'+
@@ -258,7 +259,7 @@ V.learn=view('learn',sb()+'<div class="body"><div class="appbar"><div class="tt"
 
 /* 13 我的 */
 V.me=view('me',sb()+'<div class="body">'+
- '<div class="card" style="background:var(--navy);color:#fff;"><div style="display:flex;align-items:center;gap:13px;"><div style="width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;">'+ic('user',25)+'</div><div style="flex:1;"><b style="font-size:16px;">陈某</b><div class="small" style="opacity:.85;margin-top:3px;">身份规划顾问 · 示例出入境咨询（北京）</div></div></div>'+
+ '<div class="card" style="background:var(--grad);background-size:170% 170%;animation:drift 16s ease-in-out infinite alternate;color:#fff;"><div style="display:flex;align-items:center;gap:13px;"><div style="width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;">'+ic('user',25)+'</div><div style="flex:1;"><b style="font-size:16px;">陈某</b><div class="small" style="opacity:.85;margin-top:3px;">身份规划顾问 · 示例出入境咨询（北京）</div></div></div>'+
  '<div style="display:flex;gap:7px;margin-top:13px;flex-wrap:wrap;"><span class="st" style="background:rgba(255,255,255,.18);color:#fff;">备案 BJ-2026-018</span><span class="st" style="background:rgba(255,255,255,.18);color:#fff;">有效至 2027-03</span></div></div>'+
  '<div class="card" style="padding:4px 14px;">'+
  '<div class="row" data-go="commission"><div class="mi">'+ic('coins',18)+'</div><div class="mt"><b>我的佣金</b><span>六态明细与结算记录</span></div>'+ic('chevron',17)+'</div>'+
