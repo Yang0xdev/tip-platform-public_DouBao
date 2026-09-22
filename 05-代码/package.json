@@ -1,0 +1,21 @@
+{
+  "name": "transparent-identity-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "透明身份规划平台 —— 一后台 + 客户服务端 + 顾问展业端 + 服务方受控门户",
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "core:test": "pnpm --filter @tip/core test"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
+  }
+}
