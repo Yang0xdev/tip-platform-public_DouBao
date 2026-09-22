@@ -77,13 +77,13 @@ h4{font-size:15px;font-weight:700;}
 .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:11px;}
 .kpi{background:#fff;border-radius:14px;box-shadow:var(--sh1);padding:12px 10px;text-align:center;}
 .kpi b{font-size:20px;font-weight:800;display:block;color:var(--navy);}.kpi span{font-size:10.5px;color:var(--faint);}
-.flow{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:6px;scrollbar-width:none;}
+.flow{display:flex;align-items:stretch;gap:0;padding-bottom:6px;}
 .flow::-webkit-scrollbar{display:none;}
-.fstep{flex:none;width:96px;text-align:center;position:relative;}
+.fstep{flex:1 1 0;min-width:0;text-align:center;position:relative;}
 .fstep .n{width:30px;height:30px;border-radius:50%;background:var(--line-2);color:var(--faint);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;z-index:1;position:relative;}
 .fstep.on .n{background:var(--navy);color:#fff;}.fstep.done .n{background:var(--green);color:#fff;}
-.fstep .l{font-size:10px;color:var(--mut);line-height:1.4;}
-.fstep:not(:last-child)::after{content:"";position:absolute;top:15px;left:60%;width:80%;height:2px;background:var(--line);z-index:0;}
+.fstep .l{font-size:9.5px;color:var(--mut);line-height:1.35;}
+.fstep:not(:last-child)::after{content:"";position:absolute;top:15px;left:50%;width:100%;height:2px;background:var(--line);z-index:0;}
 .fstep.done:not(:last-child)::after{background:var(--green);}
 .ck{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line-2);font-size:12.5px;line-height:1.6;}
 .ck:last-child{border-bottom:0;}
@@ -210,7 +210,7 @@ V.clients=view('clients',sb()+'<div class="body"><div class="appbar"><div class=
 
 /* 08 客户 360 */
 V.client=view('client',sb()+'<div class="body">'+ab('clients','客户详情')+
- '<div class="card"><div style="display:flex;align-items:center;gap:12px;"><div style="width:46px;height:46px;border-radius:50%;background:var(--navy-100);flex:none;"></div><div style="flex:1;"><b>客 #1980 王某某</b><div class="small mut" style="margin-top:3px;">主申 · 家庭 3 人 · 顾问陈某</div></div><span class="st p"><span class="d"></span>服务中</span></div>'+
+ '<div class="card"><div style="display:flex;align-items:center;gap:12px;"><div style="width:46px;height:46px;border-radius:50%;background:var(--navy-100);color:var(--navy);display:flex;align-items:center;justify-content:center;flex:none;">'+ic('user',22)+'</div><div style="flex:1;"><b>客 #1980 王某某</b><div class="small mut" style="margin-top:3px;">主申 · 家庭 3 人 · 顾问陈某</div></div><span class="st p"><span class="d"></span>服务中</span></div>'+
  '<div style="display:flex;gap:7px;margin-top:12px;flex-wrap:wrap;"><span class="chip" data-go="order">订单费用</span><span class="chip" data-go="wb">案件进度</span><span class="chip" data-go="share">核准素材</span><span class="chip" data-toast="演示：预约沟通已建立日程">预约沟通</span></div></div>'+
  '<div class="note">'+ic('lock',17)+'<div>你不可修改金额、到账状态或官方进度；这些字段由财务/凭据核验岗/官方来源分别写入。</div></div>'+
  '<div class="sec-t" style="margin-top:0;">旅程时间线</div>'+
@@ -223,7 +223,7 @@ V.client=view('client',sb()+'<div class="body">'+ab('clients','客户详情')+
 /* 09 订单只读 */
 V.order=view('order',sb()+'<div class="body">'+ab('client','订单与费用')+
  '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;"><b>ORD-2401</b><span class="st g"><span class="d"></span>首款已到账</span></div><table class="fee-tbl" style="margin-top:8px;"><tr><th>费项</th><th>收取方</th><th>状态</th></tr><tr><td>平台服务费</td><td>平台</td><td>已核验</td></tr><tr><td>境外法律费</td><td>境外持牌方</td><td>未发生</td></tr><tr><td>官方申请费</td><td>代收代付</td><td>待确认</td></tr></table></div>'+
- '<div class="card"><h4>佣金状态（按下单锁定的规则版本）</h4><div class="flow" style="margin-top:12px;"><div class="fstep done"><div class="n">✓</div><div class="l">预估</div></div><div class="fstep done"><div class="n">✓</div><div class="l">待触发</div></div><div class="fstep done"><div class="n">✓</div><div class="l">应计核验</div></div><div class="fstep on"><div class="n">4</div><div class="l">可结算</div></div><div class="fstep"><div class="n">5</div><div class="l">处理中</div></div><div class="fstep"><div class="n">6</div><div class="l">已结算</div></div></div><div class="small mut" style="line-height:1.8;">结算需双人复核；异币种不合并；本页只读。</div></div>'+
+ '<div class="card"><h4>佣金状态（按下单锁定的规则版本）</h4><div class="flow" style="margin-top:12px;"><div class="fstep done"><div class="n">✓</div><div class="l">预估</div></div><div class="fstep done"><div class="n">✓</div><div class="l">待触发</div></div><div class="fstep done"><div class="n">✓</div><div class="l">应计核验</div></div><div class="fstep done"><div class="n">✓</div><div class="l">可结算</div></div><div class="fstep done"><div class="n">✓</div><div class="l">处理中</div></div><div class="fstep on"><div class="n">6</div><div class="l">已结算</div></div></div><div class="small mut" style="line-height:1.8;">结算需双人复核；异币种不合并；本页只读。</div></div>'+
  '<a class="btn quiet block sm" data-go="commission">查看佣金明细</a>'+
  '<a class="btn ghost block sm" style="margin-top:8px;" data-go="orderblock">查看主体阻断示例（培训）</a>'+
  '</div>');

@@ -56,7 +56,7 @@ h4{font-size:15px;font-weight:700;}
 .st.g{background:var(--green-bg);color:var(--green);}.st.a{background:var(--amber-bg);color:var(--amber);}
 .st.r{background:var(--red-bg);color:var(--red);}.st.b{background:var(--blue-bg);color:var(--blue);}.st.p{background:var(--purple-bg);color:var(--purple);}
 .st.n{background:var(--line-2);color:var(--mut);}
-.chip{font-size:12px;border:1px solid var(--line);background:#fff;color:var(--mut);border-radius:16px;padding:6px 13px;display:inline-block;}
+.chip{font-size:12px;border:1px solid var(--line);background:#fff;color:var(--mut);border-radius:16px;padding:6px 13px;display:inline-block;white-space:nowrap;flex:none;}
 .chip.on{background:var(--navy);color:#fff;border-color:var(--navy);}
 .appbar{display:flex;align-items:center;gap:10px;padding:6px 2px 12px;}
 .appbar .bk{width:36px;height:36px;border-radius:50%;background:#fff;box-shadow:var(--sh1);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;}
@@ -99,10 +99,11 @@ h4{font-size:15px;font-weight:700;}
 .proj-row{display:flex;gap:11px;align-items:center;background:#fff;border-radius:15px;padding:13px;margin-bottom:9px;box-shadow:var(--sh1);cursor:pointer;transition:transform .15s var(--ease-out);}
 .proj-row:active{transform:scale(.985);}
 .proj-row .flag{width:40px;height:40px;border-radius:12px;background:var(--navy-50);display:flex;align-items:center;justify-content:center;flex:none;color:var(--navy);}
+.proj-row>div{min-width:0;}.proj-row b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.proj-row .st{flex:none;margin-left:6px;}
 .qgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:12px 0;}
 .qgrid .q{background:#fff;border-radius:14px;box-shadow:var(--sh1);height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:10.5px;color:var(--mut);cursor:pointer;transition:transform .15s;}
 .qgrid .q:active{transform:scale(.94);}
-.qgrid .q i{width:21px;height:21px;border-radius:7px;background:var(--navy-100);display:block;}
+.qgrid .q i{width:26px;height:26px;border-radius:8px;background:var(--navy-100);color:var(--navy);display:flex;align-items:center;justify-content:center;}.qgrid .q i svg{width:15px;height:15px;}
 .hintbar{background:var(--amber-bg);border-radius:13px;padding:11px 13px;font-size:11.5px;color:#8a5a1e;line-height:1.6;display:flex;gap:9px;align-items:flex-start;margin-bottom:12px;}
 .fade-up{animation:fadeUp .34s var(--ease-out) both;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
@@ -185,10 +186,10 @@ V.home=view('home',
  '<div style="height:6px;background:rgba(255,255,255,.22);border-radius:4px;margin:13px 0 8px;overflow:hidden;"><div style="width:42%;height:100%;background:#fff;border-radius:4px;"></div></div>'+
  '<div style="font-size:11px;opacity:.92;display:flex;justify-content:space-between;"><span>2 项材料待提交 · 无 T0 超时</span><span>查看进度 ›</span></div></div>'+
  '<div class="qgrid">'+
- '<div class="q" data-go="assessment"><i style="background:var(--berry-50);"></i>初步评估</div>'+
- '<div class="q" data-go="projects"><i></i>找项目</div>'+
- '<div class="q" data-go="visa"><i></i>签证查询</div>'+
- '<div class="q" data-go="services"><i></i>服务工单</div></div>'+
+ '<div class="q" data-go="assessment"><i style="background:var(--berry-50);color:var(--berry);">'+ic('scale',15)+'</i>初步评估</div>'+
+ '<div class="q" data-go="projects"><i>'+ic('search',15)+'</i>找项目</div>'+
+ '<div class="q" data-go="visa"><i>'+ic('globe',15)+'</i>签证查询</div>'+
+ '<div class="q" data-go="services"><i>'+ic('headset',15)+'</i>服务工单</div></div>'+
  '<div class="hintbar">'+ic('shield',18)+'<div><b>防骗提示：</b>付款前先核验收费主体与对公账户，平台不会要求向个人账户转账。</div></div>'+
  '<div class="sec-t">为你推荐</div>'+
  '<div class="proj-row" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">A 国 · 随行子女路径</b><div class="small mut" style="margin-top:3px;">随主申请 · v1.4 · 已发布</div></div><span class="st n">了解</span></div>'+
@@ -326,7 +327,7 @@ V.progress=view('progress',
 V.global=view('global',sb()+'<div class="body">'+
  '<div class="gtop"><div class="tt">全球通行</div><div class="small" style="opacity:.85;margin-top:4px;">护照 · 签证要求 · 通行力对比（示例数据）</div></div>'+
  '<div class="gradband" data-go="passport" style="cursor:pointer;padding:16px 18px;"><div style="display:flex;align-items:center;gap:12px;"><div style="width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;">'+ic('book',22)+'</div><div style="flex:1;"><b style="font-size:14px;">我的护照</b><div class="small" style="opacity:.85;margin-top:2px;">中国 · 普通护照 · 有效期至 2030-06</div></div>'+ic('chevron',18)+'</div></div>'+
- '<div class="qgrid" style="grid-template-columns:repeat(3,1fr);"><div class="q" data-go="visa" style="height:74px;"><i></i>签证要求</div><div class="q" data-go="passportCompare" style="height:74px;"><i></i>护照对比</div><div class="q" data-go="passportCompare" style="height:74px;"><i></i>通行力排名</div></div>'+
+ '<div class="qgrid" style="grid-template-columns:repeat(3,1fr);"><div class="q" data-go="visa" style="height:74px;"><i>'+ic("doc",15)+'</i>签证要求</div><div class="q" data-go="passportCompare" style="height:74px;"><i>'+ic("scale",15)+'</i>护照对比</div><div class="q" data-go="passportCompare" style="height:74px;"><i>'+ic("globe",15)+'</i>通行力排名</div></div>'+
  '<div class="hintbar">'+ic('info',18)+'<div><b>演示数据：</b>签证与通行力来自第三方授权数据源（如 IATA Timatic 类）。授权正式落实前仅展示示例，不对客作为出行依据；授权失效将自动下架。</div></div>'+
  '<div class="sec-t">常用目的地（示例）</div>'+
  '<div class="proj-row" data-go="visa"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">A 国</b><div class="small mut" style="margin-top:3px;">工作居留需前置许可</div></div><span class="st a"><span class="d"></span>需签证</span></div>'+
@@ -463,7 +464,7 @@ V.education=view('education',sb()+'<div class="body"><div class="appbar"><div cl
  '<a class="btn berry block" data-go="ticketCreate">我遇到了可疑情况，立即反馈</a>'+
  '</div>'+tb('me'));
 
-V.advisorCard=view('advisorCard',sb()+'<div class="body"><div class="gbar"><div class="gbk" data-go="assessmentResult">'+ic('back',18)+'</div><div class="tt">顾问名片</div></div><div class="card" style="text-align:center;padding:30px 22px;"><div style="width:72px;height:72px;border-radius:50%;background:var(--grad);margin:0 auto 12px;box-shadow:0 8px 20px rgba(94,36,107,.3);"></div><b style="font-size:17px;">陈某</b><div class="small mut" style="margin-top:4px;">身份规划顾问 · 示例出入境咨询（北京）</div><div style="display:flex;gap:7px;justify-content:center;margin:14px 0;flex-wrap:wrap;"><span class="st g"><span class="d"></span>资质已核验</span><span class="st n">备案 BJ-2026-018</span></div><div class="small mut" style="line-height:1.9;">已授权 A 国技术居留等 3 个项目；名片仅展示白名单核验字段，无成功率类表述。</div><a class="btn berry block" style="margin-top:18px;" data-toast="请求已发送，顾问接受后服务关系成立">请求该顾问服务</a></div></div>');
+V.advisorCard=view('advisorCard',sb()+'<div class="body"><div class="gbar"><div class="gbk" data-go="assessmentResult">'+ic('back',18)+'</div><div class="tt">顾问名片</div></div><div class="card" style="text-align:center;padding:30px 22px;"><div style="width:72px;height:72px;border-radius:50%;background:var(--grad);margin:0 auto 12px;box-shadow:0 8px 20px rgba(94,36,107,.3);display:flex;align-items:center;justify-content:center;color:#fff;">'+ic('user',34)+'</div><b style="font-size:17px;">陈某</b><div class="small mut" style="margin-top:4px;">身份规划顾问 · 示例出入境咨询（北京）</div><div style="display:flex;gap:7px;justify-content:center;margin:14px 0;flex-wrap:wrap;"><span class="st g"><span class="d"></span>资质已核验</span><span class="st n">备案 BJ-2026-018</span></div><div class="small mut" style="line-height:1.9;">已授权 A 国技术居留等 3 个项目；名片仅展示白名单核验字段，无成功率类表述。</div><a class="btn berry block" style="margin-top:18px;" data-toast="请求已发送，顾问接受后服务关系成立">请求该顾问服务</a></div></div>');
 
 /* render */
 const root=document.getElementById('root');
