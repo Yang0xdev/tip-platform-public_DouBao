@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "透明身份规划",
+    "slug": "tip-client",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": ["**/*"],
+    "ios": { "supportsTablet": true, "bundleIdentifier": "com.tip.client" },
+    "android": { "package": "com.tip.client" },
+    "extra": { "stage": "m0-spike" }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "realm": "tip-partner",
+  "enabled": true,
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": false,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "sslRequired": "none",
+  "requiredCredentials": ["password", "otp"],
+  "otpPolicyType": "totp",
+  "otpPolicyDigits": 6,
+  "otpPolicyPeriod": 30,
+  "roles": {
+    "realm": [
+      { "name": "partner", "description": "服务方门户账号：MFA 必开；授权按 PortalGrant 六元组在后端校验" }
+    ]
+  }
+}

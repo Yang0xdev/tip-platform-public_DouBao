@@ -32,4 +32,11 @@ export interface AuditVerify {
   reason?: string;
 }
 
+export interface FeatureFlag {
+  key: string;
+  state: "off" | "shadow" | "on";
+  doorRef: string;
+  note: string;
+}
+
 export const LS_ACTOR = "tip-admin-actor";

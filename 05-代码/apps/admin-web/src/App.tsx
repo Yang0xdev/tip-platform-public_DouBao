@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api, LS_ACTOR, type Actor, type MachinesMeta, type AuditVerify } from "./api.js";
+import { api, LS_ACTOR, type Actor, type MachinesMeta, type AuditVerify, type FeatureFlag } from "./api.js";
 
 /* ---------------- 模块地图（与总后台高保真、PRD 一致） ---------------- */
 const MODULES = [
@@ -17,14 +17,14 @@ const MODULES = [
   { code: "A12", name: "合规工作台", prd: "M4", desc: "词库 · 合规事件分级 · 处置申诉 · 备案台账" }
 ];
 
-const DOORS = [
-  { key: "交易（合同/支付）", door: "D2 / D8", state: "off" },
-  { key: "门户跨境共享", door: "D9", state: "off" },
-  { key: "佣金结算", door: "D6", state: "off" },
-  { key: "电子签通道", door: "D2", state: "off" },
-  { key: "全球通行真实数据", door: "Q6", state: "off" },
-  { key: "T2 营销消息", door: "合规", state: "off" }
-] as const;
+const DOOR_LABELS: Record<string, string> = {
+  transaction: "交易（合同/支付）",
+  portal_cross_border: "门户跨境共享",
+  settlement: "佣金结算",
+  esign: "电子签通道",
+  global_access: "全球通行真实数据",
+  t2_marketing: "T2 营销消息"
+};
 
 /* ---------------- 登录 ---------------- */
 function Login({ onLogin }: { onLogin: (a: Actor) => void }) {
@@ -102,14 +102,16 @@ function Shell({ actor, onLogout }: { actor: Actor; onLogout: () => void }) {
   const [active, setActive] = useState<string>("home");
   const [meta, setMeta] = useState<MachinesMeta | null>(null);
   const [audit, setAudit] = useState<AuditVerify | null>(null);
+  const [flags, setFlags] = useState<FeatureFlag[] | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([
       api<MachinesMeta>("/v1/_meta/machines", actor),
-      api<AuditVerify>("/v1/_meta/audit/verify", actor)
+      api<AuditVerify>("/v1/_meta/audit/verify", actor),
+      api<{ flags: FeatureFlag[] }>("/v1/_meta/feature-flags", actor)
     ])
-      .then(([m, a]) => { setMeta(m); setAudit(a); })
+      .then(([m, a, f]) => { setMeta(m); setAudit(a); setFlags(f.flags); })
       .catch((e: Error) => setApiError(e.message));
   }, [actor]);
 
@@ -159,20 +161,21 @@ function Shell({ actor, onLogout }: { actor: Actor; onLogout: () => void }) {
           {apiError && (
             <div className="mb-5 rounded-card border border-bad/30 bg-bad-bg px-4 py-3 text-[13px] text-bad">后端连接失败：{apiError}（状态机与审计数据不可用，不使用模拟数据顶替）</div>
           )}
-          {active === "home" ? <Home meta={meta} audit={audit} /> : <ModulePlaceholder code={active} />}
+          {active === "home" ? <Home meta={meta} audit={audit} flags={flags} /> : <ModulePlaceholder code={active} />}
         </div>
       </main>
     </div>
   );
 }
 
-function Home({ meta, audit }: { meta: MachinesMeta | null; audit: AuditVerify | null }) {
+function Home({ meta, audit, flags }: { meta: MachinesMeta | null; audit: AuditVerify | null; flags: FeatureFlag[] | null }) {
+  const onCount = flags?.filter((f) => f.state === "on").length ?? 0;
   return (
     <div className="rise space-y-6">
       <div className="grid grid-cols-4 gap-4">
         <Stat label="领域状态机（@tip/core）" value={meta ? String(meta.machines.length) : "—"} sub="前后端共用唯一真源" tone="navy" />
         <Stat label="审计哈希链校验" value={audit?.ok ? "完整" : audit ? "断链" : "—"} sub={audit?.ok ? `${audit.count} 条记录` : "每日自动校验"} tone={audit?.ok ? "ok" : "warn"} />
-        <Stat label="合规决策门开启" value="0 / 6" sub="D 门/Q6 拍板前默认全关" tone="berry" />
+        <Stat label="合规决策门开启" value={flags ? `${onCount} / ${flags.length}` : "—"} sub="D 门/Q6 拍板前默认全关" tone="berry" />
         <Stat label="当前阶段" value="M0" sub="地基：认证/数据层/CI" tone="navy" />
       </div>
 
@@ -200,14 +203,19 @@ function Home({ meta, audit }: { meta: MachinesMeta | null; audit: AuditVerify |
           <h2 className="text-[14.5px] font-bold mb-1">特性开关（决策门）</h2>
           <p className="text-[11.5px] text-faint mb-4">门未开时相关路由与入口在服务端关闭，非前端隐藏。</p>
           <div className="space-y-2.5">
-            {DOORS.map((d) => (
+            {(flags ?? []).map((d) => (
               <div key={d.key} className="flex items-center justify-between rounded-xl bg-line-soft px-3.5 py-2.5">
                 <div>
-                  <div className="text-[12.5px] font-semibold">{d.key}</div>
-                  <div className="text-[10.5px] text-faint font-mono">{d.door}</div>
+                  <div className="text-[12.5px] font-semibold">{DOOR_LABELS[d.key] ?? d.key}</div>
+                  <div className="text-[10.5px] text-faint font-mono">{d.doorRef}</div>
                 </div>
-                <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-bad-bg text-bad">OFF</span>
+                <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${d.state === "on" ? "bg-ok-bg text-ok" : d.state === "shadow" ? "bg-warn-bg text-warn" : "bg-bad-bg text-bad"}`}>
+                  {d.state === "on" ? "ON" : d.state === "shadow" ? "影子" : "OFF"}
+                </span>
               </div>
+            ))}
+            {!flags && Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="h-[46px] rounded-xl bg-line-soft animate-pulse" />
             ))}
           </div>
           <div className="mt-4 rounded-xl bg-navy-50 px-3.5 py-3 text-[11.5px] text-navy leading-relaxed">

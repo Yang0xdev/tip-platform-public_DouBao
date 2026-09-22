@@ -1,0 +1,16 @@
+{
+  "realm": "tip-customer",
+  "enabled": true,
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "sslRequired": "none",
+  "requiredCredentials": [],
+  "roles": {
+    "realm": [
+      { "name": "customer", "description": "客户：手机验证码登录（M1 接短信 OTP 认证器/动作）" }
+    ]
+  }
+}

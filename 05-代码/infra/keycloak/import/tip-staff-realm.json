@@ -1,0 +1,24 @@
+{
+  "realm": "tip-staff",
+  "enabled": true,
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": false,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "sslRequired": "none",
+  "requiredCredentials": ["password", "otp"],
+  "otpPolicyType": "totp",
+  "otpPolicyAlgorithm": "HmacSHA1",
+  "otpPolicyDigits": 6,
+  "otpPolicyLookAheadWindow": 1,
+  "otpPolicyPeriod": 30,
+  "roles": {
+    "realm": [
+      { "name": "staff", "description": "员工（细粒度权限由后端 Casbin RBAC+ABAC 决定）" },
+      { "name": "finance", "description": "财务（凭证核验/收据/结算）" },
+      { "name": "compliance", "description": "合规（事件/词库/审计导出）" },
+      { "name": "service", "description": "系统服务账号" }
+    ]
+  }
+}

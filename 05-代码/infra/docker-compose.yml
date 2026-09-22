@@ -1,0 +1,53 @@
+# 透明身份规划平台 —— 本地开发依赖（M0）
+# 用法：docker compose -f infra/docker-compose.yml up -d
+# 仅用于本机/影子环境；生产部署走 infra/deploy（M5），密钥由 KMS/密钥管理注入，不写本文件。
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: tip-postgres
+    environment:
+      POSTGRES_USER: tip
+      POSTGRES_PASSWORD: tip
+      POSTGRES_DB: tip
+    ports:
+      - "5432:5432"
+    volumes:
+      - tip-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tip"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: tip-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - tip-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0
+    container_name: tip-keycloak
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin-dev-only
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak/import:/opt/keycloak/data/import:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  tip-pg:
+  tip-redis:

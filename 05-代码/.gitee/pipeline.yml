@@ -1,0 +1,34 @@
+# Gitee Go 流水线（M0）
+# 说明：不同 runner 镜像的 YAML 字段可能略有差异；实际执行内容以 infra/ci/ci.sh 为唯一真源。
+# 在 Gitee Go 新建流水线时关联本文件；runner 需具备 Node 22+、pnpm 9（corepack）。
+version: "1.0"
+name: tip-ci
+displayName: "透明身份规划平台 CI"
+triggers:
+  push:
+    branches:
+      include:
+        - main
+  pullRequest:
+    branches:
+      include:
+        - main
+stages:
+  - stage:
+      name: verify
+      displayName: "类型/测试/构建"
+      jobs:
+        - job:
+            name: ci
+            runsOn:
+              - docker
+            container: node:22-slim
+            steps:
+              - step: shell@1
+                name: "core 测试 + prisma 校验 + 全量构建"
+                inputs:
+                  script:
+                    - corepack enable
+                    - corepack prepare pnpm@9.15.9 --activate
+                    - chmod +x infra/ci/ci.sh
+                    - ./infra/ci/ci.sh
