@@ -40,6 +40,8 @@ export class RuleSetError extends HttpException {
 export class RuleSetService {
   private records = new Map<string, RuleSetRecord>();
   private seq = 0;
+  /** M1-17 聚合漏斗（仅计数，不落游客明细，不可识别个人） */
+  readonly funnel = { started: 0, completed: 0, notCommitted: 0, byProject: new Map<string, { started: number; completed: number }>() };
 
   constructor(
     private readonly verifications: VerificationService,
@@ -110,7 +112,17 @@ export class RuleSetService {
   evaluate(projectCode: string, answers: Answers, questionnaireVersion: string): AssessmentResult {
     const rec = this.published(projectCode);
     if (!rec) throw new RuleSetError(404, "40470", "当前试点暂无匹配路径");
-    return evaluate(rec.ruleSet, answers, questionnaireVersion);
+    this.funnel.started += 1;
+    const by = this.funnel.byProject.get(projectCode) ?? { started: 0, completed: 0 };
+    by.started += 1;
+    const result = evaluate(rec.ruleSet, answers, questionnaireVersion);
+    if (result.outcome === "not_committed") this.funnel.notCommitted += 1;
+    else {
+      this.funnel.completed += 1;
+      by.completed += 1;
+    }
+    this.funnel.byProject.set(projectCode, by);
+    return result;
   }
 
   private nextVersion(projectCode: string): number {

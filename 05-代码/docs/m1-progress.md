@@ -35,13 +35,17 @@
 - 测试：api 17（新增 3 例）；HTTP 冒烟四类结果全过。
 - 端点：`/admin/assessment/templates/:kind/{drafts,submit,review}`、`/admin/assessment/rulesets/{drafts,:id/submit,:id/review}`；游客 `GET /v1/assessment/{questionnaire,result-template}`、`POST /v1/assessment/evaluate`。
 
+## 切片 5：Q6 数据源开关框架 + 质量基线看板（M1-16/17）✅
+- **M1-16**：DataSourceService 内置单条 visa_passport_data 记录强制 off（提供方/范围/合同期/节拍/署名全空）；`POST /admin/data-sources/:key/configure` 开启前校验五要件齐全且合同未过期（42280/42281），切换写审计；游客 `GET /v1/global-access/:key/status` 在 off/过期时只返回维护态与三页骨架标识，无任何国别数据出口；真实接入留 M5。
+- **M1-17**：`GET /admin/quality/dashboard`（staff 只读），口径版本 m1-baseline-v1：核验覆盖率/临期失效数、发布周期中位数（<5 样本显"样本积累中"）、机构可用/临期/不可用、入驻与授权状态分布、初评漏斗（RuleSetService 内仅聚合计数，不落游客明细）；响应显式列出禁止指标（获批率/成功率、成交额排名、词库负向计数）。
+- 测试：api 19（新增 2 例）；HTTP 冒烟：游客维护态、强开 42280、看板聚合全过。
+
 ## 后续切片
-5. M1-14 本机收藏比较（客户端 RN）。
-6. M1-15 初评端流程（RN）、M1-16 数据源开关框架（FeatureFlag 已就绪）、M1-17 质量基线看板。
-7. admin-web A01/A02/A03/A12 页面接真实端点；客户端 M1 页面（RN）。
+6. M1-14 本机收藏比较（客户端 RN）、M1-15 初评端流程（RN，含全球通行三页维护态骨架）。
+7. admin-web A01/A02/A03/A11/A12 页面接真实端点（项目/收费/核验/机构/入驻授权/模板规则集/数据源/看板）。
 8. Prisma 仓储替换内存实现（开发机 PG 就绪后），审计落 audit_events。
 
 ## 验证
 ```bash
-./infra/ci/ci.sh    # 7 类型检查 + 59 core 测试 + 17 api 测试 + prisma validate + 全量构建
+./infra/ci/ci.sh    # 7 类型检查 + 59 core 测试 + 19 api 测试 + prisma validate + 全量构建
 ```

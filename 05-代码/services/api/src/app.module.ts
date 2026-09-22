@@ -9,6 +9,8 @@ import { VerificationController } from "./catalog/verification.controller.js";
 import { EntityController } from "./entities/entity.controller.js";
 import { AdvisorController, AdminAdvisorController, PublicAdvisorCardController } from "./advisors/advisor.controller.js";
 import { AdminAssessmentController, PublicAssessmentController } from "./assessment/assessment.controller.js";
+import { AdminDataSourceController, PublicDataSourceController } from "./globalaccess/data-source.controller.js";
+import { QualityController } from "./quality/quality.controller.js";
 import { AuditService } from "./audit.service.js";
 import { FeatureFlagService } from "./feature-flag.service.js";
 import { CatalogService } from "./catalog/catalog.service.js";
@@ -19,6 +21,8 @@ import { AuthorizationService } from "./advisors/authorization.service.js";
 import { AdvisorCardService } from "./advisors/advisor-card.service.js";
 import { AssessmentTemplateService } from "./assessment/template.service.js";
 import { RuleSetService } from "./assessment/ruleset.service.js";
+import { DataSourceService } from "./globalaccess/data-source.service.js";
+import { QualityService } from "./quality/quality.service.js";
 import { RealmGuard } from "./realm.guard.js";
 
 @Module({
@@ -36,7 +40,10 @@ import { RealmGuard } from "./realm.guard.js";
     AdminAdvisorController,
     PublicAdvisorCardController,
     AdminAssessmentController,
-    PublicAssessmentController
+    PublicAssessmentController,
+    AdminDataSourceController,
+    PublicDataSourceController,
+    QualityController
   ],
   providers: [
     AuditService,
@@ -49,6 +56,8 @@ import { RealmGuard } from "./realm.guard.js";
     AdvisorCardService,
     AssessmentTemplateService,
     RuleSetService,
+    DataSourceService,
+    QualityService,
     RealmGuard
   ]
 })
