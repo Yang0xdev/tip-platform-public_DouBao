@@ -9,6 +9,7 @@
 | @tip/api 后端骨架 | NestJS；健康检查、realm 守卫（四类账号白名单）、审计留痕、状态机只读端点 | 构建通过；实跑冒烟：无身份 401 且审计 deny、staff/customer 访问 allow 且审计、19 台状态机可查 |
 | 审计哈希链 | core 追加/校验纯函数（可注入哈希，Node 注入 sha256）；api 内存链 + /audit/verify、/audit/tail（仅 staff/service） | 50 条单测全过；冒烟：anon 401、customer 403、staff 校验 `{ok:true}` |
 | Prisma 地基 | schema.prisma：audit_events / outbox_events / feature_flags（六门）；金额/事件溯源/L3 约定注释 | `prisma validate` 通过、client 生成成功；.env.example 就位 |
+| admin-web 总后台 | Vite6+React18+Tailwind；登录壳（必须真实通过 realm 守卫）、工作台（真实读取 19 台状态机与审计链校验）、A01–A12 模块地图、六门开关、按 PRD 里程碑占位 | 构建通过；Playwright 三屏验证（登录/工作台/模块）零控制台错误 |
 
 ### 红线在代码层的落点（首批）
 
