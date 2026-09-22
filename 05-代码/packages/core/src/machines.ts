@@ -87,10 +87,12 @@ export const feeScheduleMachine = new StateMachine<FeeScheduleState, FeeSchedule
 
 export type AuthzState =
   | "applied" | "learning" | "exam_pending" | "exam_passed" | "grant_pending"
-  | "authorized" | "rejected" | "renewal_pending" | "suspended" | "terminated" | "revoked";
+  | "authorized" | "rejected" | "renewal_pending" | "reconfirm_required" | "expiring"
+  | "suspended" | "terminated" | "revoked" | "expired";
 export type AuthzEvent =
   | "start_learning" | "complete_learning" | "pass_exam" | "fail_exam" | "submit_grant"
-  | "approve" | "reject" | "request_renewal" | "renew" | "suspend" | "terminate" | "revoke";
+  | "approve" | "reject" | "request_renewal" | "renew" | "suspend" | "terminate" | "revoke"
+  | "expire" | "mark_expiring" | "require_reconfirm" | "start_reconfirm";
 
 export interface AuthzContext extends FourEyesContext {
   scope: string[];
@@ -107,16 +109,41 @@ export const authorizationMachine = new StateMachine<AuthzState, AuthzEvent, Aut
   { from: "exam_pending", event: "pass_exam", to: "exam_passed" },
   { from: "exam_pending", event: "fail_exam", to: "learning" },
   { from: "exam_passed", event: "submit_grant", to: "grant_pending" },
+  // M1-10：无考试环节，三份必读材料逐项确认后可直接提交申请（跳步由应用层确认记录守卫）
+  { from: "learning", event: "submit_grant", to: "grant_pending" },
   { from: "grant_pending", event: "approve", to: "authorized", guards: [fourEyesGuard, scopeGuard] },
   { from: "grant_pending", event: "reject", to: "rejected", guards: [fourEyesGuard] },
+  { from: "rejected", event: "start_learning", to: "learning" }, // 驳回可重申
   { from: "authorized", event: "request_renewal", to: "renewal_pending" },
   { from: "renewal_pending", event: "renew", to: "authorized", guards: [fourEyesGuard] },
+  // M1-10：项目规则版本更新 → 旧确认失效，展业前必须重确认
+  { from: "authorized", event: "require_reconfirm", to: "reconfirm_required" },
+  { from: "reconfirm_required", event: "start_reconfirm", to: "learning" },
   { from: "authorized", event: "suspend", to: "suspended" },
   { from: "suspended", event: "renew", to: "authorized", guards: [fourEyesGuard] },
+  { from: "authorized", event: "expire", to: "expired" }, // 到期定时任务，停新接旧
+  { from: "authorized", event: "mark_expiring", to: "expiring" }, // 60/30/7 天临期
+  { from: "expiring", event: "expire", to: "expired" },
+  { from: "expiring", event: "renew", to: "authorized", guards: [fourEyesGuard] },
+  { from: "expiring", event: "require_reconfirm", to: "reconfirm_required" },
+  { from: "expired", event: "start_learning", to: "learning" }, // 重新申请
   { from: "authorized", event: "terminate", to: "terminated" },
   { from: "suspended", event: "terminate", to: "terminated" },
   { from: "authorized", event: "revoke", to: "revoked" },
   { from: "suspended", event: "revoke", to: "revoked" }
+]);
+
+/* ---- M1-09 顾问入驻：draft→submitted→correcting→approved/rejected ---- */
+export type OnboardingState = "draft" | "submitted" | "correcting" | "approved" | "rejected";
+export type OnboardingEvent = "submit" | "approve" | "reject" | "request_correction" | "resubmit";
+
+export const onboardingMachine = new StateMachine<OnboardingState, OnboardingEvent, FourEyesContext>("AdvisorOnboarding", [
+  { from: "draft", event: "submit", to: "submitted" },
+  { from: "submitted", event: "approve", to: "approved", guards: [fourEyesGuard] },
+  { from: "submitted", event: "reject", to: "rejected", guards: [fourEyesGuard] },
+  { from: "submitted", event: "request_correction", to: "correcting", guards: [fourEyesGuard] },
+  { from: "correcting", event: "resubmit", to: "submitted" },
+  { from: "correcting", event: "submit", to: "submitted" }
 ]);
 
 /* ============ M2：咨询 / 关系 ============ */
@@ -479,5 +506,6 @@ export const ALL_MACHINES = {
   ticket: ticketMachine,
   compliance: complianceMachine,
   commission: commissionMachine,
-  dataSource: dataSourceMachine
+  dataSource: dataSourceMachine,
+  onboarding: onboardingMachine
 };

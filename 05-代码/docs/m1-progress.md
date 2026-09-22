@@ -20,15 +20,21 @@
   - 机构：`GET/POST /admin/entities`、`POST /admin/entities/:id/{active,status,update}`
   - 对客：`GET /v1/catalog/{projects,fee-schedules}[/{id}]`（游客只读，仅 published 且核验未失效）
 
+## 切片 3：顾问入驻 + 授权五步 + 名片白名单（M1-09/10/11）✅
+- **入驻（M1-09）**：草稿→提交→通过/驳回/补正；提交门=机构有效 + 四条承诺逐条时间戳签署 + 通识培训确认 + L3 材料引用 + 自述在 pitch 生产点过词库；审核中/驳回账号展业门接口级拒绝（非仅 UI 隐藏）；驳回必填原因（含申诉说明）。
+- **授权五步（M1-10）**：applied→learning（三份必读：项目规则/禁表述清单/费用说明，逐项记录版本+时间）→grant_pending→authorized（有效期=min(申请时长, 机构备案剩余)，禁永久，上限 2 年）；不可跳步（缺确认 42250）；申请人不可自批；60/30/7 临期、到期定时 expired 停新接旧；项目新版本发布自动重确认，旧确认清空，重走阅读+审批前 assertCanPitch 拒绝；驳回可重申。
+- **名片（M1-11）**：游客只读端点只返回白名单字段；自述单独审核通过才展示并带"未经平台核验"；统计固定"样本积累中"无假数字；动作区"即将开放"，不产生关系/归属；响应体无手机号、材料、承诺、佣金、内部备注。
+- 测试：core 59、api 14；HTTP 冒烟全过。
+- 端点：`/advisor/onboarding/*`、`/advisor/grants/:code/{start,confirm,submit}`、`/advisor/learning/materials`；`/admin/advisors/{onboarding,grants}/*`；游客 `GET /v1/advisor-cards?projectCode=`。
+
 ## 后续切片
-3. M1-09/10 顾问入驻审核 + 学习必读与授权五步（authorizationMachine 已在内核；入驻门接 EntityService.assertUsable）。
 4. M1-07/08 问卷/结论模板审核 + 初评四结果引擎 API（assessment 内核已就绪；词库挂 assessment 生产点）。
-5. M1-11 名片白名单只读、M1-14 本机收藏比较（客户端）。
+5. M1-14 本机收藏比较（客户端 RN）。
 6. M1-15 初评端流程、M1-16 数据源开关框架（FeatureFlag 已就绪）、M1-17 质量基线看板。
 7. admin-web A01/A02/A03 页面接真实端点；客户端 M1 页面（RN）。
 8. Prisma 仓储替换内存实现（开发机 PG 就绪后），审计落 audit_events。
 
 ## 验证
 ```bash
-./infra/ci/ci.sh    # 7 类型检查 + 54 core 测试 + 7 api 测试 + prisma validate + 全量构建
+./infra/ci/ci.sh    # 7 类型检查 + 59 core 测试 + 14 api 测试 + prisma validate + 全量构建
 ```

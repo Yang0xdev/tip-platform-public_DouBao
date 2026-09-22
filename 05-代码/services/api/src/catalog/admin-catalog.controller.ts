@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { RealmAllowed, RealmGuard, CurrentActor, type Actor } from "../realm.guard.js";
 import { AuditService } from "../audit.service.js";
 import { CatalogService, projectView, feeView, type ProjectDraftInput, type FeeDraftInput } from "./catalog.service.js";
+import { AuthorizationService } from "../advisors/authorization.service.js";
 
 /**
  * 员工侧内容治理（M1-02/04/05/06）。仅 staff；全部动作留痕。
@@ -12,6 +13,7 @@ import { CatalogService, projectView, feeView, type ProjectDraftInput, type FeeD
 export class AdminCatalogController {
   constructor(
     private readonly catalog: CatalogService,
+    private readonly grants: AuthorizationService,
     private readonly audit: AuditService
   ) {}
 
@@ -59,10 +61,16 @@ export class AdminCatalogController {
 
   @Post("projects/:id/publication")
   publicationDecision(@Param("id") id: string, @Body() body: { decision: "approve" | "reject"; reason?: string }, @CurrentActor() actor: Actor) {
-    const rec = body.decision === "approve"
-      ? this.catalog.approvePublication(id, actor.user)
-      : this.catalog.rejectPublication(id, actor.user, body.reason ?? "");
-    this.audit.record({ actor: actor.user, realm: "staff", action: `project.publication_${body.decision}`, resource: id, result: "allow", subjectRef: rec.code });
+    let rec;
+    if (body.decision === "approve") {
+      rec = this.catalog.approvePublication(id, actor.user);
+      // M1-05：项目规则版本发布 → 该项目已授权顾问旧确认失效，展业前须重确认
+      const n = this.grants.markReconfirm(rec.code);
+      this.audit.record({ actor: actor.user, realm: "staff", action: "project.publication_approve", resource: id, result: "allow", subjectRef: rec.code, reason: `reconfirm:${n}` });
+    } else {
+      rec = this.catalog.rejectPublication(id, actor.user, body.reason ?? "");
+      this.audit.record({ actor: actor.user, realm: "staff", action: "project.publication_reject", resource: id, result: "allow", subjectRef: rec.code });
+    }
     return projectView(rec);
   }
 

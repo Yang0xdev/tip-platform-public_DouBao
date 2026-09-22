@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import {
-  projectVersionMachine, feeScheduleMachine, authorizationMachine, proposalMachine,
+  projectVersionMachine, feeScheduleMachine, authorizationMachine, onboardingMachine, proposalMachine,
   contractMachine, paymentMachine, caseMachine, consentMachine,
   portalGrantMachine, deliveryMachine, ticketMachine, complianceMachine,
   commissionMachine, dataSourceMachine, ALL_MACHINES
@@ -203,5 +203,33 @@ describe("注册表完整性", () => {
     for (const [name, m] of Object.entries(ALL_MACHINES)) {
       expect(m.states().length, name).toBeGreaterThan(1);
     }
+  });
+});
+
+describe("M1 顾问入驻与授权（补充）", () => {
+  const ctx = { authorId: "adv1", reviewerId: "admin2", scope: [], projectCode: "A_TECH", grantedScopes: ["A_TECH"] };
+  it("入驻：草稿提交后双人审核通过；补正后可重申", () => {
+    const oc = { authorId: "adv1", reviewerId: "admin2" };
+    expect(onboardingMachine.transition(oc, "submitted", "approve").to).toBe("approved");
+    expect(onboardingMachine.transition(oc, "submitted", "request_correction").to).toBe("correcting");
+    expect(onboardingMachine.transition(oc, "correcting", "resubmit").to).toBe("submitted");
+    const self = { authorId: "adv1", reviewerId: "adv1" };
+    expect(onboardingMachine.transition(self, "submitted", "approve").code).toBe("REVIEWER_IS_AUTHOR");
+  });
+  it("授权：M1 无考试路径 learning 可直接 submit_grant", () => {
+    expect(authorizationMachine.transition(ctx, "learning", "submit_grant").to).toBe("grant_pending");
+  });
+  it("授权：未授予项目范围审批拒绝", () => {
+    const bad = { ...ctx, projectCode: "B_INV" };
+    expect(authorizationMachine.transition(bad, "grant_pending", "approve").code).toBe("SCOPE_NOT_GRANTED");
+  });
+  it("授权：规则版本更新转待重确认，重确认前不可展业；重走阅读后可再批", () => {
+    expect(authorizationMachine.transition(ctx, "authorized", "require_reconfirm").to).toBe("reconfirm_required");
+    expect(authorizationMachine.transition(ctx, "reconfirm_required", "start_reconfirm").to).toBe("learning");
+  });
+  it("授权：到期停新，可重新申请；驳回可重申", () => {
+    expect(authorizationMachine.transition(ctx, "authorized", "expire").to).toBe("expired");
+    expect(authorizationMachine.transition(ctx, "expired", "start_learning").to).toBe("learning");
+    expect(authorizationMachine.transition(ctx, "rejected", "start_learning").to).toBe("learning");
   });
 });
