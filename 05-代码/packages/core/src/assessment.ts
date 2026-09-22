@@ -22,6 +22,10 @@ export interface DimensionRule {
   all?: RuleCondition[];
   /** 任一满足即判差距（硬门槛不满足） */
   anyGap?: RuleCondition[];
+  /** 证据：核验记录 ID（M1-08，发布门校验全部 verified） */
+  evidenceVerificationIds?: string[];
+  /** 差距项的可能方向文案（不承诺可弥补） */
+  gapGuidance?: string;
 }
 
 export interface AssessmentRuleSet {

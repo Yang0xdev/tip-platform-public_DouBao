@@ -23,8 +23,11 @@ export const REALMS_KEY = "allowed_realms";
 export const RealmAllowed = (...realms: Realm[]) => SetMetadata(REALMS_KEY, realms);
 
 export const ANON_KEY = "allow_anonymous";
-/** 游客只读端点（M1-12 首页游客态 / M1-13 发现与详情）：无身份可 GET，有身份仍须在白名单内 */
-export const AllowAnonymous = () => SetMetadata(ANON_KEY, true);
+/**
+ * 游客端点（M1-12 首页游客态 / M1-13 发现与详情 / M1-08 无状态初评）：
+ * 无身份可访问（默认仅 GET；无状态计算类 POST 显式声明），有身份仍须在白名单内。
+ */
+export const AllowAnonymous = (methods: string[] = ["GET"]) => SetMetadata(ANON_KEY, methods);
 
 export const CurrentActor = createParamDecorator((_data: unknown, ctx: ExecutionContext): Actor | null => {
   const req = ctx.switchToHttp().getRequest<Request>();
@@ -46,15 +49,15 @@ export class RealmGuard implements CanActivate {
     const handler = context.getHandler();
     const cls = context.getClass();
     const allowed = this.reflector.getAllAndOverride<Realm[]>(REALMS_KEY, [handler, cls]) ?? [];
-    const anonAllowed = this.reflector.getAllAndOverride<boolean>(ANON_KEY, [handler, cls]) ?? false;
+    const anonMethods = this.reflector.getAllAndOverride<string[]>(ANON_KEY, [handler, cls]) ?? [];
     const realm = req.header("x-tip-realm") as Realm | undefined;
     const user = req.header("x-tip-user");
     const action = `${req.method} ${req.path}`;
     const hasIdentity = Boolean(realm && user);
 
     if (!hasIdentity) {
-      if (anonAllowed && req.method === "GET") {
-        return true; // 游客只读不逐条审计（发布内容本就公开）；异常流量在网关层限流
+      if (anonMethods.includes(req.method)) {
+        return true; // 游客无状态端点；异常流量在网关层限流
       }
       this.audit.record({ actor: user ?? "anonymous", realm: realm ?? "none", action, resource: req.path, result: "deny", reason: "MISSING_IDENTITY" });
       throw new UnauthorizedException({ code: 40101, message: "未提供身份" });

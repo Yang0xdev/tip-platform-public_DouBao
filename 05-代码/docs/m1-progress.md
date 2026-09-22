@@ -27,14 +27,21 @@
 - 测试：core 59、api 14；HTTP 冒烟全过。
 - 端点：`/advisor/onboarding/*`、`/advisor/grants/:code/{start,confirm,submit}`、`/advisor/learning/materials`；`/admin/advisors/{onboarding,grants}/*`；游客 `GET /v1/advisor-cards?projectCode=`。
 
+## 切片 4：初评问卷/结论模板 + 规则集与无状态引擎（M1-07/08）✅
+- **模板版本（M1-07）**：问卷与结论模板各自 draft→in_review→published→superseded，四眼复核；assessment 生产点过词库（"包过"等在题面/选项/结论块均拦截）；客户端只加载已发布版本并带版本号；新版发布旧版自动 superseded。
+- **规则集（M1-08）**：随项目管理，项目无已发布版本不可建；每个维度必须挂核验证据，发布门=证据全部 verified 且核验人≠规则集编辑人；同项目新版发布旧版 superseded。
+- **无状态评估**：`POST /v1/assessment/evaluate`（游客可用 POST，不保存明细）；输出固定四类 eligible/gap/unconfirmed/not_committed + 三段结构（符合/差距/待确认/来源）+ 固定性质提示（非资格认定、非法律意见、不代表获批）；必填缺失只给已完成部分整理不出确定结论；相同输入幂等；无规则集项目返回"暂无匹配路径"；needs_manual 提示"顾问人工解读即将开放"，M1 不产生任务/归属/佣金。
+- RealmGuard 支持 @AllowAnonymous 按方法声明（评估 POST 游客可用，其余游客端点仍仅 GET）。
+- 测试：api 17（新增 3 例）；HTTP 冒烟四类结果全过。
+- 端点：`/admin/assessment/templates/:kind/{drafts,submit,review}`、`/admin/assessment/rulesets/{drafts,:id/submit,:id/review}`；游客 `GET /v1/assessment/{questionnaire,result-template}`、`POST /v1/assessment/evaluate`。
+
 ## 后续切片
-4. M1-07/08 问卷/结论模板审核 + 初评四结果引擎 API（assessment 内核已就绪；词库挂 assessment 生产点）。
 5. M1-14 本机收藏比较（客户端 RN）。
-6. M1-15 初评端流程、M1-16 数据源开关框架（FeatureFlag 已就绪）、M1-17 质量基线看板。
-7. admin-web A01/A02/A03 页面接真实端点；客户端 M1 页面（RN）。
+6. M1-15 初评端流程（RN）、M1-16 数据源开关框架（FeatureFlag 已就绪）、M1-17 质量基线看板。
+7. admin-web A01/A02/A03/A12 页面接真实端点；客户端 M1 页面（RN）。
 8. Prisma 仓储替换内存实现（开发机 PG 就绪后），审计落 audit_events。
 
 ## 验证
 ```bash
-./infra/ci/ci.sh    # 7 类型检查 + 59 core 测试 + 14 api 测试 + prisma validate + 全量构建
+./infra/ci/ci.sh    # 7 类型检查 + 59 core 测试 + 17 api 测试 + prisma validate + 全量构建
 ```
