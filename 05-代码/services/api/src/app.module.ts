@@ -5,9 +5,13 @@ import { AuditController } from "./audit.controller.js";
 import { FeatureFlagController } from "./feature-flag.controller.js";
 import { AdminCatalogController } from "./catalog/admin-catalog.controller.js";
 import { PublicCatalogController } from "./catalog/public-catalog.controller.js";
+import { VerificationController } from "./catalog/verification.controller.js";
+import { EntityController } from "./entities/entity.controller.js";
 import { AuditService } from "./audit.service.js";
 import { FeatureFlagService } from "./feature-flag.service.js";
 import { CatalogService } from "./catalog/catalog.service.js";
+import { VerificationService } from "./catalog/verification.service.js";
+import { EntityService } from "./entities/entity.service.js";
 import { RealmGuard } from "./realm.guard.js";
 
 @Module({
@@ -18,8 +22,10 @@ import { RealmGuard } from "./realm.guard.js";
     AuditController,
     FeatureFlagController,
     AdminCatalogController,
-    PublicCatalogController
+    PublicCatalogController,
+    VerificationController,
+    EntityController
   ],
-  providers: [AuditService, FeatureFlagService, CatalogService, RealmGuard]
+  providers: [AuditService, FeatureFlagService, VerificationService, CatalogService, EntityService, RealmGuard]
 })
 export class AppModule {}

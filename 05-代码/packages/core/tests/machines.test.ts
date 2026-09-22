@@ -1,19 +1,47 @@
 import { describe, it, expect } from "vitest";
 import {
-  projectVersionMachine, authorizationMachine, proposalMachine,
+  projectVersionMachine, feeScheduleMachine, authorizationMachine, proposalMachine,
   contractMachine, paymentMachine, caseMachine, consentMachine,
   portalGrantMachine, deliveryMachine, ticketMachine, complianceMachine,
   commissionMachine, dataSourceMachine, ALL_MACHINES
 } from "../src/machines.js";
 
-describe("M1 四眼发布", () => {
-  it("自审不通过", () => {
-    const ctx = { authorId: "u1", reviewerId: "u1" };
-    expect(projectVersionMachine.transition(ctx, "in_review", "approve").code).toBe("REVIEWER_IS_AUTHOR");
+describe("M1 项目版本发布流（核验门 + 四眼）", () => {
+  const factsOk = { editorId: "u1", verifierId: "u2", publisherId: "u3", keyFactsTotal: 3, keyFactsVerified: 3 };
+  it("核验人=编辑人拒绝", () => {
+    const ctx = { ...factsOk, verifierId: "u1" };
+    expect(projectVersionMachine.transition(ctx, "pending_verification", "pass_verification").code).toBe("VERIFIER_IS_EDITOR");
   });
-  it("他人复核通过", () => {
-    const ctx = { authorId: "u1", reviewerId: "u2" };
-    expect(projectVersionMachine.transition(ctx, "in_review", "approve").to).toBe("published");
+  it("关键事实未核验完拒绝发布流转", () => {
+    const ctx = { ...factsOk, keyFactsVerified: 2 };
+    expect(projectVersionMachine.transition(ctx, "pending_verification", "pass_verification").code).toBe("KEY_FACTS_UNVERIFIED");
+  });
+  it("零关键事实拒绝", () => {
+    const ctx = { ...factsOk, keyFactsTotal: 0, keyFactsVerified: 0 };
+    expect(projectVersionMachine.transition(ctx, "pending_verification", "pass_verification").code).toBe("KEY_FACTS_REQUIRED");
+  });
+  it("最后编辑人=发布人拒绝", () => {
+    const ctx = { ...factsOk, publisherId: "u1" };
+    expect(projectVersionMachine.transition(ctx, "pending_publish", "approve_publication").code).toBe("PUBLISHER_IS_EDITOR");
+  });
+  it("完整链路：草稿→核验→发布复核→发布→暂停→下架", () => {
+    let s: any = "draft";
+    s = projectVersionMachine.transition(factsOk, s, "submit_verification").to;
+    expect(s).toBe("pending_verification");
+    s = projectVersionMachine.transition(factsOk, s, "pass_verification").to;
+    expect(s).toBe("pending_publish");
+    s = projectVersionMachine.transition(factsOk, s, "approve_publication").to;
+    expect(s).toBe("published");
+    s = projectVersionMachine.transition(factsOk, s, "suspend").to;
+    expect(s).toBe("suspended");
+    expect(projectVersionMachine.transition(factsOk, s, "delist").to).toBe("delisted");
+  });
+  it("收费方案：同人复核拒绝；他人通过；发布后可被新版本替代", () => {
+    const author = { authorId: "u1", reviewerId: "u1" };
+    expect(feeScheduleMachine.transition(author, "in_review", "approve").code).toBe("REVIEWER_IS_AUTHOR");
+    const other = { authorId: "u1", reviewerId: "u2" };
+    expect(feeScheduleMachine.transition(other, "in_review", "approve").to).toBe("published");
+    expect(feeScheduleMachine.transition(other, "published", "supersede").to).toBe("superseded");
   });
 });
 

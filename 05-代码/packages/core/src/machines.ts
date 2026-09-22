@@ -7,10 +7,6 @@ import { StateMachine, guard, type GuardResult } from "./fsm.js";
 
 /* ============ M1：项目版本 / 收费方案（四眼发布） ============ */
 
-export type ContentVersionState = "draft" | "in_review" | "published" | "rejected" | "suspended" | "expired";
-export type ContentVersionEvent =
-  | "submit" | "approve" | "reject" | "revise" | "suspend" | "expire" | "renew";
-
 export interface FourEyesContext {
   authorId: string;
   reviewerId: string | null;
@@ -23,30 +19,67 @@ const fourEyesGuard = (ctx: FourEyesContext): GuardResult =>
       ? guard.fail("REVIEWER_IS_AUTHOR", "编制人与复核人不得为同一人（四眼原则）")
       : guard.ok();
 
-export const projectVersionMachine = new StateMachine<ContentVersionState, ContentVersionEvent, FourEyesContext>(
+/* ---- M1-02 项目版本：草稿→待核验→待发布复核→已发布→暂停→下架（驳回回草稿） ---- */
+export type ProjectVersionState =
+  | "draft" | "pending_verification" | "pending_publish"
+  | "published" | "suspended" | "delisted";
+export type ProjectVersionEvent =
+  | "submit_verification" | "pass_verification" | "reject_verification"
+  | "approve_publication" | "reject_publication" | "suspend" | "delist";
+
+export interface ProjectVersionContext {
+  editorId: string;
+  verifierId: string | null;
+  publisherId: string | null;
+  keyFactsTotal: number;
+  keyFactsVerified: number;
+}
+
+const verifierDistinctGuard = (ctx: ProjectVersionContext): GuardResult =>
+  ctx.verifierId === null
+    ? guard.fail("REVIEWER_REQUIRED", "缺少核验人")
+    : ctx.verifierId === ctx.editorId
+      ? guard.fail("VERIFIER_IS_EDITOR", "核验人不得为该版本最后编辑人（职责分离）")
+      : guard.ok();
+
+const factsCompleteGuard = (ctx: ProjectVersionContext): GuardResult =>
+  ctx.keyFactsTotal === 0
+    ? guard.fail("KEY_FACTS_REQUIRED", "项目版本至少登记一条关键事实")
+    : ctx.keyFactsVerified < ctx.keyFactsTotal
+      ? guard.fail("KEY_FACTS_UNVERIFIED", `仍有 ${ctx.keyFactsTotal - ctx.keyFactsVerified} 条关键事实未核验`)
+      : guard.ok();
+
+const publisherDistinctGuard = (ctx: ProjectVersionContext): GuardResult =>
+  ctx.publisherId === null
+    ? guard.fail("REVIEWER_REQUIRED", "缺少发布复核人")
+    : ctx.publisherId === ctx.editorId
+      ? guard.fail("PUBLISHER_IS_EDITOR", "最后编辑人不得兼任发布人（四眼原则）")
+      : guard.ok();
+
+export const projectVersionMachine = new StateMachine<ProjectVersionState, ProjectVersionEvent, ProjectVersionContext>(
   "ProjectVersion",
   [
-    { from: "draft", event: "submit", to: "in_review" },
-    { from: "in_review", event: "approve", to: "published", guards: [fourEyesGuard] },
-    { from: "in_review", event: "reject", to: "rejected", guards: [fourEyesGuard] },
-    { from: "rejected", event: "revise", to: "draft" },
-    { from: "published", event: "revise", to: "draft" }, // 修订产生新版本，旧版归档
-    { from: "published", event: "suspend", to: "suspended", guards: [fourEyesGuard] },
-    { from: "published", event: "expire", to: "expired" },
-    { from: "expired", event: "renew", to: "in_review" }
+    { from: "draft", event: "submit_verification", to: "pending_verification" },
+    { from: "pending_verification", event: "pass_verification", to: "pending_publish", guards: [verifierDistinctGuard, factsCompleteGuard] },
+    { from: "pending_verification", event: "reject_verification", to: "draft", guards: [verifierDistinctGuard] },
+    { from: "pending_publish", event: "approve_publication", to: "published", guards: [publisherDistinctGuard] },
+    { from: "pending_publish", event: "reject_publication", to: "draft", guards: [publisherDistinctGuard] },
+    { from: "published", event: "suspend", to: "suspended" }, // 原因类别与处置说明由应用层强制
+    { from: "suspended", event: "delist", to: "delisted" }
   ]
 );
 
-export const feeScheduleMachine = new StateMachine<ContentVersionState, ContentVersionEvent, FourEyesContext>(
+/* ---- M1-04 收费方案版本：draft→in_review→published→superseded ---- */
+export type FeeScheduleState = "draft" | "in_review" | "published" | "superseded";
+export type FeeScheduleEvent = "submit" | "approve" | "reject" | "supersede";
+
+export const feeScheduleMachine = new StateMachine<FeeScheduleState, FeeScheduleEvent, FourEyesContext>(
   "FeeScheduleVersion",
   [
     { from: "draft", event: "submit", to: "in_review" },
     { from: "in_review", event: "approve", to: "published", guards: [fourEyesGuard] },
-    { from: "in_review", event: "reject", to: "rejected", guards: [fourEyesGuard] },
-    { from: "rejected", event: "revise", to: "draft" },
-    { from: "published", event: "revise", to: "draft" },
-    { from: "published", event: "suspend", to: "suspended", guards: [fourEyesGuard] },
-    { from: "published", event: "expire", to: "expired" }
+    { from: "in_review", event: "reject", to: "draft", guards: [fourEyesGuard] },
+    { from: "published", event: "supersede", to: "superseded" } // 同 code 新版本发布时系统迁移，旧版只读
   ]
 );
 

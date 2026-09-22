@@ -1,10 +1,10 @@
 import { Controller, Get, Param, UseGuards } from "@nestjs/common";
 import { AllowAnonymous, RealmAllowed, RealmGuard } from "../realm.guard.js";
-import { CatalogService, toPublicView } from "./catalog.service.js";
+import { CatalogService, projectView, feeView } from "./catalog.service.js";
 
 /**
  * 对客只读目录（M1-12 游客态 / M1-13 发现与详情）：
- * 仅返回 published；游客可访问，登录客户/员工同样只读；草稿、在审、下架一律不可见。
+ * 仅返回 published 且核验未失效；游客可读；草稿/在审/暂停/下架一律不可见。
  */
 @Controller("v1/catalog")
 @UseGuards(RealmGuard)
@@ -15,21 +15,21 @@ export class PublicCatalogController {
 
   @Get("projects")
   listProjects() {
-    return { records: this.catalog.listPublished("project").map(toPublicView) };
+    return { records: this.catalog.listPublishedProjects().map(projectView) };
   }
 
   @Get("projects/:id")
   project(@Param("id") id: string) {
-    return toPublicView(this.catalog.getPublished(id));
+    return projectView(this.catalog.getPublishedProject(id));
   }
 
   @Get("fee-schedules")
   listFeeSchedules() {
-    return { records: this.catalog.listPublished("fee_schedule").map(toPublicView) };
+    return { records: this.catalog.listPublishedFees().map(feeView) };
   }
 
   @Get("fee-schedules/:id")
   feeSchedule(@Param("id") id: string) {
-    return toPublicView(this.catalog.getPublished(id));
+    return feeView(this.catalog.getPublishedFee(id));
   }
 }
