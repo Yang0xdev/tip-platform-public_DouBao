@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>透明身份规划平台 · 三端演示</title>
+<style>
+:root{
+  --navy:#002661; --navy2:#0B3A82; --navy50:#EDF1F8;
+  --berry:#AF2D67; --berry2:#C63D80; --berry50:#FAEEF4;
+  --ink:#1B2433; --mut:#5E6B7E; --faint:#8A95A6;
+  --line:#E5E9F0; --paper:#F5F7FA;
+  --green:#177A5B; --greenbg:#E6F4EE; --amber:#B45309; --amberbg:#FBF1E2; --red:#C03221; --redbg:#FCEBEA;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:"Manrope","Noto Sans SC",-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#0E1626;color:var(--ink)}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+.sig{background:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);background-size:170%}
+/* ===== 顶部切换 ===== */
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:10px;padding:10px 16px;background:rgba(14,22,38,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
+.brand{color:#fff;font-weight:800;font-size:15px;letter-spacing:.3px}
+.brand small{display:block;font-size:10px;font-weight:500;opacity:.65;letter-spacing:1px}
+.tswitch{margin-left:auto;display:flex;background:rgba(255,255,255,.08);border-radius:999;padding:3px}
+.tswitch button{padding:7px 14px;border-radius:999;font-size:13px;font-weight:700;color:rgba(255,255,255,.65)}
+.tswitch button.on{background:#fff;color:var(--navy)}
+/* ===== 舞台 ===== */
+.stage{min-height:calc(100vh - 57px);display:flex;justify-content:center;padding:28px 16px 60px}
+/* 手机壳 */
+.phone{width:390px;max-width:100%;height:820px;max-height:86vh;background:var(--paper);border-radius:42px;overflow:hidden;position:relative;box-shadow:0 40px 90px rgba(0,0,0,.55),0 0 0 11px #1c2740,0 0 0 13px #33415c;display:flex;flex-direction:column}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:130px;height:26px;background:#1c2740;border-radius:0 0 16px 16px;z-index:40}
+.screen{flex:1;overflow-y:auto;overflow-x:hidden;padding:44px 16px 92px;animation:rise .42s cubic-bezier(.22,1,.36,1)}
+@keyframes rise{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+.screen::-webkit-scrollbar{width:0}
+/* 后台壳 */
+.desktop{width:1180px;max-width:100%;height:820px;max-height:86vh;background:#fff;border-radius:16px;overflow:hidden;display:flex;box-shadow:0 40px 90px rgba(0,0,0,.5)}
+.side{width:218px;background:var(--navy);color:#fff;display:flex;flex-direction:column;padding:18px 0;flex-shrink:0}
+.side .lg{padding:0 20px 16px;font-weight:800;font-size:16px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:10px}
+.side .lg span{display:block;font-size:10px;font-weight:500;opacity:.6;margin-top:3px;letter-spacing:1px}
+.side a{padding:9px 20px;font-size:13px;color:rgba(255,255,255,.72);font-weight:600;display:flex;gap:10px;cursor:pointer}
+.side a b{font-size:11px;opacity:.55;width:22px}
+.side a.on{background:rgba(255,255,255,.12);color:#fff;border-left:3px solid var(--berry2);padding-left:17px}
+.main{flex:1;overflow-y:auto;background:var(--paper)}
+.mhead{padding:18px 26px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center}
+.mhead h2{font-size:18px}
+.mhead .pill{margin-left:auto;font-size:11px;font-weight:700;padding:5px 12px;border-radius:999;background:var(--navy50);color:var(--navy)}
+.mbody{padding:22px 26px}
+/* 通用组件 */
+.hero{border-radius:20;padding:20px;color:#fff;margin-bottom:14px}
+.hero h1{font-size:23px;line-height:1.3;margin:6px 0 8px}
+.hero p{font-size:13px;line-height:1.7;opacity:.92}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px;animation:cardin .5s cubic-bezier(.22,1,.36,1) both}
+@keyframes cardin{from{opacity:0;transform:translateY(12px)}to{opacity:1}}
+.card h3{font-size:16;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.card .sub{font-size:13px;color:var(--mut);line-height:1.7}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.spread{justify-content:space-between}
+.tag{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999;background:var(--navy50);color:var(--navy);white-space:nowrap}
+.tag.g{background:var(--greenbg);color:var(--green)} .tag.a{background:var(--amberbg);color:var(--amber)}
+.tag.r{background:var(--redbg);color:var(--red)} .tag.b{background:var(--berry50);color:var(--berry)}
+.tag.dark{background:var(--navy);color:#fff}
+.h{font-size:17px;font-weight:800;margin:14px 2px 10px}
+.btn{width:100%;padding:14px;border-radius:15px;font-size:15px;font-weight:800;color:#fff;background:linear-gradient(180deg,#1E3E78,#002661);transition:transform .12s}
+.btn:active{transform:scale(.96)}
+.btn.berry{background:linear-gradient(180deg,#C63D80,#A5275F)}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+.btn.sm{width:auto;padding:9px 16px;font-size:13px;border-radius:11px}
+.chips{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px}
+.chip{padding:7px 15px;border-radius:999;font-size:13px;font-weight:700;background:#fff;border:1px solid var(--line);color:var(--mut);white-space:nowrap}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.search{width:100%;padding:13px 16px;border-radius:14px;border:1px solid var(--line);background:#fff;font-size:14px;margin-bottom:14px}
+.fee{display:flex;justify-content:space-between;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+.fee:last-child{border-bottom:none}
+.fee b{font-size:15px;color:var(--navy);white-space:nowrap;margin-left:12px}
+.fee .n{font-size:14px;font-weight:700} .fee .c{font-size:12px;color:var(--mut);margin-top:3px}
+.tabbar{position:absolute;bottom:0;left:0;right:0;height:78px;background:#fff;border-top:1px solid var(--line);display:flex;padding-bottom:14px}
+.tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--faint);font-size:11px;font-weight:700}
+.tabbar button .ic{font-size:19px;line-height:1}
+.tabbar button.on{color:var(--navy)}
+.tabbar button.on .ic{color:var(--berry)}
+.link{color:var(--navy2);font-weight:700;font-size:13px;cursor:pointer}
+.dashgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.stat .v{font-size:26px;font-weight:800;margin-top:6px}
+.stat .l{font-size:12px;color:var(--mut)}
+.stat .v.g{color:var(--green)} .stat .v.b{color:var(--berry)}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;font-size:13px}
+th{text-align:left;padding:11px 14px;background:#F8FAFC;color:var(--mut);font-size:12px;font-weight:700}
+td{padding:11px 14px;border-top:1px solid var(--line)}
+.modgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.modcard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px;cursor:pointer;transition:.15s}
+.modcard:hover{border-color:var(--navy);box-shadow:0 8px 24px rgba(0,38,97,.08)}
+.modcard .t{font-weight:800;font-size:14px;display:flex;justify-content:space-between}
+.modcard .d{font-size:12px;color:var(--mut);margin-top:6px;line-height:1.6}
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:#1B2433;color:#fff;padding:12px 20px;border-radius:12px;font-size:13px;font-weight:600;opacity:0;transition:.3s;z-index:99;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%)}
+textarea,input.inp{width:100%;border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:12px;font-size:14px;font-family:inherit;margin-bottom:10px}
+textarea{min-height:74px;resize:vertical}
+label.il{font-size:12px;color:var(--mut);font-weight:700;margin-bottom:6px;display:block}
+.hint{font-size:12px;color:var(--faint);line-height:1.7}
+@media(max-width:600px){.stage{padding:14px 8px 40px}.phone,.desktop{max-height:82vh;border-radius:28px}.dashgrid{grid-template-columns:repeat(2,1fr)}.modgrid{grid-template-columns:1fr}.side{width:150px}.mbody{padding:14px}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">透明身份规划平台<small>TRANSPARENT IDENTITY PLANNING</small></div>
+  <div class="tswitch">
+    <button id="t-client" class="on" onclick="switchTerminal('client')">客户端</button>
+    <button id="t-advisor" onclick="switchTerminal('advisor')">销售端</button>
+    <button id="t-admin" onclick="switchTerminal('admin')">总后台</button>
+  </div>
+</div>
+<div class="stage" id="stage"></div>
+<div class="toast" id="toast"></div>
+<script>
+/* ============ 演示数据（全部为虚构【示例】） ============ */
+const projects=[
+ {id:"PRJ-0001",code:"PROJ-TECH-A",ver:1,title:"A国技术居留（示例）",body:"面向合规技术岗位的居留路径介绍，不作任何结果承诺。",status:"published",
+  fees:[{n:"平台服务费",c:"示例出入境咨询（北京）有限公司",a:"CNY 30,000.00",tag:"确定",tc:""},
+        {n:"境外持牌方法律服务费",c:"示例境外律所A（持牌）",a:"USD 4,500.00",tag:"估算",tc:"a"},
+        {n:"官方申请费",c:"收取方待确认",a:"待确认（不计入合计）",tag:"待确认",tc:"r"}]},
+ {id:"PRJ-0002",code:"PROJ-FAMILY-A",ver:2,title:"A国随行子女（示例）",body:"随行家庭成员路径介绍，需与主申请人路径一并评估。",status:"published",
+  fees:[{n:"平台服务费",c:"示例出入境咨询（北京）有限公司",a:"CNY 18,000.00",tag:"确定",tc:""},
+        {n:"官方申请费",c:"A国官方",a:"USD 320.00",tag:"估算",tc:"a"}]},
+ {id:"PRJ-0003",code:"PROJ-DIGITAL-C",ver:1,title:"C国数字游民（示例草稿）",body:"草稿内容，待核验，暂不对客可见。",status:"draft",fees:[]}
+];
+let queue=[
+ {id:"CON-0005",cust:"c-2049",src:"名片预约",proj:"PROJ-TECH-A",state:"待接受",note:"希望了解技术居留整体路径"},
+ {id:"CON-0006",cust:"c-1902",src:"名片预约",proj:"",state:"待平台分配",note:"官网预约，未指定顾问"}
+];
+let clients=[
+ {id:"REL-0002",cust:"c-1980",proj:"PROJ-TECH-A",state:"服务关系已建立",ce:"2026/9/23 08:32",ae:"2026/9/23 08:32"},
+ {id:"REL-0004",cust:"c-2051",proj:"PROJ-TECH-A",state:"服务关系已建立",ce:"2026/9/23 08:33",ae:"2026/9/23 08:33"}
+];
+let proposals=[
+ {id:"PROP-0001",rev:1,cust:"c-1980",proj:"PROJ-TECH-A",state:"待客户确认",tc:"b",valid:"2026/10/07"}
+];
+let terminal="client", screen="home", subTab="", detailId=null;
+function toast(t){const e=document.getElementById("toast");e.textContent=t;e.classList.add("show");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("show"),2200)}
+function esc(s){return String(s).replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]))}
+
+/* ================= 客户端 ================= */
+function clientScreen(){
+  const pub=projects.filter(p=>p.status==="published");
+  let body="";
+  if(screen==="home"){
+    body=`
+    <div class="hero sig">
+      <div style="font-size:12px;font-weight:700;opacity:.85;letter-spacing:1px">透明 · 可核验 · 不承诺结果</div>
+      <h1>把身份规划的<br>每一步摊开给你看</h1>
+      <p>费用分项、收取方、确定性一目了然；所有项目均经平台核验，初评只提示差距，不作资格认定。</p>
+    </div>
+    <div class="card" onclick="goClient('global')" style="cursor:pointer">
+      <div class="row spread">
+        <h3><span class="tag b">全球通行</span></h3><span class="link">查看 ›</span>
+      </div>
+      <div class="sub">护照对比、签证要求查询（数据服务授权后上线，当前为框架预览）。</div>
+    </div>
+    <div class="h">已核验项目（${pub.length}）</div>
+    ${pub.map((p,i)=>`
+    <div class="card" style="animation-delay:${i*60}ms" onclick="openDetail('${p.id}')">
+      <div class="row spread" style="margin-bottom:6px"><h3>${esc(p.title)}</h3><span class="tag g">已核验</span></div>
+      <div class="sub">${esc(p.body)}</div>
+      <div class="row" style="margin-top:10px"><span class="tag">v${p.ver}</span><span class="tag">${p.code}</span></div>
+    </div>`).join("")}`;
+  }
+  if(screen==="projects"){
+    body=`
+    <input class="search" placeholder="搜索项目名称 / 代码" oninput="filterProjects(this.value)">
+    <div id="plist">${pub.map(p=>`
+    <div class="card" onclick="openDetail('${p.id}')">
+      <div class="row spread"><h3>${esc(p.title)}</h3><span class="tag g">已核验</span></div>
+      <div class="sub" style="margin-top:6px">${esc(p.body)}</div>
+    </div>`).join("")}</div>`;
+  }
+  if(screen==="detail"){
+    const p=projects.find(x=>x.id===detailId);
+    body=`
+    <div class="link" onclick="goClient('projects')">‹ 返回项目列表</div>
+    <div class="card" style="margin-top:10px">
+      <div class="row spread"><h3 style="font-size:18px">${esc(p.title)}</h3><span class="tag g">已核验</span></div>
+      <div class="sub" style="margin:8px 0">${esc(p.body)}</div>
+      <div class="row"><span class="tag">${p.code}</span><span class="tag">版本 v${p.ver}</span><span class="tag a">核验有效期 90 天</span></div>
+    </div>
+    <div class="card">
+      <h3>费用明细（异币种不相加、不折总价）</h3>
+      ${p.fees.map(f=>`
+      <div class="fee">
+        <div><div class="n">${esc(f.n)}</div><div class="c">${esc(f.c)}</div></div>
+        <div style="text-align:right"><b>${esc(f.a)}</b><div style="margin-top:4px"><span class="tag ${f.tc}">${f.tag}</span></div></div>
+      </div>`).join("")}
+      <div class="hint" style="margin-top:10px">“待确认”不参与任何合计；最终以签署方案中的费表快照为准。</div>
+    </div>
+    <div class="card">
+      <h3>确定性说明</h3>
+      <div class="sub">本页为路径与费用信息整理，<b>不构成资格认定、不代表获批结果</b>；个案以官方审核为准。</div>
+    </div>
+    <div class="row" style="gap:10px">
+      <button class="btn ghost" style="flex:1" onclick="goClient('assessment')">初步评估</button>
+      <button class="btn berry" style="flex:1" onclick="toast('已记录咨询意向，顾问将通过平台与你联系')">预约顾问</button>
+    </div>`;
+  }
+  if(screen==="assessment"){
+    body=`
+    <div class="hero sig" style="padding:16px 18px">
+      <div style="font-size:15px;font-weight:800">初步评估问卷</div>
+      <p style="margin-top:6px">仅用于整理符合项与差距，不保存明细、不产生画像，结果不是资格认定。</p>
+    </div>
+    <div class="card">
+      <label class="il">1. 年龄</label><input class="inp" placeholder="请输入年龄">
+      <label class="il">2. 当前主要职业</label><input class="inp" placeholder="例如：软件工程师">
+      <label class="il">3. 是否持有相关岗位录用意向？</label>
+      <div class="row" style="gap:8px;margin-bottom:10px">
+        <button class="chip on" onclick="pickChip(this)">是</button><button class="chip" onclick="pickChip(this)">否</button><button class="chip" onclick="pickChip(this)">待确认</button>
+      </div>
+      <label class="il">4. 目标项目</label><input class="inp" value="A国技术居留（示例）" readonly>
+      <button class="btn" onclick="showResult()">查看评估结果</button>
+    </div>
+    <div id="result"></div>`;
+  }
+  if(screen==="global"){
+    const tabs=[["my_passport","我的护照"],["visa_check","签证要求"],["passport_compare","护照对比"]];
+    if(!subTab)subTab="my_passport";
+    body=`
+    <div class="hero sig" style="padding:16px 18px">
+      <div style="font-size:15px;font-weight:800">全球通行</div>
+      <p style="margin-top:6px">数据来源需第三方授权，授权完成前仅提供框架预览，不含任何国别数据。</p>
+    </div>
+    <div class="chips">${tabs.map(t=>`<button class="chip ${subTab===t[0]?"on":""}" onclick="subTab='${t[0]}';render()">${t[1]}</button>`).join("")}</div>
+    <div class="card" style="text-align:center;padding:34px 18px">
+      <div style="font-size:30px">🛠</div>
+      <h3 style="justify-content:center;margin:10px 0 6px">数据服务维护中</h3>
+      <div class="sub">签证与护照数据为第三方专有服务，平台完成授权与合规校验后开放。</div>
+      <div class="tag a" style="margin-top:14px">当前：零国别数据</div>
+    </div>`;
+  }
+  if(screen==="profile"){
+    body=`
+    <div class="hero sig">
+      <div style="font-size:15px;font-weight:800">你好，访客</div>
+      <p style="margin-top:6px">浏览与初评无需注册；建立服务关系时才需要实名信息，且仅在必要范围内收集。</p>
+    </div>
+    <div class="card"><h3>我的收藏</h3><div class="sub">本机保存，不上传、不产生画像与归属。</div></div>
+    <div class="card"><h3>防骗教育</h3><div class="sub">识别“包过”“内部渠道”等常见话术，了解费用与合同应有的样子。</div></div>
+    <div class="card"><h3>隐私与授权</h3><div class="sub">查看授权清单、随时撤回授权、注销账户。</div></div>`;
+  }
+  const tabs=[["home","首页","⌂"],["projects","项目","▦"],["global","全球通行","◎"],["profile","我的","◔"]];
+  return `<div class="notch"></div><div class="screen">${body}</div>
+  <div class="tabbar">${tabs.map(t=>`<button class="${screen===t[0]?"on":""}" onclick="goClient('${t[0]}')"><span class="ic">${t[2]}</span>${t[1]}</button>`).join("")}</div>`;
+}
+function goClient(s){screen=s;subTab="";detailId=null;render()}
+function openDetail(id){screen="detail";detailId=id;render()}
+function filterProjects(v){
+  const pub=projects.filter(p=>p.status==="published"&&(p.title.includes(v)||p.code.includes(v)));
+  document.getElementById("plist").innerHTML=pub.map(p=>`<div class="card" onclick="openDetail('${p.id}')"><div class="row spread"><h3>${esc(p.title)}</h3><span class="tag g">已核验</span></div><div class="sub" style="margin-top:6px">${esc(p.body)}</div></div>`).join("")||'<div class="card sub">没有匹配的项目</div>';
+}
+function pickChip(el){[...el.parentNode.children].forEach(c=>c.classList.remove("on"));el.classList.add("on")}
+/* ================= 销售端（顾问展业） ================= */
+function advisorScreen(){
+  let body="";
+  if(screen==="home"){
+    body=`
+    <div class="hero sig">
+      <div style="font-size:12px;font-weight:700;opacity:.85;letter-spacing:1px">展业工作台</div>
+      <h1 style="font-size:21px">陈某，早上好</h1>
+      <p>今日待接受 ${queue.filter(q=>q.state==="待接受").length} 条 · 服务中客户 ${clients.length} 位 · 待确认方案 ${proposals.length} 份</p>
+    </div>
+    <div class="chips">
+      <button class="chip ${subTab==="accept"||!subTab?"on":""}" onclick="subTab='accept';render()">待接受</button>
+      <button class="chip ${subTab==="assign"?"on":""}" onclick="subTab='assign';render()">待分配</button>
+      <button class="chip ${subTab==="all"?"on":""}" onclick="subTab='all';render()">全部</button>
+    </div>
+    <div id="qlist">${renderQueue()}</div>`;
+  }
+  if(screen==="clients"){
+    if(detailId){
+      const c=clients.find(x=>x.cust===detailId);
+      const tabs=[["biz","业务"],["follow","跟进"],["grant","授权"]];
+      if(!subTab)subTab="biz";
+      body=`
+      <div class="link" onclick="detailId=null;subTab='';render()">‹ 返回客户列表</div>
+      <div class="card" style="margin-top:10px">
+        <div class="row spread"><h3>客户 ${esc(c.cust)}</h3><span class="tag g">${esc(c.state)}</span></div>
+        <div class="sub" style="margin-top:6px">关联项目：${c.proj}<br>客户确认：${c.ce} · 顾问接受：${c.ae}</div>
+      </div>
+      <div class="chips">${tabs.map(t=>`<button class="chip ${subTab===t[0]?"on":""}" onclick="subTab='${t[0]}';render()">${t[1]}</button>`).join("")}</div>
+      ${subTab==="biz"?`<div class="card"><h3>在办方案</h3>${proposals.filter(p=>p.cust===c.cust).map(p=>`<div class="fee"><div class="n">${p.id} · v${p.rev}</div><span class="tag ${p.tc}">${p.state}</span></div>`).join("")||'<div class="sub">暂无方案</div>'}</div>`:""}
+      ${subTab==="follow"?`<div class="card"><h3>跟进记录（只可更正、不可删除）</h3>
+        <div class="fee"><div class="n">首次沟通</div><div class="c">2026/9/23 08:40</div></div>
+        <textarea placeholder="新增跟进（超模板话术需人工署名）"></textarea><button class="btn sm" onclick="toast('跟进已记录并留痕')">添加记录</button></div>`:""}
+      ${subTab==="grant"?`<div class="card"><h3>授权状态</h3>
+        <div class="fee"><div class="n">服务关系</div><span class="tag g">已建立</span></div>
+        <div class="fee"><div class="n">问卷授权</div><span class="tag a">未授权（可由客户随时撤回）</span></div>
+        <div class="fee"><div class="n">项目授权</div><span class="tag g">PROJ-TECH-A</span></div></div>`:""}`;
+    }else{
+      body=`
+      <input class="search" placeholder="搜索客户编号" oninput="filterClients(this.value)">
+      <div class="h">我的客户（${clients.length}）</div>
+      <div id="clist">${clients.map(c=>`
+      <div class="card" onclick="openClient('${c.cust}')">
+        <div class="row spread"><h3>${esc(c.cust)}</h3><span class="tag g">服务中</span></div>
+        <div class="sub" style="margin-top:6px">${c.proj} · 建立于 ${c.ae}</div>
+      </div>`).join("")}</div>`;
+    }
+  }
+  if(screen==="proposals"){
+    body=`
+    <div class="row spread" style="margin:4px 2px 12px"><div class="h" style="margin:0">方案（${proposals.length}）</div>
+      <button class="btn sm" id="newp" onclick="toggleForm()">${subTab==="form"?"收起":"新建方案"}</button></div>
+    <div id="pform"></div>
+    <div id="plist2">${proposals.map(p=>`
+    <div class="card">
+      <div class="row spread"><h3>${p.id} · v${p.rev}</h3><span class="tag ${p.tc}">${p.state}</span></div>
+      <div class="sub" style="margin-top:6px">客户 ${p.cust} · ${p.proj}<br>有效期至 ${p.valid}（费表只读快照，不可改价）</div>
+    </div>`).join("")}</div>`;
+  }
+  if(screen==="profile"){
+    body=`
+    <div class="hero sig">
+      <div style="font-size:22px;font-weight:800">陈某</div>
+      <p style="margin-top:6px">资深顾问 · 备案号 BJ-2026-018<br>示例出入境咨询（北京）有限公司</p>
+      <div class="tag dark" style="margin-top:8px">已授权：PROJ-TECH-A</div>
+    </div>
+    <div class="card"><h3>展业承诺</h3><div class="sub">
+      · 不引导平台外收款，不私下收取任何费用<br>
+      · 不在平台外作出结果承诺或夸大表述<br>
+      · 不协助虚假材料，发现即停止服务并上报<br>
+      · 对客户信息保密，跨境共享须单独同意</div></div>
+    <div class="card"><h3>iPad 展业模式</h3><div class="sub">面向客户的需求采集与方案共读，含“不承诺事项”逐项知悉；演示模式与工作模式分离。</div>
+      <div class="link" style="margin-top:8px" onclick="toast('iPad模式：工作/演示双模式，演示不写入任何客户数据')">了解如何启用 ›</div></div>
+    <div class="card"><h3>合规与帮助</h3><div class="sub">遇到合规疑问可随时转平台合规台，不自行解释政策。</div></div>`;
+  }
+  const tabs=[["home","工作台","◔"],["clients","客户","☷"],["proposals","方案","≡"],["profile","我的","◌"]];
+  return `<div class="notch"></div><div class="screen">${body}</div>
+  <div class="tabbar">${tabs.map(t=>`<button class="${screen===t[0]?"on":""}" onclick="goAdvisor('${t[0]}')"><span class="ic">${t[2]}</span>${t[1]}</button>`).join("")}</div>`;
+}
+function renderQueue(){
+  const mode=subTab||"accept";
+  const list=queue.filter(q=>mode==="all"||(mode==="accept"?q.state==="待接受":q.state==="待平台分配"));
+  if(!list.length)return '<div class="card sub">该分类下暂无记录</div>';
+  return list.map(q=>`
+  <div class="card" id="q-${q.id}">
+    <div class="row spread"><h3>${q.id} · ${esc(q.cust)}</h3><span class="tag ${q.state==="待接受"?"a":""}">${q.state}</span></div>
+    <div class="sub" style="margin:8px 0">来源：${q.src}${q.proj?" · "+q.proj:""}<br>${esc(q.note)}</div>
+    ${q.state==="待接受"
+      ?`<div class="row" style="gap:8px"><button class="btn sm" style="flex:1" onclick="acceptQueue('${q.id}')">接受并建立关系</button><button class="btn sm ghost" onclick="toast('已转回平台分配队列')">转分配</button></div>`
+      :`<button class="btn sm" onclick="toast('已提交平台分配')">提交平台分配</button>`}
+  </div>`).join("");
+}
+function acceptQueue(id){
+  const q=queue.find(x=>x.id===id);
+  queue=queue.filter(x=>x.id!==id);
+  clients.push({id:"REL-"+String(clients.length+1).padStart(4,"0"),cust:q.cust,proj:q.proj||"待匹配",state:"服务关系已建立",ce:"2026/9/23 10:20",ae:"2026/9/23 10:20"});
+  document.getElementById("qlist").innerHTML=renderQueue();
+  toast("关系已建立（双向确认），客户已进入「我的客户」");
+}
+function goAdvisor(s){screen=s;subTab="";detailId=null;render()}
+function openClient(c){detailId=c;subTab="";render()}
+function filterClients(v){
+  document.getElementById("clist").innerHTML=clients.filter(c=>c.cust.includes(v)).map(c=>`<div class="card" onclick="openClient('${c.cust}')"><div class="row spread"><h3>${esc(c.cust)}</h3><span class="tag g">服务中</span></div><div class="sub" style="margin-top:6px">${c.proj} · 建立于 ${c.ae}</div></div>`).join("");
+}
+function toggleForm(){subTab=subTab==="form"?"":"form";render();setTimeout(()=>{if(subTab==="form")document.getElementById("pform").innerHTML=`
+  <div class="card">
+    <h3>编制方案（费表只读快照）</h3>
+    <label class="il">选择客户</label>
+    <div class="row" style="margin-bottom:10px">${clients.map((c,i)=>`<button class="chip ${i===0?"on":""}" onclick="pickChip(this)">${c.cust}</button>`).join("")}</div>
+    <label class="il">个性化建议（超模板内容将人工署名）</label><textarea id="f-adv"></textarea>
+    <label class="il">责任分工</label><textarea id="f-duty"></textarea>
+    <label class="il">有效期（天）</label><input class="inp" id="f-valid" value="14">
+    <div class="row" style="gap:8px;margin-top:6px">
+      <button class="btn sm berry" style="flex:1" onclick="saveProposal(1)">保存草稿并提交复核</button>
+      <button class="btn sm" style="flex:1" onclick="saveProposal(0)">仅保存草稿</button>
+    </div>
+  </div>`},10)}
+function saveProposal(submit){
+  const cust=document.querySelector("#pform .chip.on").textContent;
+  const p={id:"PROP-"+String(proposals.length+1).padStart(4,"0"),rev:1,cust,proj:"PROJ-TECH-A",state:submit?"待复核":"草稿",tc:submit?"a":"",valid:"2026/10/07"};
+  proposals.unshift(p);subTab="";render();toast(submit?"已提交四眼复核（复核人≠编制人）":"草稿已保存");
+}
+function showResult(){
+  document.getElementById("result").innerHTML=`
+  <div class="card" style="margin-top:12px">
+    <div class="row spread"><h3>评估结果</h3><span class="tag a">存在差距</span></div>
+    <div style="margin-top:10px">
+      <div class="tag g" style="margin:0 6px 6px 0">符合项</div><div class="sub" style="display:inline">年龄、职业方向与示例路径描述一致。</div>
+    </div>
+    <div style="margin-top:10px">
+      <div class="tag a" style="margin:0 6px 6px 0">差距项</div><div class="sub" style="display:inline">尚未取得岗位录用意向，缺少该路径的关键前置材料。</div>
+    </div>
+    <div style="margin-top:10px">
+      <div class="tag" style="margin:0 6px 6px 0">待确认</div><div class="sub" style="display:inline">语言材料、学历核验状态需补充后确认。</div>
+    </div>
+    <div class="hint" style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line)">信息整理与差距提示，不是资格认定、不构成法律意见、不代表获批结果，个案以官方审核为准。（规则集 v1）</div>
+  </div>`;
+}
+
+/* ================= 总后台 ================= */
+const adminModules=[
+ ["A01","内容治理","项目/收费版本四眼发布、核验台账"],
+ ["A02","供给准入","境内机构备案、境外持牌核验"],
+ ["A03","顾问管理","入驻四承诺、项目授权五步"],
+ ["A04","交易复核","方案复核、订单主体三要素门"],
+ ["A05","交付监控","任务进度、T0 通知、受控门户"],
+ ["A06","结算管理","佣金六态、双人结算（M4）"],
+ ["A07","质量基线","口径化看板、禁显指标拦截"],
+ ["A08","合规工作台","决策门、审计哈希链、投诉"],
+ ["A09","特性开关","数据源/功能开关与审计"],
+ ["A10","账号权限","三 realm、RBAC+ABAC"],
+ ["A11","数据看板","运营只读统计（示例口径）"],
+ ["A12","系统设置","环境、灰度、变更控制"]
+];
+function adminScreen(){
+  if(!subTab)subTab="home";
+  let m="";
+  if(subTab==="home"){
+    m=`<div class="dashgrid">
+      <div class="stat"><div class="l">已发布项目</div><div class="v">${projects.filter(p=>p.status==="published").length}</div></div>
+      <div class="stat"><div class="l">待复核方案</div><div class="v b">${proposals.filter(p=>p.state!=="草稿").length}</div></div>
+      <div class="stat"><div class="l">服务中关系</div><div class="v">${clients.length}</div></div>
+      <div class="stat"><div class="l">审计链状态</div><div class="v g">完整</div></div>
+    </div>
+    <div class="row spread" style="margin:4px 2px 12px"><div class="h" style="margin:0">模块地图</div><span class="tag a">影子运行 · 不向真实客户收费</span></div>
+    <div class="modgrid">${adminModules.map(x=>`
+      <div class="modcard" onclick="subTab='${x[0]}';render()">
+        <div class="t">${x[0]} ${x[1]} <span style="color:var(--faint)">›</span></div>
+        <div class="d">${x[2]}</div>
+      </div>`).join("")}
+    </div>
+    <div class="card" style="margin-top:14px"><h3>特性开关</h3>
+      <div class="fee"><div class="n">签证/护照数据源（visa_passport_data）</div><span class="tag r">强制 OFF</span></div>
+      <div class="fee"><div class="n">在线支付/资金托管</div><span class="tag r">OFF（线下对公）</span></div>
+      <div class="fee"><div class="n">服务方门户对外开放</div><span class="tag r">OFF</span></div>
+    </div>`;
+  }
+  if(subTab==="A01"){
+    m=`<table><thead><tr><th style="width:26%">项目</th><th style="width:18%">代码/版本</th><th style="width:16%">状态</th><th style="width:22%">四眼发布</th><th>核验</th></tr></thead><tbody>
+    ${projects.map(p=>`<tr>
+      <td><b>${esc(p.title)}</b></td><td>${p.code}<br><span class="hint">v${p.ver}</span></td>
+      <td><span class="tag ${p.status==="published"?"g":"a"}">${p.status==="published"?"已发布":"草稿"}</span></td>
+      <td class="hint">编辑 A / 核验 B / 发布 C</td>
+      <td>${p.status==="published"?'<span class="tag g">有效</span>':'<span class="tag">未核验</span>'}</td></tr>`).join("")}
+    </tbody></table>
+    <div class="card" style="margin-top:14px"><h3>发布门（全部满足才可发布）</h3><div class="sub">
+      关键事实全部核验且在有效期内 · 核验人≠最后编辑人 · 发布人≠最后编辑人 · 关联收费版本已发布 · 词库零命中</div></div>`;
+  }
+  if(subTab==="A02"){
+    m=`<table><thead><tr><th style="width:30%">机构</th><th style="width:24%">备案/牌照</th><th style="width:18%">有效期</th><th>状态</th></tr></thead><tbody>
+      <tr><td><b>示例出入境咨询（北京）有限公司</b></td><td>BJ-2026-018</td><td class="hint">至 2027/03</td><td><span class="tag g">有效</span></td></tr>
+      <tr><td><b>示例境外律所A</b></td><td>境外持牌（B2B）</td><td class="hint">核验中</td><td><span class="tag a">待备案</span></td></tr>
+    </tbody></table>
+    <div class="card" style="margin-top:14px"><div class="sub">备案失效前 60/30/7 天自动预警；失效后关联项目与顾问授权同步暂停。</div></div>`;
+  }
+  if(subTab==="A03"){
+    m=`<table><thead><tr><th style="width:22%">顾问</th><th style="width:24%">所属机构/备案</th><th style="width:24%">项目授权</th><th>状态</th></tr></thead><tbody>
+      <tr><td><b>陈某</b></td><td>示例出入境咨询 · BJ-2026-018</td><td>PROJ-TECH-A（至 2027/03）</td><td><span class="tag g">有效</span></td></tr>
+    </tbody></table>
+    <div class="card" style="margin-top:14px"><div class="sub">授权五步：三份必读逐项确认 → 申请 → 机构门校验 → 双人审批（申请人不可自批）→ 生效；到期停新接旧。</div></div>`;
+  }
+  if(subTab==="A07"){
+    m=`<div class="dashgrid">
+      <div class="stat"><div class="l">样本量</div><div class="v">${clients.length}</div></div>
+      <div class="stat"><div class="l">口径</div><div class="v" style="font-size:16px;padding-top:8px">m1-baseline-v1</div></div>
+    </div>
+    <div class="card"><h3>禁显指标（平台不采集、不展示）</h3><div class="sub">获批率 / 成功率 / 成交额排名 / 词库负向计数——样本不足时显示“样本积累中”，不做排名。</div></div>`;
+  }
+  if(subTab==="A08"){
+    m=`<div class="card"><h3>商业合规决策门</h3>
+      <div class="fee"><div class="n">D1–D9 决策</div><span class="tag a">0/9 已拍板</span></div>
+      <div class="fee"><div class="n">审计哈希链</div><span class="tag g">完整（启动重放校验）</span></div>
+      <div class="fee"><div class="n">备案窗口（841号令）</div><span class="tag a">补办窗口约至 2026/12/14</span></div>
+    </div>`;
+  }
+  if(subTab==="A09"){
+    m=`<div class="card">${[["签证/护照数据源","r","强制 OFF · 授权五要件未满足"],["在线支付","r","OFF · D8 线下对公口径"],["服务方门户","r","OFF · PIPIA 未完成"],["邀请制试点","a","筹备中"]].map(x=>`
+      <div class="fee"><div class="n">${x[0]}</div><span class="tag ${x[1]}">${x[2]}</span></div>`).join("")}
+    </div><div class="hint">所有开关切换均记录审计；强制 OFF 项无法在界面绕过。</div>`;
+  }
+  if(!m){
+    const mod=adminModules.find(x=>x[0]===subTab);
+    m=`<div class="card"><h3>${mod[0]} ${mod[1]}</h3><div class="sub">该模块随对应里程碑（M2–M5）交付，当前为占位框架，不放假数据、不放假入口。</div>
+    <div class="hint" style="margin-top:8px">规划说明：${mod[2]}</div></div>`;
+  }
+  const title=subTab==="home"?"运营工作台":adminModules.find(x=>x[0]===subTab)[1];
+  return `<div class="desktop">
+    <div class="side">
+      <div class="lg">TIP 总后台<span>ADMIN CONSOLE</span></div>
+      <a class="${subTab==="home"?"on":""}" onclick="subTab='home';render()"><b>00</b>工作台</a>
+      ${adminModules.map(x=>`<a class="${subTab===x[0]?"on":""}" onclick="subTab='${x[0]}';render()"><b>${x[0].slice(1)}</b>${x[1]}</a>`).join("")}
+    </div>
+    <div class="main">
+      <div class="mhead"><h2>${title}</h2><span class="pill">演示环境 · 示例数据</span></div>
+      <div class="mbody">${m}</div>
+    </div>
+  </div>`;
+}
+
+/* ================= 路由与渲染 ================= */
+function switchTerminal(t){
+  terminal=t;screen="home";subTab="";detailId=null;
+  ["client","advisor","admin"].forEach(x=>document.getElementById("t-"+x).classList.toggle("on",x===t));
+  render();
+}
+function render(){
+  const stage=document.getElementById("stage");
+  stage.innerHTML=terminal==="client"?clientScreen():terminal==="advisor"?advisorScreen():adminScreen();
+}
+render();
+</script>
+</body>
+</html>

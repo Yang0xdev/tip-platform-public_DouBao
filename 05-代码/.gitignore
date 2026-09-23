@@ -10,3 +10,4 @@ coverage/
 .DS_Store
 apps/client-app/dist-web/
 apps/advisor-app/dist-web/
+demo/_shots/
