@@ -49,6 +49,29 @@ export interface ProposalView {
   updatedAt: string;
 }
 
+export interface FollowView {
+  id: string;
+  text: string;
+  kind: "fact" | "internal";
+  createdAt: string;
+  correctedOf: string | null;
+  correctionNote: string | null;
+  corrected: boolean;
+}
+
+export interface ClientDetailView {
+  customerRef: string;
+  tabs: {
+    biz: {
+      proposals: Array<{ id: string; revision: number; state: string; validUntil: string }>;
+      orders: Array<{ id: string; contractState: string; freezeStatus: string | null; readyForCaseAt: string | null }>;
+      officialReceipts: string;
+    };
+    follow: { records: FollowView[] };
+    scope: { visible: string[]; notVisible: string[]; originalBatchApply: string };
+  };
+}
+
 export const api = {
   queue: (chip: string) =>
     req<{ records: ConsultationView[] }>(`/advisor/engagements/queue?chip=${chip}`),
@@ -58,5 +81,17 @@ export const api = {
   createProposal: (body: unknown) =>
     req<ProposalView>("/advisor/proposals/drafts", { method: "POST", body: JSON.stringify(body) }),
   submitProposal: (id: string) =>
-    req<ProposalView>(`/advisor/proposals/${id}/submit`, { method: "POST" })
+    req<ProposalView>(`/advisor/proposals/${id}/submit`, { method: "POST" }),
+  clientDetail: (relationshipId: string) =>
+    req<ClientDetailView>(`/advisor/clients/${relationshipId}/detail`),
+  addFollow: (customerRef: string, text: string, kind: "fact" | "internal") =>
+    req<FollowView>(`/advisor/clients/${customerRef}/follow-ups`, {
+      method: "POST",
+      body: JSON.stringify({ text, kind })
+    }),
+  correctFollow: (id: string, text: string, note: string) =>
+    req<FollowView>(`/advisor/follow-ups/${id}/correct`, {
+      method: "POST",
+      body: JSON.stringify({ text, note })
+    })
 };

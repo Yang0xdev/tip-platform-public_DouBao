@@ -34,6 +34,10 @@ import { OrderService } from "./order/order.service.js";
 import { OrderAdvisorController, OrderAdminController, OrderCustomerController, ContractTemplateAdminController } from "./order/order.controller.js";
 import { PaymentService } from "./payment/payment.service.js";
 import { PaymentCustomerController, PaymentAdminController, ChangeRequestAdminController } from "./payment/payment.controller.js";
+import { ClientDetailService } from "./clientdetail/clientdetail.service.js";
+import { ClientDetailAdvisorController, FollowUpCustomerController } from "./clientdetail/clientdetail.controller.js";
+import { IpadService } from "./ipad/ipad.service.js";
+import { IpadController } from "./ipad/ipad.controller.js";
 import { PrismaService } from "./persistence/prisma.service.js";
 import { SnapshotStore } from "./persistence/snapshot.store.js";
 
@@ -68,7 +72,10 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     ContractTemplateAdminController,
     PaymentCustomerController,
     PaymentAdminController,
-    ChangeRequestAdminController
+    ChangeRequestAdminController,
+    ClientDetailAdvisorController,
+    FollowUpCustomerController,
+    IpadController
   ],
   providers: [
     PrismaService,
@@ -89,7 +96,9 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     EngagementService,
     ProposalService,
     OrderService,
-    PaymentService
+    PaymentService,
+    ClientDetailService,
+    IpadService
   ]
 })
 export class AppModule {}

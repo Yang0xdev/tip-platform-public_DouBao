@@ -49,9 +49,25 @@
 - 端点：客户 /v1/orders/:id（payment-plan、payee-info、payment-vouchers、receipts、change-requests）；后台 /admin/payments（pending-verify、:orderId/verify、receipts）、/admin/order-changes。
 - 测试：payment.service.test.ts 6 场景全绿（待核验≠到账/重复凭证/金额不符与驳回重传/顾问禁验/退款冻结并行门/空说明与平台外边界）；HTTP 全链路冒烟；dev-seed 增补首付凭证→双人核验→收据→待建案。
 
+## 切片 5：顾问客户详情三页签 + iPad 双模式 + 后台 A04/A05（M2-03/07/08）✅
+- clientdetail 限界上下文（services/api/src/clientdetail/）：
+  - 客户详情 GET /advisor/clients/:relationshipId/detail（复用关系归属校验 advisorClientView，不与既有 clients/:relationshipId 路由冲突），三页签：
+    biz（方案编号/版本/状态/有效期 + 订单编号/合同态/冻结态/待建案，官方回执只读占位；**字段级 DTO 无支付账户/到账明细/投诉正文/服务方结算**）；
+    follow（跟进时间线 + 新增）；scope（可见/不可见清单，原件批次申请显“办理阶段开放 M3”）。
+  - 跟进记录：过词库生产点 pitch（42503），仅本人 active 客户可写（assertWritable）；fact 对客可见、internal 不对客；**不可删除只能更正**：旧条标 corrected 留存、新条 correctedOf 关联并必填更正原因（42505）；对客 GET /v1/follow-ups/mine 字段级过滤。
+  - 可选 SnapshotStore 持久化（kind=followup）。
+- ipad 限界上下文（services/api/src/ipad/），M2-07/08 双模式硬规则：
+  - 会话 start 默认 work；switch 需显式、重复切同模式拒（42602）；end 清理；模式切换/停留/尝试内部内容全部审计；一位客户一会话、他人不可操作（42606）。
+  - I-01 projects：仅已发布项目 + 已发布费表费项投影；演示模式境外收取方改中性“境外持牌方”。
+  - I-02 proposal：仅 pending_customer/customer_confirmed 可共读（未过 A05 拒 42603）；演示模式剔除 wordVersion/authorId/reviewerId/confirmSnapshot 等内部字段（抓包可验）；attemptInternal 演示模式 403/40301 + deny 审计。
+  - 讲解备注 checkRemark 过 pitch 词库（42604，第五生产点）。
+- admin-web：A04 关系分配（咨询队列：分配顾问/冲突裁决；双向关系只读表）、A05 报价与合同（复核队列通过/驳回带原因；订单一键“主体门→签署登记（客户 Consent 模拟）→生效”；合同模板五要素核验表）。
+- advisor-app：ClientDetailScreen 重写为真实三页签 + 新增跟进（fact/internal 切换）+ 内联更正表单。
+- 测试：clientdetail 4 场景、ipad 4 场景全绿（API 非 PG 合计 62）；Playwright 走查顾问端新增/更正跟进、后台 A04/A05 五视图零控制台错误；CI 六阶段通过。
+- 全局补丁：main.ts 增加 BigInt.prototype.toJSON（金额 amountMinor 统一字符串输出）。
+
 ## 后续切片
 - 切片 2：M2-04/05/06/13 方案版本化 + A05 复核 + 客户确认 + 规则快照（含第四生产点词库、人工署名、改价接口拒绝审计、有效期失效）。
 - 切片 3：M2-09/10 订单主体三要素门 + 合同五要素受控登记。
 - 切片 4：M2-11/12 付款计划/凭证核验/收据 + 退款调整只冻结不执行。
-- 切片 5：M2-03 顾问客户详情三页签 + M2-07/08 iPad 双模式（RN），admin A04/A05 页面。
 - M2-0 结转：M1 内存聚合回填 SnapshotStore（M2 新聚合直接持久化）。

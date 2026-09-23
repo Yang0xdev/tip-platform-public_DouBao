@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api, LS_ACTOR, type Actor, type MachinesMeta, type AuditVerify, type FeatureFlag } from "./api.js";
-import { A01Content, A02Supply, A03Advisors, A11Quality, A12Compliance } from "./modules.js";
+import { A01Content, A02Supply, A03Advisors, A04Assign, A05Contract, A11Quality, A12Compliance } from "./modules.js";
 
 /* ---------------- 模块地图（与总后台高保真、PRD 一致） ---------------- */
 const MODULES = [
@@ -166,9 +166,11 @@ function Shell({ actor, onLogout }: { actor: Actor; onLogout: () => void }) {
           {active === "A01" && <A01Content actor={actor} />}
           {active === "A02" && <A02Supply actor={actor} />}
           {active === "A03" && <A03Advisors actor={actor} />}
+          {active === "A04" && <A04Assign actor={actor} />}
+          {active === "A05" && <A05Contract actor={actor} />}
           {active === "A11" && <A11Quality actor={actor} />}
           {active === "A12" && <A12Compliance actor={actor} />}
-          {!["home", "A01", "A02", "A03", "A11", "A12"].includes(active) && <ModulePlaceholder code={active} />}
+          {!["home", "A01", "A02", "A03", "A04", "A05", "A11", "A12"].includes(active) && <ModulePlaceholder code={active} />}
         </div>
       </main>
     </div>

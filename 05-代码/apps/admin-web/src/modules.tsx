@@ -314,7 +314,194 @@ function MiniStat({ label, value, tone = "default" }: { label: string; value: st
   );
 }
 
-/* ============== A12 合规工作台（M1 子集） ============== */
+/* ============== A04 关系分配 ============== */
+
+interface ConsultationRow { id: string; source: string; state: string; projectCode: string | null; advisorId: string | null; customerRef: string; questionnaireGranted: boolean; conflictReason: string | null }
+interface RelationshipRow { id: string; customerRef: string; advisorId: string; state: string; customerEventAt: string | null; customerConfirmedAt: string | null; advisorAcceptedAt: string | null }
+
+export function A04Assign({ actor }: { actor: Actor }) {
+  const [tab, setTab] = useState<"queue" | "rel">("queue");
+  const [tick, setTick] = useState(0);
+  const queue = useApi<{ records: ConsultationRow[] }>("/admin/engagements/queue", actor, [tab, tick]);
+  const rels = useApi<{ records: RelationshipRow[] }>("/admin/engagements/relationships", actor, [tab, tick]);
+  const post = async (path: string, body?: unknown) => {
+    await api(path, actor, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body ?? {}) });
+    setTick((t) => t + 1);
+  };
+
+  return (
+    <div className="rise space-y-5">
+      <div className="flex gap-1.5">
+        {([["queue", "咨询队列（五来源）"], ["rel", "双向关系"]] as const).map(([k, label]) => (
+          <button key={k} onClick={() => setTab(k)} className={`px-4 h-9 rounded-full text-[12.5px] font-semibold transition ${tab === k ? "bg-navy text-white shadow-sh1" : "bg-white border border-line text-mut hover:border-navy/40"}`}>{label}</button>
+        ))}
+      </div>
+
+      {tab === "queue" && (
+        <Panel title="咨询队列" sub="名片/预约/分享只产生待分配咨询，不成立关系、不授权问卷；平台分配须客户确认后顾问才可接受；冲突未裁决锁方案/订单。">
+          <Loading {...queue} empty={(queue.data?.records.length ?? 0) === 0}>
+            <table className="w-full">
+              <thead><tr><Th w="12%">咨询号</Th><Th w="13%">来源</Th><Th w="13%">状态</Th><Th w="12%">项目</Th><Th w="12%">顾问</Th><Th>操作</Th></tr></thead>
+              <tbody>
+                {queue.data?.records.map((c) => (
+                  <tr key={c.id}>
+                    <Td mono>{c.id}</Td><Td>{c.source}</Td><Td><Badge state={c.state} /></Td>
+                    <Td mono>{c.projectCode ?? "—"}</Td><Td mono>{c.advisorId ?? "—"}</Td>
+                    <Td>
+                      {c.state === "pending_assign" && (
+                        <button className="text-[12px] font-semibold text-navy hover:underline" onClick={() => { const a = window.prompt("分配给顾问 id（如 adv-chen）"); if (a) void post(`/admin/engagements/${c.id}/assign`, { advisorId: a.trim() }); }}>分配顾问</button>
+                      )}
+                      {c.state === "conflict_pending" && (
+                        <button className="text-[12px] font-semibold text-bad hover:underline" onClick={() => { const a = window.prompt("裁决：保留顾问 id（留空=平台另行分配）"); const r = window.prompt("裁决原因"); if (r) void post(`/admin/engagements/${c.id}/resolve-conflict`, { advisorId: a?.trim() || null, reason: r }); }}>冲突裁决</button>
+                      )}
+                      {!["pending_assign", "conflict_pending"].includes(c.state) && <span className="text-[11.5px] text-faint">—</span>}
+                    </Td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Loading>
+        </Panel>
+      )}
+
+      {tab === "rel" && (
+        <Panel title="双向关系（一名客户一名主责）" sub="客户事件 + 顾问接受双向成立；换顾问/转分配必填原因；到期停新接旧。">
+          <Loading {...rels} empty={(rels.data?.records.length ?? 0) === 0}>
+            <table className="w-full">
+              <thead><tr><Th w="13%">关系号</Th><Th w="12%">客户</Th><Th w="12%">顾问</Th><Th w="12%">状态</Th><Th w="20%">客户事件</Th><Th>顾问接受</Th></tr></thead>
+              <tbody>
+                {rels.data?.records.map((r) => (
+                  <tr key={r.id}>
+                    <Td mono>{r.id}</Td><Td mono>{r.customerRef}</Td><Td mono>{r.advisorId}</Td><Td><Badge state={r.state} /></Td>
+                    <Td>{r.customerEventAt ? r.customerEventAt.slice(0, 16).replace("T", " ") : "—"}</Td>
+                    <Td>{r.advisorAcceptedAt ? r.advisorAcceptedAt.slice(0, 16).replace("T", " ") : "—"}</Td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Loading>
+        </Panel>
+      )}
+    </div>
+  );
+}
+
+/* ============== A05 报价与合同 ============== */
+
+interface ReviewRow { id: string; revision: number; state: string; customerRef: string; projectCode: string; authorId: string; validUntil: string; feeSnapshot: Array<{ label: string; nature: string; collector: string; currency: string; amountMinor: string | null; certainty: string }> }
+interface OrderRow { id: string; customerRef: string; projectCode: string; contractState: string; freezeStatus: string | null; advisorId: string; subject: { status: string } }
+interface TemplateRow2 { id: string; title: string; state: string; fiveElements: { scope: boolean; refund: boolean; overseasNotice: boolean; guarantee: boolean; privacy: boolean } }
+
+export function A05Contract({ actor }: { actor: Actor }) {
+  const [tab, setTab] = useState<"review" | "orders" | "tpl">("review");
+  const [tick, setTick] = useState(0);
+  const review = useApi<{ records: ReviewRow[] }>("/admin/proposals/review-queue", actor, [tab, tick]);
+  const orders = useApi<{ records: OrderRow[] }>("/admin/orders", actor, [tab, tick]);
+  const tpls = useApi<{ records: TemplateRow2[] }>("/admin/contract-templates", actor, [tab, tick]);
+  const post = async (path: string, body?: unknown) => {
+    await api(path, actor, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body ?? {}) });
+    setTick((t) => t + 1);
+  };
+
+  return (
+    <div className="rise space-y-5">
+      <div className="flex gap-1.5">
+        {([["review", "方案复核队列"], ["orders", "订单与主体门"], ["tpl", "合同模板（五要素）"]] as const).map(([k, label]) => (
+          <button key={k} onClick={() => setTab(k)} className={`px-4 h-9 rounded-full text-[12.5px] font-semibold transition ${tab === k ? "bg-navy text-white shadow-sh1" : "bg-white border border-line text-mut hover:border-navy/40"}`}>{label}</button>
+        ))}
+      </div>
+
+      {tab === "review" && (
+        <Panel title="报价复核（四眼 + 大额第二复核）" sub="复核人≠编制人；偏离仅限减免/分期且选自标准费表；减免超阈值（影子期配置 10%）须第二复核人且三人互异；驳回必填原因。">
+          <Loading {...review} empty={(review.data?.records.length ?? 0) === 0}>
+            <div className="space-y-3">
+              {review.data?.records.map((p) => (
+                <div key={p.id} className="rounded-xl border border-line p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-[12.5px]">
+                      <span className="font-mono font-bold">{p.id}</span>
+                      <span className="text-faint"> · rev{p.revision} · {p.customerRef} · {p.projectCode} · 编制 {p.authorId}</span>
+                    </div>
+                    <div className="flex gap-2 shrink-0">
+                      <button className="px-3 h-8 rounded-full bg-ok-bg text-ok text-[12px] font-semibold" onClick={() => void post(`/admin/proposals/${p.id}/approve`)}>复核通过</button>
+                      <button className="px-3 h-8 rounded-full bg-bad-bg text-bad text-[12px] font-semibold" onClick={() => { const r = window.prompt("驳回原因（逐条）"); if (r) void post(`/admin/proposals/${p.id}/reject`, { reasons: r.split(/[；;\n]/).map((x) => x.trim()).filter(Boolean) }); }}>驳回</button>
+                    </div>
+                  </div>
+                  <div className="mt-3 grid grid-cols-3 gap-2">
+                    {p.feeSnapshot.map((f) => (
+                      <div key={f.label} className="rounded-lg bg-line-soft px-3 py-2 text-[11.5px]">
+                        <div className="font-semibold">{f.label}</div>
+                        <div className="text-faint mt-0.5">{f.collector} · {f.certainty}</div>
+                        <div className="font-mono mt-0.5">{f.currency} {f.amountMinor ?? "tbc"}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Loading>
+        </Panel>
+      )}
+
+      {tab === "orders" && (
+        <Panel title="订单推进：主体三要素门 → 签署登记 → 生效" sub="门不过留差异、无强制通过；签署核验人≠顾问；生效受 D 门控制（影子环境放行）；24h 内 ≥3 次阻断告警。">
+          <Loading {...orders} empty={(orders.data?.records.length ?? 0) === 0}>
+            <div className="space-y-3">
+              {orders.data?.records.map((o) => (
+                <div key={o.id} className="rounded-xl border border-line p-4 flex items-center justify-between gap-3">
+                  <div className="text-[12.5px]">
+                    <span className="font-mono font-bold">{o.id}</span>
+                    <span className="text-faint"> · {o.customerRef} · {o.projectCode} · 顾问 {o.advisorId}</span>
+                    <div className="mt-1 flex gap-2 items-center"><Badge state={o.contractState} /><Badge state={o.subject.status} />{o.freezeStatus && <Badge state={o.freezeStatus} />}</div>
+                  </div>
+                  <div className="flex gap-2 shrink-0">
+                    {o.subject.status === "unchecked" && <button className="px-3 h-8 rounded-full bg-navy text-white text-[12px] font-semibold" onClick={() => void post(`/admin/orders/${o.id}/subject-check`)}>主体门核验</button>}
+                    {o.subject.status === "passed" && o.contractState === "gate_passed" && (
+                      <button className="px-3 h-8 rounded-full bg-navy text-white text-[12px] font-semibold" onClick={async () => {
+                        const list = await api<{ records: TemplateRow2[] }>("/admin/contract-templates", actor);
+                        const t = list.records.find((x) => x.state === "published");
+                        if (!t) { window.alert("无已发布合同模板"); return; }
+                        await post(`/admin/orders/${o.id}/signing/start`, { templateId: t.id });
+                        // 三条 Consent（客户身份头模拟）
+                        for (const k of ["fees", "non_commitment", "privacy"]) {
+                          await fetch(`/v1/orders/${o.id}/consents`, { method: "POST", headers: { "content-type": "application/json", "x-tip-realm": "customer", "x-tip-user": o.customerRef }, body: JSON.stringify({ key: k }) });
+                        }
+                        await post(`/admin/orders/${o.id}/contract/register`, { signedAt: new Date().toISOString(), artifactRef: "L3://demo-contract.pdf", method: "offline", registrarId: actor.user });
+                        await post(`/admin/orders/${o.id}/make-effective`);
+                      }}>签署登记并生效</button>
+                    )}
+                    {(o.contractState === "effective" || o.subject.status === "blocked") && <span className="text-[11.5px] text-faint">—</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Loading>
+        </Panel>
+      )}
+
+      {tab === "tpl" && (
+        <Panel title="合同模板（五要素齐备才可发布）" sub="服务范围/退款规则/境外告知/不保证条款/隐私条款；模板内容编辑走文档流程，本页只做状态与要素核验。">
+          <Loading {...tpls} empty={(tpls.data?.records.length ?? 0) === 0}>
+            <table className="w-full">
+              <thead><tr><Th w="14%">编号</Th><Th>标题</Th><Th w="12%">状态</Th><Th w="12%">服务范围</Th><Th w="12%">退款</Th><Th w="12%">境外告知</Th><Th w="12%">不保证</Th><Th w="10%">隐私</Th></tr></thead>
+              <tbody>
+                {tpls.data?.records.map((t) => (
+                  <tr key={t.id}>
+                    <Td mono>{t.id}</Td><Td>{t.title}</Td><Td><Badge state={t.state} /></Td>
+                    {(["scope", "refund", "overseasNotice", "guarantee", "privacy"] as const).map((k) => (
+                      <Td key={k}>{t.fiveElements[k] ? <span className="text-ok font-semibold">齐</span> : <span className="text-bad font-semibold">缺</span>}</Td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </Loading>
+        </Panel>
+      )}
+    </div>
+  );
+}
+
 
 interface TemplateRow { id: string; kind: string; code: string; version: number; title: string; state: string; authorId: string; reviewerId: string | null }
 interface RulesetRow { id: string; projectCode: string; version: number; state: string; editorId: string; reviewerId: string | null }
