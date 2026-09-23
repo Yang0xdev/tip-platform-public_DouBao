@@ -48,6 +48,15 @@ export class SnapshotStore {
       WHERE kind = ${kind}
       ORDER BY aggregate_id, version DESC
     `;
-    return rows.map((r) => ({ aggregateId: r.aggregate_id, version: Number(r.version), state: r.state, snapshot: r.snapshot }));
+    return rows.map((r) => ({ aggregateId: r.aggregate_id, version: Number(r.version), state: r.state, snapshot: r.snapshot as T }));
+  }
+
+  async listAll<T = unknown>(kind: string): Promise<Array<{ aggregateId: string; version: number; state: string; snapshot: T }>> {
+    if (!this.prisma.enabled) return [];
+    const rows = await this.prisma.db.aggregateSnapshot.findMany({
+      where: { kind },
+      orderBy: [{ aggregateId: "asc" }, { version: "asc" }]
+    });
+    return rows.map((r) => ({ aggregateId: r.aggregateId, version: Number(r.version), state: r.state, snapshot: r.snapshot as T }));
   }
 }

@@ -107,8 +107,15 @@ export class ProposalService implements OnModuleInit {
 
   async onModuleInit() {
     if (!this.snapshots?.enabled) return;
-    const rows = await this.snapshots.listLatest<ProposalRecord>("proposal");
-    for (const r of rows) this.proposals.set(r.aggregateId, { ...r.snapshot, state: r.state as ProposalState });
+    // 加载全部行（含同号各版本），保证 supersedesId 修订链重启后不断裂
+    const rows = await this.snapshots.listAll<ProposalRecord>("proposal");
+    let maxSeq = 0;
+    for (const r of rows) {
+      this.proposals.set(r.aggregateId, { ...r.snapshot, state: r.state as ProposalState });
+      const n = Number(r.aggregateId.replace("PROP-", ""));
+      if (n > maxSeq) maxSeq = n;
+    }
+    this.seq = maxSeq;
   }
 
   private persist(p: ProposalRecord) {
@@ -232,7 +239,7 @@ export class ProposalService implements OnModuleInit {
       }
       p.secondReviewerId = secondReviewerId;
     }
-    this.apply(p, "approve", reviewerId, { actorId: reviewerId, verifierId: reviewerId, publisherId: reviewerId });
+    this.apply(p, "approve", reviewerId, { reviewerId });
     p.reviewerId = reviewerId;
     p.validUntil = new Date(Date.now() + p.validDays * 86_400_000).toISOString();
     this.persist(p);
@@ -245,9 +252,9 @@ export class ProposalService implements OnModuleInit {
     const p = this.require(id);
     if (!reasons?.length || reasons.some((r) => !r.trim())) throw new ProposalError(422, "42317", "驳回必须逐条填写原因");
     if (reviewerId === p.authorId) throw new ProposalError(403, "42314", "复核人不得为编制顾问");
-    this.apply(p, "reject", reviewerId, { actorId: reviewerId, verifierId: reviewerId, publisherId: reviewerId });
+    this.apply(p, "reject", reviewerId, { reviewerId });
     p.reviewReasons.push(...reasons);
-    this.apply(p, "revise", reviewerId, { actorId: reviewerId, verifierId: reviewerId, publisherId: reviewerId });
+    this.apply(p, "revise", reviewerId);
     p.updatedAt = new Date().toISOString();
     this.persist(p);
     this.audit.record({ actor: reviewerId, realm: "staff", action: "proposal.reject", resource: p.id, result: "allow", reason: reasons.join("；") });
@@ -404,13 +411,12 @@ export class ProposalService implements OnModuleInit {
     return p;
   }
 
-  /** 走 core 状态机（含前置/四眼/有效期守卫） */
+  /** 走 core 状态机（含前置/四眼/有效期守卫）；ProposalContext 字段为 authorId/reviewerId */
   private buildCtx(p: ProposalRecord, actor: string, overrides: Record<string, unknown> = {}) {
     const project = this.catalog.listPublishedProjects().find((x) => x.code === p.projectCode);
     return {
-      editorId: p.authorId,
-      verifierId: p.reviewerId ?? "",
-      publisherId: p.reviewerId ?? "",
+      authorId: p.authorId,
+      reviewerId: p.reviewerId,
       actorId: actor,
       projectPublished: Boolean(project),
       feePublished: Boolean(project?.feeScheduleId),
@@ -441,9 +447,8 @@ export class ProposalService implements OnModuleInit {
     // invalidate/revise 等无守卫迁移仍走状态机白名单，只是放宽上下文
     const ctx = (skipGuard
       ? {
-          editorId: actor,
-          verifierId: actor,
-          publisherId: actor,
+          authorId: actor,
+          reviewerId: actor,
           actorId: actor,
           projectPublished: true,
           feePublished: true,
