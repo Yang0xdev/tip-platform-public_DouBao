@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { CurrentActor, RealmAllowed, RealmGuard, type Actor } from "../realm.guard.js";
 import { ProposalService, type ProposalDraftInput } from "./proposal.service.js";
+import { OrderService } from "../order/order.service.js";
 
 /** 顾问端：方案编制与提交复核（M2-04） */
 @Controller("advisor/proposals")
@@ -58,7 +59,10 @@ export class ProposalAdminController {
 @UseGuards(RealmGuard)
 @RealmAllowed("customer")
 export class ProposalCustomerController {
-  constructor(private readonly proposals: ProposalService) {}
+  constructor(
+    private readonly proposals: ProposalService,
+    private readonly orders: OrderService
+  ) {}
 
   @Get("mine")
   mine(@CurrentActor() actor: Actor) {
@@ -72,7 +76,10 @@ export class ProposalCustomerController {
 
   @Post(":id/confirm")
   confirm(@Param("id") id: string, @CurrentActor() actor: Actor) {
-    return this.proposals.confirm(id, actor.user);
+    const p = this.proposals.confirm(id, actor.user);
+    // M2-09/13：客户确认即自动生成订单草稿，固化方案/费表/规则快照
+    this.orders.createFromProposal(p, actor.user);
+    return p;
   }
 
   @Post(":id/revision")

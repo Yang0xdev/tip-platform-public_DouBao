@@ -26,6 +26,17 @@
 - 端点：顾问 /advisor/proposals（drafts、submit、mine、:id）；后台 /admin/proposals（review-queue、approve{secondReviewerId?}、reject{reasons[]}）；客户 /v1/proposals（mine、:id、confirm、revision{note}）。
 - 测试：proposal.service.test.ts 8 场景全绿；HTTP 全链路冒烟（草稿→提交→自审 42314→后台通过→客户确认固化 baseline-v1）；CI 通过。
 
+## 切片 3：订单主体三要素门 + 合同五要素受控登记（M2-09/10/13）✅
+- order 限界上下文（services/api/src/order/）：
+  - 订单生成：客户确认方案即自动生成订单草稿（proposal 控制器联动），固化方案/费表/词库版本快照与归因三字段（来源/关系/佣金分离）；佣金规则仅槽位，点击/咨询/预约/方案确认均不产生可提现佣金（M4）。
+  - 主体三要素门（唯一实现，四入口同关、无强制通过参数）：①签约方=境内备案有效主体（entity.usable）；②境外交付方已关联（持牌方或自营交付部门）；③收款账户户名=签约主体（白名单）。阻断列差异项并留 deny 审计；24h 内反复提交 ≥3 次触发 blocked_alert 合规告警线索。
+  - 合同模板版本化：五要素（服务范围与边界/退款规则/境外段告知/平台保障边界/隐私跨境告知）齐备才可发布；未发布模板不可进入签署（42202）。
+  - 告知 Consent：费用逐项/不承诺结果/隐私跨境逐条时间戳，缺一不可登记；线下/外部签署受控登记（签署时间+完成件引用+核验人，核验人≠顾问）；电子签通道 B 供应商未定不开发。
+  - 生效门：D 门未开（D2 未拍板）仅影子环境可生效（core effectiveGuard）；取消必填原因。
+  - 越权：客户/顾问查看他人订单 403（42244）+deny 审计；客户只能对本人订单作告知确认（42234）。
+- 端点：顾问 /advisor/orders（list、:id、block-reason、drafts 重建通道）；后台 /admin/orders（config、subject-check、signing/start、contract/register、make-effective、cancel）、/admin/contract-templates（drafts、update、publish）；客户 /v1/orders（mine、:id、consents）。
+- 测试：order.service.test.ts 9 场景全绿（含 ORD-2409-018 户名不符反例、D 门非影子不可生效、三要素阻断与告警）；HTTP 全链路冒烟通过；dev-seed 增补方案→订单全链路（影子生效 ORD-0001）。
+
 ## 后续切片
 - 切片 2：M2-04/05/06/13 方案版本化 + A05 复核 + 客户确认 + 规则快照（含第四生产点词库、人工署名、改价接口拒绝审计、有效期失效）。
 - 切片 3：M2-09/10 订单主体三要素门 + 合同五要素受控登记。

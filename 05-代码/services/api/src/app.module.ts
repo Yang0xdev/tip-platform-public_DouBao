@@ -30,6 +30,8 @@ import { EngagementAdvisorController } from "./engagement/engagement-advisor.con
 import { EngagementAdminController } from "./engagement/engagement-admin.controller.js";
 import { ProposalService } from "./proposal/proposal.service.js";
 import { ProposalAdvisorController, ProposalAdminController, ProposalCustomerController } from "./proposal/proposal.controller.js";
+import { OrderService } from "./order/order.service.js";
+import { OrderAdvisorController, OrderAdminController, OrderCustomerController, ContractTemplateAdminController } from "./order/order.controller.js";
 import { PrismaService } from "./persistence/prisma.service.js";
 import { SnapshotStore } from "./persistence/snapshot.store.js";
 
@@ -57,7 +59,11 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     EngagementAdminController,
     ProposalAdvisorController,
     ProposalAdminController,
-    ProposalCustomerController
+    ProposalCustomerController,
+    OrderAdvisorController,
+    OrderAdminController,
+    OrderCustomerController,
+    ContractTemplateAdminController
   ],
   providers: [
     PrismaService,
@@ -76,7 +82,8 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     QualityService,
     RealmGuard,
     EngagementService,
-    ProposalService
+    ProposalService,
+    OrderService
   ]
 })
 export class AppModule {}

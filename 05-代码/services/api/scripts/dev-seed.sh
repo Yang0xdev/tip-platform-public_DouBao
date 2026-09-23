@@ -91,4 +91,37 @@ C4=(-H "content-type: application/json" -H "x-tip-realm: customer" -H "x-tip-use
 curl -s "${C4[@]}" -X POST "$BASE/v1/engagements/capture" -d '{"source":"card_appointment","projectCode":"PROJ-TECH-A"}' >/dev/null
 echo "  pending_assign（待平台分配）: c-1902"
 
+echo "== 方案→订单全链路（M2-04～10/13，影子环境，客户 c-1980）"
+# 方案
+PROP=$(curl -s "${CHEN[@]}" -X POST "$BASE/advisor/proposals/drafts" -d '{
+  "customerRef":"c-1980","projectCode":"PROJ-TECH-A",
+  "advice":[{"text":"技术居留公开路径的学历与雇主条件与本人情况匹配，建议准备学位认证。","sourceRef":"PROJ-TECH-A@v1#conditions"}],
+  "responsibilities":"平台负责材料清单、进度提醒与受控登记，官方审核以当局为准。",
+  "nonCommitments":["不承诺获批结果","官方费以递交时为准"]}')
+PROP_ID=$(echo "$PROP" | j "['id']")
+curl -s "${CHEN[@]}" -X POST "$BASE/advisor/proposals/$PROP_ID/submit" >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/proposals/$PROP_ID/approve" >/dev/null
+curl -s "${C1[@]}" -X POST "$BASE/v1/proposals/$PROP_ID/confirm" >/dev/null
+echo "  proposal confirmed: $PROP_ID（确认即自动生成订单草稿）"
+# 三要素配置（境外方=自营交付部门；收款户名=签约主体）
+curl -s "${V[@]}" -X PUT "$BASE/admin/orders/config" -d '{
+  "overseasParty":{"linked":true,"name":"自营交付部门","licensed":false},
+  "payeeAccounts":[{"name":"示例出入境咨询（北京）有限公司","bank":"中国银行北京分行","account":"1100 0000 1234"}]}' >/dev/null
+ORD_ID=$(curl -s "${V[@]}" "$BASE/admin/orders" | j "['records'][0]['id']")
+curl -s "${V[@]}" -X POST "$BASE/admin/orders/$ORD_ID/subject-check" >/dev/null
+echo "  subject gate passed: $ORD_ID"
+# 合同模板（五要素齐备）
+TPL=$(curl -s "${V[@]}" -X POST "$BASE/admin/contract-templates/drafts" -d '{"title":"标准服务合同（示例）"}')
+TPL_ID=$(echo "$TPL" | j "['id']")
+curl -s "${V[@]}" -X POST "$BASE/admin/contract-templates/$TPL_ID/update" -d '{"scope":true,"refund":true,"overseasNotice":true,"guarantee":true,"privacy":true}' >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/contract-templates/$TPL_ID/publish" >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/orders/$ORD_ID/signing/start" -d "{\"templateId\":\"$TPL_ID\"}" >/dev/null
+for k in fees non_commitment privacy; do
+  curl -s "${C1[@]}" -X POST "$BASE/v1/orders/$ORD_ID/consents" -d "{\"key\":\"$k\"}" >/dev/null
+done
+SIGNED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+curl -s "${V[@]}" -X POST "$BASE/admin/orders/$ORD_ID/contract/register" -d "{\"signedAt\":\"$SIGNED_AT\",\"artifactRef\":\"l3://signed/$ORD_ID.pdf\",\"registrarId\":\"s-verifier\"}" >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/orders/$ORD_ID/make-effective" >/dev/null
+echo "  order effective（影子）: $ORD_ID"
+
 echo "== dev seed 完成（重跑会因唯一编码报错属正常，内存仓储重启即清空）"
