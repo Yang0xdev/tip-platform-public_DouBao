@@ -46,4 +46,49 @@ echo "  published project: $PROJ_ID"
 
 curl -s "${A[@]}" -X POST "$BASE/admin/catalog/projects/drafts" -d '{"code":"PROJ-DIGITAL-C","title":"C国数字游民（示例草稿）","body":"草稿内容，待核验。"}' >/dev/null
 echo "  draft project created"
+
+echo "== 顾问入驻 + 授权（M1-07/09，顾问 adv-chen）"
+CHEN=(-H "content-type: application/json" -H "x-tip-realm: staff" -H "x-tip-user: adv-chen")
+OB=$(curl -s "${CHEN[@]}" -X POST "$BASE/advisor/onboarding/drafts" -d "{
+  \"phone\":\"13800010001\",\"entityId\":\"$ENT_ID\",\"realName\":\"陈某\",\"materialRefs\":[\"l3://id-card\",\"l3://cert\"],
+  \"selfIntro\":\"专注技术居留，材料透明。\",\"title\":\"资深顾问\",\"yearsOfPractice\":6,\"filingNo\":\"BJ-2026-018\"}")
+OB_ID=$(echo "$OB" | j "['id']")
+for k in no_private_collection no_offplatform_promise no_exaggeration confidentiality; do
+  curl -s "${CHEN[@]}" -X POST "$BASE/advisor/onboarding/$OB_ID/commitment" -d "{\"key\":\"$k\"}" >/dev/null
+done
+curl -s "${CHEN[@]}" -X POST "$BASE/advisor/onboarding/$OB_ID/training" >/dev/null
+curl -s "${CHEN[@]}" -X POST "$BASE/advisor/onboarding/$OB_ID/submit" >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/advisors/$OB_ID/approve" >/dev/null
+echo "  advisor onboarded: adv-chen ($OB_ID)"
+curl -s "${CHEN[@]}" -X POST "$BASE/advisor/grants/PROJ-TECH-A/start" >/dev/null
+for m in project_rules banned_words fee_script; do
+  curl -s "${CHEN[@]}" -X POST "$BASE/advisor/grants/PROJ-TECH-A/confirm" -d "{\"materialKey\":\"$m\"}" >/dev/null
+done
+curl -s "${CHEN[@]}" -X POST "$BASE/advisor/grants/PROJ-TECH-A/submit" -d '{"requestedDays":500}' >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/advisors/grants/adv-chen/PROJ-TECH-A/approve" >/dev/null
+echo "  grant authorized: adv-chen × PROJ-TECH-A"
+
+echo "== 客户关系（M2-01/02，双向确认）"
+C1=(-H "content-type: application/json" -H "x-tip-realm: customer" -H "x-tip-user: c-1980")
+R1=$(curl -s "${C1[@]}" -X POST "$BASE/v1/engagements/capture" -d '{"source":"card_request","advisorId":"adv-chen","projectCode":"PROJ-TECH-A","note":"希望了解技术居留路径"}')
+R1_ID=$(echo "$R1" | j "['consultation']['id']")
+curl -s "${CHEN[@]}" -X POST "$BASE/advisor/engagements/$R1_ID/accept" >/dev/null
+echo "  active: c-1980 × adv-chen（名片请求，客户直接发起）"
+C2=(-H "content-type: application/json" -H "x-tip-realm: customer" -H "x-tip-user: c-2051")
+R2=$(curl -s "${C2[@]}" -X POST "$BASE/v1/engagements/capture" -d '{"source":"card_appointment","projectCode":"PROJ-TECH-A"}')
+R2_ID=$(echo "$R2" | j "['consultation']['id']")
+curl -s "${V[@]}" -X POST "$BASE/admin/engagements/$R2_ID/assign" -d '{"advisorId":"adv-chen"}' >/dev/null
+curl -s "${C2[@]}" -X POST "$BASE/v1/engagements/$R2_ID/confirm-assignment" >/dev/null
+curl -s "${CHEN[@]}" -X POST "$BASE/advisor/engagements/$R2_ID/accept" >/dev/null
+echo "  active: c-2051 × adv-chen（平台分配，双向确认）"
+# 待处理：一条待客户确认、一条待平台分配
+C3=(-H "content-type: application/json" -H "x-tip-realm: customer" -H "x-tip-user: c-2049")
+R3=$(curl -s "${C3[@]}" -X POST "$BASE/v1/engagements/capture" -d '{"source":"card_appointment","advisorId":"adv-chen","projectCode":"PROJ-TECH-A"}')
+R3_ID=$(echo "$R3" | j "['consultation']['id']")
+curl -s "${V[@]}" -X POST "$BASE/admin/engagements/$R3_ID/assign" -d '{"advisorId":"adv-chen"}' >/dev/null
+echo "  pending_accept（待客户确认）: c-2049"
+C4=(-H "content-type: application/json" -H "x-tip-realm: customer" -H "x-tip-user: c-1902")
+curl -s "${C4[@]}" -X POST "$BASE/v1/engagements/capture" -d '{"source":"card_appointment","projectCode":"PROJ-TECH-A"}' >/dev/null
+echo "  pending_assign（待平台分配）: c-1902"
+
 echo "== dev seed 完成（重跑会因唯一编码报错属正常，内存仓储重启即清空）"

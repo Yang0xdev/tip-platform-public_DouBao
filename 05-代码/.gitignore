@@ -9,3 +9,4 @@ coverage/
 *.log
 .DS_Store
 apps/client-app/dist-web/
+apps/advisor-app/dist-web/

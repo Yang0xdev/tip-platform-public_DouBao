@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "顾问展业",
+    "slug": "advisor-app",
+    "version": "0.1.0",
+    "orientation": "default",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": ["**/*"],
+    "ios": { "supportsTablet": true },
+    "android": {},
+    "web": { "output": "single" }
+  }
+}
