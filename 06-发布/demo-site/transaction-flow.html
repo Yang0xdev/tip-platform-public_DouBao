@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>交易全链路演示 · 透明身份规划平台</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23AF2D67'/%3E%3Cstop offset='1' stop-color='%23002661'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='9' fill='url(%23g)'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11.5' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800&display=swap">
+<style>
+:root{
+  --navy:#002661;--navy-h:#1E3E78;--navy50:#EDF1F8;--berry:#AF2D67;--berry50:#FAEEF4;
+  --paper:#F5F7FA;--ink:#1B2433;--mut:#5E6B7E;--faint:#8A95A6;--line:#E5E9F0;
+  --green:#177A5B;--green-bg:#E6F4EE;--amber:#B45309;--amber-bg:#FBF1E2;--red:#C03221;--red-bg:#FCEBEA;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Manrope','Noto Sans SC',system-ui,sans-serif;background:#E9EDF3;color:var(--ink);}
+.stage{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:34px 16px 70px;}
+.stage-head{text-align:center;margin-bottom:22px;max-width:560px;}
+.stage-head h1{font-size:21px;font-weight:800;letter-spacing:-.01em;}
+.stage-head p{font-size:12.5px;color:var(--mut);margin-top:7px;line-height:1.8;}
+.pill{display:inline-block;font-size:11px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:4px 12px;color:var(--mut);margin-top:9px;}
+/* steps indicator */
+.steps{display:flex;gap:8px;margin:18px 0 20px;align-items:center;flex-wrap:wrap;justify-content:center;}
+.dot{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--faint);font-weight:600;transition:color .3s;}
+.dot .n{width:24px;height:24px;border-radius:50%;background:#fff;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;transition:all .35s;}
+.dot.on{color:var(--navy);}
+.dot.on .n{background:linear-gradient(132deg,#AF2D67,#002661);border-color:transparent;color:#fff;}
+.dot.done .n{background:var(--navy);border-color:var(--navy);color:#fff;}
+.bar{width:22px;height:2px;background:var(--line);border-radius:2px;}
+/* phone */
+.phone{width:390px;height:800px;border-radius:42px;background:#11262B;padding:11px;box-shadow:0 30px 70px rgba(10,25,60,.35);position:relative;flex:none;}
+.screen{width:100%;height:100%;border-radius:32px;background:var(--paper);overflow:hidden;position:relative;}
+.sb{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:12px;font-weight:700;flex:none;}
+.view{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--paper);opacity:0;pointer-events:none;transform:translateX(28px) scale(.985);transition:transform .42s cubic-bezier(.22,1,.36,1),opacity .3s ease;}
+.view.on{opacity:1;pointer-events:auto;transform:none;z-index:2;}
+.body{flex:1;min-height:0;overflow-y:auto;padding:6px 18px 14px;scrollbar-width:none;}
+.body::-webkit-scrollbar{display:none;}
+/* generic */
+.topbar{display:flex;align-items:center;gap:10px;padding:6px 2px 14px;}
+.back{width:34px;height:34px;border-radius:50%;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;flex:none;}
+.topbar h2{font-size:16px;font-weight:800;}
+.card{background:#fff;border-radius:18px;padding:15px 16px;box-shadow:0 1px 2px rgba(16,37,96,.05);margin-bottom:12px;}
+.card h3{font-size:13.5px;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:7px;}
+.card .sub{font-size:11px;color:var(--faint);line-height:1.6;margin-bottom:10px;}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:999px;}
+.tag.green{background:var(--green-bg);color:var(--green);}
+.tag.navy{background:var(--navy50);color:var(--navy);}
+.tag.amber{background:var(--amber-bg);color:var(--amber);}
+.tag.berry{background:var(--berry50);color:var(--berry);}
+.hero{border-radius:20px;padding:18px 18px 16px;color:#fff;margin-bottom:14px;background:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);background-size:170% 170%;animation:drift 16s ease-in-out infinite alternate;box-shadow:0 14px 30px rgba(30,40,90,.28);}
+@keyframes drift{0%{background-position:0 30%}100%{background-position:100% 70%}}
+.hero .k{font-size:10.5px;opacity:.82;font-weight:600;letter-spacing:.04em;}
+.hero h4{font-size:18px;font-weight:800;margin:7px 0 3px;}
+.hero p{font-size:11px;opacity:.86;line-height:1.6;}
+.fee{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line);gap:10px;}
+.fee:last-child{border-bottom:none;}
+.fee .l{font-size:12px;font-weight:700;}
+.fee .d{font-size:10px;color:var(--faint);margin-top:3px;line-height:1.5;}
+.fee .v{font-size:12.5px;font-weight:800;white-space:nowrap;}
+.fee .v small{font-size:9.5px;color:var(--faint);font-weight:600;display:block;text-align:right;margin-top:2px;}
+.nototal{font-size:10.5px;color:var(--mut);background:var(--navy50);border-radius:12px;padding:9px 11px;line-height:1.6;margin-top:4px;}
+.row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #F0F3F8;font-size:11.5px;line-height:1.6;}
+.row:last-child{border-bottom:none;}
+.row .ic{width:20px;height:20px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;margin-top:1px;}
+.row .ic.ok{background:var(--green-bg);color:var(--green);}
+.row .ic.wait{background:var(--amber-bg);color:var(--amber);}
+.row b{font-weight:700;}
+.row span{color:var(--mut);}
+.consent{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid #F0F3F8;cursor:pointer;}
+.consent:last-child{border-bottom:none;}
+.cb{width:21px;height:21px;border-radius:7px;border:2px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;transition:all .25s;margin-top:1px;}
+.consent.on .cb{background:linear-gradient(132deg,#AF2D67,#002661);border-color:transparent;}
+.consent .t{font-size:12px;font-weight:700;}
+.consent .ts{font-size:10px;color:var(--faint);margin-top:3px;}
+.bank{border:1.5px solid var(--line);border-radius:14px;padding:12px 13px;margin-bottom:9px;transition:border-color .25s;}
+.bank.on{border-color:var(--navy);background:var(--navy50);}
+.bank .nm{font-size:12px;font-weight:800;}
+.bank .ac{font-size:11px;color:var(--mut);margin-top:4px;display:flex;justify-content:space-between;align-items:center;}
+.copy{font-size:10px;font-weight:700;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px 10px;}
+.warn{display:flex;gap:9px;background:var(--amber-bg);border-radius:13px;padding:10px 12px;font-size:10.5px;color:var(--amber);line-height:1.6;margin-bottom:11px;}
+.upload{border:1.5px dashed #B9C4D8;border-radius:15px;padding:20px 14px;text-align:center;cursor:pointer;transition:all .3s;}
+.upload .up-ic{width:40px;height:40px;border-radius:50%;background:var(--navy50);display:flex;align-items:center;justify-content:center;margin:0 auto 9px;color:var(--navy);}
+.upload .u1{font-size:12px;font-weight:800;}
+.upload .u2{font-size:10px;color:var(--faint);margin-top:4px;line-height:1.6;}
+.status-banner{display:flex;gap:10px;border-radius:14px;padding:12px 14px;font-size:11px;line-height:1.6;margin-bottom:12px;}
+.status-banner.wait{background:var(--amber-bg);color:var(--amber);}
+.status-banner.ok{background:var(--green-bg);color:var(--green);}
+.status-banner b{display:block;font-size:12px;margin-bottom:2px;}
+.receipt{border:2px solid var(--line);border-radius:16px;padding:16px;position:relative;overflow:hidden;background:#fff;}
+.receipt::after{content:"TRANSPARENT IDENTITY PLATFORM";position:absolute;top:46%;left:50%;transform:translate(-50%,-50%) rotate(-18deg);font-size:13px;font-weight:800;color:rgba(0,38,97,.07);letter-spacing:.12em;white-space:nowrap;}
+.receipt .r-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.receipt .r-h .logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(132deg,#AF2D67,#002661);display:flex;align-items:center;justify-content:center;}
+.receipt .r-h .rid{font-size:10px;color:var(--faint);text-align:right;line-height:1.5;}
+.rline{display:flex;justify-content:space-between;font-size:11px;padding:7px 0;border-bottom:1px dashed var(--line);}
+.rline b{font-weight:700;}
+.rline span{color:var(--mut);}
+.rline.total{border-bottom:none;margin-top:4px;font-size:13px;font-weight:800;}
+.foot-nav{display:flex;gap:10px;padding:12px 18px 16px;border-top:1px solid var(--line);background:#fff;flex:none;}
+.btn{flex:1;height:48px;border-radius:22px;border:none;font-size:13.5px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:transform .15s,box-shadow .2s;font-family:inherit;}
+.btn:active{transform:scale(.962);}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line);flex:0 0 104px;}
+.btn.primary{background:linear-gradient(132deg,#0B3A82,#002661);color:#fff;box-shadow:0 10px 22px rgba(0,38,97,.28);}
+.btn.berry{background:linear-gradient(132deg,#C63D80,#A5275F);color:#fff;box-shadow:0 10px 22px rgba(165,39,95,.28);}
+.btn:disabled{opacity:.45;box-shadow:none;}
+.home-link{position:fixed;top:18px;left:18px;font-size:11px;color:var(--mut);text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-weight:700;z-index:9;}
+@media(max-width:440px){.phone{width:100%;max-width:390px;}.home-link{display:none;}}
+</style>
+</head>
+<body>
+<a class="home-link" href="/">← 返回演示入口</a>
+<div class="stage">
+  <div class="stage-head">
+    <h1>交易全链路 · 交互演示</h1>
+    <p>从方案确认到合同登记、付款核验与收据，全程费用分项、不承诺结果、留痕可查。<br>以下均为虚构【示例】数据，仅用于流程演示。</p>
+    <span class="pill">M2 方案与交易 · 影子环境</span>
+  </div>
+  <div class="steps" id="steps"></div>
+  <div class="phone"><div class="screen" id="screen"></div></div>
+</div>
+<script>
+(function(){
+"use strict";
+var STEP_LABELS=["方案确认","合同与告知","付款凭证","核验到账","收据·待建案"];
+var state={step:0,consents:{fees:false,non_commitment:false,privacy:false},voucher:false,verified:false};
+var screen=document.getElementById("screen");
+var stepsEl=document.getElementById("steps");
+
+function svg(p,w){return '<svg viewBox="0 0 24 24" width="'+w+'" height="'+w+'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>';
+}
+var ICON={
+ check:'<path d="M20 6L9 17l-5-5"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ shield:'<path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/>',
+ lock:'<rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 018 0v3"/>',
+ upload:'<path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',
+ bank:'<path d="M3 10l9-6 9 6"/><path d="M5 10v8M19 10v8M9 10v8M15 10v8M3 20h18"/>',
+ doc:'<path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/>'
+};
+
+/* ---------- screen builders ---------- */
+function s1(){
+ return ''+
+ '<div class="sb"><span>9:41</span><span>透明身份规划</span><span>●●●</span></div>'+
+ '<div class="body">'+
+ '<div class="topbar"><div class="back">'+svg('<path d="M15 18l-6-6 6-6"',16)+'</div><h2>方案详情</h2></div>'+
+ '<div class="hero"><div class="k">YOUR PROPOSAL · 已通过平台复核</div><h4>A国技术居留 · 方案 v1</h4><p>顾问 陈某 编制 · 复核人 李某（与编制人互异）<br>有效期至 2026-10-07</p></div>'+
+ '<div class="card"><h3>'+svg(ICON.doc,15)+'路径要点 <span class="tag green" style="margin-left:auto">已复核</span></h3>'+
+ '<div class="sub">结论均可追溯至项目公开条件版本，未作结果承诺。</div>'+
+ '<div class="row"><div class="ic ok">'+svg(ICON.check,12)+'</div><div><b>学历与雇主条件</b><br><span>与公开路径匹配，建议准备学位认证（来源 PROJ-TECH-A@v1）</span></div></div>'+
+ '<div class="row"><div class="ic wait">'+svg(ICON.clock,12)+'</div><div><b>语言材料</b><br><span>待补充合规语言成绩，清单已列明</span></div></div>'+
+ '</div>'+
+ '<div class="card"><h3>'+svg(ICON.bank,15)+'费用分项（费表只读快照）</h3>'+
+ '<div class="fee"><div><div class="l">平台服务费</div><div class="d">收取方：示例出入境咨询（北京）· 签约时</div></div><div class="v">¥30,000.00<small>confirmed</small></div></div>'+
+ '<div class="fee"><div><div class="l">境外持牌方法律服务费</div><div class="d">收取方：境外律所A（持牌）· 估算</div></div><div class="v">$4,500.00<small>estimated</small></div></div>'+
+ '<div class="fee"><div><div class="l">官方申请费</div><div class="d">收取方待确认 · 未发生不预记</div></div><div class="v">TBC<small>tbc</small></div></div>'+
+ '<div class="nototal">不同币种不相加、不折算总价；TBC 不参与合计。最终以签署合同与实际发生为准。</div>'+
+ '</div>'+
+ '<div class="card"><h3>'+svg(ICON.shield,15)+'不承诺条款</h3>'+
+ '<div class="row"><div class="ic ok">'+svg(ICON.check,12)+'</div><div><span>平台整理信息与差距，不承诺获批结果，个案以官方审核为准。</span></div></div>'+
+ '</div>'+
+ '</div>'+
+ nav("ghost","申请修改","primary","确认方案");
+}
+
+function s2(){
+ var keys=[["fees","费用逐项知悉","平台服务费 ¥30,000；境外/官方费按实际发生"],["non_commitment","不承诺结果知悉","平台不承诺获批，官方审核以当局为准"],["privacy","隐私与跨境告知知悉","材料按授权范围使用，跨境共享单独同意"]];
+ var all=keys.every(function(k){return state.consents[k[0]];});
+ var h='<div class="sb"><span>9:41</span><span>订单与合同</span><span>●●●</span></div>'+
+ '<div class="body">'+
+ '<div class="topbar"><div class="back">'+svg('<path d="M15 18l-6-6 6-6"',16)+'</div><h2>订单 · 合同登记</h2></div>'+
+ '<div class="card"><h3>'+svg(ICON.shield,15)+'主体三要素对照 <span class="tag green" style="margin-left:auto">已通过</span></h3>'+
+ '<div class="row"><div class="ic ok">'+svg(ICON.check,12)+'</div><div><b>签约方</b><br><span>示例出入境咨询（北京）有限公司 · 备案 BJ-2026-018 有效</span></div></div>'+
+ '<div class="row"><div class="ic ok">'+svg(ICON.check,12)+'</div><div><b>境外交付方</b><br><span>自营交付部门（D2 决策门通过前影子值）</span></div></div>'+
+ '<div class="row"><div class="ic ok">'+svg(ICON.check,12)+'</div><div><b>收款账户</b><br><span>白名单账户户名 = 签约主体</span></div></div>'+
+ '<div class="nototal">客户付款、下单、顾问发起、财务核验四入口共享此判定，无强制通过。</div>'+
+ '</div>'+
+ '<div class="card"><h3>'+svg(ICON.doc,15)+'合同五要素 <span class="tag navy" style="margin-left:auto">标准合同 v1</span></h3>'+
+ '<div class="row"><div class="ic ok">'+svg(ICON.check,12)+'</div><div><span>服务范围与边界 · 退款规则 · 境外段告知 · 平台保障边界 · 隐私跨境告知，五要素齐备。</span></div></div>'+
+ '</div>'+
+ '<div class="card"><h3>'+svg(ICON.user,15)+'逐条告知确认（Consent）</h3>'+
+ '<div class="sub">请逐条阅读并确认，缺一不可完成签署登记。</div>';
+ keys.forEach(function(k){
+  var on=state.consents[k[0]];
+  h+='<div class="consent'+(on?" on":"")+'" data-k="'+k[0]+'"><div class="cb">'+(on?svg(ICON.check,12):"")+'</div><div><div class="t">'+k[1]+'</div><div class="ts">'+k[2]+(on?"<br>确认时间 "+new Date().toLocaleString("zh-CN"):"")+'</div></div></div>';
+ });
+ h+='</div>'+
+ '<div class="card"><h3>'+svg(ICON.lock,15)+'签署登记</h3>'+
+ '<div class="row"><div class="ic '+(all?"ok":"wait")+'">'+(all?svg(ICON.check,12):svg(ICON.clock,12))+'</div><div><span>'+(all?"告知完成，合同可进入签署登记（核验人≠顾问）":"待全部告知确认")+'</span></div></div>'+
+ '</div>'+
+ '</div>'+nav("ghost","上一步","primary",all?"进入付款":"请完成全部告知",!all);
+ return h;
+}
+
+function s3(){
+ var h='<div class="sb"><span>9:41</span><span>合同首付</span><span>●●●</span></div>'+
+ '<div class="body">'+
+ '<div class="topbar"><div class="back">'+svg('<path d="M15 18l-6-6 6-6"',16)+'</div><h2>付款 · 第 1 期</h2></div>';
+ if(state.voucher){
+  h+='<div class="status-banner wait"><div>'+svg(ICON.clock,18)+'</div><div><b>凭证待核验 · 不代表到账</b>财务将与银行流水双人核对，请留意结果。</div></div>';
+ }
+ h+='<div class="warn"><div>'+svg(ICON.lock,15)+'</div><div>请仅向签约主体对公账户转账；<b>请勿向任何个人账户转账</b>，平台不会在聊天中索要验证码。</div></div>'+
+ '<div class="card"><h3>'+svg(ICON.bank,15)+'签约主体对公账户（白名单）</h3>'+
+ '<div class="bank on"><div class="nm">示例出入境咨询（北京）有限公司</div><div class="ac"><span>中国银行北京分行 · 1100 0000 1234</span><span class="copy">复制</span></div></div>'+
+ '<div class="nototal">非签约主体账户不在此展示，也无复制入口。</div>'+
+ '</div>';
+ if(!state.voucher){
+  h+='<div class="card"><h3>'+svg(ICON.upload,15)+'上传转账凭证</h3>'+
+  '<div class="upload" id="up"><div class="up-ic">'+svg(ICON.upload,20)+'</div><div class="u1">点击上传凭证</div><div class="u2">JPG / PDF · 不超过 20MB<br>上传后状态为“待核验”</div></div>'+
+  '</div>';
+ }else{
+  h+='<div class="card"><h3>'+svg(ICON.doc,15)+'凭证已上传 <span class="tag amber" style="margin-left:auto">待核验</span></h3>'+
+  '<div class="row"><div class="ic wait">'+svg(ICON.clock,12)+'</div><div><b>voucher_seed_0001.jpg</b><br><span>金额 ¥30,000.00 · 上传于刚刚</span></div></div>'+
+  '<div class="nototal">核验通过前，任何终端都不会显示“已付款/已到账”。</div>'+
+  '</div>';
+ }
+ h+='</div>'+nav("ghost","上一步","primary",state.voucher?"提交财务核验":"请先上传凭证",!state.voucher);
+ return h;
+}
+
+function s4(){
+ var h='<div class="sb"><span>9:41</span><span>财务核验</span><span>●●●</span></div><div class="body">'+
+ '<div class="topbar"><div class="back">'+svg('<path d="M15 18l-6-6 6-6"',16)+'</div><h2>核验进度</h2></div>';
+ if(!state.verified){
+  h+='<div class="status-banner wait"><div>'+svg(ICON.clock,18)+'</div><div><b>pending_verify · 凭证待核验</b>财务双人核对：户名、金额、银行流水。</div></div>'+
+  '<div class="card"><h3>'+svg(ICON.shield,15)+'核验规则（职责分离）</h3>'+
+  '<div class="row"><div class="ic ok">'+svg(ICON.check,12)+'</div><div><span>核验人为财务，<b>≠顾问</b>；第二财务复核人共同确认。</span></div></div>'+
+  '<div class="row"><div class="ic ok">'+svg(ICON.check,12)+'</div><div><span>凭证金额 = 应付 ¥30,000.00，户名 = 签约主体。</span></div></div>'+
+  '<div class="row"><div class="ic ok">'+svg(ICON.check,12)+'</div><div><span>凭证哈希查重通过，非重复凭证。</span></div></div>'+
+  '</div>'+
+  '<div class="card"><div class="upload" id="simverify"><div class="up-ic" style="background:var(--green-bg);color:var(--green)">'+svg(ICON.check,20)+'</div><div class="u1">模拟财务双人核验通过</div><div class="u2">演示：点击后凭证转为 verified 并自动开具收据</div></div></div>';
+ }else{
+  h+='<div class="status-banner ok"><div>'+svg(ICON.check,18)+'</div><div><b>verified · 已核验到账</b>收据已自动开具，订单进入待建案。</div></div>'+
+  '<div class="card"><h3>'+svg(ICON.doc,15)+'核验记录</h3>'+
+  '<div class="row"><div class="ic ok">'+svg(ICON.check,12)+'</div><div><span>核验人 fin-1 · 第二核验人 fin-2，与顾问互异。</span></div></div>'+
+  '<div class="row"><div class="ic ok">'+svg(ICON.check,12)+'</div><div><span>到账 ¥30,000.00，收据 RCP-0001 已生成。</span></div></div>'+
+  '</div>';
+ }
+ h+='</div>'+nav("ghost","上一步",state.verified?"primary":"primary",state.verified?"查看收据":"等待核验…",false);
+ return h;
+}
+
+function s5(){
+ var h='<div class="sb"><span>9:41</span><span>收据 · 待建案</span><span>●●●</span></div><div class="body">'+
+ '<div class="topbar"><div class="back">'+svg('<path d="M15 18l-6-6 6-6"',16)+'</div><h2>电子收据</h2></div>'+
+ '<div class="receipt"><div class="r-h"><div class="logo">'+svg('<path d="M20 6L9 17l-5-5"',15)+'</div><div class="rid">收据编号 RCP-0001<br>开具于 '+new Date().toLocaleDateString("zh-CN")+'</div></div>'+
+ '<div class="rline"><b>订单</b><span>ORD-0001 · 第 1 期（合同首付）</span></div>'+
+ '<div class="rline"><b>项目</b><span>A国技术居留 PROJ-TECH-A</span></div>'+
+ '<div class="rline"><b>收取方</b><span>示例出入境咨询（北京）有限公司</span></div>'+
+ '<div class="rline total"><b>金额</b><span>CNY ¥30,000.00</span></div>'+
+ '</div>'+
+ '<div class="card" style="margin-top:13px"><h3>'+svg(ICON.shield,15)+'订单状态：待建案</h3>'+
+ '<div class="row"><div class="ic ok">'+svg(ICON.check,12)+'</div><div><span>合同已生效 + 首付已核验 → 等待 M3 建案与材料清单。</span></div></div>'+
+ '<div class="row"><div class="ic wait">'+svg(ICON.clock,12)+'</div><div><span>官方/境外第三方费按实际发生代收代付，未发生不预记。</span></div></div>'+
+ '</div>'+
+ '<div class="card"><h3>'+svg(ICON.doc,15)+'如需变更</h3>'+
+ '<div class="sub">退款 / 分期 / 方案 / 费用争议可提交变更申请，订单即冻结、生成编号，由平台在后续流程处理；不存在“提交即生效”。</div>'+
+ '<div class="nototal">平台外交易无法受理：登记订单才享平台保障。</div>'+
+ '</div>'+
+ '</div>'+nav("ghost","重新演示","primary","完成");
+ return h;
+}
+
+function nav(lc,lt,pc,pt,pd){
+ return '<div class="foot-nav">'+
+ '<button class="btn '+lc+'" id="b-left">'+lt+'</button>'+
+ '<button class="btn '+pc+'" id="b-right"'+(pd?" disabled":"")+'>'+pt+'</button></div>';
+}
+
+var BUILDERS=[s1,s2,s3,s4,s5];
+function render(){
+ screen.innerHTML='<div class="view on">'+BUILDERS[state.step]()+'</div>';
+ // steps indicator
+ stepsEl.innerHTML=STEP_LABELS.map(function(l,i){
+  var cls=i===state.step?"on":(i<state.step?"done":"");
+  return '<div class="dot '+cls+'"><div class="n">'+(i<state.step?svg(ICON.check,11):(i+1))+'</div>'+l+'</div>'+(i<STEP_LABELS.length-1?'<div class="bar"></div>':"");
+ }).join("");
+ bind();
+}
+
+function bind(){
+ var l=document.getElementById("b-left"),r=document.getElementById("b-right");
+ l.onclick=function(){
+  if(state.step===0){location.href="/";return;}
+  if(state.step===4){ // reset
+   state={step:0,consents:{fees:false,non_commitment:false,privacy:false},voucher:false,verified:false};render();return;
+  }
+  state.step--;render();
+ };
+ r.onclick=function(){
+  if(r.disabled)return;
+  if(state.step===0){state.step=1;render();return;}
+  if(state.step===1){state.step=2;render();return;}
+  if(state.step===2){state.step=3;render();return;}
+  if(state.step===3){
+   if(!state.verified)return; // 需先核验
+   state.step=4;render();return;
+  }
+ };
+ // consents
+ var cs=screen.querySelectorAll(".consent");
+ cs.forEach(function(el){el.onclick=function(){var k=el.getAttribute("data-k");state.consents[k]=!state.consents[k];render();};});
+ // upload
+ var up=document.getElementById("up");
+ if(up)up.onclick=function(){state.voucher=true;render();};
+ // simulate verify
+ var sv=document.getElementById("simverify");
+ if(sv)sv.onclick=function(){state.verified=true;render();};
+ // copy buttons
+ screen.querySelectorAll(".copy").forEach(function(c){c.onclick=function(){c.textContent="已复制";};});
+}
+render();
+})();
+</script>
+</body>
+</html>

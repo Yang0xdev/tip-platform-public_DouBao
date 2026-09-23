@@ -30,6 +30,12 @@ body{font-family:"Manrope","Noto Sans SC",-apple-system,"PingFang SC",sans-serif
 .tile b{font-size:17px}
 .tile .d{font-size:13px;color:var(--mut);line-height:1.7}
 .tile .go{margin-top:auto;font-size:13px;font-weight:700;color:var(--navy);padding-top:6px}
+.feature{display:block;text-decoration:none;border-radius:22px;padding:22px 24px;color:#fff;margin:8px 0 26px;background:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);background-size:170% 170%;animation:fd 16s ease-in-out infinite alternate;box-shadow:0 18px 40px rgba(30,40,90,.3)}
+@keyframes fd{0%{background-position:0 30%}100%{background-position:100% 70%}}
+.feature .f-k{font-size:11px;font-weight:700;letter-spacing:.08em;opacity:.85}
+.feature .f-t{font-size:20px;font-weight:800;margin:8px 0 6px}
+.feature .f-d{font-size:12.5px;line-height:1.7;opacity:.9}
+.feature .f-go{margin-top:12px;font-size:13px;font-weight:800}
 .foot{margin-top:40px;text-align:center;font-size:12px;color:var(--faint);line-height:2}
 @media(max-width:640px){.grid{grid-template-columns:1fr}.hero{padding:30px 24px}.hero h1{font-size:23px}}
 </style>
@@ -42,6 +48,13 @@ body{font-family:"Manrope","Noto Sans SC",-apple-system,"PingFang SC",sans-serif
     <p>一个总后台、两个终端、一个 B2B 受控门户。费用分项可核验、进度可追踪、服务关系双向确认；不承诺获批结果，不展示成功率。</p>
     <div class="meta"><span>UI 冻结 v1.3</span><span>点击进入各端可操作</span><span>数据均为虚构【示例】</span></div>
   </div>
+
+  <a class="feature" href="transaction-flow">
+    <div class="f-k">NEW · M2 方案与交易</div>
+    <div class="f-t">交易全链路交互演示</div>
+    <div class="f-d">方案确认 → 主体三要素门与合同登记 → 对公付款凭证 → 财务双人核验 → 收据与待建案，可逐步操作。</div>
+    <div class="f-go">开始体验 ›</div>
+  </a>
 
   <div class="h2">选择要查看的端</div>
   <div class="grid">
