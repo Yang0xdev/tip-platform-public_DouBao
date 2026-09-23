@@ -3,10 +3,10 @@ import { FlatList, Text, View, Pressable, RefreshControl } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
-import { api, type ProjectView } from "../api.js";
-import { listFavorites, type FavoriteItem } from "../storage.js";
-import { Card, GradientButton, Loading, ErrorBox, EmptyBox, Tag, colors, signatureGradient } from "../ui.js";
-import type { RootStackParamList } from "../navigation.js";
+import { api, type ProjectView } from "../api";
+import { listFavorites, type FavoriteItem } from "../storage";
+import { Card, GradientButton, Loading, ErrorBox, EmptyBox, Tag, colors, signatureGradient } from "../ui";
+import type { RootStackParamList } from "../navigation";
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 

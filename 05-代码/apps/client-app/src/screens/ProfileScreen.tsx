@@ -2,9 +2,9 @@ import { useCallback, useState } from "react";
 import { ScrollView, Text, View, Pressable } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { listFavorites } from "../storage.js";
-import { Card, Tag, colors } from "../ui.js";
-import type { RootStackParamList } from "../navigation.js";
+import { listFavorites } from "../storage";
+import { Card, Tag, colors } from "../ui";
+import type { RootStackParamList } from "../navigation";
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 

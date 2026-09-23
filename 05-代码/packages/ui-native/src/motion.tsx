@@ -9,7 +9,7 @@ import Animated, {
   useAnimatedStyle
 } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
-import { motion, navyButtonGradient, berryButtonGradient, radius } from "./tokens.js";
+import { motion, navyButtonGradient, berryButtonGradient, radius } from "./tokens";
 
 /** 页面推进自定义进入动画：420ms 贝塞尔 + 14px 上移 + 0.985→1 缩放（G-P6 v1.3） */
 export function screenEntering(delay = 0) {

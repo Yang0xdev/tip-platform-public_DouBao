@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Text, View, Pressable, ScrollView } from "react-native";
-import { api, type GlobalAccessStatus } from "../api.js";
-import { Card, Loading, ErrorBox, Tag, colors } from "../ui.js";
+import { api, type GlobalAccessStatus } from "../api";
+import { Card, Loading, ErrorBox, Tag, colors } from "../ui";
 
 /**
  * 全球通行（M1-16 框架态 / Q6 门）：

@@ -3,7 +3,7 @@ import React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import RootNavigator from "./src/navigation.js";
+import RootNavigator from "./src/navigation";
 
 /**
  * 客户端 M1（PRD-M1 M1-12～M1-16）：

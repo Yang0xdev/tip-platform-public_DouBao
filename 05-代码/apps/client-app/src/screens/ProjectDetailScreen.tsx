@@ -2,10 +2,10 @@ import { useCallback, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { useFocusEffect, useNavigation, type RouteProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { api, type ProjectView, type FeeScheduleView } from "../api.js";
-import { isFavorite, toggleFavorite } from "../storage.js";
-import { Card, FeeLine, GradientButton, Loading, ErrorBox, Tag, colors } from "../ui.js";
-import type { RootStackParamList } from "../navigation.js";
+import { api, type ProjectView, type FeeScheduleView } from "../api";
+import { isFavorite, toggleFavorite } from "../storage";
+import { Card, FeeLine, GradientButton, Loading, ErrorBox, Tag, colors } from "../ui";
+import type { RootStackParamList } from "../navigation";
 
 type Nav = NativeStackNavigationProp<RootStackParamList, "ProjectDetail">;
 type R = RouteProp<RootStackParamList, "ProjectDetail">;

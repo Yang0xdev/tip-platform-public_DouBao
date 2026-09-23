@@ -2,9 +2,9 @@ import { useCallback, useMemo, useState } from "react";
 import { FlatList, Text, TextInput, View, Pressable } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { api, type ProjectView } from "../api.js";
-import { Card, Loading, ErrorBox, EmptyBox, Tag, colors } from "../ui.js";
-import type { RootStackParamList } from "../navigation.js";
+import { api, type ProjectView } from "../api";
+import { Card, Loading, ErrorBox, EmptyBox, Tag, colors } from "../ui";
+import type { RootStackParamList } from "../navigation";
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 

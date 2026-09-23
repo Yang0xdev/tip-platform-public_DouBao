@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Pressable, Text, View, type ViewStyle } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from "react-native-reanimated";
-import { colors, motion } from "./tokens.js";
+import { colors, motion } from "./tokens";
 
 interface TabBarProps {
   tabs: string[];

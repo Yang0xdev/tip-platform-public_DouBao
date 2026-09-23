@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { ScrollView, Text, TextInput, View, Pressable } from "react-native";
 import { useRoute, type RouteProp } from "@react-navigation/native";
-import { api, type Questionnaire, type EvaluateResponse } from "../api.js";
-import { Card, GradientButton, Loading, ErrorBox, Tag, colors } from "../ui.js";
-import type { RootStackParamList } from "../navigation.js";
+import { api, type Questionnaire, type EvaluateResponse } from "../api";
+import { Card, GradientButton, Loading, ErrorBox, Tag, colors } from "../ui";
+import type { RootStackParamList } from "../navigation";
 
 type R = RouteProp<RootStackParamList, "Assessment">;
 type Answers = Record<string, string | number | undefined>;

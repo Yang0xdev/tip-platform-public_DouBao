@@ -28,6 +28,8 @@ import { EngagementService } from "./engagement/engagement.service.js";
 import { EngagementCustomerController } from "./engagement/engagement-customer.controller.js";
 import { EngagementAdvisorController } from "./engagement/engagement-advisor.controller.js";
 import { EngagementAdminController } from "./engagement/engagement-admin.controller.js";
+import { ProposalService } from "./proposal/proposal.service.js";
+import { ProposalAdvisorController, ProposalAdminController, ProposalCustomerController } from "./proposal/proposal.controller.js";
 import { PrismaService } from "./persistence/prisma.service.js";
 import { SnapshotStore } from "./persistence/snapshot.store.js";
 
@@ -52,7 +54,10 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     QualityController,
     EngagementCustomerController,
     EngagementAdvisorController,
-    EngagementAdminController
+    EngagementAdminController,
+    ProposalAdvisorController,
+    ProposalAdminController,
+    ProposalCustomerController
   ],
   providers: [
     PrismaService,
@@ -70,7 +75,8 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     DataSourceService,
     QualityService,
     RealmGuard,
-    EngagementService
+    EngagementService,
+    ProposalService
   ]
 })
 export class AppModule {}

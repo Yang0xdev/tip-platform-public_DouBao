@@ -3,7 +3,7 @@
  * 比较页只读本地快照（id/version 用于检测内容更新）。
  */
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import type { ProjectView } from "./api.js";
+import type { ProjectView } from "./api";
 
 const KEY = "tip.favorites.v1";
 

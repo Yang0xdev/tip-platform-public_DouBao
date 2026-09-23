@@ -5,13 +5,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { colors } from "@tip/ui-native";
 
-import HomeScreen from "./screens/HomeScreen.js";
-import ProjectListScreen from "./screens/ProjectListScreen.js";
-import ProjectDetailScreen from "./screens/ProjectDetailScreen.js";
-import AssessmentScreen from "./screens/AssessmentScreen.js";
-import GlobalAccessScreen from "./screens/GlobalAccessScreen.js";
-import FavoritesScreen from "./screens/FavoritesScreen.js";
-import ProfileScreen from "./screens/ProfileScreen.js";
+import HomeScreen from "./screens/HomeScreen";
+import ProjectListScreen from "./screens/ProjectListScreen";
+import ProjectDetailScreen from "./screens/ProjectDetailScreen";
+import AssessmentScreen from "./screens/AssessmentScreen";
+import GlobalAccessScreen from "./screens/GlobalAccessScreen";
+import FavoritesScreen from "./screens/FavoritesScreen";
+import ProfileScreen from "./screens/ProfileScreen";
 
 export type TabParamList = {
   HomeTab: undefined;
