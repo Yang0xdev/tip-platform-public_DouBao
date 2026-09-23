@@ -37,6 +37,18 @@
 - 端点：顾问 /advisor/orders（list、:id、block-reason、drafts 重建通道）；后台 /admin/orders（config、subject-check、signing/start、contract/register、make-effective、cancel）、/admin/contract-templates（drafts、update、publish）；客户 /v1/orders（mine、:id、consents）。
 - 测试：order.service.test.ts 9 场景全绿（含 ORD-2409-018 户名不符反例、D 门非影子不可生效、三要素阻断与告警）；HTTP 全链路冒烟通过；dev-seed 增补方案→订单全链路（影子生效 ORD-0001）。
 
+## 切片 4：付款计划/凭证核验/收据 + 变更退款冻结（M2-11/12，D8 保守口径）✅
+- payment 限界上下文（services/api/src/payment/）：
+  - PaymentPlan：M3 前仅合同首付（平台服务费 confirmed）到期；官方/第三方费显“未发生/not_accrued”，不预记应收；期次与案件节点挂钩。
+  - 收款指引：仅展示签约主体对公账户（白名单、户名=主体），“请勿向个人账户转账”等防骗提示常驻；非主体账户无信息。
+  - 凭证：客户上传（文件哈希+引用+金额+币种）→ pending_verify，客户端明确“待核验，不代表到账”；重复凭证（哈希+金额+期次，跨订单）拦截 42204。
+  - 财务核验（双人/银行核对）：核验人≠顾问（42409）、双人第二核验人留痕（42412/42413）、凭证金额不符不可通过（42411）；verified 自动开收据（编号/期次/币种/金额/水印）；reject 必填原因（户名/金额/不清/重复）回 unpaid 可重传、原凭证留存。
+  - 首付 verified + 合同 effective → 订单“待建案”（markReadyForCase，M3 建案）。
+  - PaymentGateway 接口仅定义无实现；D8 拍板后装在线/跨境通道，不动状态机。
+  - M2-12：变更/退款/分期/争议申请提交即生成编号工单并冻结订单（change_pending/refund_pending），冻结期不可并行付款（42401）、不可并行申请（42251）；执行流转在 M4，“提交即生效”不存在；平台外交易不假装受理。
+- 端点：客户 /v1/orders/:id（payment-plan、payee-info、payment-vouchers、receipts、change-requests）；后台 /admin/payments（pending-verify、:orderId/verify、receipts）、/admin/order-changes。
+- 测试：payment.service.test.ts 6 场景全绿（待核验≠到账/重复凭证/金额不符与驳回重传/顾问禁验/退款冻结并行门/空说明与平台外边界）；HTTP 全链路冒烟；dev-seed 增补首付凭证→双人核验→收据→待建案。
+
 ## 后续切片
 - 切片 2：M2-04/05/06/13 方案版本化 + A05 复核 + 客户确认 + 规则快照（含第四生产点词库、人工署名、改价接口拒绝审计、有效期失效）。
 - 切片 3：M2-09/10 订单主体三要素门 + 合同五要素受控登记。

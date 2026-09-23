@@ -123,5 +123,15 @@ SIGNED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 curl -s "${V[@]}" -X POST "$BASE/admin/orders/$ORD_ID/contract/register" -d "{\"signedAt\":\"$SIGNED_AT\",\"artifactRef\":\"l3://signed/$ORD_ID.pdf\",\"registrarId\":\"s-verifier\"}" >/dev/null
 curl -s "${V[@]}" -X POST "$BASE/admin/orders/$ORD_ID/make-effective" >/dev/null
 echo "  order effective（影子）: $ORD_ID"
+# 首付：客户查看计划与对公账户 → 上传凭证（待核验）→ 财务双人核验 → 开收据（M2-11）
+curl -s "${C1[@]}" "$BASE/v1/orders/$ORD_ID/payment-plan" >/dev/null
+curl -s "${C1[@]}" -X POST "$BASE/v1/orders/$ORD_ID/payment-vouchers" -d '{
+  "installmentSeq":1,"fileHash":"seed-voucher-0001","artifactRef":"l3://vouchers/seed-0001.jpg",
+  "amountMinor":"3000000","currency":"CNY"}' >/dev/null
+echo "  voucher uploaded（pending_verify，待核验≠到账）"
+curl -s "${V[@]}" -X POST "$BASE/admin/payments/$ORD_ID/verify" -d '{
+  "installmentSeq":1,"decision":"verified","secondVerifierId":"s-finance2"}' >/dev/null
+RCP_ID=$(curl -s "${V[@]}" "$BASE/admin/payments/receipts" | j "['records'][0]['id']")
+echo "  receipt issued: $RCP_ID；订单进入待建案（M3 建案）"
 
 echo "== dev seed 完成（重跑会因唯一编码报错属正常，内存仓储重启即清空）"

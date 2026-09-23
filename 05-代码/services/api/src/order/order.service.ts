@@ -94,6 +94,11 @@ export interface OrderRecord {
   };
   effectiveAt: string | null;
   cancelReason: string | null;
+  /** M2-12 变更冻结支线 */
+  freezeStatus: null | "change_pending" | "refund_pending";
+  freezeRequestId: string | null;
+  /** M2-11：首付核验通过 + 合同生效 → 待建案（M3 建案） */
+  readyForCaseAt: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -241,6 +246,9 @@ export class OrderService implements OnModuleInit {
       registration: { method: null, signedAt: null, artifactRef: null, registrarId: null },
       effectiveAt: null,
       cancelReason: null,
+      freezeStatus: null,
+      freezeRequestId: null,
+      readyForCaseAt: null,
       createdAt: now,
       updatedAt: now
     };
@@ -411,6 +419,30 @@ export class OrderService implements OnModuleInit {
     o.cancelReason = reason;
     this.persist(o, actor);
     this.audit.record({ actor, realm: "staff", action: "order.cancel", resource: o.id, result: "allow", reason });
+    return o;
+  }
+
+  /* ---------------- M2-11/12 冻结与待建案（供 PaymentService 调用） ---------------- */
+
+  /** M2-12：变更/退款申请提交即冻结订单，不可并行付款/改方案；执行在 M4 */
+  freezeFor(id: string, status: "change_pending" | "refund_pending", requestId: string, actor: string): OrderRecord {
+    const o = this.require(id);
+    if (o.contractState === "cancelled") throw new OrderError(409, "42250", "已取消订单不可提交变更");
+    if (o.freezeStatus) throw new OrderError(409, "42251", `订单已在 ${o.freezeStatus}，不可并行申请`);
+    o.freezeStatus = status;
+    o.freezeRequestId = requestId;
+    o.updatedAt = new Date().toISOString();
+    this.persist(o, actor);
+    this.audit.record({ actor, realm: "customer", action: "order.freeze", resource: o.id, result: "allow", reason: `${status}:${requestId}` });
+    return o;
+  }
+
+  /** M2-11：首付到账核验通过且合同生效 → 待建案 */
+  markReadyForCase(id: string, actor: string): OrderRecord {
+    const o = this.require(id);
+    if (o.contractState !== "effective") throw new OrderError(409, "42252", "合同生效后才可进入待建案");
+    o.readyForCaseAt = new Date().toISOString();
+    this.persist(o, actor);
     return o;
   }
 
