@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>客户端高保真 · 全集 v1.3（高级动效版）</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23AF2D67'/%3E%3Cstop offset='1' stop-color='%23002661'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M8 20l5-6 4 3 7-9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --navy:#002661;--navy-700:#1E3E78;--navy-100:#DCE4F2;--navy-50:#EDF1F8;
+  --berry:#AF2D67;--berry-50:#FAEEF4;
+  --grad:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);
+  --ink:#1B2433;--mut:#5E6B7E;--faint:#8A95A6;--line:#E5E9F0;--line-2:#F0F3F8;--paper:#F5F7FA;
+  --green:#177A5B;--green-bg:#E6F4EE;--amber:#B45309;--amber-bg:#FBF1E2;--red:#C03221;--red-bg:#FCEBEA;--blue:#1D5F8A;--blue-bg:#E9F2F8;--purple:#6B5AA8;--purple-bg:#EFECF7;
+  --sh1:0 1px 2px rgba(16,32,67,.05),0 6px 18px -8px rgba(16,32,67,.12);--sh2:0 2px 6px rgba(16,32,67,.05),0 20px 44px -14px rgba(15,35,80,.22);
+  --ease-out:cubic-bezier(.16,1,.3,1);--spring:cubic-bezier(.34,1.3,.5,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+body{font-family:"Manrope","Noto Sans SC",-apple-system,"PingFang SC",sans-serif;background:#E9EDF3;color:var(--ink);min-height:100vh;}
+.stage{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:34px 16px 60px;}
+.stage-head{text-align:center;margin-bottom:22px;}
+.stage-head h1{font-size:20px;font-weight:800;}
+.stage-head p{font-size:12.5px;color:var(--mut);margin-top:6px;line-height:1.7;}
+.stage-head .pill{display:inline-block;font-size:11px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:4px 12px;color:var(--mut);margin-top:8px;}
+/* phone */
+.phone{width:390px;height:800px;border-radius:42px;background:#11262B;padding:11px;box-shadow:0 30px 70px rgba(10,25,60,.35);position:relative;flex:none;}
+.screen{width:100%;height:100%;border-radius:32px;background:var(--paper);overflow:hidden;position:relative;}
+.screens{position:absolute;inset:11px;border-radius:32px;overflow:hidden;}
+.view{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--paper);overflow:hidden;opacity:0;pointer-events:none;transform:translateX(30px) scale(.985);transition:transform .42s cubic-bezier(.22,1,.36,1),opacity .3s ease;will-change:transform,opacity;}
+.view.on{opacity:1;pointer-events:auto;transform:none;z-index:2;}
+.view.back{transform:translateX(-24px) scale(.99);}
+.sb{height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;font-weight:600;color:var(--ink);}
+.body{flex:1 1 0;min-height:0;overflow-y:auto;padding:4px 18px 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.body::-webkit-scrollbar{display:none;}
+/* tabbar */
+.tabbar{height:64px;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-top:1px solid var(--line);display:flex;flex:none;padding-bottom:6px;}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:var(--faint);text-decoration:none;transition:color .2s;}
+.tabbar a.on{color:var(--navy);font-weight:700;}
+.tabbar svg{width:22px;height:22px;}
+/* atoms */
+h4{font-size:15px;font-weight:700;}
+.mut{color:var(--mut);} .small{font-size:11.5px;}
+.card{background:#fff;border-radius:18px;box-shadow:var(--sh1);padding:16px;margin-bottom:12px;}
+.btn{border:0;font-family:inherit;font-weight:700;border-radius:22px;height:46px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:15px;cursor:pointer;text-decoration:none;transition:transform .18s var(--spring),box-shadow .25s,filter .2s;}
+.btn:active{transform:scale(.962);}
+.btn.navy{background:linear-gradient(180deg,#0B3A82 0%,#002661 100%);color:#fff;box-shadow:0 6px 18px rgba(0,38,97,.24),inset 0 1px 0 rgba(255,255,255,.16);}
+.btn.navy:hover{background:var(--navy-700);}
+.btn.berry{background:linear-gradient(180deg,#C63D80 0%,#A5275F 100%);color:#fff;box-shadow:0 6px 18px rgba(175,45,103,.26),inset 0 1px 0 rgba(255,255,255,.16);}
+.btn.ghost{background:#fff;border:1.5px solid var(--navy);color:var(--navy);}
+.btn.quiet{background:var(--navy-50);color:var(--navy);}
+.btn.sm{height:36px;font-size:13px;border-radius:18px;padding:0 16px;}
+.btn.block{width:100%;}
+.st{font-size:11px;font-weight:600;border-radius:7px;padding:3px 9px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
+.st .d{width:6px;height:6px;border-radius:50%;background:currentColor;}
+.st.g{background:var(--green-bg);color:var(--green);}.st.a{background:var(--amber-bg);color:var(--amber);}
+.st.r{background:var(--red-bg);color:var(--red);}.st.b{background:var(--blue-bg);color:var(--blue);}.st.p{background:var(--purple-bg);color:var(--purple);}
+.st.n{background:var(--line-2);color:var(--mut);}
+.chip{font-size:12px;border:1px solid var(--line);background:#fff;color:var(--mut);border-radius:16px;padding:6px 13px;display:inline-block;white-space:nowrap;flex:none;transition:background .18s,color .18s,border-color .18s,transform .15s var(--spring);cursor:pointer;}.chip:active{transform:scale(.94);}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy);}
+.appbar{display:flex;align-items:center;gap:10px;padding:6px 2px 12px;}
+.appbar .bk{width:36px;height:36px;border-radius:50%;background:#fff;box-shadow:var(--sh1);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;transition:transform .15s var(--spring);}.appbar .bk:active{transform:scale(.88);}
+.appbar .tt{font-size:17px;font-weight:700;flex:1;}
+.sec-t{font-size:13px;font-weight:700;margin:16px 2px 10px;color:var(--ink);}
+.cta-bar{background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:10px 16px 14px;display:flex;gap:9px;flex:none;}
+.gradband{background:var(--grad);background-size:170% 170%;animation:drift 16s ease-in-out infinite alternate;color:#fff;border-radius:20px;padding:18px;box-shadow:0 12px 28px rgba(94,36,107,.25);}
+.gtop{background:var(--grad);background-size:170% 170%;animation:drift 16s ease-in-out infinite alternate;color:#fff;border-radius:0 0 22px 22px;margin:-4px -18px 14px;padding:15px 20px 17px;}
+.gtop .tt{font-size:19px;font-weight:800;}.gtop .st{background:rgba(255,255,255,.2);color:#fff;}
+.gbar{background:var(--grad);background-size:170% 170%;animation:drift 16s ease-in-out infinite alternate;color:#fff;border-radius:18px;padding:12px 14px;margin-bottom:13px;display:flex;align-items:center;gap:10px;box-shadow:0 10px 24px rgba(94,36,107,.22);}
+.gbar .tt{font-size:16px;font-weight:800;flex:1;}.gbar .gbk{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex:none;cursor:pointer;}
+.gbar .st,.gtop .chip{background:rgba(255,255,255,.2);color:#fff;border:0;}
+@keyframes drift{0%{background-position:0 30%}100%{background-position:100% 70%}}
+.fee-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.fee-tbl th{color:var(--faint);font-weight:600;text-align:left;padding:7px 6px;border-bottom:1px solid var(--line);font-size:10.5px;}
+.fee-tbl td{padding:9px 6px;border-bottom:1px solid var(--line-2);color:var(--ink);}
+.fee-tbl tr:last-child td{border-bottom:0;}
+.steps{display:flex;align-items:center;gap:4px;margin:4px 0 14px;}
+.steps .s{width:24px;height:24px;border-radius:50%;background:var(--line-2);color:var(--faint);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none;}
+.steps .s.on{background:var(--navy);color:#fff;}
+.steps .s.done{background:var(--green);color:#fff;}
+.steps .bar{flex:1;height:2px;background:var(--line);}
+.steps .bar.done{background:var(--green);}
+.tli{display:flex;gap:12px;position:relative;padding-bottom:16px;}
+.tli .rail{display:flex;flex-direction:column;align-items:center;width:12px;flex:none;}
+.tli .dot{width:11px;height:11px;border-radius:50%;margin-top:4px;z-index:1;}
+.tli .vl{position:absolute;left:5px;top:18px;bottom:0;width:2px;background:var(--line);}
+.tli:last-child .vl{display:none;}
+.tli .tc{flex:1;background:#fff;border:1px solid var(--line);border-radius:13px;padding:10px 12px;box-shadow:var(--sh1);}
+.tli .tt{font-size:13px;font-weight:700;display:flex;gap:7px;align-items:center;flex-wrap:wrap;}
+.tli .td{font-size:11.5px;color:var(--mut);margin-top:4px;line-height:1.6;}
+.qopt{border:1.5px solid var(--line);border-radius:13px;padding:13px 14px;font-size:13.5px;margin-bottom:9px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .15s,background .15s;background:#fff;}
+.qopt.on{border-color:var(--navy);background:var(--navy-50);font-weight:600;box-shadow:0 2px 10px rgba(0,38,97,.08);}
+.qopt .rd{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;}
+.qopt.on .rd{border-color:var(--navy);} .qopt.on .rd::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--navy);}
+.mat-row{display:flex;align-items:center;gap:11px;padding:12px 4px;border-bottom:1px solid var(--line-2);}
+.mat-row .mi{width:34px;height:34px;border-radius:10px;background:var(--navy-50);color:var(--navy);display:flex;align-items:center;justify-content:center;flex:none;}
+.mat-row .mt{flex:1;} .mat-row .mt b{font-size:13.5px;display:block;} .mat-row .mt span{font-size:11px;color:var(--faint);}
+.gate{border:1.5px dashed #B9847C;background:var(--red-bg);border-radius:13px;padding:13px 14px;font-size:12px;color:#8a261c;line-height:1.7;}
+.proj-row{display:flex;gap:11px;align-items:center;background:#fff;border-radius:15px;padding:13px;margin-bottom:9px;box-shadow:var(--sh1);cursor:pointer;transition:transform .22s var(--ease-out),box-shadow .25s;}.proj-row:hover{transform:translateY(-1px);box-shadow:var(--sh2);}
+.proj-row:active{transform:scale(.98);}
+.proj-row .flag{width:40px;height:40px;border-radius:12px;background:var(--navy-50);display:flex;align-items:center;justify-content:center;flex:none;color:var(--navy);}
+.proj-row>div{min-width:0;}.proj-row b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.proj-row .st{flex:none;margin-left:6px;}
+.qgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:12px 0;}
+.qgrid .q{background:#fff;border-radius:14px;box-shadow:var(--sh1);height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:10.5px;color:var(--mut);cursor:pointer;transition:transform .22s var(--spring),box-shadow .25s;}.qgrid .q:hover{box-shadow:var(--sh2);}
+.qgrid .q:active{transform:scale(.9);}
+.qgrid .q i{width:26px;height:26px;border-radius:8px;background:var(--navy-100);color:var(--navy);display:flex;align-items:center;justify-content:center;}.qgrid .q i svg{width:15px;height:15px;}
+.hintbar{background:var(--amber-bg);border-radius:13px;padding:11px 13px;font-size:11.5px;color:#8a5a1e;line-height:1.6;display:flex;gap:9px;align-items:flex-start;margin-bottom:12px;}
+.fade-up{animation:fadeUp .34s var(--ease-out) both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.devnote{max-width:760px;margin:26px auto 0;background:#fff;border:1px dashed var(--line);border-radius:14px;padding:16px 20px;font-size:12px;color:var(--mut);line-height:2;}
+
+/* ===== v1.3 高级动效层 ===== */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tabIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(192,50,33,.38)}70%{box-shadow:0 0 0 7px rgba(192,50,33,0)}100%{box-shadow:0 0 0 0 rgba(192,50,33,0)}}
+@keyframes sweep{to{transform:translateX(100%)}}
+.view.on .sb{animation:fadeIn .35s ease both;}
+.view.on .body>*{animation:fadeIn .5s var(--ease-out) both;}
+.view.on .body>*:not(.proj-row):not(.gradband):not([data-go]):not(.cta-bar):not(.btn){animation:rise .55s var(--ease-out) both;}
+.view.on .body>*:nth-child(1){animation-delay:.02s}.view.on .body>*:nth-child(2){animation-delay:.06s}
+.view.on .body>*:nth-child(3){animation-delay:.10s}.view.on .body>*:nth-child(4){animation-delay:.14s}
+.view.on .body>*:nth-child(5){animation-delay:.18s}.view.on .body>*:nth-child(6){animation-delay:.22s}
+.view.on .body>*:nth-child(7){animation-delay:.26s}.view.on .body>*:nth-child(8){animation-delay:.30s}
+.view.on .body>*:nth-child(9){animation-delay:.34s}.view.on .body>*:nth-child(10){animation-delay:.38s}
+.view.on .gradband,.view.on .gtop,.view.on .gbar{animation:rise .55s var(--ease-out) both,drift 16s ease-in-out infinite alternate;}
+.view.on .tabbar{animation:tabIn .45s var(--ease-out) both;}
+.view#v-login.on>div:last-child{animation:rise .6s var(--ease-out) both;}
+/* tab 活动胶囊 */
+.tabbar a{position:relative;transition:color .25s,transform .2s var(--spring);}
+.tabbar a::before{content:"";position:absolute;top:2px;left:50%;width:48px;height:30px;border-radius:15px;background:var(--navy-50);transform:translateX(-50%) scale(.5);opacity:0;transition:transform .32s var(--spring),opacity .25s;z-index:0;}
+.tabbar a.on::before{opacity:1;transform:translateX(-50%) scale(1);}
+.tabbar a svg,.tabbar a span{position:relative;z-index:1;}
+.tabbar svg{transition:transform .32s var(--spring);}
+.tabbar a.on svg{transform:scale(1.14) translateY(-1px);}
+.tabbar a:active{transform:scale(.88);}
+/* 渐变面高光 */
+.gradband,.gtop{position:relative;overflow:hidden;}
+.gradband>*,.gtop>*{position:relative;}
+.gradband::after,.gtop::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 90% at 82% -12%,rgba(255,255,255,.18),transparent 55%);}
+.gbar .gbk{transition:transform .15s var(--spring);}.gbar .gbk:active{transform:scale(.88);}
+/* 进度条光泽 */
+.pbar{position:relative;overflow:hidden;}
+.pbar::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 20%,rgba(255,255,255,.5) 50%,transparent 80%);transform:translateX(-100%);animation:sweep 2.8s 1.1s ease-in-out infinite;}
+/* T0 红态脉冲（语义：需要立即注意） */
+.st.r .d{animation:pulse 1.8s ease-out infinite;}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important;}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="stage-head">
+    <h1>客户端高保真 · 全集 v1.3（高级动效版）</h1>
+    <p>方向 C「双色签名」· 主链路 9 屏 + 全球通行 / 服务工单 / 消息 / 我的与家庭授权 / 项目比较 / 防骗教育，共 21 屏可点击<br>示例数据均为虚构【示例】；本稿为视觉与交互样机，非最终文案。</p>
+    <span class="pill">点击屏内按钮可跳转 · 底部 6 tab 可切换</span>
+  </div>
+  <div class="phone"><div class="screen"><div class="screens" id="root"></div></div></div>
+  <div class="devnote">
+    <b style="color:var(--ink);">本 Pass 覆盖：</b>签名渐变首页卡、四级来源时间线、费用分项收取方表、主体三要素门、T0 送达卡、材料状态、初评四类结果、方案版本确认。<br>
+    <b style="color:var(--ink);">客户端已覆盖：</b>主链路 9 屏 + 全球通行（护照/签证/对比）+ 服务目录与工单 + 消息中心 + 我的/家庭授权 + 项目比较 + 防骗教育。<br><b style="color:var(--ink);">下一步：</b>顾问展业端（手机 + iPad）高保真，随后总后台。
+  </div>
+</div>
+
+<script>
+/* ---------- 图标 ---------- */
+const I={
+ home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+ globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/>',
+ case:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 4v5M16 4v5"/>',
+ headset:'<path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/><path d="M19 19a4 4 0 0 1-4 3h-3"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',
+ back:'<path d="M15 5l-7 7 7 7"/>',shield:'<path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/>',
+ check:'<path d="M5 12l5 5L20 7"/>',doc:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/>',
+ flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ upload:'<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 17v3h16v-3"/>',alert:'<path d="M12 8v5M12 16.5v.5"/><path d="M10.3 3.9 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
+ chevron:'<path d="M9 6l6 6-6 6"/>',star:'<path d="M12 3l2.6 5.6 6.4.7-4.7 4.3 1.3 6.1L12 16.9 6.4 19.7l1.3-6.1L3 9.3l6.4-.7z"/>',
+ coins:'<ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3"/><path d="M15 10c3.3 0 6-1.3 6-3v5c0 1.7-2.7 3-6 3"/><path d="M3 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/>',
+ send:'<path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+ book:'<path d="M4 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4z"/><path d="M20 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"/>',
+ users:'<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5 6-5s6 1.7 6 5"/><path d="M16 5.2a3.2 3.2 0 0 1 0 5.6M17.5 15.4c2 .7 3.5 2.2 3.5 4.6"/>',
+ bell:'<path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>',
+ card:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+ scale:'<path d="M12 3v18M7 21h10M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/>',
+ info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.5"/>',
+ logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/>',
+ bookmark:'<path d="M6 3h12v18l-6-4-6 4z"/>',
+ edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+ list:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>'
+};
+function ic(k,s){s=s||20;return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+I[k]+'</svg>';}
+function sb(txt){return '<div class="sb"><span>9:41</span><span style="letter-spacing:1px;">● ● ●</span></div>';}
+function tb(active){const t=[['home','home','首页'],['projects','search','找项目'],['global','globe','全球通行'],['cases','case','我的办理'],['services','headset','服务'],['me','user','我的']];return '<div class="tabbar">'+t.map(x=>'<a data-go="'+x[0]+'" class="'+(active===x[0]?'on':'')+'">'+ic(x[1])+'<span>'+x[2]+'</span></a>').join('')+'</div>';}
+function view(id,inner,cls){return '<div class="view '+(cls||'')+'" id="v-'+id+'">'+inner+'</div>';}
+const V={};
+
+/* 1 登录 */
+V.login=view('login',
+ sb()+
+ '<div style="flex:1;display:flex;flex-direction:column;">'+
+ '<div style="background:var(--grad);background-size:170% 170%;animation:drift 16s ease-in-out infinite alternate;padding:46px 26px 56px;color:#fff;border-radius:0 0 30px 30px;">'+
+ '<div style="width:54px;height:54px;border-radius:16px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;margin-bottom:20px;">'+ic('shield',28)+'</div>'+
+ '<div style="font-size:24px;font-weight:800;line-height:1.4;">每一步，都清楚<br>每一笔，都明白</div>'+
+ '<div class="small" style="opacity:.88;margin-top:10px;line-height:1.7;">透明的身份规划服务：可核验的进度、分项的费用、独立的保障。</div></div>'+
+ '<div style="padding:26px 22px;flex:1;">'+
+ '<div style="font-size:13px;font-weight:700;margin-bottom:9px;">手机号登录 / 注册</div>'+
+ '<div style="height:50px;border:1.5px solid var(--line);border-radius:13px;display:flex;align-items:center;padding:0 15px;font-size:16px;color:var(--ink);background:#fff;">+86　138 0000 2051</div>'+
+ '<div style="height:50px;border:1.5px solid var(--line);border-radius:13px;display:flex;align-items:center;padding:0 15px;font-size:16px;color:var(--faint);background:#fff;margin-top:11px;">输入 6 位验证码</div>'+
+ '<a class="btn navy block" style="margin-top:18px;" data-go="home">登录 / 注册</a>'+
+ '<div style="display:flex;gap:18px;justify-content:center;margin:16px 0;color:var(--faint);font-size:12px;"><span>微信登录</span><span>Apple 登录</span></div>'+
+ '<div style="font-size:10.5px;color:var(--faint);line-height:1.8;text-align:center;margin-top:10px;">未注册手机号验证后将自动创建账号，登录即代表同意《服务协议》《隐私政策》</div>'+
+ '<a data-go="home" style="display:block;text-align:center;margin-top:18px;font-size:13px;color:var(--navy);font-weight:600;cursor:pointer;">先以游客身份看看 ›</a>'+
+ '</div></div>');
+
+/* 2 首页 */
+V.home=view('home',
+ sb()+
+ '<div class="body">'+
+ '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 2px 14px;"><div><div style="font-size:19px;font-weight:800;">王某某，下午好</div><div class="small mut" style="margin-top:3px;">你的身份规划，正在稳步推进</div></div>'+
+ '<div style="width:42px;height:42px;border-radius:50%;background:var(--navy-100);display:flex;align-items:center;justify-content:center;color:var(--navy);">'+ic('user',21)+'</div></div>'+
+ '<div class="gradband" data-go="progress" style="cursor:pointer;">'+
+ '<div style="display:flex;justify-content:space-between;align-items:center;"><b style="font-size:14px;">A 国技术工作居留 · CASE-A03</b><span class="st" style="background:rgba(255,255,255,.2);color:#fff;"><span class="d" style="background:#fff;"></span>材料准备</span></div>'+
+ '<div style="height:6px;background:rgba(255,255,255,.22);border-radius:4px;margin:13px 0 8px;overflow:hidden;"><div class="pbar" style="width:42%;height:100%;background:#fff;border-radius:4px;"></div></div>'+
+ '<div style="font-size:11px;opacity:.92;display:flex;justify-content:space-between;"><span>2 项材料待提交 · 无 T0 超时</span><span>查看进度 ›</span></div></div>'+
+ '<div class="qgrid">'+
+ '<div class="q" data-go="assessment"><i style="background:var(--berry-50);color:var(--berry);">'+ic('scale',15)+'</i>初步评估</div>'+
+ '<div class="q" data-go="projects"><i>'+ic('search',15)+'</i>找项目</div>'+
+ '<div class="q" data-go="visa"><i>'+ic('globe',15)+'</i>签证查询</div>'+
+ '<div class="q" data-go="services"><i>'+ic('headset',15)+'</i>服务工单</div></div>'+
+ '<div class="hintbar">'+ic('shield',18)+'<div><b>防骗提示：</b>付款前先核验收费主体与对公账户，平台不会要求向个人账户转账。</div></div>'+
+ '<div class="sec-t">为你推荐</div>'+
+ '<div class="proj-row" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">A 国 · 随行子女路径</b><div class="small mut" style="margin-top:3px;">随主申请 · v1.4 · 已发布</div></div><span class="st n">了解</span></div>'+
+ '<div class="proj-row" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">C 国 · 数字游民</b><div class="small mut" style="margin-top:3px;">收费方案待发布，暂不报价</div></div><span class="st a"><span class="d"></span>待发布</span></div>'+
+ '</div>'+tb('home'));
+
+/* 3 找项目 */
+V.projects=view('projects',
+ sb()+
+ '<div class="body">'+
+ '<div class="gtop"><div class="tt">找项目</div><div class="small" style="opacity:.85;margin-top:4px;">按目的地与身份性质，比较已核验项目</div></div>'+
+ '<div style="height:44px;background:#fff;border:1px solid var(--line);border-radius:22px;display:flex;align-items:center;gap:9px;padding:0 16px;color:var(--faint);font-size:13px;margin-bottom:12px;">'+ic('search',18)+'<span>搜索目的地 / 身份性质</span></div>'+
+ '<div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px;"><span class="chip on">全部</span><span class="chip">工作居留</span><span class="chip">随行子女</span><span class="chip">数字游民</span><span class="chip">长居养老</span></div>'+
+ '<div class="proj-row" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">【示例】A 国 · 技术工作居留</b><div class="small mut" style="margin-top:3px;">长期工作居留（非永居）· 参考 9–14 个月</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row" data-go="project"><div class="flag">'+ic('user',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">【示例】A 国 · 随行子女路径</b><div class="small mut" style="margin-top:3px;">随主申请 · 少量官方附加费</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">【示例】C 国 · 数字游民</b><div class="small mut" style="margin-top:3px;">项目核验中，暂不可报价</div></div><span class="st a"><span class="d"></span>核验中</span></div>'+
+ '<div class="proj-row" style="opacity:.55;"><div class="flag">'+ic('lock',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">【示例】A 国 · 雇主担保</b><div class="small mut" style="margin-top:3px;">供给暂停，已下架新签</div></div><span class="st n">已暂停</span></div>'+
+ '<div class="card" data-go="compare" style="display:flex;align-items:center;gap:10px;justify-content:center;color:var(--mut);font-size:12.5px;cursor:pointer;">'+ic('star',17)+' 比较夹（2 个项目可对比）</div>'+
+ '</div>'+tb('projects'));
+
+/* 4 项目详情 */
+V.project=view('project',
+ sb()+
+ '<div style="flex:none;"><div class="gradband" style="border-radius:0 0 24px 24px;padding:14px 20px 18px;">'+
+ '<div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;"><div class="bk" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;color:#fff;" data-go="projects">'+ic('back',18)+'</div><b style="font-size:15px;">项目详情</b></div>'+
+ '<div style="font-size:19px;font-weight:800;">A 国 · 技术工作居留</div>'+
+ '<div style="display:flex;gap:7px;margin-top:9px;"><span class="st" style="background:rgba(255,255,255,.2);color:#fff;">长期工作居留 · 非永居</span><span class="st" style="background:rgba(255,255,255,.2);color:#fff;">v3.2</span></div></div></div>'+
+ '<div class="body">'+
+ '<div class="card fade-up"><h4>申请条件（已核验）</h4><div style="font-size:12.5px;color:var(--mut);line-height:2;margin-top:8px;">· 职业在示例清单内，语言达到 B1<br>· 有雇主 offer 或技能评估路径<br>· 随行配偶与子女可一并申请</div></div>'+
+ '<div class="card"><h4>办理流程与责任分工</h4><div style="font-size:12.5px;color:var(--mut);line-height:2;margin-top:8px;">材料准备可自助完成 → 境外法律段由持牌方递交沟通 → 审批决定由目的地官方作出。</div></div>'+
+ '<div class="card"><h4 style="margin-bottom:10px;">费用分项（按收取方）</h4>'+
+ '<table class="fee-tbl"><tr><th>费项</th><th>收取方</th><th>币种</th><th>性质</th></tr>'+
+ '<tr><td>平台服务费</td><td>平台</td><td>CNY</td><td>确定</td></tr>'+
+ '<tr><td>公证翻译</td><td>境内机构</td><td>CNY</td><td>估算区间</td></tr>'+
+ '<tr><td>境外法律服务</td><td>境外持牌方</td><td>USD</td><td>合同为准</td></tr>'+
+ '<tr><td>官方申请费</td><td>官方代收代付</td><td>外币</td><td>可能调整</td></tr></table>'+
+ '<div class="small mut" style="margin-top:9px;line-height:1.7;">不同币种不相加、不折算总价；「待确认」不等于 0。</div></div>'+
+ '<div class="hintbar" style="background:var(--navy-50);color:var(--navy);">'+ic('shield',18)+'<div>参考周期 9–14 个月，<b>非承诺</b>；不承诺获批、永居或入籍时间点，以官方审理为准。</div></div>'+
+ '<div style="height:6px;"></div></div>'+
+ '<div class="cta-bar"><a class="btn ghost" style="flex:1;" data-go="compare">'+ic('star',17)+' 比较</a><a class="btn navy" style="flex:1.6;" data-go="assessment">初步评估</a></div>'+
+ '<div style="background:#fff;padding:0 16px 12px;flex:none;"><a class="btn quiet block sm" data-go="advisorCard">联系顾问（需登录）</a></div>');
+
+/* 5 初评 */
+V.assessment=view('assessment',
+ sb()+
+ '<div class="body">'+
+ '<div class="gbar"><div class="gbk" data-go="project">'+ic('back',18)+'</div><div class="tt">初步评估</div></div>'+
+ '<div class="steps"><span class="s done">✓</span><span class="bar done"></span><span class="s on">2</span><span class="bar"></span><span class="s">3</span><span class="bar"></span><span class="s">4</span></div>'+
+ '<div class="card"><div class="small mut">第 2 题 / 共 4 题</div><div style="font-size:16px;font-weight:700;margin:8px 0 14px;line-height:1.5;">你的主申请人语言水平目前是？</div>'+
+ '<div class="qopt on"><span class="rd"></span>英语 B1 及以上（有成绩或可考）</div>'+
+ '<div class="qopt" onclick="qpick(this)"><span class="rd"></span>接近 B1，预计 6 个月内取得</div>'+
+ '<div class="qopt" onclick="qpick(this)"><span class="rd"></span>暂无语言成绩</div>'+
+ '<div class="qopt" onclick="qpick(this)"><span class="rd"></span>不确定，需要顾问判断</div></div>'+
+ '<div class="small mut" style="line-height:1.8;padding:0 4px;">选择「不确定」是完全可以的，待确认项会由顾问在方案中跟进。</div></div>'+
+ '<div class="cta-bar"><a class="btn ghost" style="flex:1;" data-go="project">上一步</a><a class="btn navy" style="flex:1.4;" data-go="assessmentResult">查看结果</a></div>');
+V.assessmentResult=view('assessmentResult',
+ sb()+
+ '<div class="body">'+
+ '<div class="gbar"><div class="gbk" data-go="assessment">'+ic('back',18)+'</div><div class="tt">初步评估结果</div></div>'+
+ '<div class="card" style="border-left:4px solid var(--green);"><div style="display:flex;gap:9px;align-items:center;margin-bottom:7px;">'+ic('check',18).replace('stroke="currentColor"','stroke="#177A5B"')+'<b style="color:var(--green);">已知符合项</b></div><div class="small mut" style="line-height:1.8;">职业在示例清单内；语言达到 B1；年龄与学历满足基础门槛。</div></div>'+
+ '<div class="card" style="border-left:4px solid var(--red);"><div style="display:flex;gap:9px;align-items:center;margin-bottom:7px;">'+ic('alert',18).replace('stroke="currentColor"','stroke="#C03221"')+'<b style="color:var(--red);">明显差距</b></div><div class="small mut" style="line-height:1.8;">资金证明尚未达到示例要求，需提前规划存款与来源说明。</div></div>'+
+ '<div class="card" style="border-left:4px solid var(--amber);"><div style="display:flex;gap:9px;align-items:center;margin-bottom:7px;">'+ic('clock',18).replace('stroke="currentColor"','stroke="#B45309"')+'<b style="color:var(--amber);">待确认项</b></div><div class="small mut" style="line-height:1.8;">随行子女年龄与在学证明；雇主 offer 路径可行性。</div></div>'+
+ '<div class="card" style="border-left:4px solid var(--navy);"><div style="display:flex;gap:9px;align-items:center;margin-bottom:7px;">'+ic('doc',18).replace('stroke="currentColor"','stroke="#002661"')+'<b style="color:var(--navy);">信息来源与时间</b></div><div class="small mut" style="line-height:1.8;">基于 A 国项目规则 v3.2（2026-09 核验）。</div></div>'+
+ '<div class="hintbar" style="background:var(--navy-50);color:var(--navy);">'+ic('shield',17)+'<div>本结果为信息整理，不构成资格认定或法律意见，个案以官方审核为准；无评分、无成功率。</div></div>'+
+ '</div><div class="cta-bar"><a class="btn ghost" style="flex:1;" data-go="projects">再看项目</a><a class="btn berry" style="flex:1.3;" data-go="advisorCard">请顾问跟进</a></div>');
+
+/* 6 方案 */
+V.proposal=view('proposal',
+ sb()+
+ '<div class="body">'+
+ '<div class="gbar"><div class="gbk" data-go="home">'+ic('back',18)+'</div><div class="tt">我的方案</div><span class="st" style="background:rgba(255,255,255,.22);color:#fff;"><span class="d"></span>v3 待确认</span></div>'+
+ '<div class="card"><h4>个性化建议</h4><div style="font-size:12.5px;color:var(--mut);line-height:1.9;margin-top:8px;">1. 先补配偶语言成绩，再一并递交；<br>2. 资金证明提前 3 个月规划来源说明；<br>3. 子女路径随主案，可先办公证。</div></div>'+
+ '<div class="card"><h4 style="margin-bottom:10px;">费用分项与收取方</h4><table class="fee-tbl"><tr><th>费项</th><th>收取方</th><th>币种</th></tr>'+
+ '<tr><td>平台服务费</td><td>平台</td><td>CNY 示例</td></tr><tr><td>境外法律服务</td><td>境外持牌方</td><td>USD 示例</td></tr><tr><td>官方申请费</td><td>官方代收代付</td><td>待确认</td></tr></table></div>'+
+ '<div class="card"><h4>责任分工</h4><div style="font-size:12.5px;color:var(--mut);line-height:2;margin-top:6px;">客户保证材料真实；平台负责协调、凭据核验与透明告知；境外持牌方负责法律段递交；审批由官方决定。</div></div>'+
+ '<div class="card" style="background:var(--red-bg);border:1px solid #f0c4bf;"><b style="color:var(--red);font-size:13.5px;">不承诺事项（请逐条知悉）</b><div style="font-size:11.5px;color:#8a261c;line-height:1.9;margin-top:7px;">不承诺获批 / 审理时限 / 永居入籍时间点；不承诺投资收益；平台与顾问不替代官方决定。</div></div>'+
+ '<div style="height:4px;"></div></div>'+
+ '<div class="cta-bar"><a class="btn ghost" style="flex:1;" data-toast="修改请求已提交顾问，将出新版本并留痕">请求修改</a><a class="btn navy" style="flex:1.3;" data-go="order">确认本版本</a></div>');
+
+/* 7 订单 */
+V.order=view('order',
+ sb()+
+ '<div class="body">'+
+ '<div class="appbar"><div class="bk" data-go="proposal">'+ic('back',18)+'</div><div class="tt">合同订单与费用</div></div>'+
+ '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">'+
+ '<div class="card" style="padding:12px;margin:0;text-align:center;border-top:3px solid var(--navy);"><div class="small mut">合同</div><b style="font-size:12.5px;display:block;margin-top:5px;color:var(--navy);">待签署</b></div>'+
+ '<div class="card" style="padding:12px;margin:0;text-align:center;border-top:3px solid var(--amber);"><div class="small mut">到账</div><b style="font-size:12.5px;display:block;margin-top:5px;color:var(--amber);">待核验</b></div>'+
+ '<div class="card" style="padding:12px;margin:0;text-align:center;border-top:3px solid var(--line);"><div class="small mut">服务</div><b style="font-size:12.5px;display:block;margin-top:5px;color:var(--faint);">未开始</b></div></div>'+
+ '<div class="card" style="border-left:4px solid var(--green);"><div style="display:flex;align-items:center;gap:8px;margin-bottom:9px;"><b style="font-size:13.5px;">主体三要素校验通过</b><span class="st g"><span class="d"></span>可付款</span></div>'+
+ '<div style="font-size:11.5px;color:var(--mut);line-height:2;">签约/收费主体：示例出入境咨询（北京）<br>境外交付：示例境外律所 A（持牌有效）<br>收款账户户名：与签约主体一致</div></div>'+
+ '<div class="card"><h4>付款计划</h4>'+
+ '<div class="mat-row"><div class="mi">'+ic('coins',18)+'</div><div class="mt"><b>首付款 · CNY 示例</b><span>签约后 3 个工作日内</span></div><span class="st b"><span class="d"></span>本期</span></div>'+
+ '<div class="mat-row"><div class="mi">'+ic('coins',18)+'</div><div class="mt"><b>境外法律服务费 · USD 示例</b><span>递交前发生，合同为准</span></div><span class="st n">未发生</span></div>'+
+ '<div class="mat-row" style="border-bottom:0;"><div class="mi">'+ic('doc',18)+'</div><div class="mt"><b>官方申请费 · 代收代付</b><span>金额待官方确认</span></div><span class="st a"><span class="d"></span>待确认</span></div></div>'+
+ '<div class="card" style="border-style:dashed;display:flex;align-items:center;gap:12px;cursor:pointer;" data-toast="凭证上传后显示「待核验」，财务核验后才到账"><div style="width:42px;height:42px;border-radius:12px;background:var(--navy-50);color:var(--navy);display:flex;align-items:center;justify-content:center;">'+ic('upload',21)+'</div><div><b style="font-size:13.5px;">上传付款凭证</b><div class="small mut" style="margin-top:3px;">提交后显示「待核验」，不重复记账</div></div></div>'+
+ '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;"><span class="chip">合同五要素</span><span class="chip">告知确认</span><span class="chip">收据</span><span class="chip" data-go="services">退款 / 调整走工单</span></div>'+
+ '<div class="hintbar" style="background:var(--red-bg);color:#8a261c;">'+ic('lock',17)+'<div>请勿向任何个人账户转账；主体不一致时系统将关闭付款入口，且没有强制通过通道。</div></div>'+
+ '</div><div class="cta-bar"><a class="btn navy block" data-toast="演示：跳转对公付款指引（主体一致时可用）">查看对公付款指引</a></div>');
+
+/* 8 材料 */
+V.cases=view('cases',
+ sb()+
+ '<div class="body">'+
+ '<div class="gtop"><div class="tt">我的案件与材料</div><div class="small" style="opacity:.85;margin-top:4px;">阶段指引与材料状态，每一步标明来源</div></div>'+
+ '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><b style="font-size:13.5px;">A 国技术居留 · CASE-A03</b><span class="st p"><span class="d"></span>材料准备</span></div>'+
+ '<div class="steps"><span class="s done">✓</span><span class="bar done"></span><span class="s on">2</span><span class="bar"></span><span class="s">3</span><span class="bar"></span><span class="s">4</span></div><div class="small mut" style="text-align:center;">合同生效 · 材料准备 · 递交受理 · 审理结果（阶段指引，非百分比）</div></div>'+
+ '<div style="display:flex;gap:7px;margin:4px 0 10px;"><span class="chip on">主申 王某某</span><span class="chip">配偶（待授权）</span><span class="chip">子女（监护）</span></div>'+
+ '<div class="card" style="padding:4px 14px;">'+
+ '<div class="mat-row"><div class="mi">'+ic('doc',18)+'</div><div class="mt"><b>护照首页影印件</b><span>本人材料</span></div><span class="st g"><span class="d"></span>已通过</span></div>'+
+ '<div class="mat-row"><div class="mi">'+ic('doc',18)+'</div><div class="mt"><b>无犯罪记录公证</b><span>需补充：请附双号公证书</span></div><span class="st a"><span class="d"></span>需补充</span></div>'+
+ '<div class="mat-row"><div class="mi">'+ic('clock',18)+'</div><div class="mt"><b>补件回执 T0</b><span style="color:var(--red);">截止 09-23 18:00 · 原截止时间不变</span></div><span class="st r"><span class="d"></span>T0</span></div>'+
+ '<div class="mat-row" style="border-bottom:0;"><div class="mi">'+ic('lock',18)+'</div><div class="mt"><b>配偶学历证明</b><span>需配偶本人授权后提交</span></div><span class="st n">待授权</span></div>'+
+ '</div><a class="btn navy block" data-toast="演示：上传/补交本人材料">'+ic('upload',18)+' 上传 / 补交材料</a>'+
+ '<div class="small mut" style="text-align:center;margin-top:10px;line-height:1.7;">证件原件查看需逐案审批、全程水印留痕；越权访问由服务端拒绝并记录。</div>'+
+ '</div>'+tb('cases'));
+
+/* 9 进度 */
+V.progress=view('progress',
+ sb()+
+ '<div class="body">'+
+ '<div class="gbar"><div class="gbk" data-go="home">'+ic('back',18)+'</div><div class="tt">办理进度</div><span class="chip" data-go="messages">消息</span></div>'+
+ '<div class="tli"><div class="rail"><span class="dot" style="background:var(--green);"></span><span class="vl"></span></div><div class="tc"><div class="tt">官方受理回执 <span class="st g"><span class="d"></span>官方凭据</span></div><div class="td">核验人：凭据核验岗（非案件发起人）· 09-21 10:24 · 可查看水印凭据</div></div></div>'+
+ '<div class="tli"><div class="rail"><span class="dot" style="background:var(--amber);"></span><span class="vl"></span></div><div class="tc"><div class="tt">服务方已递交 <span class="st a"><span class="d"></span>服务方报告</span></div><div class="td">来自境外律所 A，未经官方核验，不作为官方状态</div></div></div>'+
+ '<div class="tli"><div class="rail"><span class="dot" style="background:var(--purple);"></span><span class="vl"></span></div><div class="tc"><div class="tt">材料审核通过 <span class="st p"><span class="d"></span>公司审核</span></div><div class="td">护照影印件 · 09-20 16:02</div></div></div>'+
+ '<div class="tli"><div class="rail"><span class="dot" style="background:var(--blue);"></span></div><div class="tc"><div class="tt">客户提交无犯罪公证 <span class="st b"><span class="d"></span>客户提交</span></div><div class="td">待审核</div></div></div>'+
+ '<div class="card" style="background:var(--red-bg);border:1px solid #f0c4bf;">'+
+ '<div style="display:flex;gap:10px;align-items:flex-start;color:#8a261c;">'+ic('alert',20)+'<div style="flex:1;"><b style="font-size:13.5px;">T0 · 补件回执剩余 4 小时</b><div style="font-size:11.5px;line-height:1.8;margin-top:5px;">App 已送达 · 短信未达已转人工电话；未回执将升级主管。<br><b>原截止时间不因通知问题改写。</b></div>'+
+ '<div style="display:flex;gap:6px;margin-top:9px;flex-wrap:wrap;"><span class="st g"><span class="d"></span>App 已读</span><span class="st r"><span class="d"></span>短信未达</span><span class="st a"><span class="d"></span>电话跟进中</span></div></div></div>'+
+ '<a class="btn navy block sm" style="margin-top:12px;" data-go="cases">去处理补件</a></div>'+
+ '<div class="small mut" style="text-align:center;line-height:1.8;padding:4px 8px;">锁屏与推送摘要不显示案号；通道全部未达时平台将人工联系并升级，不会静默。</div>'+
+ '</div>'+tb('cases'));
+
+/* 其余 tab 占位（Pass 2 完整） */
+/* ===== 全球通行 P-19/20/21 ===== */
+V.global=view('global',sb()+'<div class="body">'+
+ '<div class="gtop"><div class="tt">全球通行</div><div class="small" style="opacity:.85;margin-top:4px;">护照 · 签证要求 · 通行力对比（示例数据）</div></div>'+
+ '<div class="gradband" data-go="passport" style="cursor:pointer;padding:16px 18px;"><div style="display:flex;align-items:center;gap:12px;"><div style="width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;">'+ic('book',22)+'</div><div style="flex:1;"><b style="font-size:14px;">我的护照</b><div class="small" style="opacity:.85;margin-top:2px;">中国 · 普通护照 · 有效期至 2030-06</div></div>'+ic('chevron',18)+'</div></div>'+
+ '<div class="qgrid" style="grid-template-columns:repeat(3,1fr);"><div class="q" data-go="visa" style="height:74px;"><i>'+ic("doc",15)+'</i>签证要求</div><div class="q" data-go="passportCompare" style="height:74px;"><i>'+ic("scale",15)+'</i>护照对比</div><div class="q" data-go="passportCompare" style="height:74px;"><i>'+ic("globe",15)+'</i>通行力排名</div></div>'+
+ '<div class="hintbar">'+ic('info',18)+'<div><b>演示数据：</b>签证与通行力来自第三方授权数据源（如 IATA Timatic 类）。授权正式落实前仅展示示例，不对客作为出行依据；授权失效将自动下架。</div></div>'+
+ '<div class="sec-t">常用目的地（示例）</div>'+
+ '<div class="proj-row" data-go="visa"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">A 国</b><div class="small mut" style="margin-top:3px;">工作居留需前置许可</div></div><span class="st a"><span class="d"></span>需签证</span></div>'+
+ '<div class="proj-row" data-go="visa"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">B 地区</b><div class="small mut" style="margin-top:3px;">短期旅游示例免签</div></div><span class="st g"><span class="d"></span>免签</span></div>'+
+ '</div>'+tb('global'));
+
+V.passport=view('passport',sb()+'<div class="body"><div class="gbar"><div class="gbk" data-go="global">'+ic('back',18)+'</div><div class="tt">我的护照</div></div>'+
+ '<div class="card"><div style="display:flex;gap:12px;align-items:center;"><div style="width:46px;height:46px;border-radius:13px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;">'+ic('book',23)+'</div><div style="flex:1;"><b>王某某</b><div class="small mut" style="margin-top:3px;">中国 · 普通护照　E1234****</div></div><span class="st g"><span class="d"></span>已核验</span></div><div class="small mut" style="margin-top:10px;line-height:1.7;">签发日 2020-06 · 有效期至 2030-06；出行前请确认目的地要求剩余有效期 6 个月以上。</div></div>'+
+ '<div class="card"><div style="display:flex;gap:12px;align-items:center;opacity:.75;"><div style="width:46px;height:46px;border-radius:13px;background:var(--navy-100);color:var(--navy);display:flex;align-items:center;justify-content:center;">'+ic('users',23)+'</div><div style="flex:1;"><b>家庭成员护照</b><div class="small mut" style="margin-top:3px;">需成员本人授权 / 监护证据后可见</div></div><span class="st n">待授权</span></div></div>'+
+ '<a class="btn quiet block sm" data-go="family">管理家庭成员与授权</a>'+
+ '<div class="hintbar" style="background:var(--navy-50);color:var(--navy);margin-top:12px;">'+ic('lock',17)+'<div>护照号属敏感信息，默认脱敏显示，仅在办理必需范围内使用。</div></div>'+
+ '</div>'+tb('global'));
+
+V.visa=view('visa',sb()+'<div class="body"><div class="gbar"><div class="gbk" data-go="global">'+ic('back',18)+'</div><div class="tt">签证要求查询</div></div>'+
+ '<div class="card"><div class="small mut">持护照</div><div style="font-weight:700;margin:3px 0 12px;">中国 · 普通护照</div>'+
+ '<div class="small mut">目的地</div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:6px;"><span class="chip on">A 国</span><span class="chip">B 地区</span><span class="chip">C 国</span></div></div>'+
+ '<div class="card"><h4 style="margin-bottom:11px;">按出行目的（示例）</h4>'+
+ '<div class="mat-row"><div class="mt"><b>旅游 / 短期访问</b></div><span class="st a"><span class="d"></span>需提前签证</span></div>'+
+ '<div class="mat-row"><div class="mt"><b>商务考察</b></div><span class="st a"><span class="d"></span>需签证</span></div>'+
+ '<div class="mat-row"><div class="mt"><b>工作（长期）</b></div><span class="st r"><span class="d"></span>需工作许可前置</span></div>'+
+ '<div class="mat-row" style="border-bottom:0;"><div class="mt"><b>数字游民</b></div><span class="st p"><span class="d"></span>专项许可</span></div></div>'+
+ '<div class="hintbar" style="background:var(--navy-50);color:var(--navy);margin-top:4px;">'+ic('info',17)+'<div>以上为<b>示例</b>。正式结果以授权数据源与目的地官方为准，出行前再次核对。</div></div></div>'+
+ '<a class="btn navy block" data-go="project">查看匹配的身份项目</a>'+
+ '</div>'+tb('global'));
+
+V.passportCompare=view('passportCompare',sb()+'<div class="body"><div class="gbar"><div class="gbk" data-go="global">'+ic('back',18)+'</div><div class="tt">护照对比与通行力</div></div>'+
+ '<div class="hintbar">'+ic('info',17)+'<div>排名与数字为<b>示例演示</b>，正式版接入授权数据源并标注更新日期。</div></div>'+
+ '<div class="card" style="padding:6px 14px;">'+
+ '<div class="mat-row" style="background:var(--navy-50);border-radius:12px;padding:10px 12px;"><div style="width:34px;font-weight:800;color:var(--navy);">—</div><div class="mt"><b>中国（我的护照）</b><span>普通护照</span></div><b style="font-size:15px;color:var(--navy);">示例 86</b></div>'+
+ '<div class="mat-row"><div style="width:34px;" class="mut small">1</div><div class="mt"><b>示例国 X</b></div><b style="font-size:14px;">193</b></div>'+
+ '<div class="mat-row"><div style="width:34px;" class="mut small">2</div><div class="mt"><b>示例国 Y</b></div><b style="font-size:14px;">192</b></div>'+
+ '<div class="mat-row" style="border-bottom:0;"><div style="width:34px;" class="mut small">6</div><div class="mt"><b>示例国 Z</b></div><b style="font-size:14px;">187</b></div></div>'+
+ '<div class="sec-t">两本护照对比（示例）</div>'+
+ '<div class="card" style="padding:0;overflow:hidden;"><table class="fee-tbl" style="font-size:12.5px;"><tr><th style="width:46%;">项目</th><th>我的护照</th><th>示例国 X</th></tr>'+
+ '<tr><td>免签 / 落地签数量</td><td>示例 86</td><td>193</td></tr><tr><td>主要目的地区域</td><td>亚洲为主</td><td>全球主要地区</td></tr><tr><td>数据更新</td><td colspan="2" style="color:var(--faint);">以数据源标注日期为准</td></tr></table></div>'+
+ '<div class="small mut" style="line-height:1.8;padding:0 4px;">通行力仅反映短期旅行便利，不代表移民、工作或长期居留资格。</div>'+
+ '</div>'+tb('global'));
+
+/* ===== 服务目录与工单 P-14/15 ===== */
+V.services=view('services',sb()+'<div class="body"><div class="gtop"><div class="tt">全部服务</div><div class="small" style="opacity:.85;margin-top:4px;">预约、疑问、变更、退款，投诉独立受理</div></div>'+
+ '<div class="card" style="padding:6px 14px;">'+
+ [['预约顾问沟通','clock'],['办理疑问咨询','headset'],['进度异常反馈','alert'],['退款 / 费用争议','coins'],['资料与关系变更','edit'],['凭证与合同索取','doc']].map(x=>'<div class="mat-row" data-go="ticketCreate" style="cursor:pointer;"><div class="mi">'+ic(x[1],18)+'</div><div class="mt"><b>'+x[0]+'</b></div><span style="color:var(--faint);">'+ic('chevron',17)+'</span></div>').join('')+'</div>'+
+ '<div class="card" style="border-left:4px solid var(--red);"><div style="display:flex;gap:10px;align-items:center;margin-bottom:6px;">'+ic('shield',19).replace('stroke="currentColor"','stroke="#C03221"')+'<b style="color:var(--red);font-size:13.5px;">投诉与合规举报（独立受理）</b></div><div class="small mut" style="line-height:1.8;">顾问私收款、平台外承诺、误导宣传等，由不经手该顾问的独立合规岗受理；你的保障边界可随时出示。</div><a class="btn ghost sm" style="margin-top:11px;border-color:var(--red);color:var(--red);" data-go="ticketCreate">发起独立投诉</a></div>'+
+ '<div class="sec-t">我的工单</div>'+
+ '<div class="proj-row" data-go="ticketDetail"><div class="flag">'+ic('headset',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">#TK-0919-006 补件指引咨询</b><div class="small mut" style="margin-top:3px;">最近回复 09-20 · 处理中</div></div><span class="st b"><span class="d"></span>处理中</span></div>'+
+ '<div class="proj-row" data-go="ticketDetail"><div class="flag">'+ic('check',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">#TK-0902-011 收据补开</b><div class="small mut" style="margin-top:3px;">已完成</div></div><span class="st g"><span class="d"></span>已完成</span></div>'+
+ '</div>'+tb('services'));
+
+V.ticketCreate=view('ticketCreate',sb()+'<div class="body"><div class="appbar"><div class="bk" data-go="services">'+ic('back',18)+'</div><div class="tt">发起工单</div></div>'+
+ '<div class="card"><div class="small mut" style="margin-bottom:8px;">问题类型</div><div style="display:flex;gap:7px;flex-wrap:wrap;"><span class="chip on">办理疑问</span><span class="chip">进度异常</span><span class="chip">退款争议</span><span class="chip">投诉举报</span></div></div>'+
+ '<div class="card"><div class="small mut" style="margin-bottom:8px;">关联案件（可选）</div><div style="height:46px;border:1.5px solid var(--line);border-radius:12px;display:flex;align-items:center;padding:0 14px;font-size:13.5px;">CASE-A03 · A 国技术居留</div></div>'+
+ '<div class="card"><div class="small mut" style="margin-bottom:8px;">问题描述</div><div style="border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--faint);min-height:96px;line-height:1.7;">请描述你遇到的问题，可补充截图与凭证…</div></div>'+
+ '<div class="hintbar" style="background:var(--navy-50);color:var(--navy);">'+ic('clock',17)+'<div>普通问题示例 SLA：1 个工作日内首次响应；投诉类自动分派独立合规岗，不经被投诉人。</div></div>'+
+ '</div><div class="cta-bar"><a class="btn navy block" data-toast="工单已提交，编号将通过消息与短信送达">提交工单</a></div>');
+
+V.ticketDetail=view('ticketDetail',sb()+'<div class="body"><div class="appbar"><div class="bk" data-go="services">'+ic('back',18)+'</div><div class="tt">工单详情</div><span class="st b"><span class="d"></span>处理中</span></div>'+
+ '<div class="card"><b style="font-size:14px;">#TK-0919-006 补件指引咨询</b><div class="small mut" style="line-height:1.8;margin-top:7px;">关联 CASE-A03 · 09-19 提交 · 服务保障组受理</div></div>'+
+ '<div class="tli"><div class="rail"><span class="dot" style="background:var(--blue);"></span><span class="vl"></span></div><div class="tc"><div class="tt">客户提交 <span class="st b"><span class="d"></span>客户</span></div><div class="td">无犯罪公证双号要求不明确，请求指引。</div></div></div>'+
+ '<div class="tli"><div class="rail"><span class="dot" style="background:var(--purple);"></span><span class="vl"></span></div><div class="tc"><div class="tt">服务组回复 <span class="st p"><span class="d"></span>平台</span></div><div class="td">已说明需附双号公证书模板，09-20 11:20。</div></div></div>'+
+ '<div class="tli"><div class="rail"><span class="dot" style="background:var(--line);border:2px solid var(--faint);"></span></div><div class="tc" style="border-style:dashed;"><div class="tt mut">等待客户补充</div><div class="td">可在下方继续回复或上传凭证。</div></div></div>'+
+ '</div><div class="cta-bar"><a class="btn ghost" style="flex:1;" data-toast="演示：补充回复已发送">补充回复</a><a class="btn navy" style="flex:1;" data-go="cases">去处理材料</a></div>');
+
+/* ===== 消息 P-13 ===== */
+V.messages=view('messages',sb()+'<div class="body"><div class="appbar"><div class="bk" data-go="progress">'+ic('back',18)+'</div><div class="tt">消息中心</div></div>'+
+ '<div class="sec-t" style="margin-top:0;">待办与时限</div>'+
+ '<div class="proj-row" data-go="progress" style="border-left:3px solid var(--red);"><div class="flag" style="background:var(--red-bg);color:var(--red);">'+ic('alert',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">T0 · 补件回执剩余 4 小时</b><div class="small mut" style="margin-top:3px;">短信未达，已转人工电话 · 锁屏不显示案号</div></div><span class="st r"><span class="d"></span>T0</span></div>'+
+ '<div class="sec-t">案件动态</div>'+
+ '<div class="proj-row" data-go="progress"><div class="flag" style="background:var(--green-bg);color:var(--green);">'+ic('check',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">官方受理回执已核验</b><div class="small mut" style="margin-top:3px;">CASE-A03 · 09-21 10:24</div></div></div>'+
+ '<div class="proj-row" data-go="progress"><div class="flag" style="background:var(--amber-bg);color:var(--amber);">'+ic('send',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">服务方已递交（待官方核验）</b><div class="small mut" style="margin-top:3px;">不作为官方状态 · 09-20</div></div></div>'+
+ '<div class="sec-t">系统与通知</div>'+
+ '<div class="proj-row" data-go="ticketDetail"><div class="flag">'+ic('bell',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">工单 #TK-0919-006 有新回复</b><div class="small mut" style="margin-top:3px;">09-20 11:20</div></div></div>'+
+ '<div class="proj-row" data-go="education"><div class="flag" style="background:var(--berry-50);color:var(--berry);">'+ic('book',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">防骗教育：三句话识别违规承诺</b><div class="small mut" style="margin-top:3px;">消费者教育专区</div></div></div>'+
+ '</div>'+tb('cases'));
+
+/* ===== 我的 P-17 ===== */
+function meRow(icon,label,go,tag){return '<div class="mat-row" data-go="'+(go||'')+'" '+(go?'':'data-toast="演示：该入口将在正式版提供"')+' style="cursor:pointer;"><div class="mi">'+ic(icon,18)+'</div><div class="mt"><b>'+label+'</b></div>'+(tag?'<span class="st n">'+tag+'</span>':'')+'<span style="color:var(--faint);">'+ic('chevron',17)+'</span></div>';}
+V.me=view('me',sb()+'<div class="body">'+
+ '<div class="gradband" style="padding:18px;display:flex;align-items:center;gap:14px;"><div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;">'+ic('user',26)+'</div><div style="flex:1;"><b style="font-size:16px;">王某某</b><div class="small" style="opacity:.85;margin-top:3px;">138****2051 · 已实名</div></div></div>'+
+ '<div class="card" style="margin-top:12px;padding:6px 14px;">'+
+ meRow('user','我的顾问','advisorCard','陈某')+
+ meRow('bookmark','我的方案','proposal','v3')+
+ meRow('card','订单 · 合同 · 收据','order')+
+ meRow('case','我的案件','cases','1 个在办')+
+ meRow('users','家庭成员与授权','family')+
+ meRow('bell','消息通知','messages')+
+ '</div><div class="card" style="padding:6px 14px;">'+
+ meRow('book','移民防骗教育','education')+
+ meRow('doc','合同凭据库','')+
+ meRow('list','访问与授权记录','accessLog')+
+ meRow('info','设置与隐私','')+
+ '</div>'+
+ '<a class="btn ghost block sm" data-toast="演示：退出登录" style="color:var(--mut);border-color:var(--line);">'+ic('logout',16)+' 退出登录</a>'+
+ '<div class="small mut" style="text-align:center;margin:12px 0;line-height:1.8;">数据分级保护：敏感信息脱敏显示，跨境共享单独同意。</div>'+
+ '</div>'+tb('me'));
+
+V.accessLog=view('accessLog',sb()+'<div class="body"><div class="appbar"><div class="bk" data-go="me">'+ic('back',18)+'</div><div class="tt">访问与授权记录</div></div>'+
+ '<div class="card" style="padding:6px 14px;">'+
+ '<div class="mat-row"><div class="mi">'+ic('lock',18)+'</div><div class="mt"><b>境外律所 A 查看 CASE-A03 材料</b><span>受控门户 · 批次 B-2409-07 · 全屏水印</span></div><span class="small mut">09-21</span></div>'+
+ '<div class="mat-row"><div class="mi">'+ic('doc',18)+'</div><div class="mt"><b>护照原件查看申请（已批准，2 小时窗口）</b><span>审批留痕 · 到期自动回收</span></div><span class="small mut">09-18</span></div>'+
+ '<div class="mat-row" style="border-bottom:0;"><div class="mi">'+ic('users',18)+'</div><div class="mt"><b>配偶授权：待本人确认</b><span>成年成员须本人授权</span></div><span class="st a"><span class="d"></span>待确认</span></div>'+
+ '</div><div class="small mut" style="line-height:1.8;padding:0 4px;">任何越权访问由服务端拒绝并记录审计；你可随时撤回授权，撤回后新动作立即停止，在办交接不失联。</div></div>'+tb('me'));
+
+/* ===== 家庭授权 P-18 ===== */
+V.family=view('family',sb()+'<div class="body"><div class="appbar"><div class="bk" data-go="me">'+ic('back',18)+'</div><div class="tt">家庭成员与授权</div></div>'+
+ '<div class="hintbar">'+ic('info',17)+'<div>授权按「人员 × 案件 × 动作 × 有效期」逐项生效；成年成员必须本人授权，未成年人需监护证据，监护争议转人工处理。</div></div>'+
+ '<div class="card"><div style="display:flex;align-items:center;gap:12px;"><div style="width:42px;height:42px;border-radius:50%;background:var(--navy-100);display:flex;align-items:center;justify-content:center;color:var(--navy);">'+ic('user',21)+'</div><div style="flex:1;"><b>王某某（本人 · 主申请人）</b><div class="small mut" style="margin-top:2px;">CASE-A03 全部本人材料</div></div><span class="st g"><span class="d"></span>本人</span></div></div>'+
+ '<div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;"><div style="width:42px;height:42px;border-radius:50%;background:var(--navy-50);display:flex;align-items:center;justify-content:center;color:var(--navy);">'+ic('users',21)+'</div><div style="flex:1;"><b>配偶</b><div class="small mut" style="margin-top:2px;">成年成员 · 需本人确认</div></div><span class="st a"><span class="d"></span>待本人授权</span></div>'+
+ '<div style="border:1px dashed var(--line);border-radius:12px;padding:11px 13px;font-size:12px;color:var(--mut);line-height:1.8;">将通过短信邀请配偶本人登录确认；不支持主申请人代勾选。<br>授权动作：材料查看 / 提交 / 进度接收 / 方案知悉。</div>'+
+ '<a class="btn navy sm block" style="margin-top:10px;" data-toast="邀请已发送至配偶手机，待本人确认">发送本人授权邀请</a></div>'+
+ '<div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;"><div style="width:42px;height:42px;border-radius:50%;background:var(--navy-50);display:flex;align-items:center;justify-content:center;color:var(--navy);">'+ic('users',21)+'</div><div style="flex:1;"><b>随行子女（未成年）</b><div class="small mut" style="margin-top:2px;">随主案 · 需监护证据</div></div><span class="st b"><span class="d"></span>监护审核中</span></div>'+
+ '<div class="small mut" style="line-height:1.8;">已上传户口簿与出生证明示例；监护关系存争议时自动转人工，不通过隐藏入口放行。</div></div>'+
+ '<a class="btn quiet block sm" data-toast="演示：添加家庭成员需先完成关系核验">+ 添加家庭成员</a>'+
+ '</div>'+tb('me'));
+
+/* ===== 项目比较 P-05 ===== */
+V.compare=view('compare',sb()+'<div class="body"><div class="gbar"><div class="gbk" data-go="projects">'+ic('back',18)+'</div><div class="tt">项目比较</div></div>'+
+ '<div class="card" style="padding:0;overflow:hidden;"><table class="fee-tbl" style="font-size:12px;"><tr><th style="width:30%;">维度</th><th>A 国技术居留</th><th>C 国数字游民</th></tr>'+
+ '<tr><td>身份性质</td><td>长期工作居留（非永居）</td><td>临时数字游民许可</td></tr>'+
+ '<tr><td>参考周期</td><td>9–14 个月（非承诺）</td><td>2–4 个月（示例）</td></tr>'+
+ '<tr><td>语言要求</td><td>B1</td><td>无硬性要求</td></tr>'+
+ '<tr><td>随行家庭</td><td>配偶 / 子女</td><td>部分支持</td></tr>'+
+ '<tr><td>费用收取方</td><td>平台+境内+境外持牌+官方</td><td>平台+官方</td></tr>'+
+ '<tr><td>当前状态</td><td><span class="st g"><span class="d"></span>可评估</span></td><td><span class="st a"><span class="d"></span>核验中</span></td></tr></table></div>'+
+ '<div class="hintbar" style="background:var(--navy-50);color:var(--navy);">'+ic('info',17)+'<div>异币种费用不相加、不折算总价；周期为参考区间而非承诺。</div></div>'+
+ '<a class="btn navy block" data-go="assessment">对 A 国技术居留做初步评估</a>'+
+ '</div>'+tb('projects'));
+
+/* ===== 防骗教育 ===== */
+V.education=view('education',sb()+'<div class="body"><div class="appbar"><div class="bk" data-go="me">'+ic('back',18)+'</div><div class="tt">移民防骗教育</div></div>'+
+ '<div class="gradband" style="padding:16px 18px;"><b style="font-size:14.5px;">三句话，守住你的钱与身份</b><div class="small" style="opacity:.9;line-height:1.8;margin-top:7px;">不看广告看主体，不听承诺看凭据，不转个人只转对公。</div></div>'+
+ '<div class="card"><div style="display:flex;gap:11px;align-items:flex-start;"><span class="st r" style="flex:none;">骗局 1</span><div><b style="font-size:13.5px;">「包成功、不成功全退」</b><div class="small mut" style="line-height:1.8;margin-top:5px;">审批由目的地官方决定，任何机构都不能承诺获批；本平台不展示成功率。</div></div></div></div>'+
+ '<div class="card"><div style="display:flex;gap:11px;align-items:flex-start;"><span class="st r" style="flex:none;">骗局 2</span><div><b style="font-size:13.5px;">要求向个人账户 / 第三方公司转账</b><div class="small mut" style="line-height:1.8;margin-top:5px;">收款户名必须与签约主体一致；不一致时系统直接关闭付款入口。</div></div></div></div>'+
+ '<div class="card"><div style="display:flex;gap:11px;align-items:flex-start;"><span class="st a" style="flex:none;">识别 3</span><div><b style="font-size:13.5px;">核验顾问资质与项目授权</b><div class="small mut" style="line-height:1.8;margin-top:5px;">名片仅展示经核验的备案与授权范围；超范围报价、平台外承诺均可独立投诉。</div></div></div></div>'+
+ '<a class="btn berry block" data-go="ticketCreate">我遇到了可疑情况，立即反馈</a>'+
+ '</div>'+tb('me'));
+
+V.advisorCard=view('advisorCard',sb()+'<div class="body"><div class="gbar"><div class="gbk" data-go="assessmentResult">'+ic('back',18)+'</div><div class="tt">顾问名片</div></div><div class="card" style="text-align:center;padding:30px 22px;"><div style="width:72px;height:72px;border-radius:50%;background:var(--grad);margin:0 auto 12px;box-shadow:0 8px 20px rgba(94,36,107,.3);display:flex;align-items:center;justify-content:center;color:#fff;">'+ic('user',34)+'</div><b style="font-size:17px;">陈某</b><div class="small mut" style="margin-top:4px;">身份规划顾问 · 示例出入境咨询（北京）</div><div style="display:flex;gap:7px;justify-content:center;margin:14px 0;flex-wrap:wrap;"><span class="st g"><span class="d"></span>资质已核验</span><span class="st n">备案 BJ-2026-018</span></div><div class="small mut" style="line-height:1.9;">已授权 A 国技术居留等 3 个项目；名片仅展示白名单核验字段，无成功率类表述。</div><a class="btn berry block" style="margin-top:18px;" data-toast="请求已发送，顾问接受后服务关系成立">请求该顾问服务</a></div></div>');
+
+/* render */
+const root=document.getElementById('root');
+Object.keys(V).forEach(k=>{const w=document.createElement('div');w.innerHTML=V[k];root.appendChild(w.firstElementChild);});
+let hist=['login'];
+function go(k,push){const el=document.getElementById('v-'+k);if(!el)return;
+ document.querySelectorAll('.view').forEach(v=>v.classList.remove('on','back'));
+ el.classList.add('on');if(push!==false&&hist[hist.length-1]!==k)hist.push(k);
+ const b=el.querySelector('.body');if(b)b.scrollTop=0;
+}
+let toastT;function toast(m){let t=document.getElementById('utoast');if(!t){t=document.createElement('div');t.id='utoast';t.style.cssText='position:absolute;left:50%;bottom:96px;transform:translate(-50%,140%);background:rgba(27,36,51,.92);backdrop-filter:blur(10px);color:#fff;font-size:13px;padding:12px 20px;border-radius:16px;box-shadow:0 10px 32px rgba(10,20,45,.32);border:1px solid rgba(255,255,255,.08);z-index:50;transition:transform .34s cubic-bezier(.34,1.3,.5,1);max-width:300px;text-align:center;';document.querySelector('.screen').appendChild(t);}t.textContent=m;t.style.transform='translate(-50%,0)';clearTimeout(toastT);toastT=setTimeout(()=>t.style.transform='translate(-50%,140%)',1900);}
+function qpick(el){[...el.parentNode.children].forEach(c=>c.classList.remove('on'));el.classList.add('on');}
+document.addEventListener('click',e=>{
+ const g=e.target.closest('[data-go]');if(g){go(g.dataset.go);return;}
+ const tt=e.target.closest('[data-toast]');if(tt){toast(tt.dataset.toast);return;}
+ const q=e.target.closest('.qopt');if(q)qpick(q);
+});
+go('login',false);
+</script>
+</body>
+</html>

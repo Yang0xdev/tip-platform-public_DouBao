@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>服务方受控门户 · 高保真 v1.3（外部持牌方 / 自营交付部双模式 · 高级动效版）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23AF2D67'/%3E%3Cstop offset='.5' stop-color='%235E246B'/%3E%3Cstop offset='1' stop-color='%23002661'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M10 16.5l4 4 8-9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+:root{
+ --navy:#002661;--navy-h:#1E3E78;--navy-50:#EDF1F8;--navy-100:#DCE4F2;
+ --berry:#AF2D67;--berry-50:#FAEEF4;
+ --ink:#1B2433;--mut:#5E6B7E;--faint:#8A95A6;--line:#E5E9F0;--line-2:#F0F3F8;--paper:#F5F7FA;--card:#FFF;
+ --g-bg:#E6F4EE;--g-tx:#177A5B;--a-bg:#FBF1E2;--a-tx:#B45309;--r-bg:#FCEBEA;--r-tx:#C03221;--b-bg:#E9F2F8;--b-tx:#1D5F8A;--p-bg:#EFECF7;--p-tx:#6B5AA8;
+ --r15:15px;--sh1:0 1px 3px rgba(16,33,64,.06),0 6px 18px -8px rgba(16,33,64,.14);--sh2:0 2px 6px rgba(16,33,64,.05),0 20px 44px -14px rgba(15,35,80,.22);
+ --ease:cubic-bezier(.22,.61,.36,1);--spring:cubic-bezier(.34,1.3,.5,1);--ease-out:cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Manrope','Noto Sans SC',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--paper);color:var(--ink);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+button{font-family:inherit;cursor:pointer;border:0;background:none;}
+a{cursor:pointer;}
+/* ===== 顶栏 ===== */
+.top{height:60px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 24px;position:sticky;top:0;z-index:40;}
+.logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);display:flex;align-items:center;justify-content:center;color:#fff;flex:none;}
+.logo svg{width:19px;height:19px;}
+.t-name{font-weight:800;font-size:15px;line-height:1.25;}
+.t-sub{font-size:11px;color:var(--faint);}
+.t-pill{margin-left:auto;display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--g-tx);background:var(--g-bg);padding:6px 12px;border-radius:20px;}
+.lockbadge{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--navy);background:var(--navy-50);border:1px solid var(--navy-100);padding:6px 12px;border-radius:20px;}
+.lockbadge svg{width:13px;height:13px;}
+.modswitch{display:flex;background:var(--line-2);border-radius:20px;padding:3px;}
+.modswitch button{font-size:12.5px;font-weight:700;padding:6px 14px;border-radius:18px;color:var(--mut);transition:all .28s var(--spring);white-space:nowrap;}
+.modswitch button.on{background:linear-gradient(180deg,#0B3A82,#002661);color:#fff;box-shadow:0 4px 12px rgba(0,38,97,.25),inset 0 1px 0 rgba(255,255,255,.14);}
+.t-user{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--mut);padding-left:14px;border-left:1px solid var(--line);}
+.t-user .av{width:30px;height:30px;border-radius:50%;background:var(--navy-100);color:var(--navy);display:flex;align-items:center;justify-content:center;font-weight:800;}
+/* ===== 布局 ===== */
+.wrap{max-width:1240px;margin:0 auto;padding:22px 24px 90px;position:relative;}
+.crumb{font-size:12px;color:var(--faint);margin-bottom:10px;}
+.head{background:#fff;border:1px solid var(--line);border-radius:var(--r15);padding:18px 22px;box-shadow:var(--sh1);margin-bottom:16px;}
+.head h1{font-size:19px;font-weight:800;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.head .meta{font-size:12.5px;color:var(--mut);margin-top:8px;line-height:1.8;}
+.mode-note{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:14px;background:var(--p-bg);color:var(--p-tx);}
+/* tabs */
+.tabs{display:flex;gap:4px;background:#fff;border:1px solid var(--line);border-radius:var(--r15);padding:6px;box-shadow:var(--sh1);margin-bottom:16px;position:sticky;top:72px;z-index:30;}
+.tabs button{flex:1;padding:11px 8px;border-radius:10px;font-size:13.5px;font-weight:700;color:var(--mut);display:flex;align-items:center;justify-content:center;gap:8px;transition:all .25s var(--ease-out);}.tabs button:hover{color:var(--navy);background:var(--line-2);}.tabs button.on:hover{background:linear-gradient(180deg,#0B3A82,#002661);}
+.tabs button svg{width:16px;height:16px;}
+.tabs button.on{background:linear-gradient(180deg,#0B3A82,#002661);color:#fff;box-shadow:0 4px 12px rgba(0,38,97,.22),inset 0 1px 0 rgba(255,255,255,.12);}
+.tpane{display:none;animation:fadeUp .34s var(--ease);}
+.tpane.on{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+/* cards / tables */
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r15);padding:18px 20px;box-shadow:var(--sh1);margin-bottom:16px;transition:box-shadow .25s,transform .25s var(--ease-out);}.card:hover{box-shadow:var(--sh2);}
+.card h3{font-size:14.5px;font-weight:800;margin-bottom:13px;display:flex;align-items:center;gap:8px;}
+.card h3 .ic{width:30px;height:30px;border-radius:9px;background:var(--navy-50);color:var(--navy);display:inline-flex;align-items:center;justify-content:center;}
+.card h3 .ic svg{width:16px;height:16px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;table-layout:fixed;}
+th{text-align:left;color:var(--faint);font-weight:700;font-size:11.5px;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;}
+td{padding:11px 10px;border-bottom:1px solid var(--line-2);color:var(--ink);vertical-align:top;word-break:break-word;}
+tr:last-child td{border-bottom:0;}
+tbody tr{transition:background .15s;}tbody tr:hover{background:var(--line-2);}
+.st{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:12px;white-space:nowrap;}
+.st .d{width:6px;height:6px;border-radius:50%;background:currentColor;}
+.st.g{background:var(--g-bg);color:var(--g-tx);}.st.a{background:var(--a-bg);color:var(--a-tx);}.st.r{background:var(--r-bg);color:var(--r-tx);}
+.st.b{background:var(--b-bg);color:var(--b-tx);}.st.p{background:var(--p-bg);color:var(--p-tx);}.st.n{background:var(--line-2);color:var(--mut);}
+.btn{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:8px 15px;border-radius:10px;transition:transform .18s var(--spring),box-shadow .25s,background .2s;white-space:nowrap;}
+.btn:active{transform:scale(.955);}
+.btn.navy{background:linear-gradient(180deg,#0B3A82,#002661);color:#fff;box-shadow:0 4px 12px rgba(0,38,97,.2),inset 0 1px 0 rgba(255,255,255,.12);}.btn.navy:hover{filter:brightness(1.08);}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--navy-100);}
+.btn.ghost:hover{background:var(--navy-50);}
+.btn svg{width:14px;height:14px;}
+.gate{border-radius:12px;padding:13px 16px;font-size:12.5px;line-height:1.85;display:flex;gap:10px;margin-bottom:16px;}
+.gate svg{width:17px;height:17px;flex:none;margin-top:2px;}
+.gate.block{background:var(--r-bg);color:#8c261b;border:1px solid #f3c9c5;}
+.gate.warn{background:var(--a-bg);color:#8a4608;border:1px solid #f0d9b8;}
+.gate.info{background:var(--b-bg);color:#174a6b;border:1px solid #c9dfec;}
+.gate b{font-weight:800;}
+.note{background:var(--navy-50);border:1px solid var(--navy-100);border-radius:12px;padding:12px 15px;font-size:12px;color:var(--navy);line-height:1.8;display:flex;gap:9px;margin-top:12px;}
+.note svg{width:15px;height:15px;flex:none;margin-top:2px;}
+/* reader */
+.reader{border:1.5px dashed var(--navy-100);border-radius:12px;background:repeating-linear-gradient(45deg,#fafbfe,#fafbfe 14px,#f4f7fc 14px,#f4f7fc 28px);position:relative;overflow:hidden;min-height:250px;display:flex;flex-direction:column;}
+.reader .rwm{position:absolute;inset:-40px;pointer-events:none;z-index:1;}
+.reader .rbody{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;color:var(--mut);font-size:13px;text-align:center;padding:30px;}
+.reader .rbody .docic{width:52px;height:52px;border-radius:14px;background:#fff;border:1px solid var(--line);box-shadow:var(--sh1);display:flex;align-items:center;justify-content:center;color:var(--navy);}
+.reader .rtools{position:relative;z-index:2;display:flex;gap:8px;justify-content:center;padding:12px;border-top:1px solid var(--line);background:rgba(255,255,255,.85);}
+.rbtn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:7px 13px;border-radius:9px;}
+.rbtn svg{width:14px;height:14px;}
+.rbtn.off{background:var(--line-2);color:var(--faint);text-decoration:line-through;}
+.rbtn.ok{background:linear-gradient(180deg,#0B3A82,#002661);color:#fff;}
+.pnote{font-size:11.5px;color:var(--mut);line-height:1.8;margin-top:10px;}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:var(--r15);padding:14px 16px;box-shadow:var(--sh1);transition:transform .22s var(--ease-out),box-shadow .28s;}.kpi:hover{transform:translateY(-2px);box-shadow:var(--sh2);}
+.kpi .n{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.5px;}
+.kpi .l{font-size:11.5px;color:var(--mut);margin-top:2px;}
+.kpi .n.r{color:var(--r-tx);}.kpi .n.a{color:var(--a-tx);}.kpi .n.g{color:var(--g-tx);}
+/* watermark layer */
+#wm{position:absolute;inset:0;pointer-events:none;z-index:60;}
+.foot{position:fixed;left:0;right:0;bottom:0;background:var(--navy);color:#cdd8ee;font-size:11.5px;padding:9px 24px;display:flex;align-items:center;gap:10px;z-index:41;}
+.foot svg{width:14px;height:14px;flex:none;color:#9db2dd;}
+.foot b{color:#fff;font-weight:700;}
+.toast{position:fixed;left:50%;bottom:64px;transform:translateX(-50%) translateY(16px);background:rgba(12,26,52,.92);backdrop-filter:blur(10px);color:#fff;padding:11px 20px;border-radius:16px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s,transform .32s var(--spring);z-index:99;max-width:70%;text-align:center;box-shadow:var(--sh2);border:1px solid rgba(255,255,255,.08);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.devnote{max-width:1240px;margin:0 auto;padding:0 24px 26px;font-size:11.5px;color:var(--faint);line-height:1.9;}
+@media(max-width:900px){.grid2{grid-template-columns:1fr;}.kpis{grid-template-columns:repeat(2,1fr);}.t-user,.t-sub{display:none;}.tabs{flex-wrap:wrap;position:static;}.tabs button{flex:1 1 45%;}}
+
+/* ===== v1.3 高级动效层 ===== */
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(192,50,33,.38)}70%{box-shadow:0 0 0 7px rgba(192,50,33,0)}100%{box-shadow:0 0 0 0 rgba(192,50,33,0)}}
+.tpane.on .card{animation:cardIn .45s var(--ease-out) both;}
+.tpane.on .card:nth-child(2){animation-delay:.05s}.tpane.on .card:nth-child(3){animation-delay:.09s}
+.tpane.on .card:nth-child(4){animation-delay:.13s}.tpane.on .card:nth-child(5){animation-delay:.17s}
+.tpane.on .kpis{animation:cardIn .4s var(--ease-out) both;}
+@keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.st.r .d{animation:pulse 1.8s ease-out infinite;}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+
+<div class="top">
+ <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg></div>
+ <div>
+  <div class="t-name">服务方协作门户</div>
+  <div class="t-sub">受控只读 · B2B 境外段协作</div>
+ </div>
+ <div class="t-pill"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 12 2 2 4-5"/><circle cx="12" cy="12" r="9"/></svg>影子运行环境</div>
+ <div class="modswitch">
+  <button id="m-ext" onclick="setMode('ext')">外部持牌方</button>
+  <button id="m-in" onclick="setMode('in')">自营交付部</button>
+ </div>
+ <div class="lockbadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg><span id="locktxt">只读 · 全屏水印 · 不可下载</span></div>
+ <div class="t-user"><div class="av">例</div><div><div style="color:var(--ink);font-weight:700;" id="u-name">承办人 · 示例账号</div><div>15 分钟无操作自动退出</div></div></div>
+</div>
+
+<div class="wrap" id="wrap">
+ <div id="wm"></div>
+ <div class="crumb">门户首页 / <span id="crumb-mode">外部持牌方</span></div>
+ <div class="head">
+  <h1 id="h-title"></h1>
+  <div class="meta" id="h-meta"></div>
+ </div>
+
+ <div class="tabs" id="tabs">
+  <button class="on" data-t="cases"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/><path d="M3 12.5h18"/></svg><span id="tab-cases">分派给我的案件</span></button>
+  <button data-t="grants"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3.6"/><path d="m10.8 10.8 8.2 8.2M16.5 14.5l2-2M14.5 16.5l2-2"/></svg>批次授权与材料</button>
+  <button data-t="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="m9 13.5 2 2 4-4.2"/></svg>报告 / 凭据提交</button>
+  <button data-t="profile" id="tab-profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 7.2h1.6M13.4 7.2H15M9 11h1.6M13.4 11H15M9 14.8h1.6M13.4 14.8H15M10.2 21v-2.6h3.6V21"/></svg>资质与协议</button>
+ </div>
+
+ <!-- 案件 -->
+ <div class="tpane on" data-p="cases">
+  <div class="kpis">
+   <div class="kpi"><div class="n">3</div><div class="l" id="k-cases">分派给本机构的案件</div></div>
+   <div class="kpi"><div class="n g">1</div><div class="l">有效批次授权</div></div>
+   <div class="kpi"><div class="n a">1</div><div class="l">原件查看待审批</div></div>
+   <div class="kpi"><div class="n">1</div><div class="l">授权过期需重新申请</div></div>
+  </div>
+  <div class="gate block"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg><div id="gate-cases"></div></div>
+  <div class="card">
+   <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7"/></svg></span><span id="cases-title">分派给本机构的案件（只读）</span></h3>
+   <table>
+    <colgroup><col style="width:11%"><col style="width:17%"><col style="width:17%"><col style="width:16%"><col style="width:13%"><col style="width:14%"><col style="width:12%"></colgroup>
+    <tr><th>平台案号</th><th>主申请人（脱敏）</th><th>项目 / 版本</th><th id="th-src">境内协作主体</th><th>当前阶段</th><th>批次授权</th><th>操作</th></tr>
+    <tr><td>CASE-A03</td><td>主申 王**（家庭 3 人）</td><td>A 国技术居留 v3.2</td><td id="src1">示例出入境咨询（北京）</td><td>材料准备中</td><td><span class="st g"><span class="d"></span>有效 · 至 09-23</span></td><td><button class="btn ghost" onclick="goTab('grants')">查看授权材料</button></td></tr>
+    <tr><td>CASE-A02</td><td>主申 李**（随行子女）</td><td>A 国随行子女 v1.4</td><td id="src2">示例出入境咨询（北京）</td><td>已递交待受理</td><td><span class="st n">已过期 · 需重新申请</span></td><td><button class="btn navy" onclick="toast('演示：发起批次授权申请，须写明用途、材料范围与有效期，由 A06/A10 逐项审批')">申请授权</button></td></tr>
+    <tr><td>CASE-A11</td><td>主申 陈**</td><td>A 国技术居留 v3.2</td><td id="src3">示例出入境咨询（北京）</td><td>待受理回执</td><td><span class="st a"><span class="d"></span>原件查看待审批</span></td><td><button class="btn ghost" onclick="toast('演示：原件查看为特殊审批，批准后开放 2 小时窗口，全程审计')">查看进度</button></td></tr>
+   </table>
+  </div>
+ </div>
+
+ <!-- 授权 -->
+ <div class="tpane" data-p="grants">
+  <div class="grid2">
+   <div>
+    <div class="card">
+     <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="8" r="3.6"/><path d="m10.8 10.8 8.2 8.2"/></svg></span><span id="grants-title">批次授权（由境内 A06/A10 逐项审批）</span></h3>
+     <table>
+      <colgroup><col style="width:20%"><col style="width:16%"><col style="width:30%"><col style="width:18%"><col style="width:16%"></colgroup>
+      <tr><th>授权批次</th><th>案件</th><th>可见范围（最小化）</th><th>有效期</th><th>状态</th></tr>
+      <tr><td>B-2409-07</td><td>CASE-A03</td><td>护照影印件 + 亲属关系影印件</td><td>至 09-23 23:59</td><td><span class="st g"><span class="d"></span>有效</span></td></tr>
+      <tr><td>B-2408-31</td><td>CASE-A02</td><td>全套申请材料影印件</td><td>已过期 09-07</td><td><span class="st n">已回收</span></td></tr>
+      <tr><td>B-2409-12</td><td>CASE-A03</td><td>护照原件（核验收件用）</td><td>待审批</td><td><span class="st a"><span class="d"></span>审批中</span></td></tr>
+     </table>
+    </div>
+    <div class="gate info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.5 2"/></svg><div><b>到期自动回收：</b>授权按「案件 × 材料范围 × 动作 × 有效期」授予；到期访问自动回收、不可续用；每次打开、翻页、尝试另存均写入访问审计（A10），<b id="audit-note">内部账号同样不豁免</b>。</div></div>
+   </div>
+   <div>
+    <div class="card">
+     <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></svg></span>受控阅读器（演示）</h3>
+     <div class="reader">
+      <div class="rwm" id="readerWm"></div>
+      <div class="rbody">
+       <div class="docic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="13" height="13" rx="2"/><path d="M4 17V5a2 2 0 0 1 2-2h12"/></svg></div>
+       <div style="font-weight:700;color:var(--ink);">CASE-A03 · 护照影印件</div>
+       <div style="font-size:11.5px;">水印预览 · 仅本批次授权用途</div>
+      </div>
+      <div class="rtools">
+       <button class="rbtn off" onclick="toast('演示：下载已被禁用（当前为只读授权）')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/></svg>下载</button>
+       <button class="rbtn off" onclick="toast('演示：另存 / 打印已被禁用')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="13" height="13" rx="2"/><path d="M4 17V5a2 2 0 0 1 2-2h12"/></svg>另存 / 打印</button>
+       <button class="rbtn ok" onclick="toast('演示：全屏水印含机构 / 部门名称、案号与查看时间，截屏可追溯')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></svg>水印说明</button>
+      </div>
+     </div>
+     <div class="pnote">影印件仅用于本批次授权用途；全屏水印含机构 / 部门名称、案号与查看时间。发现材料与清单不符时，只能在「报告提交」中书面说明，<b>不能直接联系客户</b>。</div>
+    </div>
+   </div>
+  </div>
+ </div>
+
+ <!-- 报告 -->
+ <div class="tpane" data-p="reports">
+  <div class="card">
+   <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg></span>提交报告 / 凭据</h3>
+   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+    <button class="btn navy" onclick="toast('演示：上传作业报告（PDF/图片），提交后状态为「待平台核验」')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"/></svg>提交作业报告</button>
+    <button class="btn ghost" onclick="toast('演示：上传官方回执 / 凭据扫描件，须含官方编号与日期')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>上传官方凭据</button>
+   </div>
+   <table>
+    <colgroup><col style="width:26%"><col style="width:14%"><col style="width:14%"><col style="width:18%"><col style="width:28%"></colgroup>
+    <tr><th>提交物</th><th>案件</th><th>类型</th><th>提交时间</th><th>平台状态</th></tr>
+    <tr><td>官方受理回执扫描件</td><td>CASE-A02</td><td>官方凭据</td><td>09-19 16:20</td><td><span class="st a"><span class="d"></span>待核验（核验人≠发起人）</span></td></tr>
+    <tr><td>材料核对报告 v2</td><td>CASE-A03</td><td>作业报告</td><td>09-18 11:02</td><td><span class="st g"><span class="d"></span>已核验采纳</span></td></tr>
+    <tr><td>补料说明（随行子女）</td><td>CASE-A02</td><td>作业报告</td><td>09-15 09:40</td><td><span class="st g"><span class="d"></span>已转客户补件</span></td></tr>
+   </table>
+  </div>
+  <div class="gate warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 2.5 20h19z"/><path d="M12 10v5M12 18.2v.3"/></svg><div><b>报告 ≠ 官方状态（内部同样适用）：</b>作业 / 服务方报告只作为线索进入平台核验流程，<b>不会直接显示为客户案件的官方进度</b>；官方节点以经核验的凭据为准。不得绕过平台向客户作受理 / 获批承诺。</div></div>
+ </div>
+
+ <!-- 资质 -->
+ <div class="tpane" data-p="profile" id="pane-profile"></div>
+</div>
+
+<div class="foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 5.5v5c0 4.5 3 7.8 7 9.5 4-1.7 7-5 7-9.5v-5z"/></svg><span id="foot-txt">受控边界：仅见本机构承接案件 · 联系方式与证件号默认不可见 · 不可修改金额 / 官方进度 / 对客承诺 · 全程访问留痕（A10）</span></div>
+<div class="toast" id="toast"></div>
+<div class="devnote">高保真可点击视觉稿 v1.0 · 外部持牌方 / 自营交付部双模式控制点完全相同 · 全部为虚构【示例】数据，不构成移民 / 法律建议 · 水印为前端演示，正式环境由服务端逐图加盖并做越权拒绝</div>
+
+<script>
+const I={
+ check:'<path d="m5 12.5 4.5 4.5L19 7"/>',ban:'<circle cx="12" cy="12" r="9"/><path d="m5.8 5.8 12.4 12.4"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.5 2"/>',
+ gavel:'<path d="m13.5 6.5 4 4M8.5 9.5l3 3M14 6l2.5-2.5 3.5 3.5L17.5 9.5M6 18.5 9 15.5M3 21h8M13 19l-2 2"/>',
+ building:'<rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 7.2h1.6M13.4 7.2H15M9 11h1.6M13.4 11H15M9 14.8h1.6M13.4 14.8H15M10.2 21v-2.6h3.6V21"/>',
+ doc:'<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="m9 13.5 2 2 4-4.2"/>'
+};
+function ic(k){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;">'+I[k]+'</svg>';}
+
+const MODE={
+ ext:{
+  h:'持牌方协作门户 · 受控只读',
+  meta:'<b>示例境外律所 · A 国</b>（境外持牌方，持牌有效期 2027-05）｜境内协作主体：<b>示例出入境咨询（北京）有限公司</b><br>本门户由境内平台授权开通，仅用于 B2B 境外段协作；会话 15 分钟无操作自动退出，全程访问留痕。',
+  crumb:'外部持牌方',tabCases:'分派给我的案件',casesTitle:'分派给本机构的案件（只读）',kCases:'分派给本机构的案件',
+  srcCol:'境内协作主体',srcVal:'示例出入境咨询（北京）',grantBy:'批次授权（由境内 A06/A10 逐项审批）',
+  gate:'仅见<b>本机构承接</b>的案件；客户联系方式、证件号、完整证件原件默认不可见；不可见其他客户、其他机构、平台佣金与顾问信息；不可修改金额、官方进度或任何对客承诺。',
+  foot:'受控边界：仅见本机构承接案件 · 联系方式与证件号默认不可见 · 不可见佣金 / 顾问信息 · 不可修改金额 / 官方进度 / 对客承诺 · 全程访问留痕（A10）',
+  wm:'示例境外律所·A国 受控只读',
+  profile:
+   '<div class="grid2"><div class="card"><h3><span class="ic">'+ic('building')+'</span>机构资质（只读，来源 A02）</h3>'+
+   '<table><colgroup><col style="width:34%"><col style="width:42%"><col style="width:24%"></colgroup>'+
+   '<tr><th>项目</th><th>信息</th><th>状态</th></tr>'+
+   '<tr><td>境外持牌编号</td><td>示例 RCIC-XXXX（虚构）</td><td><span class="st g"><span class="d"></span>有效至 2027-05</span></td></tr>'+
+   '<tr><td>执业范围</td><td>A 国居留 / 签证境外段</td><td>与承接项目一致</td></tr>'+
+   '<tr><td>境内协作主体</td><td>示例出入境咨询（北京）</td><td><span class="st g"><span class="d"></span>已关联</span></td></tr>'+
+   '<tr><td>门户账号</td><td>2 个（承办人，实名备案）</td><td>人员变更须报备</td></tr></table></div>'+
+   '<div class="card"><h3><span class="ic">'+ic('doc')+'</span>协议与承诺</h3>'+
+   '<table><colgroup><col style="width:66%"><col style="width:34%"></colgroup><tr><th>文件</th><th>状态</th></tr>'+
+   '<tr><td>B2B 服务委托与交付边界</td><td><span class="st g"><span class="d"></span>已签</span></td></tr>'+
+   '<tr><td>保密与个人信息处理协议</td><td><span class="st g"><span class="d"></span>已签</span></td></tr>'+
+   '<tr><td>跨境数据共享清单（最小化）</td><td><span class="st g"><span class="d"></span>已确认</span></td></tr>'+
+   '<tr><td>禁止夸大误导 / 协助虚假材料承诺</td><td><span class="st g"><span class="d"></span>已承诺</span></td></tr></table>'+
+   '<div class="note">'+ic('clock')+'<div><b>到期联动：</b>资质或协议到期前 60 天提醒；到期未续，门户自动降级为停止接收新案件、历史案件只读，状态由 A02/A03 强制控制。</div></div></div></div>'
+ },
+ in:{
+  h:'交付作业门户 · 自营交付部（内部）',
+  meta:'<b>平台自营交付部 · 境外作业组</b> —— 不接入外部项目方时，由本部门承担境外段作业并使用同一套门户<br>对内归属：<b>示例出入境咨询（北京）有限公司</b>；账号按岗位授权、人员按规定备案；同样执行批次授权、全屏水印、职责分离与访问审计。',
+  crumb:'自营交付部',tabCases:'分派给本组的案件',casesTitle:'分派给本组的案件（只读）',kCases:'分派给本组的案件',
+  srcCol:'分派来源',srcVal:'平台内部分派',grantBy:'批次授权（由案件主管 / A10 按岗位逐项审批）',
+  gate:'内部部门同样<b>仅见分派给本组</b>的案件；客户联系方式、证件原件默认不可见；作业账号与销售 / 佣金数据隔离、不可互相查看；不可修改金额、官方进度或任何对客承诺。',
+  foot:'受控边界：仅见分派给本组案件 · 作业账号与销售 / 佣金数据隔离 · 联系方式与证件原件默认不可见 · 不可修改金额 / 官方进度 / 对客承诺 · 全程访问留痕（A10）',
+  wm:'平台自营交付部 受控作业',
+  profile:
+   '<div class="grid2"><div class="card"><h3><span class="ic">'+ic('building')+'</span>部门与岗位备案（来源 A02/A03）</h3>'+
+   '<table><colgroup><col style="width:34%"><col style="width:42%"><col style="width:24%"></colgroup>'+
+   '<tr><th>项目</th><th>信息</th><th>状态</th></tr>'+
+   '<tr><td>部门 / 作业组</td><td>自营交付部 · A 国境外作业组</td><td><span class="st g"><span class="d"></span>已设立</span></td></tr>'+
+   '<tr><td>备案作业人员</td><td>3 人（材料核对 / 报告撰写 / 凭据收件）</td><td><span class="st g"><span class="d"></span>已人员备案</span></td></tr>'+
+   '<tr><td>岗位授权</td><td>按案件批次授予，离职 / 转岗即时回收</td><td><span class="st b"><span class="d"></span>系统强制</span></td></tr>'+
+   '<tr><td>培训与承诺</td><td>禁表述、反虚假材料、隐私保护年度培训</td><td><span class="st g"><span class="d"></span>全部完成</span></td></tr></table></div>'+
+   '<div class="card"><h3><span class="ic">'+ic('doc')+'</span>内部制度与承诺</h3>'+
+   '<table><colgroup><col style="width:66%"><col style="width:34%"></colgroup><tr><th>文件</th><th>状态</th></tr>'+
+   '<tr><td>岗位授权与保密责任书</td><td><span class="st g"><span class="d"></span>已签</span></td></tr>'+
+   '<tr><td>作业规范与交付边界（内部 SOP）</td><td><span class="st g"><span class="d"></span>已发布 v2</span></td></tr>'+
+   '<tr><td>禁止夸大误导 / 协助虚假材料承诺</td><td><span class="st g"><span class="d"></span>已承诺</span></td></tr></table></div></div>'+
+   '<div class="gate block">'+ic('gavel')+'<div><b>自营 ≠ 豁免当地法定资质：</b>目的地法律规定须由当地持牌人员 / 机构完成的环节（如法律代理、递交担保），<b>自营部门不能自行替代</b>；此类环节仍须委托当地持牌方，自营部门负责组织、核验与留痕。模式切换只改变用工与协作方式，不改变任何法定门槛。</div></div>'
+ }
+};
+let mode='ext';
+function wmURL(text){
+ const svg="<svg xmlns='http://www.w3.org/2000/svg' width='300' height='190'><text x='30' y='100' fill='rgba(0,38,97,0.055)' font-size='15' font-family='sans-serif' transform='rotate(-24 150 95)'>"+text+" · 2026-09-22</text></svg>";
+ return "url(\"data:image/svg+xml;utf8,"+encodeURIComponent(svg).replace(/'/g,"%27")+"\")";
+}
+function setMode(m){
+ mode=m;const d=MODE[m];
+ document.getElementById('m-ext').classList.toggle('on',m==='ext');
+ document.getElementById('m-in').classList.toggle('on',m==='in');
+ document.getElementById('h-title').innerHTML=(m==='ext'?'持牌方协作门户 · 受控只读':'交付作业门户 · 自营交付部')+' <span class="mode-note">'+(m==='ext'?'外部 B2B 持牌方':'内部自营部门 · 控制点相同')+'</span>';
+ document.getElementById('h-meta').innerHTML=d.meta;
+ document.getElementById('crumb-mode').textContent=d.crumb;
+ document.getElementById('tab-cases').textContent=d.tabCases;
+ document.getElementById('cases-title').textContent=d.casesTitle;
+ document.getElementById('k-cases').textContent=d.kCases;
+ document.getElementById('th-src').textContent=d.srcCol;
+ document.getElementById('src1').textContent=d.srcVal;document.getElementById('src2').textContent=d.srcVal;document.getElementById('src3').textContent=d.srcVal;
+ document.getElementById('grants-title').textContent=d.grantBy;
+ document.getElementById('gate-cases').innerHTML=d.gate;
+ document.getElementById('foot-txt').innerHTML=d.foot;
+ document.getElementById('pane-profile').innerHTML=d.profile;
+ const u=wmURL(d.wm);
+ document.getElementById('wm').style.backgroundImage=u;
+ document.getElementById('readerWm').style.backgroundImage=u;
+}
+function goTab(t){
+ document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+ document.querySelectorAll('.tpane').forEach(p=>p.classList.toggle('on',p.dataset.p===t));
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('tabs').addEventListener('click',e=>{const b=e.target.closest('button[data-t]');if(b)goTab(b.dataset.t);});
+let tt;
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),1900);}
+setMode('ext');
+</script>
+</body>
+</html>
