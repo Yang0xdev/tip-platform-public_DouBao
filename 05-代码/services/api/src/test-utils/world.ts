@@ -11,6 +11,7 @@ import { PaymentService } from "../payment/payment.service.js";
 import { ClientDetailService } from "../clientdetail/clientdetail.service.js";
 import { IpadService } from "../ipad/ipad.service.js";
 import { CaseService } from "../case/case.service.js";
+import { TaskService } from "../task/task.service.js";
 
 export const ENTITY_NAME = "示例出入境咨询有限公司";
 
@@ -28,6 +29,7 @@ export interface World {
   details: ClientDetailService;
   ipad: IpadService;
   cases: CaseService;
+  tasks: TaskService;
 }
 
 export function world(): World {
@@ -43,8 +45,9 @@ export function world(): World {
   const details = new ClientDetailService(eng, props, orders, audit);
   const ipad = new IpadService(cat, props, audit);
   const cases = new CaseService(audit);
+  const tasks = new TaskService(cases, audit);
   const payments = new PaymentService(orders, audit, cases);
-  return { audit, vr, cat, ent, ob, grants, eng, props, orders, payments, details, ipad, cases };
+  return { audit, vr, cat, ent, ob, grants, eng, props, orders, payments, details, ipad, cases, tasks };
 }
 
 /**

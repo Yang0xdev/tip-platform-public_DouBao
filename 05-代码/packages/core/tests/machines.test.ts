@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   projectVersionMachine, feeScheduleMachine, authorizationMachine, onboardingMachine, proposalMachine,
   contractMachine, paymentMachine, caseMachine, consentMachine,
-  portalGrantMachine, deliveryMachine, ticketMachine, complianceMachine,
+  portalGrantMachine, deliveryMachine, ticketMachine, complianceMachine, taskMachine,
   commissionMachine, dataSourceMachine, ALL_MACHINES
 } from "../src/machines.js";
 
@@ -231,5 +231,35 @@ describe("M1 顾问入驻与授权（补充）", () => {
     expect(authorizationMachine.transition(ctx, "authorized", "expire").to).toBe("expired");
     expect(authorizationMachine.transition(ctx, "expired", "start_learning").to).toBe("learning");
     expect(authorizationMachine.transition(ctx, "rejected", "start_learning").to).toBe("learning");
+  });
+});
+
+describe("M3 任务与 T0 时钟（taskMachine）", () => {
+  const ev = { hasOfficialEvidence: true, verifierId: "v1", initiatorId: "i1" };
+  it("生命周期 open→doing→done", () => {
+    expect(taskMachine.transition(ev, "open", "start").to).toBe("doing");
+    expect(taskMachine.transition(ev, "doing", "complete").to).toBe("done");
+  });
+  it("T0：逾期→升级（多级自循环）", () => {
+    expect(taskMachine.transition(ev, "open", "mark_overdue").to).toBe("overdue");
+    expect(taskMachine.transition(ev, "overdue", "escalate").to).toBe("escalated");
+    expect(taskMachine.transition(ev, "escalated", "escalate").to).toBe("escalated");
+  });
+  it("逾期/升级态仍可完成", () => {
+    expect(taskMachine.transition(ev, "overdue", "complete").to).toBe("done");
+    expect(taskMachine.transition(ev, "escalated", "complete").to).toBe("done");
+  });
+  it("改期：无官方凭据拒绝；核验人=发起人拒绝；齐备则 overdue→open", () => {
+    expect(taskMachine.transition({ ...ev, hasOfficialEvidence: false }, "overdue", "reschedule").code).toBe(
+      "OFFICIAL_EVIDENCE_REQUIRED"
+    );
+    expect(taskMachine.transition({ ...ev, verifierId: "i1" }, "overdue", "reschedule").code).toBe(
+      "VERIFIER_IS_INITIATOR"
+    );
+    expect(taskMachine.transition(ev, "overdue", "reschedule").to).toBe("open");
+  });
+  it("非法跳步：done 不可再迁移；open 不可直接 escalate", () => {
+    expect(taskMachine.transition(ev, "done", "start").ok).toBe(false);
+    expect(taskMachine.transition(ev, "open", "escalate").ok).toBe(false);
   });
 });

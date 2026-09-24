@@ -338,6 +338,29 @@ export const materialMachine = new StateMachine<MaterialState, MaterialEvent, un
   { from: "submitted", event: "void", to: "pending" }
 ]);
 
+/* ============ M3：任务与 T0 时钟 ============ */
+
+export type TaskState = "open" | "doing" | "overdue" | "escalated" | "done";
+export type TaskEvent = "start" | "complete" | "mark_overdue" | "escalate" | "reschedule";
+
+/**
+ * 任务生命周期：open→doing→done；
+ * T0 时钟：open/doing → overdue → escalated（多级，escalated 自循环，升级记录由应用层逐条留痕）；
+ * reschedule 仅 overdue→open，且必须挂已核验官方改期凭据（守卫复用官方凭据门）。
+ */
+export const taskMachine = new StateMachine<TaskState, TaskEvent, CaseEventContext>("Task", [
+  { from: "open", event: "start", to: "doing" },
+  { from: "open", event: "complete", to: "done" },
+  { from: "doing", event: "complete", to: "done" },
+  { from: "overdue", event: "complete", to: "done" },
+  { from: "escalated", event: "complete", to: "done" },
+  { from: "open", event: "mark_overdue", to: "overdue" },
+  { from: "doing", event: "mark_overdue", to: "overdue" },
+  { from: "overdue", event: "escalate", to: "escalated" },
+  { from: "escalated", event: "escalate", to: "escalated" },
+  { from: "overdue", event: "reschedule", to: "open", guards: [officialEvidenceGuard] }
+]);
+
 /* ============ M3：家庭授权 / 门户批次 ============ */
 
 export type ConsentState = "not_invited" | "pending_self" | "active" | "revoked" | "expired";
@@ -499,6 +522,7 @@ export const ALL_MACHINES = {
   service: serviceMachine,
   case: caseMachine,
   material: materialMachine,
+  task: taskMachine,
   consent: consentMachine,
   guardianship: guardianshipMachine,
   portalGrant: portalGrantMachine,
