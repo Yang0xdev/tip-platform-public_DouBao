@@ -3,6 +3,7 @@ import { paymentMachine, type PaymentState } from "@tip/core";
 import { OrderService, type OrderRecord } from "../order/order.service.js";
 import { AuditService } from "../audit.service.js";
 import { SnapshotStore } from "../persistence/snapshot.store.js";
+import { CaseService } from "../case/case.service.js";
 
 /**
  * M2-11/12 付款计划 / 凭证核验 / 收据 + 变更退款冻结。
@@ -85,6 +86,7 @@ export class PaymentService implements OnModuleInit {
   constructor(
     private readonly orders: OrderService,
     private readonly audit: AuditService,
+    private readonly cases: CaseService,
     private readonly snapshotsStore?: SnapshotStore
   ) {}
 
@@ -242,8 +244,11 @@ export class PaymentService implements OnModuleInit {
     }
     this.persistPlan(plan, actor);
     this.audit.record({ actor, realm: "staff", action: "payment.verified", resource: `${orderId}#${ins.seq}`, result: "allow", reason: `receipt:${receipt.id},second:${body.secondVerifierId}` });
-    // 首付核验 + 合同生效 → 待建案
-    if (ins.seq === 1 && order.contractState === "effective") this.orders.markReadyForCase(orderId, actor);
+    // 首付核验 + 合同生效 → 待建案 → 自动建案（M3-01）
+    if (ins.seq === 1 && order.contractState === "effective") {
+      this.orders.markReadyForCase(orderId, actor);
+      this.cases.createFromOrder(this.orders.list().find((x) => x.id === orderId)!, actor);
+    }
     return plan;
   }
 

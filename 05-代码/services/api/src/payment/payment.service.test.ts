@@ -9,6 +9,7 @@ import { AuthorizationService } from "../advisors/authorization.service.js";
 import { EngagementService } from "../engagement/engagement.service.js";
 import { ProposalService } from "../proposal/proposal.service.js";
 import { OrderService } from "../order/order.service.js";
+import { CaseService } from "../case/case.service.js";
 import { PaymentService } from "./payment.service.js";
 
 const ENTITY_NAME = "示例出入境咨询有限公司";
@@ -23,7 +24,8 @@ function effectiveOrder(customerRef: string, advisorId: string) {
   const eng = new EngagementService(audit);
   const props = new ProposalService(cat, grants, eng, audit);
   const orders = new OrderService(ent, eng, audit);
-  const payments = new PaymentService(orders, audit);
+  const cases = new CaseService(audit);
+  const payments = new PaymentService(orders, audit, cases);
 
   const fee = cat.createFeeDraft(
     {

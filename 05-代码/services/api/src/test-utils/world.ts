@@ -10,6 +10,7 @@ import { OrderService } from "../order/order.service.js";
 import { PaymentService } from "../payment/payment.service.js";
 import { ClientDetailService } from "../clientdetail/clientdetail.service.js";
 import { IpadService } from "../ipad/ipad.service.js";
+import { CaseService } from "../case/case.service.js";
 
 export const ENTITY_NAME = "示例出入境咨询有限公司";
 
@@ -26,6 +27,7 @@ export interface World {
   payments: PaymentService;
   details: ClientDetailService;
   ipad: IpadService;
+  cases: CaseService;
 }
 
 export function world(): World {
@@ -38,10 +40,11 @@ export function world(): World {
   const eng = new EngagementService(audit);
   const props = new ProposalService(cat, grants, eng, audit);
   const orders = new OrderService(ent, eng, audit);
-  const payments = new PaymentService(orders, audit);
   const details = new ClientDetailService(eng, props, orders, audit);
   const ipad = new IpadService(cat, props, audit);
-  return { audit, vr, cat, ent, ob, grants, eng, props, orders, payments, details, ipad };
+  const cases = new CaseService(audit);
+  const payments = new PaymentService(orders, audit, cases);
+  return { audit, vr, cat, ent, ob, grants, eng, props, orders, payments, details, ipad, cases };
 }
 
 /**
