@@ -4,6 +4,7 @@ import { AuditService } from "../audit.service.js";
 import { SnapshotStore } from "../persistence/snapshot.store.js";
 import { CaseService } from "../case/case.service.js";
 import { TaskService } from "../task/task.service.js";
+import { TimelineService } from "../timeline/timeline.service.js";
 
 /**
  * M3-03 材料中心。
@@ -88,6 +89,7 @@ export class MaterialService implements OnModuleInit {
   constructor(
     private readonly cases: CaseService,
     private readonly tasks: TaskService,
+    private readonly timeline: TimelineService,
     private readonly audit: AuditService,
     private readonly store?: SnapshotStore
   ) {}
@@ -234,6 +236,7 @@ export class MaterialService implements OnModuleInit {
     m.supplement = null;
     m.updatedAt = now;
     this.persist(m, actor);
+    this.timeline.recordCustomer(m.caseId, "material_submit", `材料已提交：${m.title}`, actor);
     this.audit.record({ actor, realm: "customer", action: "material.upload", resource: m.id, result: "allow", reason: `v${m.versions.length}` });
     return m;
   }
@@ -293,6 +296,7 @@ export class MaterialService implements OnModuleInit {
     m.state = out.to as MaterialState;
     m.updatedAt = now;
     this.persist(m, reviewer);
+    this.timeline.recordCompany(m.caseId, "material_approved", reviewer, m.title);
     this.audit.record({ actor: reviewer, realm: "staff", action: "material.approve", resource: m.id, result: "allow" });
     return m;
   }

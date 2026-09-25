@@ -13,6 +13,7 @@ import { IpadService } from "../ipad/ipad.service.js";
 import { CaseService } from "../case/case.service.js";
 import { TaskService } from "../task/task.service.js";
 import { MaterialService } from "../material/material.service.js";
+import { TimelineService } from "../timeline/timeline.service.js";
 
 export const ENTITY_NAME = "示例出入境咨询有限公司";
 
@@ -32,6 +33,7 @@ export interface World {
   cases: CaseService;
   tasks: TaskService;
   materials: MaterialService;
+  timeline: TimelineService;
 }
 
 export function world(): World {
@@ -48,9 +50,10 @@ export function world(): World {
   const ipad = new IpadService(cat, props, audit);
   const cases = new CaseService(audit);
   const tasks = new TaskService(cases, audit);
-  const materials = new MaterialService(cases, tasks, audit);
+  const timeline = new TimelineService(cases, audit);
+  const materials = new MaterialService(cases, tasks, timeline, audit);
   const payments = new PaymentService(orders, audit, cases);
-  return { audit, vr, cat, ent, ob, grants, eng, props, orders, payments, details, ipad, cases, tasks, materials };
+  return { audit, vr, cat, ent, ob, grants, eng, props, orders, payments, details, ipad, cases, tasks, materials, timeline };
 }
 
 /**
