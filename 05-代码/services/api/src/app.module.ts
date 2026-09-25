@@ -42,6 +42,8 @@ import { CaseService } from "./case/case.service.js";
 import { CaseAdminController, CaseAdvisorController, CaseCustomerController } from "./case/case.controller.js";
 import { TaskService } from "./task/task.service.js";
 import { TaskAdminController, TaskAdvisorController, TaskCustomerController } from "./task/task.controller.js";
+import { MaterialService } from "./material/material.service.js";
+import { MaterialAdminController, MaterialCustomerController, MaterialAdvisorController } from "./material/material.controller.js";
 import { PrismaService } from "./persistence/prisma.service.js";
 import { SnapshotStore } from "./persistence/snapshot.store.js";
 
@@ -85,7 +87,10 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     CaseCustomerController,
     TaskAdminController,
     TaskAdvisorController,
-    TaskCustomerController
+    TaskCustomerController,
+    MaterialAdminController,
+    MaterialCustomerController,
+    MaterialAdvisorController
   ],
   providers: [
     PrismaService,
@@ -110,7 +115,8 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     ClientDetailService,
     IpadService,
     CaseService,
-    TaskService
+    TaskService,
+    MaterialService
   ]
 })
 export class AppModule {}

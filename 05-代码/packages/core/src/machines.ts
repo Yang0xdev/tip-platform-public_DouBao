@@ -334,6 +334,8 @@ export const materialMachine = new StateMachine<MaterialState, MaterialEvent, un
   { from: "submitted", event: "approve", to: "approved" },
   { from: "submitted", event: "return", to: "supplement_needed" },
   { from: "supplement_needed", event: "resubmit", to: "submitted" },
+  // 已审核通过后替换文件：只能作为新版本重新提交审核（旧版应用层留存）
+  { from: "approved", event: "submit", to: "submitted" },
   { from: "pending", event: "void", to: "pending" }, // 作废仅标记，不删除（应用层记录版本）
   { from: "submitted", event: "void", to: "pending" }
 ]);
