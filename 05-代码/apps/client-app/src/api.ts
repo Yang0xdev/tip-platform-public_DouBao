@@ -157,5 +157,8 @@ export const api = {
   listTasks: () => getJson<{ records: TaskView[] }>("/v1/tasks/mine", true),
   listTimeline: (caseId: string) => getJson<{ records: TimelineEventView[] }>(`/v1/timeline?caseId=${caseId}`, true),
   listMaterials: (caseId: string) => getJson<{ records: MaterialView[] }>(`/v1/materials?caseId=${caseId}`, true),
-  listNotifications: () => getJson<{ records: unknown[] }>("/v1/notifications", true)
+  listNotifications: () => getJson<{ records: unknown[] }>("/v1/notifications", true),
+  listTickets: () => getJson<{ records: Array<{ id: string; kind: string; title: string; state: string; complaintCategory: string | null; createdAt: string }> }>("/v1/tickets/mine", true),
+  createTicket: (body: { kind: string; title: string; description: string }) =>
+    postJson<{ id: string }>("/v1/tickets", body, true)
 };

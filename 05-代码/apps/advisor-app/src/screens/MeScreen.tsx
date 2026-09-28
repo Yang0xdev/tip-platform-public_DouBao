@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Alert, Linking, ScrollView, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Card, SectionLabel, Tag } from "../ui";
+import CommissionScreen from "./CommissionScreen";
 
 const COMMITMENTS = [
   "不引导平台外收款，不私下收取任何费用",
@@ -11,6 +12,8 @@ const COMMITMENTS = [
 ];
 
 export default function MeScreen() {
+  const [showCommission, setShowCommission] = useState(false);
+  if (showCommission) return <CommissionScreen onBack={() => setShowCommission(false)} />;
   return (
     <ScrollView style={{ backgroundColor: "#F5F7FA" }} contentContainerStyle={{ padding: 16, paddingBottom: 40 }}>
       <LinearGradient
@@ -34,6 +37,16 @@ export default function MeScreen() {
         {COMMITMENTS.map((c, i) => (
           <Text key={i} style={{ color: "#5E6B7E", fontSize: 14, lineHeight: 22 }}>· {c}</Text>
         ))}
+      </Card>
+
+      <Card>
+        <SectionLabel text="我的佣金" />
+        <Text style={{ color: "#5E6B7E", fontSize: 14, lineHeight: 21 }}>
+          查看计提状态、结算批次与支付记录。
+        </Text>
+        <Text onPress={() => setShowCommission(true)} style={{ marginTop: 10, color: "#0B3A82", fontWeight: "700", fontSize: 14 }}>
+          查看我的佣金 ›
+        </Text>
       </Card>
 
       <Card>
