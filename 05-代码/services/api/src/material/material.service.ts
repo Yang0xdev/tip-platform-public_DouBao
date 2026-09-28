@@ -5,6 +5,7 @@ import { SnapshotStore } from "../persistence/snapshot.store.js";
 import { CaseService } from "../case/case.service.js";
 import { TaskService } from "../task/task.service.js";
 import { TimelineService } from "../timeline/timeline.service.js";
+import { ConsentService } from "../consent/consent.service.js";
 
 /**
  * M3-03 材料中心。
@@ -90,6 +91,7 @@ export class MaterialService implements OnModuleInit {
     private readonly cases: CaseService,
     private readonly tasks: TaskService,
     private readonly timeline: TimelineService,
+    private readonly consents: ConsentService,
     private readonly audit: AuditService,
     private readonly store?: SnapshotStore
   ) {}
@@ -181,17 +183,29 @@ export class MaterialService implements OnModuleInit {
   ): MaterialItem {
     const c = this.cases.list().find((x) => x.id === caseId);
     if (!c) throw new MaterialError(404, "42601", "案件不存在");
-    // 授权：M3 切片3 仅本人（主申）可传本人材料；家庭成员在 M3-05 授权后开放
-    if (personRef !== c.customerRef || actor !== personRef) {
-      this.audit.record({
-        actor,
-        realm: "customer",
-        action: "material.upload",
-        resource: `${caseId}:${personRef}:${itemCode}`,
-        result: "deny",
-        reason: "P-12a 未授权代传"
-      });
-      throw new MaterialError(403, "42605", "服务端已拒绝：尚无代他人提交材料的授权（非故障）");
+    // 授权三重校验：本人 / 成年成员逐项授权 / 子女监护证据（直链同样拦截）
+    const applicant = c.applicants.find((a) => a.ref === personRef);
+    if (!applicant) {
+      this.denyUpload(caseId, personRef, itemCode, actor, "非案件申请人");
+      throw new MaterialError(403, "42605", "服务端已拒绝：非案件申请人（非故障）");
+    }
+    if (applicant.role === "primary") {
+      if (actor !== personRef) {
+        this.denyUpload(caseId, personRef, itemCode, actor, "非本人");
+        throw new MaterialError(403, "42605", "服务端已拒绝：须本人提交（非故障）");
+      }
+    } else if (applicant.role === "child") {
+      if (actor !== c.customerRef) {
+        this.denyUpload(caseId, personRef, itemCode, actor, "非监护人");
+        throw new MaterialError(403, "42605", "服务端已拒绝：仅登记监护人可代子女提交（非故障）");
+      }
+      this.consents.assertCanActForChild(caseId, personRef); // 43005 缺失/争议
+    } else {
+      if (actor !== personRef) {
+        this.denyUpload(caseId, personRef, itemCode, actor, "成年成员非本人");
+        throw new MaterialError(403, "42605", "服务端已拒绝：成年成员材料须本人提交（非故障）");
+      }
+      this.consents.assertAction(caseId, personRef, "material:view_submit"); // 43006
     }
     const m = [...this.items.values()].find(
       (x) => x.caseId === caseId && x.personRef === personRef && x.itemCode === itemCode
@@ -299,6 +313,10 @@ export class MaterialService implements OnModuleInit {
     this.timeline.recordCompany(m.caseId, "material_approved", reviewer, m.title);
     this.audit.record({ actor: reviewer, realm: "staff", action: "material.approve", resource: m.id, result: "allow" });
     return m;
+  }
+
+  private denyUpload(caseId: string, personRef: string, itemCode: string, actor: string, reason: string) {
+    this.audit.record({ actor, realm: "customer", action: "material.upload", resource: `${caseId}:${personRef}:${itemCode}`, result: "deny", reason });
   }
 
   /* ---------------- 查看（受控，留痕） ---------------- */

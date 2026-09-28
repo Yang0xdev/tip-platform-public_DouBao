@@ -158,6 +158,24 @@ export class CaseService implements OnModuleInit {
     return c;
   }
 
+  /** 追加案件申请人（配偶/子女/成年附属）；主申唯一，重复拒绝 */
+  addApplicant(
+    caseId: string,
+    ref: string,
+    role: Exclude<CaseApplicant["role"], "primary">,
+    actor: string
+  ): CaseRecord {
+    const c = this.require(caseId);
+    if (!ref.trim()) throw new CaseError(422, "42706", "申请人标识必填");
+    if (c.applicants.some((a) => a.ref === ref))
+      throw new CaseError(409, "42707", "该成员已在案件申请人列表");
+    c.applicants.push({ ref, role });
+    c.updatedAt = new Date().toISOString();
+    this.persist(c, actor);
+    this.audit.record({ actor, realm: "customer", action: "case.applicant.add", resource: caseId, result: "allow", reason: `${role}:${ref}` });
+    return c;
+  }
+
   /* ---------------- 阶段迁移 ---------------- */
 
   transition(
