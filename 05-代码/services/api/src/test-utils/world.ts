@@ -15,6 +15,7 @@ import { TaskService } from "../task/task.service.js";
 import { MaterialService } from "../material/material.service.js";
 import { TimelineService } from "../timeline/timeline.service.js";
 import { ConsentService } from "../consent/consent.service.js";
+import { NotificationService } from "../notification/notification.service.js";
 
 export const ENTITY_NAME = "示例出入境咨询有限公司";
 
@@ -36,6 +37,7 @@ export interface World {
   materials: MaterialService;
   timeline: TimelineService;
   consents: ConsentService;
+  notifications: NotificationService;
 }
 
 export function world(): World {
@@ -51,12 +53,13 @@ export function world(): World {
   const details = new ClientDetailService(eng, props, orders, audit);
   const ipad = new IpadService(cat, props, audit);
   const cases = new CaseService(audit);
-  const tasks = new TaskService(cases, audit);
   const timeline = new TimelineService(cases, audit);
   const consents = new ConsentService(cases, audit);
+  const notifications = new NotificationService(cases, audit);
+  const tasks = new TaskService(cases, audit, notifications);
   const materials = new MaterialService(cases, tasks, timeline, consents, audit);
   const payments = new PaymentService(orders, audit, cases);
-  return { audit, vr, cat, ent, ob, grants, eng, props, orders, payments, details, ipad, cases, tasks, materials, timeline, consents };
+  return { audit, vr, cat, ent, ob, grants, eng, props, orders, payments, details, ipad, cases, tasks, materials, timeline, consents, notifications };
 }
 
 /**

@@ -47,6 +47,8 @@ import { MaterialAdminController, MaterialCustomerController, MaterialAdvisorCon
 import { TimelineService } from "./timeline/timeline.service.js";
 import { TimelineAdminController, TimelineCustomerController } from "./timeline/timeline.controller.js";
 import { ConsentService } from "./consent/consent.service.js";
+import { NotificationService } from "./notification/notification.service.js";
+import { NotificationAdminController, NotificationCustomerController } from "./notification/notification.controller.js";
 import { ConsentCustomerController, ConsentAdminController } from "./consent/consent.controller.js";
 import { PrismaService } from "./persistence/prisma.service.js";
 import { SnapshotStore } from "./persistence/snapshot.store.js";
@@ -98,7 +100,9 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     TimelineAdminController,
     TimelineCustomerController,
     ConsentCustomerController,
-    ConsentAdminController
+    ConsentAdminController,
+    NotificationAdminController,
+    NotificationCustomerController
   ],
   providers: [
     PrismaService,
@@ -125,8 +129,9 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     CaseService,
 TaskService,
 MaterialService,
-    TimelineService,
-    ConsentService
+TimelineService,
+    ConsentService,
+    NotificationService
   ]
 })
 export class AppModule {}

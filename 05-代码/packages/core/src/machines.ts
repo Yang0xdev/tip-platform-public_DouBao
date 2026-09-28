@@ -410,6 +410,7 @@ export const deliveryMachine = new StateMachine<DeliveryState, DeliveryEvent, un
   { from: "sent", event: "deliver", to: "delivered" },
   { from: "delivered", event: "read", to: "read" },
   { from: "sent", event: "fail", to: "failed" },
+  { from: "sent", event: "switch_channel", to: "channel_switched" },
   { from: "pending", event: "fail", to: "failed" },
   { from: "failed", event: "switch_channel", to: "channel_switched" },
   { from: "channel_switched", event: "send", to: "sent" },

@@ -3,6 +3,7 @@ import { taskMachine, type TaskEvent, type TaskState } from "@tip/core";
 import { AuditService } from "../audit.service.js";
 import { SnapshotStore } from "../persistence/snapshot.store.js";
 import { CaseService } from "../case/case.service.js";
+import { NotificationService } from "../notification/notification.service.js";
 
 /**
  * M3-02 任务系统与 T0 时钟。
@@ -60,6 +61,7 @@ export class TaskService implements OnModuleInit {
   constructor(
     private readonly cases: CaseService,
     private readonly audit: AuditService,
+    private readonly notifications?: NotificationService,
     private readonly store?: SnapshotStore
   ) {}
 
@@ -118,6 +120,17 @@ export class TaskService implements OnModuleInit {
     this.tasks.set(t.id, t);
     this.persist(t, actor);
     this.audit.record({ actor, realm: "staff", action: "task.create", resource: t.id, result: "allow", reason: caseId });
+    if (t.t0 && this.notifications) {
+      // T0 任务自动触发通知；模板缺失只登记运营缺口，不允许静默跳过
+      try {
+        this.notifications.sendForTask(t);
+      } catch (e) {
+        const code = (e as { getResponse?: () => { code: string } }).getResponse?.().code;
+        if (code === "43103")
+          this.audit.record({ actor: "system", realm: "staff", action: "notification.template.missing", resource: t.id, result: "allow", reason: t.type });
+        else throw e;
+      }
+    }
     return t;
   }
 
