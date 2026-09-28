@@ -58,6 +58,23 @@ const DEFAULT_GRANT_DAYS = 365;
 export class AuthorizationService {
   private grants = new Map<string, GrantRecord>(); // key advisor|project
   private seq = 0;
+  /** 合规/投诉线索：新增授权冻结（停新接旧） */
+  private frozenNew = new Set<string>();
+
+  /** M4-03：冻结被投诉顾问的新增授权（在办接旧） */
+  freezeNewAuthorization(advisorId: string, reason: string, actor: string): void {
+    this.frozenNew.add(advisorId);
+    for (const g of this.grants.values()) {
+      if (g.advisorUserId === advisorId && g.state === "authorized") {
+        g.state = "reconfirm_required";
+        g.updatedAt = new Date().toISOString();
+      }
+    }
+  }
+
+  isFrozenNew(advisorId: string): boolean {
+    return this.frozenNew.has(advisorId);
+  }
 
   constructor(
     private readonly onboarding: OnboardingService,

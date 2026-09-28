@@ -4,7 +4,7 @@ import { Badge, Loading, Panel, Td, Th, useApi } from "./modules.js";
 
 /* ================= 通用：操作按钮（写操作，错误直接显示） ================= */
 
-function ActBtn({
+export function ActBtn({
   label,
   run,
   onDone,
@@ -12,7 +12,7 @@ function ActBtn({
   small = true
 }: {
   label: string;
-  run: () => Promise<void>;
+  run: () => Promise<unknown>;
   onDone?: () => void;
   kind?: "navy" | "berry" | "ok" | "ghost";
   small?: boolean;
@@ -50,10 +50,10 @@ function ActBtn({
   );
 }
 
-const post = (actor: Actor, path: string, body: unknown) =>
+export const post = (actor: Actor, path: string, body: unknown) =>
   api(path, actor, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
 
-function refreshToken(): number {
+export function refreshToken(): number {
   return Date.now();
 }
 

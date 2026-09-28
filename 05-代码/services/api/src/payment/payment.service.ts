@@ -4,6 +4,7 @@ import { OrderService, type OrderRecord } from "../order/order.service.js";
 import { AuditService } from "../audit.service.js";
 import { SnapshotStore } from "../persistence/snapshot.store.js";
 import { CaseService } from "../case/case.service.js";
+import { CommissionService } from "../commission/commission.service.js";
 
 /**
  * M2-11/12 付款计划 / 凭证核验 / 收据 + 变更退款冻结。
@@ -87,7 +88,8 @@ export class PaymentService implements OnModuleInit {
     private readonly orders: OrderService,
     private readonly audit: AuditService,
     private readonly cases: CaseService,
-    private readonly snapshotsStore?: SnapshotStore
+    private readonly snapshotsStore?: SnapshotStore,
+    private readonly commission?: CommissionService
   ) {}
 
   async onModuleInit() {
@@ -243,6 +245,7 @@ export class PaymentService implements OnModuleInit {
       void this.snapshotsStore.save("receipt", receipt.id, 1, "issued", receipt as never, actor);
     }
     this.persistPlan(plan, actor);
+    this.commission?.onPaymentVerified(orderId, actor);
     this.audit.record({ actor, realm: "staff", action: "payment.verified", resource: `${orderId}#${ins.seq}`, result: "allow", reason: `receipt:${receipt.id},second:${body.secondVerifierId}` });
     // 首付核验 + 合同生效 → 待建案 → 自动建案（M3-01）
     if (ins.seq === 1 && order.contractState === "effective") {

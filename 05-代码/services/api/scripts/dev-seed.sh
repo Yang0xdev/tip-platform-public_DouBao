@@ -186,3 +186,33 @@ TPL_ID=$(curl -s "${V[@]}" -X POST "$BASE/admin/notifications/templates" -d '{
 curl -s "${V[@]}" -X POST "$BASE/admin/notifications/templates/$TPL_ID/submit" -d '{}' >/dev/null
 curl -s "${V[@]}" -X POST "$BASE/admin/notifications/templates/$TPL_ID/review" -d '{"decision":"published"}' >/dev/null
 echo "  notification template published: $TPL_ID"
+
+# ============ M4：工单/投诉、佣金结算、退款 ============
+# 普通咨询工单
+curl -s -H "content-type: application/json" -H "x-tip-realm:customer" -H "x-tip-user:c-1980" -X POST "$BASE/v1/tickets" -d '{
+  "kind":"consult","title":"材料清单咨询","description":"想确认银行流水的月份范围"
+}' >/dev/null
+# 投诉工单（平台外交易线索 → 自动合规事件 + 被投诉顾问停新）
+TKT_ID=$(curl -s -H "content-type: application/json" -H "x-tip-realm:customer" -H "x-tip-user:c-1980" -X POST "$BASE/v1/tickets" -d '{
+  "kind":"complaint","complaintCategory":"off_platform_deal","respondentAdvisorId":"adv-chen",
+  "orderId":"ORD-0001","title":"被要求私下转账","description":"顾问让我把服务费转到他个人账户，承诺包成功"
+}' | j "['id']")
+curl -s "${V[@]}" -X POST "$BASE/admin/tickets/$TKT_ID/accept" -d '{}' >/dev/null
+echo "  complaint accepted: $TKT_ID（自动合规事件 + adv-chen 停新）"
+
+# 佣金结算批次（双人复核 → 审批 → 线下支付登记）
+STL_ID=$(curl -s "${V[@]}" -X POST "$BASE/admin/commissions/settlement-batches" -d '{}' | j "['id']")
+curl -s "${V[@]}" -H "x-tip-user:rev-a" -X POST "$BASE/admin/commissions/settlement-batches/$STL_ID/review" -d '{}' >/dev/null
+curl -s "${V[@]}" -H "x-tip-user:rev-b" -X POST "$BASE/admin/commissions/settlement-batches/$STL_ID/review" -d '{}' >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/commissions/settlement-batches/$STL_ID/approve" -d '{}' >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/commissions/settlement-batches/$STL_ID/pay" -d '{"voucherRef":"L3://commission-pay.pdf"}' >/dev/null
+echo "  settlement paid: $STL_ID（佣金六态走完）"
+
+# 退款（业务+财务双人 → 登记执行 → 收据冲红）
+RFD_ID=$(curl -s "${V[@]}" -X POST "$BASE/admin/commissions/refunds" -d '{
+  "orderId":"ORD-0001","lines":[{"amountMinor":"500000","currency":"CNY","reason":"未发生阶段服务费按实退还"}]
+}' | j "['id']")
+curl -s "${V[@]}" -X POST "$BASE/admin/commissions/refunds/$RFD_ID/review" -d '{"role":"business"}' >/dev/null
+curl -s "${V[@]}" -H "x-tip-user:fin-1" -X POST "$BASE/admin/commissions/refunds/$RFD_ID/review" -d '{"role":"finance"}' >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/commissions/refunds/$RFD_ID/execute" -d '{"voucherRef":"L3://refund.pdf"}' >/dev/null
+echo "  refund executed: $RFD_ID（双人 + 冲红留痕）"

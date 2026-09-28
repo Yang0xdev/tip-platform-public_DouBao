@@ -19,6 +19,9 @@ import { NotificationService } from "../notification/notification.service.js";
 import { ProviderService } from "../provider/provider.service.js";
 import { PortalService } from "../portal/portal.service.js";
 import { HandoverService } from "../handover/handover.service.js";
+import { TicketService } from "../ticket/ticket.service.js";
+import { CommissionService } from "../commission/commission.service.js";
+import { ComplianceEventService } from "../compliance/compliance-event.service.js";
 
 export const ENTITY_NAME = "示例出入境咨询有限公司";
 
@@ -44,6 +47,9 @@ export interface World {
   providers: ProviderService;
   portal: PortalService;
   handovers: HandoverService;
+  tickets: TicketService;
+  commissions: CommissionService;
+  complianceEvents: ComplianceEventService;
 }
 
 export function world(): World {
@@ -55,8 +61,9 @@ export function world(): World {
   const grants = new AuthorizationService(ob, ent);
   const eng = new EngagementService(audit);
   const props = new ProposalService(cat, grants, eng, audit);
+  const commissions = new CommissionService(audit);
   const providers = new ProviderService(ent, audit);
-  const orders = new OrderService(ent, eng, audit, undefined, providers);
+  const orders = new OrderService(ent, eng, audit, undefined, providers, commissions);
   const details = new ClientDetailService(eng, props, orders, audit);
   const ipad = new IpadService(cat, props, audit);
   const cases = new CaseService(audit);
@@ -65,10 +72,14 @@ export function world(): World {
   const notifications = new NotificationService(cases, audit);
   const tasks = new TaskService(cases, audit, notifications);
   const materials = new MaterialService(cases, tasks, timeline, consents, audit);
+  const tickets = new TicketService(audit);
+  const complianceEvents = new ComplianceEventService(audit);
+  tickets.setCompliance(complianceEvents);
+  tickets.setAdvisorAdmin(grants);
   const portal = new PortalService(providers, cases, timeline, audit);
   const handovers = new HandoverService(eng, cases, grants, audit);
-  const payments = new PaymentService(orders, audit, cases);
-  return { audit, vr, cat, ent, ob, grants, eng, props, orders, payments, details, ipad, cases, tasks, materials, timeline, consents, notifications, providers, portal, handovers };
+  const payments = new PaymentService(orders, audit, cases, undefined, commissions);
+  return { audit, vr, cat, ent, ob, grants, eng, props, orders, payments, details, ipad, cases, tasks, materials, timeline, consents, notifications, providers, portal, handovers, tickets, commissions, complianceEvents };
 }
 
 /**

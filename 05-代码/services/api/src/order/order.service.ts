@@ -8,6 +8,7 @@ import { EntityService } from "../entities/entity.service.js";
 import { EngagementService } from "../engagement/engagement.service.js";
 import { AuditService } from "../audit.service.js";
 import { SnapshotStore } from "../persistence/snapshot.store.js";
+import { CommissionService } from "../commission/commission.service.js";
 import { ProviderService } from "../provider/provider.service.js";
 import type { ProposalRecord } from "../proposal/proposal.service.js";
 
@@ -128,7 +129,8 @@ export class OrderService implements OnModuleInit {
     private readonly engagements: EngagementService,
     private readonly audit: AuditService,
     private readonly snapshotsStore?: SnapshotStore,
-    private readonly providers?: ProviderService
+    private readonly providers?: ProviderService,
+    private readonly commission?: CommissionService
   ) {}
 
   async onModuleInit() {
@@ -414,6 +416,10 @@ export class OrderService implements OnModuleInit {
     if (o.contractState !== "signed_registered") throw new OrderError(409, "42242", "仅已签署登记订单可生效");
     this.transition(o, "make_effective", this.gateCtx(o));
     o.effectiveAt = new Date().toISOString();
+    this.commission?.onOrderEffective(
+      { id: o.id, advisorId: o.advisorId, plan: o.snapshots.feeSnapshot },
+      actor
+    );
     this.persist(o, actor);
     this.audit.record({ actor, realm: "staff", action: "order.effective", resource: o.id, result: "allow" });
     return o;
