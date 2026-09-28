@@ -3,6 +3,11 @@
 # 用法：先启动 api（默认 http://localhost:3100），再运行本脚本
 # 数据全部为虚构【示例】，用于后台页面走查，不代表真实项目/机构/政策。
 set -uo pipefail
+# M5-11 环境门：生产环境禁止执行示例 seed
+if [ "${NODE_ENV:-}" = "production" ]; then
+  echo "拒绝执行：生产环境零示例数据（M5-11）" >&2
+  exit 2
+fi
 BASE="${BASE:-http://localhost:3100}"
 A=(-H "content-type: application/json" -H "x-tip-realm: staff" -H "x-tip-user: s-author")
 V=(-H "content-type: application/json" -H "x-tip-realm: staff" -H "x-tip-user: s-verifier")
@@ -216,3 +221,10 @@ curl -s "${V[@]}" -X POST "$BASE/admin/commissions/refunds/$RFD_ID/review" -d '{
 curl -s "${V[@]}" -H "x-tip-user:fin-1" -X POST "$BASE/admin/commissions/refunds/$RFD_ID/review" -d '{"role":"finance"}' >/dev/null
 curl -s "${V[@]}" -X POST "$BASE/admin/commissions/refunds/$RFD_ID/execute" -d '{"voucherRef":"L3://refund.pdf"}' >/dev/null
 echo "  refund executed: $RFD_ID（双人 + 冲红留痕）"
+
+# ============ M5：邀请、注销 ============
+curl -s "${V[@]}" -X POST "$BASE/admin/invites" -d '{"purpose":"customer","email":"guest@example.com"}' >/dev/null
+echo "  invite created（邀请灰度门）"
+curl -s -H "content-type: application/json" -H "x-tip-realm:customer" -H "x-tip-user:c-3000" -X POST \
+  "$BASE/v1/account/deletion" -d '{"reason":"不再需要服务"}' >/dev/null
+echo "  deletion cooling（15 天冷静期）"

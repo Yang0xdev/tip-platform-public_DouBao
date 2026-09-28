@@ -23,6 +23,8 @@ import { TicketService } from "../ticket/ticket.service.js";
 import { CommissionService } from "../commission/commission.service.js";
 import { ComplianceEventService } from "../compliance/compliance-event.service.js";
 import { RuleSetService } from "../assessment/ruleset.service.js";
+import { DeletionService } from "../deletion/deletion.service.js";
+import { InviteService } from "../invite/invite.service.js";
 
 export const ENTITY_NAME = "示例出入境咨询有限公司";
 
@@ -52,6 +54,8 @@ export interface World {
   commissions: CommissionService;
   complianceEvents: ComplianceEventService;
   rulesets: RuleSetService;
+  deletions: DeletionService;
+  invites: InviteService;
 }
 
 export function world(): World {
@@ -64,6 +68,8 @@ export function world(): World {
   const eng = new EngagementService(audit);
   const props = new ProposalService(cat, grants, eng, audit);
   const commissions = new CommissionService(audit);
+  const deletions = new DeletionService(audit);
+  const invites = new InviteService(audit);
   const rulesets = new RuleSetService(vr, cat);
   const providers = new ProviderService(ent, audit);
   const orders = new OrderService(ent, eng, audit, undefined, providers, commissions);
@@ -82,7 +88,7 @@ export function world(): World {
   const portal = new PortalService(providers, cases, timeline, audit);
   const handovers = new HandoverService(eng, cases, grants, audit);
   const payments = new PaymentService(orders, audit, cases, undefined, commissions);
-  return { audit, vr, cat, ent, ob, grants, eng, props, orders, payments, details, ipad, cases, tasks, materials, timeline, consents, notifications, providers, portal, handovers, tickets, commissions, complianceEvents, rulesets };
+  return { audit, vr, cat, ent, ob, grants, eng, props, orders, payments, details, ipad, cases, tasks, materials, timeline, consents, notifications, providers, portal, handovers, tickets, commissions, complianceEvents, rulesets, deletions, invites };
 }
 
 /**

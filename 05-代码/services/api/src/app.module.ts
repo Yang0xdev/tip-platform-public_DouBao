@@ -58,9 +58,13 @@ import { HandoverAdminController, HandoverCustomerController } from "./handover/
 import { TicketAdminController, TicketAdvisorController, TicketCustomerController } from "./ticket/ticket.controller.js";
 import { CommissionAdminController, CommissionAdvisorController } from "./commission/commission.controller.js";
 import { ComplianceEventAdminController } from "./compliance/compliance-event.controller.js";
+import { DeletionAdminController, DeletionCustomerController } from "./deletion/deletion.controller.js";
+import { InviteAdminController } from "./invite/invite.controller.js";
 import { TicketService } from "./ticket/ticket.service.js";
 import { CommissionService } from "./commission/commission.service.js";
 import { ComplianceEventService } from "./compliance/compliance-event.service.js";
+import { DeletionService } from "./deletion/deletion.service.js";
+import { InviteService } from "./invite/invite.service.js";
 import { ConsentCustomerController, ConsentAdminController } from "./consent/consent.controller.js";
 import { PrismaService } from "./persistence/prisma.service.js";
 import { SnapshotStore } from "./persistence/snapshot.store.js";
@@ -125,7 +129,10 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     TicketAdvisorController,
     CommissionAdminController,
     CommissionAdvisorController,
-    ComplianceEventAdminController
+    ComplianceEventAdminController,
+    DeletionCustomerController,
+    DeletionAdminController,
+    InviteAdminController
   ],
   providers: [
     PrismaService,
@@ -160,7 +167,9 @@ TimelineService,
     HandoverService,
     TicketService,
     CommissionService,
-    ComplianceEventService
+    ComplianceEventService,
+    DeletionService,
+    InviteService
   ]
 })
 export class AppModule {}

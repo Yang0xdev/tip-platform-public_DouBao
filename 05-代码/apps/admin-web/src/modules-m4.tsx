@@ -288,7 +288,6 @@ export function A08Tickets({ actor }: { actor: Actor }) {
     </Panel>
   );
 }
-
 /* ================= A10 合规审批中心 ================= */
 
 interface CEvent {
@@ -301,9 +300,28 @@ interface CEvent {
   dispositions: Array<{ id: string; kind: string; executed: boolean }>;
 }
 
+interface DeletionRow {
+  id: string;
+  customerRef: string;
+  state: string;
+  reason: string;
+  coolingUntil: string;
+  anonymizedAt: string | null;
+}
+interface InviteRow {
+  id: string;
+  token: string;
+  purpose: string;
+  email: string | null;
+  expiresAt: string;
+  consumedAt: string | null;
+}
+
 export function A10Compliance({ actor }: { actor: Actor }) {
   const [tick, setTick] = useState(0);
   const ev = useApi<{ records: CEvent[] }>("/admin/compliance-events", actor, [tick]);
+  const dels = useApi<{ records: DeletionRow[] }>("/admin/deletions", actor, [tick]);
+  const invs = useApi<{ records: InviteRow[] }>("/admin/invites", actor, [tick]);
 
   return (
     <Panel title="合规事件（L1/L2/L3；L3 双人审批；处置全执行才归档）">
@@ -391,6 +409,56 @@ export function A10Compliance({ actor }: { actor: Actor }) {
           </tbody>
         </table>
       </Loading>
+      <div className="mt-5 flex gap-2">
+        <ActBtn
+          label="新建邀请"
+          run={async () => {
+            const purpose = (window.prompt("用途：customer/advisor/provider") ?? "customer") as "customer" | "advisor" | "provider";
+            await post(actor, "/admin/invites", { purpose });
+          }}
+          onDone={() => setTick(refreshToken())}
+        />
+        <ActBtn
+          label="注销时钟（到期匿名化）"
+          run={async () => post(actor, "/admin/deletions/tick", { now: new Date().toISOString() })}
+          onDone={() => setTick(refreshToken())}
+        />
+      </div>
+
+      <div className="mt-5 grid grid-cols-2 gap-4">
+        <Panel title="注销队列（15 天冷静期，到期匿名化保留法定台账）">
+          <Loading error={dels.error} loading={dels.loading}>
+            {(dels.data?.records ?? []).map((d) => (
+              <div key={d.id} className="border-t border-line py-2.5 text-[12.5px]">
+                <div className="flex justify-between">
+                  <span className="font-semibold text-ink">{d.customerRef}</span>
+                  <Badge state={d.state} />
+                </div>
+                <div className="text-faint mt-1">
+                  {d.id} · 冷静至 {d.coolingUntil.slice(0, 10)}
+                </div>
+                <div className="text-mut mt-0.5">{d.reason}</div>
+              </div>
+            ))}
+          </Loading>
+        </Panel>
+        <Panel title="邀请名单（影子期一次性邀请，用途绑定）">
+          <Loading error={invs.error} loading={invs.loading}>
+            {(invs.data?.records ?? []).map((i) => (
+              <div key={i.id} className="border-t border-line py-2.5 text-[12.5px]">
+                <div className="flex justify-between">
+                  <span className="font-semibold text-ink">{i.purpose}</span>
+                  <Badge state={i.consumedAt ? "closed" : "new"} />
+                </div>
+                <div className="text-faint mt-1 font-mono break-all">{i.token}</div>
+                <div className="text-faint mt-0.5">
+                  {i.email ?? "—"} · 至 {i.expiresAt.slice(0, 10)}
+                </div>
+              </div>
+            ))}
+          </Loading>
+        </Panel>
+      </div>
     </Panel>
   );
 }
