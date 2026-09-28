@@ -72,6 +72,28 @@ export interface ClientDetailView {
   };
 }
 
+export interface CaseRow {
+  id: string;
+  customerRef: string;
+  advisorId: string;
+  stage: string;
+  exceptions: Array<{ kind: string; reason: string; active?: boolean }>;
+}
+export interface TaskRow {
+  id: string;
+  caseId: string;
+  title: string;
+  ownerId: string;
+  dueAt: string;
+  state: string;
+}
+export interface MaterialRow {
+  id: string;
+  personRef: string;
+  title: string;
+  state: string;
+}
+
 export const api = {
   queue: (chip: string) =>
     req<{ records: ConsultationView[] }>(`/advisor/engagements/queue?chip=${chip}`),
@@ -93,5 +115,9 @@ export const api = {
     req<FollowView>(`/advisor/follow-ups/${id}/correct`, {
       method: "POST",
       body: JSON.stringify({ text, note })
-    })
+    }),
+  cases: () => req<{ records: CaseRow[] }>("/advisor/cases"),
+  case: (id: string) => req<CaseRow>(`/advisor/cases/${id}`),
+  tasks: () => req<{ records: TaskRow[] }>("/advisor/tasks/mine"),
+  materials: (caseId: string) => req<{ records: MaterialRow[] }>(`/advisor/materials?caseId=${caseId}`)
 };

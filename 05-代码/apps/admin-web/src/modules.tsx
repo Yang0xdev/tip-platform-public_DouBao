@@ -3,7 +3,7 @@ import { api, type Actor } from "./api.js";
 
 /* ============== 通用小组件 ============== */
 
-function useApi<T>(path: string, actor: Actor, deps: unknown[] = []) {
+export function useApi<T>(path: string, actor: Actor, deps: unknown[] = []) {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -49,7 +49,7 @@ const STATE_TONE: Record<string, string> = {
   pending_filing: "bg-line-soft text-faint"
 };
 
-function Badge({ state }: { state: string }) {
+export function Badge({ state }: { state: string }) {
   return (
     <span className={`inline-block text-[10.5px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap ${STATE_TONE[state] ?? "bg-line-soft text-faint"}`}>
       {state}
@@ -57,7 +57,7 @@ function Badge({ state }: { state: string }) {
   );
 }
 
-function Panel({ title, sub, right, children }: { title: string; sub?: string; right?: React.ReactNode; children: React.ReactNode }) {
+export function Panel({ title, sub, right, children }: { title: string; sub?: string; right?: React.ReactNode; children: React.ReactNode }) {
   return (
     <section className="card p-5">
       <div className="flex items-start justify-between mb-4 gap-3">
@@ -72,17 +72,17 @@ function Panel({ title, sub, right, children }: { title: string; sub?: string; r
   );
 }
 
-function Loading({ error, loading, empty, children }: { error: string | null; loading: boolean; empty?: boolean; children: React.ReactNode }) {
+export function Loading({ error, loading, empty, children }: { error: string | null; loading: boolean; empty?: boolean; children: React.ReactNode }) {
   if (loading) return <div className="space-y-2">{Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-11 rounded-xl bg-line-soft animate-pulse" />)}</div>;
   if (error) return <div className="rounded-xl border border-bad/30 bg-bad-bg px-4 py-3 text-[12.5px] text-bad">{error}</div>;
   if (empty) return <div className="rounded-xl bg-line-soft px-4 py-8 text-center text-[12.5px] text-faint">暂无数据（影子期种子为空，所有数据由真实操作产生）</div>;
   return <>{children}</>;
 }
 
-function Th({ children, w }: { children: React.ReactNode; w?: string }) {
+export function Th({ children, w }: { children: React.ReactNode; w?: string }) {
   return <th style={w ? { width: w } : undefined} className="text-left text-[11px] font-semibold text-faint pb-2.5 pr-3">{children}</th>;
 }
-function Td({ children, mono }: { children: React.ReactNode; mono?: boolean }) {
+export function Td({ children, mono }: { children: React.ReactNode; mono?: boolean }) {
   return <td className={`text-[12.5px] py-2.5 pr-3 border-t border-line-soft align-top ${mono ? "font-mono text-[11.5px]" : ""}`}>{children}</td>;
 }
 

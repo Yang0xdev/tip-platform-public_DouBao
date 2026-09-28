@@ -11,10 +11,13 @@ import ProjectDetailScreen from "./screens/ProjectDetailScreen";
 import AssessmentScreen from "./screens/AssessmentScreen";
 import GlobalAccessScreen from "./screens/GlobalAccessScreen";
 import FavoritesScreen from "./screens/FavoritesScreen";
+import CaseListScreen from "./screens/CaseListScreen";
+import CaseDetailScreen from "./screens/CaseDetailScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 
 export type TabParamList = {
   HomeTab: undefined;
+  CaseTab: undefined;
   ProjectsTab: undefined;
   GlobalTab: undefined;
   MeTab: undefined;
@@ -25,6 +28,7 @@ export type RootStackParamList = {
   Projects: undefined;
   ProjectDetail: { id: string; title: string };
   Assessment: { projectCode: string };
+  CaseDetail: { id: string };
   Favorites: undefined;
   GlobalAccess: undefined;
 };
@@ -56,6 +60,7 @@ function Tabs() {
       }}
     >
       <Tab.Screen name="HomeTab" component={HomeScreen} options={{ title: "首页", headerShown: false, tabBarIcon: ({ color }) => <TabIcon glyph="⌂" color={color} /> }} />
+      <Tab.Screen name="CaseTab" component={CaseListScreen} options={{ title: "办理", tabBarIcon: ({ color }) => <TabIcon glyph="◷" color={color} /> }} />
       <Tab.Screen name="ProjectsTab" component={ProjectListScreen} options={{ title: "项目", tabBarIcon: ({ color }) => <TabIcon glyph="▤" color={color} /> }} />
       <Tab.Screen name="GlobalTab" component={GlobalAccessScreen} options={{ title: "全球通行", tabBarIcon: ({ color }) => <TabIcon glyph="◎" color={color} /> }} />
       <Tab.Screen name="MeTab" component={ProfileScreen} options={{ title: "我的", tabBarIcon: ({ color }) => <TabIcon glyph="◔" color={color} /> }} />
@@ -71,6 +76,7 @@ export default function RootNavigator() {
         <Stack.Screen name="Projects" component={ProjectListScreen} options={{ title: "身份项目" }} />
         <Stack.Screen name="ProjectDetail" component={ProjectDetailScreen} options={{ title: "项目详情" }} />
         <Stack.Screen name="Assessment" component={AssessmentScreen} options={{ title: "初步评估" }} />
+        <Stack.Screen name="CaseDetail" component={CaseDetailScreen} options={{ title: "案件详情" }} />
         <Stack.Screen name="GlobalAccess" component={GlobalAccessScreen} options={{ title: "全球通行" }} />
         <Stack.Screen name="Favorites" component={FavoritesScreen} options={{ title: "本机收藏与对比" }} />
       </Stack.Navigator>

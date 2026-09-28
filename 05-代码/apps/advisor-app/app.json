@@ -5,9 +5,16 @@
     "version": "0.1.0",
     "orientation": "default",
     "userInterfaceStyle": "light",
-    "assetBundlePatterns": ["**/*"],
-    "ios": { "supportsTablet": true },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
     "android": {},
-    "web": { "output": "single" }
+    "web": {
+      "output": "single",
+      "favicon": "./assets/favicon.png"
+    }
   }
 }

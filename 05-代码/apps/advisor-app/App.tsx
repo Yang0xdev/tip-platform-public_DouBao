@@ -12,6 +12,7 @@ import QueueScreen from "./src/screens/QueueScreen";
 import ClientsScreen from "./src/screens/ClientsScreen";
 import ClientDetailScreen from "./src/screens/ClientDetailScreen";
 import ProposalScreen from "./src/screens/ProposalScreen";
+import CasesScreen from "./src/screens/CasesScreen";
 import MeScreen from "./src/screens/MeScreen";
 import { colors } from "@tip/ui-native";
 
@@ -63,6 +64,7 @@ export default function App() {
           >
             <Tab.Screen name="工作台" component={QueueScreen} options={{ tabBarIcon: tabIcon("◔") }} />
             <Tab.Screen name="客户" component={ClientsStack} options={{ tabBarIcon: tabIcon("◍") }} />
+            <Tab.Screen name="案件" component={CasesScreen} options={{ tabBarIcon: tabIcon("◷") }} />
             <Tab.Screen name="方案" component={ProposalScreen} options={{ tabBarIcon: tabIcon("≡") }} />
             <Tab.Screen name="我的" component={MeScreen} options={{ tabBarIcon: tabIcon("◌") }} />
           </Tab.Navigator>

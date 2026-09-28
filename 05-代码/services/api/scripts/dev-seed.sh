@@ -135,3 +135,54 @@ RCP_ID=$(curl -s "${V[@]}" "$BASE/admin/payments/receipts" | j "['records'][0]['
 echo "  receipt issued: $RCP_ID；订单进入待建案（M3 建案）"
 
 echo "== dev seed 完成（重跑会因唯一编码报错属正常，内存仓储重启即清空）"
+
+# ===== M3 切片5-9 示例：服务方准入 + 门户账号批次 + 通知模板 =====
+CASE_ID=$(curl -s "${V[@]}" "$BASE/admin/cases/board" | j "['columns'][0]['cases'][0]['id']")
+SP_ID=$(curl -s "${A[@]}" -X POST "$BASE/admin/providers" -d '{
+  "type":"inhouse_delivery","mode":"in","name":"自营交付部门"
+}' | j "['id']")
+curl -s "${A[@]}" -X POST "$BASE/admin/providers/$SP_ID/license" -d '{
+  "credentialNo":"REG-DEMO-1","country":"PT",
+  "issuedAt":"2026-01-01T00:00:00Z","expiresAt":"2027-06-01T00:00:00Z"
+}' >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/providers/$SP_ID/license/verify" -d '{}' >/dev/null
+for K in framework dataProcessing confidentiality serviceLevel; do
+  curl -s "${A[@]}" -X POST "$BASE/admin/providers/$SP_ID/agreement" -d "{\"key\":\"$K\"}" >/dev/null
+done
+curl -s "${A[@]}" -X POST "$BASE/admin/providers/$SP_ID/submit" -d '{}' >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/providers/$SP_ID/review" -d '{"decision":"active"}' >/dev/null
+echo "  provider active: $SP_ID（A02 准入）"
+
+# 材料清单 + 客户上传 + 平台审核（走真实门）
+curl -s "${V[@]}" -X POST "$BASE/admin/materials/checklist" -d "{\"caseId\":\"$CASE_ID\"}" >/dev/null
+MAT_ID=$(curl -s "${V[@]}" "$BASE/admin/materials?caseId=$CASE_ID" | j "['records'][0]['id']")
+curl -s "${V[@]}" -H "x-tip-realm:customer" -H "x-tip-user:c-1980" -X POST \
+  "$BASE/v1/materials/upload" -d "{
+    \"caseId\":\"$CASE_ID\",\"itemId\":\"$MAT_ID\",
+    \"fileHash\":\"hash-demo-1\",\"artifactRef\":\"L3://p1.jpg\",
+    \"mime\":\"image/jpeg\",\"sizeBytes\":102400
+  }" >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/materials/$MAT_ID/review" -d '{"decision":"approve"}' >/dev/null
+echo "  material approved: $MAT_ID（材料中心）"
+
+# 门户账号 + 批次授权
+ACC_ID=$(curl -s "${V[@]}" -X POST "$BASE/admin/portal/accounts" -d "{
+  \"providerId\":\"$SP_ID\",\"login\":\"PA-DEMO\",\"name\":\"示例律师\"
+}" | j "['id']")
+curl -s "${V[@]}" -X POST "$BASE/admin/portal/accounts/$ACC_ID/setup" -d '{"step":"realname"}' >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/portal/accounts/$ACC_ID/setup" -d '{"step":"mfa"}' >/dev/null
+GR_ID=$(curl -s "${V[@]}" -X POST "$BASE/admin/portal/grants" -d "{
+  \"providerId\":\"$SP_ID\",\"caseId\":\"$CASE_ID\",
+  \"materialScopes\":[\"passport\"],\"actions\":[\"material_view\",\"report_upload\"]
+}" | j "['id']")
+curl -s "${V[@]}" -X POST "$BASE/admin/portal/grants/$GR_ID/approve-view" -d '{}' >/dev/null
+echo "  portal grant viewable: $GR_ID（批次授权）"
+
+# 通知模板（草稿→提交→发布）
+TPL_ID=$(curl -s "${V[@]}" -X POST "$BASE/admin/notifications/templates" -d '{
+  "code":"t0_demo","category":"t0","title":"材料补充提醒",
+  "body":"请在截止前补充材料","safeSummary":"请补充材料","channels":["app","sms"]
+}' | j "['id']")
+curl -s "${V[@]}" -X POST "$BASE/admin/notifications/templates/$TPL_ID/submit" -d '{}' >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/notifications/templates/$TPL_ID/review" -d '{"decision":"published"}' >/dev/null
+echo "  notification template published: $TPL_ID"

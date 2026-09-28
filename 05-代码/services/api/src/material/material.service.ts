@@ -343,7 +343,7 @@ export class MaterialService implements OnModuleInit {
   /* ---------------- 查询 ---------------- */
 
   listForCase(caseId: string): MaterialItem[] {
-    return [...this.items.values()].filter((m) => m.caseId === caseId);
+    return [...this.items.values()].filter((m) => !caseId || m.caseId === caseId);
   }
 
   /** 客户视图：按申请人分栏；只回本人可见行（他人行由端上以锁定态呈现，不回内容） */

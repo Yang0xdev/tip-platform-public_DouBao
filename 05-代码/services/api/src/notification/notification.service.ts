@@ -354,7 +354,7 @@ export class NotificationService implements OnModuleInit {
   /* ---------------- 查询 ---------------- */
 
   listForCase(caseId: string): DeliveryRecord[] {
-    return [...this.deliveries.values()].filter((d) => d.caseId === caseId);
+    return [...this.deliveries.values()].filter((d) => !caseId || d.caseId === caseId);
   }
 
   /** 客户视图：同一份回执，仅隐藏内部外呼细节 */

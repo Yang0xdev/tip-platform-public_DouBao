@@ -5,9 +5,21 @@
     "version": "0.1.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "assetBundlePatterns": ["**/*"],
-    "ios": { "supportsTablet": true, "bundleIdentifier": "com.tip.client" },
-    "android": { "package": "com.tip.client" },
-    "extra": { "stage": "m0-spike" }
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tip.client"
+    },
+    "android": {
+      "package": "com.tip.client"
+    },
+    "extra": {
+      "stage": "m0-spike"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
   }
 }

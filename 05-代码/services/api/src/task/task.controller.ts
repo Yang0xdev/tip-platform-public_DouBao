@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, Query, UseGuards } from "@nestjs/common";
 import { CurrentActor, RealmAllowed, RealmGuard, type Actor } from "../realm.guard.js";
 import { TaskService } from "./task.service.js";
+import { CaseService } from "../case/case.service.js";
 
 /** 后台：任务创建/推进/升级/改期（M3-02） */
 @Controller("admin/tasks")
@@ -78,7 +79,7 @@ export class TaskAdvisorController {
 export class TaskCustomerController {
   constructor(
     private readonly tasks: TaskService,
-    private readonly cases: import("../case/case.service.js").CaseService
+    private readonly cases: CaseService
   ) {}
 
   @Get("mine")
