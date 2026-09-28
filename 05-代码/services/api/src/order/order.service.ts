@@ -8,6 +8,7 @@ import { EntityService } from "../entities/entity.service.js";
 import { EngagementService } from "../engagement/engagement.service.js";
 import { AuditService } from "../audit.service.js";
 import { SnapshotStore } from "../persistence/snapshot.store.js";
+import { ProviderService } from "../provider/provider.service.js";
 import type { ProposalRecord } from "../proposal/proposal.service.js";
 
 /**
@@ -126,7 +127,8 @@ export class OrderService implements OnModuleInit {
     private readonly entities: EntityService,
     private readonly engagements: EngagementService,
     private readonly audit: AuditService,
-    private readonly snapshotsStore?: SnapshotStore
+    private readonly snapshotsStore?: SnapshotStore,
+    private readonly providers?: ProviderService
   ) {}
 
   async onModuleInit() {
@@ -274,12 +276,17 @@ export class OrderService implements OnModuleInit {
       }
     } catch { /* ignore */ }
 
-    // 2 境外交付方已关联（持牌方或自营交付部门）
+    // 2 境外交付方已关联（持牌方或自营交付部门）：A02 准入联动
     const op = this.config.overseasParty;
-    const overseasOk = Boolean(op.linked && op.name && (op.licensed || op.name.includes("自营")));
-    const overseasDetail = overseasOk
-      ? `${op.name}${op.licensed ? "（持牌已核验）" : "（自营交付部门）"}`
-      : "境外交付方未关联或资质未核验（D2 决策门）";
+    const usable = this.providers?.findUsableOverseas();
+    const overseasOk = Boolean(
+      usable ?? (op.linked && op.name && (op.licensed || op.name.includes("自营")))
+    );
+    const overseasDetail = usable
+      ? `${usable.name}（A02 准入有效，${usable.type === "inhouse_delivery" ? "自营交付部门" : "持牌已核验"}）`
+      : overseasOk
+        ? `${op.name}${op.licensed ? "（持牌已核验）" : "（自营交付部门）"}`
+        : "境外交付方未关联或资质未核验（D2 决策门）";
 
     // 3 收款账户户名 = 签约主体
     let payeeOk = false;

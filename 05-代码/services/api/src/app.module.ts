@@ -49,6 +49,12 @@ import { TimelineAdminController, TimelineCustomerController } from "./timeline/
 import { ConsentService } from "./consent/consent.service.js";
 import { NotificationService } from "./notification/notification.service.js";
 import { NotificationAdminController, NotificationCustomerController } from "./notification/notification.controller.js";
+import { ProviderService } from "./provider/provider.service.js";
+import { ProviderAdminController } from "./provider/provider.controller.js";
+import { PortalService } from "./portal/portal.service.js";
+import { PortalAdminController, PortalPartnerController } from "./portal/portal.controller.js";
+import { HandoverService } from "./handover/handover.service.js";
+import { HandoverAdminController, HandoverCustomerController } from "./handover/handover.controller.js";
 import { ConsentCustomerController, ConsentAdminController } from "./consent/consent.controller.js";
 import { PrismaService } from "./persistence/prisma.service.js";
 import { SnapshotStore } from "./persistence/snapshot.store.js";
@@ -102,7 +108,12 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     ConsentCustomerController,
     ConsentAdminController,
     NotificationAdminController,
-    NotificationCustomerController
+    NotificationCustomerController,
+    ProviderAdminController,
+    PortalAdminController,
+    PortalPartnerController,
+    HandoverAdminController,
+    HandoverCustomerController
   ],
   providers: [
     PrismaService,
@@ -131,7 +142,10 @@ TaskService,
 MaterialService,
 TimelineService,
     ConsentService,
-    NotificationService
+    NotificationService,
+    ProviderService,
+    PortalService,
+    HandoverService
   ]
 })
 export class AppModule {}

@@ -16,6 +16,9 @@ import { MaterialService } from "../material/material.service.js";
 import { TimelineService } from "../timeline/timeline.service.js";
 import { ConsentService } from "../consent/consent.service.js";
 import { NotificationService } from "../notification/notification.service.js";
+import { ProviderService } from "../provider/provider.service.js";
+import { PortalService } from "../portal/portal.service.js";
+import { HandoverService } from "../handover/handover.service.js";
 
 export const ENTITY_NAME = "示例出入境咨询有限公司";
 
@@ -38,6 +41,9 @@ export interface World {
   timeline: TimelineService;
   consents: ConsentService;
   notifications: NotificationService;
+  providers: ProviderService;
+  portal: PortalService;
+  handovers: HandoverService;
 }
 
 export function world(): World {
@@ -49,7 +55,8 @@ export function world(): World {
   const grants = new AuthorizationService(ob, ent);
   const eng = new EngagementService(audit);
   const props = new ProposalService(cat, grants, eng, audit);
-  const orders = new OrderService(ent, eng, audit);
+  const providers = new ProviderService(ent, audit);
+  const orders = new OrderService(ent, eng, audit, undefined, providers);
   const details = new ClientDetailService(eng, props, orders, audit);
   const ipad = new IpadService(cat, props, audit);
   const cases = new CaseService(audit);
@@ -58,8 +65,10 @@ export function world(): World {
   const notifications = new NotificationService(cases, audit);
   const tasks = new TaskService(cases, audit, notifications);
   const materials = new MaterialService(cases, tasks, timeline, consents, audit);
+  const portal = new PortalService(providers, cases, timeline, audit);
+  const handovers = new HandoverService(eng, cases, grants, audit);
   const payments = new PaymentService(orders, audit, cases);
-  return { audit, vr, cat, ent, ob, grants, eng, props, orders, payments, details, ipad, cases, tasks, materials, timeline, consents, notifications };
+  return { audit, vr, cat, ent, ob, grants, eng, props, orders, payments, details, ipad, cases, tasks, materials, timeline, consents, notifications, providers, portal, handovers };
 }
 
 /**

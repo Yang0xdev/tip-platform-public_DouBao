@@ -371,6 +371,37 @@ export class EngagementService {
   }
 
   /** M2 后续切片的方案/订单写入门：冲突期或关系未 active 一律拒绝 */
+  /** 交接冻结：active → handoff_frozen（停新，在办只读） */
+  freezeForHandover(relationshipId: string, actor: string): Relationship {
+    const rel = this.relationships.get(relationshipId);
+    if (!rel) throw new EngagementError(404, "42101", "服务关系不存在");
+    if (rel.state !== "active") throw new EngagementError(409, "42121", "仅生效关系可冻结交接");
+    rel.state = "handoff_frozen";
+    rel.updatedAt = new Date().toISOString();
+    return rel;
+  }
+
+  /** 完成交接：切换主责顾问并恢复 active（五步走完后由 HandoverService 调用） */
+  completeHandover(relationshipId: string, newAdvisorId: string, actor: string): Relationship {
+    const rel = this.relationships.get(relationshipId);
+    if (!rel) throw new EngagementError(404, "42101", "服务关系不存在");
+    if (rel.state !== "handoff_frozen") throw new EngagementError(409, "42121", "关系未处于交接冻结");
+    rel.advisorId = newAdvisorId;
+    rel.state = "active";
+    rel.updatedAt = new Date().toISOString();
+    return rel;
+  }
+
+  listRelationships(customerRef?: string): Relationship[] {
+    return [...this.relationships.values()].filter((r) => !customerRef || r.customerRef === customerRef);
+  }
+
+  getRelationship(relationshipId: string): Relationship {
+    const rel = this.relationships.get(relationshipId);
+    if (!rel) throw new EngagementError(404, "42101", "服务关系不存在");
+    return rel;
+  }
+
   assertWritable(customerRef: string, advisorId: string): Relationship {
     for (const c of this.consultations.values()) {
       if (c.customerRef === customerRef && c.state === "conflict_pending") {
@@ -378,7 +409,10 @@ export class EngagementService {
       }
     }
     const rel = this.activeRelationship(customerRef);
-    if (!rel || rel.state !== "active") throw new EngagementError(409, "42119", "服务关系未双向确认，不可发起方案/订单");
+    if (!rel || (rel.state !== "active" && rel.state !== "handoff_frozen"))
+      throw new EngagementError(409, "42119", "服务关系未双向确认，不可发起方案/订单");
+    if (rel.state === "handoff_frozen")
+      throw new EngagementError(409, "42121", "顾问交接冻结中：不可发起新方案/订单，在办可继续只读处理");
     if (rel.advisorId !== advisorId) throw new EngagementError(403, "42120", "主责顾问不匹配");
     return rel;
   }
