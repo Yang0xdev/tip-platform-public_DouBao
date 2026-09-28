@@ -11,3 +11,7 @@ coverage/
 apps/client-app/dist-web/
 apps/advisor-app/dist-web/
 demo/_shots/
+
+# 隧道工具与日志（环境内使用，不入仓库）
+tools/cloudflared
+tools/*.log
