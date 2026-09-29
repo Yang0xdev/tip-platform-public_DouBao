@@ -3,7 +3,7 @@
 set -uo pipefail
 
 PORT="${PORT:-3100}"
-BASE="http://localhost:${PORT}"
+BASE="http://127.0.0.1:${PORT}"
 
 node services/api/dist/main.js &
 PID=$!

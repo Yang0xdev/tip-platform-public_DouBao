@@ -12,3 +12,6 @@ Thumbs.db
 06-发布/demo-site/_shots/
 .wrangler/
 **/_shots/
+
+# FUSE 临时标记
+**/.fuse*
