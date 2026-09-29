@@ -22,7 +22,7 @@ RUN pnpm install --frozen-lockfile --registry=https://registry.npmjs.org
 COPY 05-代码/packages ./packages
 COPY 05-代码/services ./services
 
-ENV DATABASE_URL=postgresql://tip:tip@localhost:5432/tip
+ARG DATABASE_URL=postgresql://tip:tip@localhost:5432/tip
 RUN pnpm --filter @tip/api prisma:generate \
   && pnpm --filter @tip/core build \
   && pnpm --filter @tip/api build
