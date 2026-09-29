@@ -60,6 +60,7 @@ import { CommissionAdminController, CommissionAdvisorController } from "./commis
 import { ComplianceEventAdminController } from "./compliance/compliance-event.controller.js";
 import { DeletionAdminController, DeletionCustomerController } from "./deletion/deletion.controller.js";
 import { InviteAdminController } from "./invite/invite.controller.js";
+import { SeedLogController } from "./deletion/seed-log.controller.js";
 import { TicketService } from "./ticket/ticket.service.js";
 import { CommissionService } from "./commission/commission.service.js";
 import { ComplianceEventService } from "./compliance/compliance-event.service.js";
@@ -132,7 +133,8 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     ComplianceEventAdminController,
     DeletionCustomerController,
     DeletionAdminController,
-    InviteAdminController
+    InviteAdminController,
+    SeedLogController
   ],
   providers: [
     PrismaService,

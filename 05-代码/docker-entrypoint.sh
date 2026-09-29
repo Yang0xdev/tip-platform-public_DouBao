@@ -16,7 +16,7 @@ if [ "${DEMO_SEED:-0}" = "1" ]; then
     sleep 2
   done
   if [ "$ok" = "1" ]; then
-    NODE_ENV=development BASE="${BASE}" bash services/api/scripts/dev-seed.sh || echo "seed 执行异常（不影响服务）"
+    NODE_ENV=development BASE="${BASE}" bash services/api/scripts/dev-seed.sh 2>&1 | tee /tmp/seed.log || echo "seed 执行异常（不影响服务）"
   else
     echo "API 未就绪，跳过 seed"
   fi
