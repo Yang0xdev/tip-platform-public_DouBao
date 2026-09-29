@@ -15,6 +15,9 @@
     "web": {
       "output": "single",
       "favicon": "./assets/favicon.png"
+    },
+    "experiments": {
+      "baseUrl": "/live/advisor"
     }
   }
 }

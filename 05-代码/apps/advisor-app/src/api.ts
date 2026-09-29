@@ -1,7 +1,7 @@
 /** 顾问端 API（dev 身份头；Keycloak 接入后替换为 OIDC 令牌） */
-const env = (globalThis as { process?: { env: Record<string, string | undefined> } }).process?.env ?? {};
-const API_BASE = env.EXPO_PUBLIC_API_BASE ?? "http://localhost:3100";
-const ADVISOR_ID = env.EXPO_PUBLIC_ADVISOR_ID ?? "adv-chen";
+declare const process: { env: Record<string, string | undefined> };
+const API_BASE = process.env.EXPO_PUBLIC_API_BASE ?? "http://localhost:3100";
+const ADVISOR_ID = process.env.EXPO_PUBLIC_ADVISOR_ID ?? "adv-chen";
 
 const H = {
   "content-type": "application/json",

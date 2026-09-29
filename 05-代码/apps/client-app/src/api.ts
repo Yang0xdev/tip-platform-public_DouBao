@@ -3,9 +3,9 @@
  * - dev 默认本机 api；模拟器/真机用 EXPO_PUBLIC_API_BASE 覆盖（Android 模拟器用 http://10.0.2.2:3100）
  * - 游客端点不需要身份头；M2 登录后由 Keycloak customer realm 注入 Bearer。
  */
+declare const process: { env: Record<string, string | undefined> };
 export const API_BASE =
-  (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env?.EXPO_PUBLIC_API_BASE ??
-  "http://localhost:3100";
+  process.env.EXPO_PUBLIC_API_BASE ?? "http://localhost:3100";
 
 export interface ProjectView {
   id: string;

@@ -4,8 +4,9 @@ export interface Actor {
   realm: "staff" | "service";
 }
 
+export const API_ORIGIN = "https://tip-api-niy0.onrender.com";
 export async function api<T>(path: string, actor: Actor, init?: RequestInit): Promise<T> {
-  const res = await fetch(path, {
+  const res = await fetch(API_ORIGIN + path, {
     ...init,
     headers: {
       "x-tip-realm": actor.realm,
