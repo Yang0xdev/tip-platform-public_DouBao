@@ -9,7 +9,7 @@ RUN corepack enable && corepack prepare pnpm@9.15.9 --activate
 
 WORKDIR /app
 
-COPY 05-代码/pnpm-workspace.yaml 05-代码/package.json 05-代码/pnpm-lock.yaml ./
+COPY 05-代码/pnpm-workspace.yaml 05-代码/package.json 05-代码/pnpm-lock.yaml 05-代码/tsconfig.base.json ./
 COPY 05-代码/packages/core/package.json packages/core/
 COPY 05-代码/packages/ui-native/package.json packages/ui-native/
 COPY 05-代码/services/api/package.json services/api/
@@ -22,7 +22,9 @@ RUN pnpm install --frozen-lockfile --registry=https://registry.npmjs.org
 COPY 05-代码/packages ./packages
 COPY 05-代码/services ./services
 
-RUN pnpm --filter @tip/core build \
+ENV DATABASE_URL=postgresql://tip:tip@localhost:5432/tip
+RUN pnpm --filter @tip/api prisma:generate \
+  && pnpm --filter @tip/core build \
   && pnpm --filter @tip/api build
 
 ENV NODE_ENV=production
