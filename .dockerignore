@@ -1,0 +1,16 @@
+**/node_modules
+**/dist
+**/dist-web
+**/_shots
+**/.embedded-pg
+05-代码/tools
+05-代码/services/api/.embedded-pg
+05-代码/demo
+05-代码/infra
+*.log
+.git
+01-产品规划
+02-功能设计
+03-原型设计
+04-UI设计
+06-发布
