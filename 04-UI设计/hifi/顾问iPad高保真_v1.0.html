@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>顾问 iPad 面谈端高保真 · v1.0</title>
+<title>顾问 iPad 面谈端高保真 · v1.4（精修版）</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23002661'/%3E%3Cpath d='M8 20l5-6 4 3 7-9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap">
 <style>
@@ -97,12 +97,38 @@ body{font-family:"Manrope","Noto Sans SC",-apple-system,"PingFang SC",sans-serif
 .st.r .d{animation:pulse 1.8s ease-out infinite;}
 
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important;}}
+
+/* ================= v1.4 精修层（2026-09-29） ================= */
+:root{--grad:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);}
+@keyframes drift{0%{background-position:0 30%}100%{background-position:100% 70%}}
+::selection{background:#DCE4F2;color:#002661;}
+a,button{outline:none;}
+a:focus-visible,button:focus-visible,.btn:focus-visible{outline:2.5px solid #AF2D67;outline-offset:2px;}
+.card{transition:transform .28s cubic-bezier(.16,1,.3,1),box-shadow .28s;}
+.card:hover{transform:translateY(-2px);box-shadow:var(--sh2);}
+.card:active{transform:scale(.992);}
+.btn{position:relative;overflow:hidden;}
+.btn.navy::before,.btn.berry::before{content:"";position:absolute;top:0;left:-70%;width:50%;height:100%;
+ background:linear-gradient(100deg,transparent,rgba(255,255,255,.3),transparent);transform:skewX(-18deg);
+ transition:left .65s ease;pointer-events:none;}
+.btn.navy:hover::before,.btn.berry:hover::before{left:135%;}
+.skeleton{position:relative;overflow:hidden;background:#EEF1F6;border-radius:12px;}
+.skeleton::after{content:"";position:absolute;inset:0;transform:translateX(-100%);
+ background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);animation:shimmer14 1.5s infinite;}
+@keyframes shimmer14{100%{transform:translateX(100%);}}
+.statebox{display:flex;flex-direction:column;align-items:center;gap:9px;padding:34px 20px;text-align:center;
+ color:var(--mut);font-size:12.5px;line-height:1.7;}
+.statebox .si{width:48px;height:48px;border-radius:15px;background:var(--navy-50);color:var(--navy);
+ display:flex;align-items:center;justify-content:center;}
+.gradline{height:2px;border:0;border-radius:2px;background:var(--grad);background-size:200% 200%;
+ animation:drift 16s ease-in-out infinite alternate;}
+@media(prefers-reduced-motion:reduce){.skeleton::after,.gradline{animation:none!important;}}
 </style>
 </head>
 <body>
 <div class="stage">
   <div class="stage-head">
-    <h1>顾问 iPad 面谈端高保真 · v1.3（I-01 / I-02 双模式 · 高级动效版）</h1>
+    <h1>顾问 iPad 面谈端高保真 · v1.4（I-01 / I-02 双模式 · 精修版）</h1>
     <p>工作模式：客户看板 + 案件流水线 + T0 预警（内部信息）；客户演示模式：仅核准素材、脱敏、无内部信息，借鉴友邦 iPad 展业但不复制其品牌与流程。</p>
     <div class="switch">
       <button id="sw-work" class="on" onclick="setMode('work')">I-01 顾问工作模式</button>

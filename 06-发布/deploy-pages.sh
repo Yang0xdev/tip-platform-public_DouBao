@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "$0")/.."
 export CLOUDFLARE_API_TOKEN="$(cat ~/.cf/token)"
 export CLOUDFLARE_ACCOUNT_ID="8c5ca3dd5c0ed446e027a96ac5424be1"
-# 先从冻结高保真同步发布包（保持与 UI Freeze v1.3 一致）
+# 先从冻结高保真同步发布包（保持与 UI Freeze v1.4 一致）
 cp "04-UI设计/hifi/客户端高保真_v1.0.html" 06-发布/demo-site/client.html
 cp "04-UI设计/hifi/顾问端高保真_v1.0.html" 06-发布/demo-site/advisor.html
 cp "04-UI设计/hifi/顾问iPad高保真_v1.0.html" 06-发布/demo-site/advisor-ipad.html

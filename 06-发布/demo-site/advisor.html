@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>顾问展业端高保真 · v1.0</title>
+<title>顾问展业端高保真 · v1.4（精修版）</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23002661'/%3E%3Cpath d='M8 20l5-6 4 3 7-9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap">
 <style>
@@ -114,12 +114,38 @@ h4{font-size:15px;font-weight:700;}
 .ck .box{transition:transform .15s var(--spring);}.ck:active .box{transform:scale(.9);}
 
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important;}}
+
+/* ================= v1.4 精修层（2026-09-29） ================= */
+:root{--grad:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);}
+@keyframes drift{0%{background-position:0 30%}100%{background-position:100% 70%}}
+::selection{background:#DCE4F2;color:#002661;}
+a,button{outline:none;}
+a:focus-visible,button:focus-visible,.btn:focus-visible{outline:2.5px solid #AF2D67;outline-offset:2px;}
+.card{transition:transform .28s cubic-bezier(.16,1,.3,1),box-shadow .28s;}
+.card:hover{transform:translateY(-2px);box-shadow:var(--sh2);}
+.card:active{transform:scale(.992);}
+.btn{position:relative;overflow:hidden;}
+.btn.navy::before,.btn.berry::before{content:"";position:absolute;top:0;left:-70%;width:50%;height:100%;
+ background:linear-gradient(100deg,transparent,rgba(255,255,255,.3),transparent);transform:skewX(-18deg);
+ transition:left .65s ease;pointer-events:none;}
+.btn.navy:hover::before,.btn.berry:hover::before{left:135%;}
+.skeleton{position:relative;overflow:hidden;background:#EEF1F6;border-radius:12px;}
+.skeleton::after{content:"";position:absolute;inset:0;transform:translateX(-100%);
+ background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);animation:shimmer14 1.5s infinite;}
+@keyframes shimmer14{100%{transform:translateX(100%);}}
+.statebox{display:flex;flex-direction:column;align-items:center;gap:9px;padding:34px 20px;text-align:center;
+ color:var(--mut);font-size:12.5px;line-height:1.7;}
+.statebox .si{width:48px;height:48px;border-radius:15px;background:var(--navy-50);color:var(--navy);
+ display:flex;align-items:center;justify-content:center;}
+.gradline{height:2px;border:0;border-radius:2px;background:var(--grad);background-size:200% 200%;
+ animation:drift 16s ease-in-out infinite alternate;}
+@media(prefers-reduced-motion:reduce){.skeleton::after,.gradline{animation:none!important;}}
 </style>
 </head>
 <body>
 <div class="stage">
   <div class="stage-head">
-    <h1>顾问展业端高保真 · v1.3（高级动效版 · 手机 13 屏）</h1>
+    <h1>顾问展业端高保真 · v1.4（精修版 · 手机 13 屏）</h1>
     <p>签名渐变仅出现在登录与「我的」两处品牌时刻；工作台/客户/订单/佣金等作业界面保持 Navy 与语义色，不分散判断。<br>覆盖授权闭环、客户 360、项目授权、合规分享、订单只读、主体阻断警示、佣金六态、学习合规。示例数据均为虚构。</p>
     <span class="pill">与客户端同一套 Token · 底部 5 tab</span>
   </div>
@@ -162,7 +188,7 @@ V.onboard=view('onboard',sb()+
  '<div class="small mut" style="text-align:center;margin-top:14px;line-height:1.8;">账号仅限本人使用；展业行为全程留痕，接受合规抽查。</div></div>');
 
 /* 02 工作台 */
-V.wb=view('wb',sb()+'<div class="body"><div class="appbar"><div class="tt" style="font-size:20px;">早上好，陈某</div><span class="st g"><span class="d"></span>备案有效</span></div>'+
+V.wb=view('wb',sb()+'<div class="body"><div class="appbar"><div class="tt" style="font-size:20px;">早上好，陈某</div><span class="st g"><span class="d"></span>备案有效</span></div>'+'<div style="background:var(--grad);background-size:170% 170%;animation:drift 16s ease-in-out infinite alternate;color:#fff;border-radius:18px;padding:14px 16px;margin-bottom:13px;box-shadow:0 10px 24px rgba(94,36,107,.22);"><b style="font-size:15px;">展业工作台</b><div class="small" style="color:rgba(255,255,255,.88);margin-top:4px;line-height:1.6;">关系双向确认 · 费用分项透明 · 进度以官方凭据为准</div></div>'+
  '<div class="kpis"><div class="kpi"><b>12</b><span>在办客户</span></div><div class="kpi"><b>3</b><span>今日待办</span></div><div class="kpi" style="background:var(--red-bg);"><b style="color:var(--red);">1</b><span>T0 预警</span></div></div>'+
  '<div class="card" style="border-left:4px solid var(--red);background:var(--red-bg);"><div style="display:flex;gap:10px;align-items:flex-start;color:#8a261c;">'+ic('alert',21)+'<div style="flex:1;"><b style="font-size:13.5px;">CASE-A02 受理回执 T0 剩余 4 小时</b><div class="small" style="line-height:1.7;margin-top:5px;">App 已读、短信未达，已自动转人工电话并升级主管。<br><b>原截止时间不得改写</b>，锁屏推送不显示案号。</div></div></div>'+
  '<a class="btn sm navy" style="margin-top:11px;" data-go="client">查看客户与回执</a></div>'+
