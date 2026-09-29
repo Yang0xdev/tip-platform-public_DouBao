@@ -1,0 +1,11 @@
+**/node_modules
+**/dist
+**/dist-web
+**/_shots
+**/.embedded-pg
+services/api/.embedded-pg
+tools
+demo
+infra
+*.log
+.git
