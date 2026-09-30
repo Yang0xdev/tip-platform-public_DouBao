@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>总后台 AI 高保真 v1.5（AI 知识与运营中心）</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23AF2D67'/%3E%3Cstop offset='1' stop-color='%23002661'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M8 20l5-6 4 3 7-9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+:root{
+ --navy:#002661;--navy-700:#1E3E78;--navy-100:#DCE4F2;--navy-50:#EDF1F8;
+ --berry:#AF2D67;--berry-50:#FAEEF4;
+ --grad:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);
+ --ink:#1B2433;--mut:#5E6B7E;--faint:#8A95A6;--line:#E5E9F0;--line-2:#F0F3F8;--paper:#F5F7FA;
+ --green:#177A5B;--green-bg:#E6F4EE;--amber:#B45309;--amber-bg:#FBF1E2;--red:#C03221;--red-bg:#FCEBEA;--blue:#1D5F8A;--blue-bg:#E9F2F8;
+ --sh1:0 1px 2px rgba(16,32,67,.05),0 6px 18px -8px rgba(16,32,67,.12);--sh2:0 2px 6px rgba(16,32,67,.05),0 20px 44px -14px rgba(15,35,80,.22);
+ --ease-out:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+body{font-family:"Manrope","Noto Sans SC",-apple-system,"PingFang SC",sans-serif;background:#E9EDF3;color:var(--ink);min-height:100vh;padding:26px 14px 50px;}
+.head{text-align:center;margin-bottom:18px;}
+.head h1{font-size:20px;font-weight:800;}.head p{font-size:12.5px;color:var(--mut);margin-top:6px;line-height:1.8;}
+.browser{max-width:1260px;margin:0 auto;border-radius:16px;background:#fff;box-shadow:0 26px 60px rgba(10,25,60,.2);overflow:hidden;}
+.topbar{height:54px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 20px;gap:12px;}
+.dot{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--line);}
+.url{flex:1;height:31px;background:var(--paper);border-radius:8px;display:flex;align-items:center;padding:0 13px;font-size:11.5px;color:var(--faint);}
+.brand{font-size:13px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.layout{display:flex;min-height:730px;}
+.side{width:218px;background:#fff;border-right:1px solid var(--line);padding:15px 11px;flex:none;}
+.side .grp{font-size:10px;color:var(--faint);font-weight:700;padding:10px 12px 7px;letter-spacing:.5px;}
+.side button{display:flex;width:100%;border:0;background:none;font-family:inherit;font-size:12.5px;color:var(--mut);padding:10px 12px;border-radius:10px;cursor:pointer;text-align:left;transition:background .2s,color .2s;}
+.side button.on{background:var(--navy-50);color:var(--navy);font-weight:700;}
+.main{flex:1;padding:24px 28px;background:var(--paper);overflow:hidden;}
+.view{display:none;}.view.on{display:block;animation:fade .3s var(--ease-out);}@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;}}
+.p-title{font-size:19px;font-weight:800;margin-bottom:5px;}.p-sub{font-size:12.5px;color:var(--mut);margin-bottom:19px;line-height:1.7;}
+.card{border-radius:15px;background:#fff;box-shadow:var(--sh1);padding:16px 18px;margin-bottom:14px;}
+.card .lab{font-size:10.5px;color:var(--faint);font-weight:700;margin-bottom:11px;letter-spacing:.4px;}
+.btn{border:1.5px solid var(--navy);background:#fff;color:var(--navy);font-family:inherit;font-weight:700;border-radius:16px;height:37px;padding:0 17px;font-size:12.5px;cursor:pointer;transition:transform .18s var(--ease-out);}
+.btn:active{transform:scale(.96);}
+.btn.fill{background:linear-gradient(180deg,#0B3A82,#002661);color:#fff;border:0;box-shadow:0 6px 16px rgba(0,38,97,.22);}
+.btn.berry{background:linear-gradient(180deg,#C63D80,#A5275F);color:#fff;border:0;box-shadow:0 6px 16px rgba(175,45,103,.24);}
+.btn.sm{height:31px;font-size:11px;padding:0 13px;}
+.st{font-size:10.5px;font-weight:700;border-radius:6px;padding:2.5px 9px;white-space:nowrap;}
+.st.g{background:var(--green-bg);color:var(--green);}.st.a{background:var(--amber-bg);color:var(--amber);}.st.r{background:var(--red-bg);color:var(--red);}.st.b{background:var(--blue-bg);color:var(--blue);}
+table{width:100%;border-collapse:collapse;font-size:12.5px;}
+th,td{text-align:left;padding:10px 11px;border-bottom:1px solid var(--line-2);color:var(--mut);text-align:left;}
+th{color:var(--faint);font-weight:700;font-size:10.5px;}td b{color:var(--ink);}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;}
+.kpi{border-radius:15px;background:#fff;box-shadow:var(--sh1);padding:15px 16px;}
+.kpi .n{font-size:22px;font-weight:800;}.kpi .l{font-size:10.5px;color:var(--faint);margin-top:5px;}
+.chart{height:160px;display:flex;align-items:flex-end;gap:9px;padding:6px 2px 0;}
+.chart i{flex:1;border-radius:5px 5px 0 0;display:block;background:linear-gradient(180deg,#1E3E78,#002661);}
+.row{display:flex;gap:11px;align-items:center;}.grow{flex:1;}
+.dropzone{border:1.5px dashed var(--line);border-radius:12px;padding:26px;text-align:center;color:var(--faint);font-size:12.5px;background:var(--paper);}
+.gradline{height:2px;background:var(--grad);border-radius:2px;margin-bottom:16px;}
+.note{max-width:1260px;margin:18px auto 0;background:#fff;border-radius:14px;box-shadow:var(--sh1);padding:15px 19px;font-size:12.5px;color:var(--mut);line-height:1.9;}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="head">
+  <h1>总后台 AI 高保真 · v1.5（AI 知识与运营中心）</h1>
+  <p>采集入库 → 来源核验（四眼）→ 版本发布 → 运营监控；模型/Prompt 版本、同意审计、红队门禁、生成内容审核。</p>
+</div>
+<div class="browser">
+ <div class="topbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">admin.tip / AI 知识与运营中心</span><span class="brand">透明身份规划</span></div>
+ <div class="layout">
+  <div class="side" id="side"></div>
+  <div class="main" id="main"></div>
+ </div>
+</div>
+<div class="note" id="note"></div>
+<script>var P=[
+ ['collect','采集入库'],['review','复核台'],['version','版本与发布'],['metrics','运营监控'],
+ ['models','模型与 Prompt'],['consent','同意与审计'],['redteam','红队评测'],['generated','生成内容审核']
+];
+var V={};
+V.collect='<div class="gradline"></div><div class="p-title">知识采集与入库</div><div class="p-sub">文件 / 链接 / 顾问提交 → 自动分类与字段提取 → 待复核；不直接发布。</div>'+
+ '<div class="card"><div class="lab">导入区</div><div class="row"><div class="grow dropzone">拖拽文件 / 粘贴链接 / 批量上传</div><div style="width:120px;" class="btn fill">开始导入</div></div></div>'+
+ '<div class="card"><div class="lab">自动处理结果</div><table><tr><th>条目</th><th>分类</th><th>提取字段</th><th>置信度</th><th>状态</th></tr>'+
+ '<tr><td><b>PT 资金证明要求</b></td><td>政策</td><td>金额 / 形式 / 家庭系数</td><td>高</td><td><span class="st a">待复核</span></td></tr>'+
+ '<tr><td><b>某项目费项更新</b></td><td>费项</td><td>2 个字段待确认</td><td>低</td><td><span class="st r">需人工确认</span></td></tr></table></div>';
+
+V.review='<div class="gradline"></div><div class="p-title">来源核验与复核台</div><div class="p-sub">原文对照、字段校验、来源时效（政策/持牌 90 天、其他 180 天）；提交人 ≠ 复核人。</div>'+
+ '<div class="card"><div class="row" style="margin-bottom:12px;"><b style="font-size:14px;">PT 资金证明要求</b><span class="st a">待复核</span><div class="grow"></div><span style="font-size:11px;color:var(--faint);">提交人：内容运营 A</span></div>'+
+ '<div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;"><div class="card" style="margin:0;font-size:12px;color:var(--mut);min-height:150px;">原文（来源文件对照）</div><div class="card" style="margin:0;font-size:12px;min-height:150px;">提取字段（可修正）</div></div>'+
+ '<div class="row" style="margin-top:13px;"><div class="btn sm">退回（必填原因）</div><div class="grow"></div><div class="btn fill sm">核验通过 → 提交发布</div></div></div>';
+
+V.version='<div class="gradline"></div><div class="p-title">知识版本与发布</div><div class="p-sub">版本树、发布 / 失效 / 回滚；失效联动各端下架（签证类 30 分钟演练）。</div>'+
+ '<div class="card"><table><tr><th>条目</th><th>版本</th><th>来源有效期</th><th>状态</th><th>操作</th></tr>'+
+ '<tr><td><b>PT 资金证明要求</b></td><td>v3</td><td>2026-12-20</td><td><span class="st g">已发布</span></td><td>失效 / 回滚</td></tr>'+
+ '<tr><td><b>技术居留项目说明</b></td><td>v5</td><td>2026-11-30</td><td><span class="st a">待发布</span></td><td>发布</td></tr></table></div>'+
+ '<div class="card"><div class="lab">知识缺口（高频“未找到”反哺）</div><div style="font-size:12.5px;color:var(--mut);line-height:2;">某国随行父母政策 · 被问 14 次<br>某项目资金来源解释 · 被问 9 次</div></div>';
+
+V.metrics='<div class="gradline"></div><div class="p-title">AI 运营监控</div><div class="p-sub">用量 / 质量 / 安全 / 成本；只含系统指标，不展示获批率成功率。</div>'+
+ '<div class="grid4"><div class="kpi"><div class="n">12,480</div><div class="l">本周调用量</div></div>'+
+ '<div class="kpi"><div class="n">71%</div><div class="l">草稿采纳率</div></div>'+
+ '<div class="kpi"><div class="n">6.3%</div><div class="l">转人工率</div></div>'+
+ '<div class="kpi"><div class="n">37</div><div class="l">红线 / 越狱拦截</div></div></div>'+
+ '<div class="card" style="margin-top:14px;"><div class="lab">趋势（示意）</div><div class="chart">'+[40,55,48,70,62,85,92].map(h=>'<i style="height:'+h+'%"></i>').join('')+'</div></div>';
+
+V.models='<div class="gradline"></div><div class="p-title">模型与 Prompt 管理</div><div class="p-sub">自托管模型注册与路由；system prompt 与护栏规则集版本化、发布走复核；在线模型默认关闭。</div>'+
+ '<div class="card"><div class="lab">模型配置</div><table><tr><th>提供方</th><th>模型</th><th>场景</th><th>状态</th></tr>'+
+ '<tr><td>本地 Ollama</td><td><b>qwen3:7b</b></td><td>默认</td><td><span class="st g">启用</span></td></tr>'+
+ '<tr><td>自托管 vLLM</td><td>qwen 系列</td><td>生产</td><td><span class="st b">规划</span></td></tr>'+
+ '<tr><td>在线模型</td><td>—</td><td>—</td><td><span class="st r">默认关闭</span></td></tr></table></div>'+
+ '<div class="card"><div class="lab">Prompt / 护栏版本</div><div style="font-size:12.5px;color:var(--mut);line-height:2.1;">客户端 system prompt v4（已发布）<br>越狱诱导库 v2（已发布）</div><div class="row" style="margin-top:10px;"><div class="btn sm">编辑新版本</div></div></div>';
+
+V.consent='<div class="gradline"></div><div class="p-title">同意与审计</div><div class="p-sub">案件片段单独同意台账；会话审计检索；L3 不进模型；默认脱敏。</div>'+
+ '<div class="card"><table><tr><th>客户</th><th>同意范围</th><th>状态</th><th>时间</th></tr>'+
+ '<tr><td><b>c-1980</b></td><td>AI 问答 + 顾问辅助</td><td><span class="st g">已授予</span></td><td>2026-09-24</td></tr>'+
+ '<tr><td><b>c-2051</b></td><td>AI 问答 + 顾问辅助</td><td><span class="st a">已撤回</span></td><td>2026-09-26</td></tr></table></div>'+
+ '<div class="card"><div class="lab">审计检索（脱敏样例）</div><div style="font-size:12.5px;color:var(--mut);line-height:1.9;">谁 · 何时 · 使用片段类别 · 是否采纳；查看完整内容需权限并留痕。</div></div>';
+
+V.redteam='<div class="gradline"></div><div class="p-title">红队评测与发布门禁</div><div class="p-sub">红线 / 越狱 / 跨客户泄漏 / 注入；每次模型或 Prompt 变更自动回归，红线项必须 100% 通过。</div>'+
+ '<div class="card"><table><tr><th>运行</th><th>评测集</th><th>通过率</th><th>门禁</th></tr>'+
+ '<tr><td><b>RT-2026-09-30</b></td><td>集 v3（120 例）</td><td>100%</td><td><span class="st g">通过 · 可发布</span></td></tr>'+
+ '<tr><td><b>RT-2026-09-28</b></td><td>集 v3（120 例）</td><td>98.3%</td><td><span class="st r">阻断</span></td></tr></table></div>'+
+ '<div class="btn fill">运行红队回归</div>';
+
+V.generated='<div class="gradline"></div><div class="p-title">生成内容集中审核</div><div class="p-sub">汇总进入正式流程的 AI 内容；只做“看得见”，审核仍在既有四眼完成。</div>'+
+ '<div class="card"><table><tr><th>内容</th><th>来源端</th><th>类型</th><th>状态</th></tr>'+
+ '<tr><td><b>方案草稿（c-1980）</b></td><td>顾问端</td><td>方案</td><td><span class="st a">四眼中</span></td></tr>'+
+ '<tr><td><b>防骗教育：费用先看清</b></td><td>知识中心</td><td>教育</td><td><span class="st g">已发布</span></td></tr>'+
+ '<tr><td><b>补件指引回复</b></td><td>顾问端</td><td>回复</td><td><span class="st b">待顾问确认</span></td></tr></table></div>';
+
+var NOTES={
+ collect:'资料导入与自动提取，低置信字段强制人工确认。',review:'四眼复核与来源时效核验。',
+ version:'版本树与失效联动下架。',metrics:'系统指标看板，禁业务红线指标。',
+ models:'自托管模型与 Prompt 版本管理，在线默认关闭。',consent:'同意台账与脱敏审计。',
+ redteam:'红队回归作为发布门禁。',generated:'生成内容集中可见，不另设审核捷径。'
+};
+function go(k){
+ document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+ document.getElementById('p-'+k).classList.add('on');
+ document.querySelectorAll('#side button').forEach(b=>b.classList.toggle('on',b.dataset.go===k));
+ document.getElementById('note').textContent=NOTES[k];
+}
+document.getElementById('side').innerHTML='<div class="grp">AI 知识与运营</div>'+
+ P.map(x=>'<button data-go="'+x[0]+'">'+x[1]+'</button>').join('');
+document.getElementById('main').innerHTML=P.map(x=>'<div class="view" id="p-'+x[0]+'">'+V[x[0]]+'</div>').join('');
+document.addEventListener('click',function(e){var b=e.target.closest('#side button');if(b)go(b.dataset.go);});
+go('collect');</script>
+</body>
+</html>

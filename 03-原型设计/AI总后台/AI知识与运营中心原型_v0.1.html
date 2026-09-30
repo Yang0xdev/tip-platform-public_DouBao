@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>总后台 AI 知识与运营中心原型 v0.1（线框）</title>
+<style>
+:root{--ink:#1B2433;--mut:#5E6B7E;--faint:#8A95A6;--line:#D9DFE8;--line-2:#EDF0F5;--paper:#F5F7FA;
+--navy:#002661;--berry:#AF2D67;--green:#177A5B;--green-bg:#E6F4EE;--amber:#B45309;--amber-bg:#FBF1E2;--red:#C03221;--red-bg:#FCEBEA;--blue:#1D5F8A;--blue-bg:#E9F2F8;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#E9EDF3;color:var(--ink);min-height:100vh;padding:26px 14px 50px;}
+.head{text-align:center;margin-bottom:18px;}
+.head h1{font-size:19px;font-weight:800;}.head p{font-size:12.5px;color:var(--mut);margin-top:6px;line-height:1.8;}
+.browser{max-width:1240px;margin:0 auto;border-radius:16px;background:#fff;box-shadow:0 26px 60px rgba(10,25,60,.2);overflow:hidden;}
+.topbar{height:52px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 20px;gap:12px;}
+.dot{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--line);}
+.topbar .url{flex:1;height:30px;background:var(--paper);border-radius:8px;display:flex;align-items:center;padding:0 12px;font-size:11.5px;color:var(--faint);}
+.layout{display:flex;min-height:720px;}
+.side{width:210px;background:#fff;border-right:1px solid var(--line);padding:14px 10px;flex:none;}
+.side .grp{font-size:10px;color:var(--faint);font-weight:700;padding:10px 12px 6px;letter-spacing:.5px;}
+.side button{display:flex;width:100%;border:0;background:none;font-family:inherit;font-size:12.5px;color:var(--mut);padding:9px 12px;border-radius:9px;cursor:pointer;text-align:left;}
+.side button.on{background:var(--navy-50,#EDF1F8);color:var(--navy);font-weight:700;}
+.main{flex:1;padding:22px 26px;background:var(--paper);overflow:hidden;}
+.view{display:none;}.view.on{display:block;animation:fade .25s ease;}@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;}}
+.p-title{font-size:18px;font-weight:800;margin-bottom:4px;}.p-sub{font-size:12px;color:var(--mut);margin-bottom:18px;line-height:1.7;}
+.wf{border:1.5px dashed var(--line);border-radius:12px;background:#fff;padding:14px 16px;margin-bottom:13px;}
+.wf.solid{border-style:solid;}
+.wf .lab{font-size:10px;color:var(--faint);font-weight:700;margin-bottom:9px;letter-spacing:.4px;}
+.btn{border:1.5px solid var(--navy);background:#fff;color:var(--navy);font-family:inherit;font-weight:700;border-radius:15px;height:36px;padding:0 16px;font-size:12.5px;cursor:pointer;}
+.btn.fill{background:var(--navy);color:#fff;}.btn.berry{border-color:var(--berry);background:var(--berry);color:#fff;}.btn.sm{height:30px;font-size:11px;padding:0 12px;}
+.st{font-size:10.5px;font-weight:700;border-radius:6px;padding:2px 8px;}
+.st.g{background:var(--green-bg);color:var(--green);}.st.a{background:var(--amber-bg);color:var(--amber);}.st.r{background:var(--red-bg);color:var(--red);}.st.b{background:var(--blue-bg);color:var(--blue);}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line-2);color:var(--mut);}
+th{color:var(--faint);font-weight:700;font-size:10.5px;}td b{color:var(--ink);}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.kpi{border:1.5px solid var(--line);border-radius:12px;background:#fff;padding:13px 14px;}
+.kpi .n{font-size:21px;font-weight:800;}.kpi .l{font-size:10.5px;color:var(--faint);margin-top:4px;}
+.chart{height:150px;border:1.5px dashed var(--line);border-radius:10px;display:flex;align-items:flex-end;gap:8px;padding:14px;}
+.chart i{flex:1;background:var(--line);border-radius:4px 4px 0 0;display:block;}
+.row{display:flex;gap:10px;align-items:center;}.grow{flex:1;}
+.tagrow{display:flex;gap:7px;flex-wrap:wrap;}
+.note{max-width:1240px;margin:18px auto 0;background:#fff;border:1px dashed var(--line);border-radius:12px;padding:14px 18px;font-size:12px;color:var(--mut);line-height:1.9;}
+</style>
+</head>
+<body>
+<div class="head">
+  <h1>总后台 AI 知识与运营中心原型 v0.1（线框）</h1>
+  <p>采集入库 → 来源核验（四眼）→ 版本发布 → 运营监控；模型/Prompt 版本管理、同意审计、红队门禁、生成内容集中审核。<br>AI 只提取建议，发布与变更必须真人复核。</p>
+</div>
+<div class="browser">
+ <div class="topbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">admin.tip / AI 知识与运营中心</span></div>
+ <div class="layout">
+  <div class="side" id="side"></div>
+  <div class="main" id="main"></div>
+ </div>
+</div>
+<div class="note" id="note"></div>
+<script>
+var P=[
+ ['collect','采集入库'],['review','复核台'],['version','版本与发布'],['metrics','运营监控'],
+ ['models','模型与 Prompt'],['consent','同意与审计'],['redteam','红队评测'],['generated','生成内容审核']
+];
+var V={};
+V.collect='<div class="p-title">知识采集与入库</div><div class="p-sub">文件/链接/顾问提交 → 自动分类与字段提取 → 待复核；不直接发布。</div>'+
+ '<div class="wf solid"><div class="lab">导入区</div><div class="row"><div class="grow wf" style="margin:0;text-align:center;color:var(--faint);font-size:12px;">拖拽文件 / 粘贴链接 / 批量上传</div><div class="btn fill">开始导入</div></div></div>'+
+ '<div class="wf solid"><div class="lab">自动处理结果（示例）</div><table><tr><th>条目</th><th>分类</th><th>提取字段</th><th>置信度</th><th>状态</th></tr>'+
+ '<tr><td><b>PT 资金证明要求</b></td><td>政策</td><td>金额/形式/家庭系数</td><td>高</td><td><span class="st a">待复核</span></td></tr>'+
+ '<tr><td><b>某项目费项更新</b></td><td>费项</td><td>2 个字段待确认</td><td>低</td><td><span class="st r">需人工确认</span></td></tr></table></div>';
+
+V.review='<div class="p-title">来源核验与复核台</div><div class="p-sub">原文对照、字段校验、来源时效（政策/持牌 90 天、其他 180 天）；提交人 ≠ 复核人。</div>'+
+ '<div class="wf solid"><div class="row" style="margin-bottom:10px;"><b style="font-size:13.5px;">PT 资金证明要求</b><span class="st a">待复核</span><div class="grow"></div><span style="font-size:11px;color:var(--faint);">提交人：内容运营 A</span></div>'+
+ '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div class="wf" style="margin:0;font-size:11.5px;color:var(--mut);">原文（来源文件对照）</div><div class="wf solid" style="margin:0;font-size:11.5px;">提取字段（可修正）</div></div>'+
+ '<div class="row" style="margin-top:11px;"><div class="btn sm">退回（必填原因）</div><div class="grow"></div><div class="btn fill sm">核验通过 → 提交发布</div></div></div>';
+
+V.version='<div class="p-title">知识版本与发布</div><div class="p-sub">版本树、发布/失效/回滚；失效联动各端下架（签证类 30 分钟演练）。</div>'+
+ '<div class="wf solid"><table><tr><th>条目</th><th>版本</th><th>来源有效期</th><th>状态</th><th>操作</th></tr>'+
+ '<tr><td><b>PT 资金证明要求</b></td><td>v3</td><td>2026-12-20</td><td><span class="st g">已发布</span></td><td>失效 / 回滚</td></tr>'+
+ '<tr><td><b>技术居留项目说明</b></td><td>v5</td><td>2026-11-30</td><td><span class="st a">待发布</span></td><td>发布</td></tr></table></div>'+
+ '<div class="wf solid"><div class="lab">知识缺口（高频“未找到”反哺）</div><div style="font-size:12px;color:var(--mut);line-height:1.9;">某国随行父母政策 · 被问 14 次<br>某项目资金来源解释 · 被问 9 次</div></div>';
+
+V.metrics='<div class="p-title">AI 运营监控</div><div class="p-sub">用量 / 质量 / 安全 / 成本；只含系统指标，不展示获批率成功率。</div>'+
+ '<div class="grid"><div class="kpi"><div class="n">12,480</div><div class="l">本周调用量</div></div>'+
+ '<div class="kpi"><div class="n">71%</div><div class="l">草稿采纳率</div></div>'+
+ '<div class="kpi"><div class="n">6.3%</div><div class="l">转人工率</div></div>'+
+ '<div class="kpi"><div class="n">37</div><div class="l">红线/越狱拦截</div></div></div>'+
+ '<div class="wf solid" style="margin-top:13px;"><div class="lab">趋势（示意）</div><div class="chart">'+[40,55,48,70,62,85,92].map(h=>'<i style="height:'+h+'%"></i>').join('')+'</div></div>';
+
+V.models='<div class="p-title">模型与 Prompt 管理</div><div class="p-sub">自托管模型注册与路由；system prompt 与护栏规则集版本化，发布走复核；在线模型默认关闭。</div>'+
+ '<div class="wf solid"><div class="lab">模型配置</div><table><tr><th>提供方</th><th>模型</th><th>场景</th><th>状态</th></tr>'+
+ '<tr><td>本地 Ollama</td><td><b>qwen3:7b</b></td><td>默认</td><td><span class="st g">启用</span></td></tr>'+
+ '<tr><td>自托管 vLLM</td><td>qwen 系列</td><td>生产</td><td><span class="st b">规划</span></td></tr>'+
+ '<tr><td>在线模型</td><td>—</td><td>—</td><td><span class="st r">默认关闭</span></td></tr></table></div>'+
+ '<div class="wf solid"><div class="lab">Prompt / 护栏版本</div><div style="font-size:12px;color:var(--mut);line-height:1.9;">客户端 system prompt v4（已发布）<br>越狱诱导库 v2（已发布）<div class="row" style="margin-top:8px;"><div class="btn sm">编辑新版本</div></div></div></div>';
+
+V.consent='<div class="p-title">同意与审计</div><div class="p-sub">案件片段单独同意台账；会话审计检索；L3 不进模型；默认脱敏。</div>'+
+ '<div class="wf solid"><table><tr><th>客户</th><th>同意范围</th><th>状态</th><th>时间</th></tr>'+
+ '<tr><td><b>c-1980</b></td><td>AI 问答 + 顾问辅助</td><td><span class="st g">已授予</span></td><td>2026-09-24</td></tr>'+
+ '<tr><td><b>c-2051</b></td><td>AI 问答 + 顾问辅助</td><td><span class="st a">已撤回</span></td><td>2026-09-26</td></tr></table></div>'+
+ '<div class="wf solid"><div class="lab">审计检索（脱敏样例）</div><div style="font-size:12px;color:var(--mut);">谁 · 何时 · 使用片段类别 · 是否采纳；查看完整内容需权限并留痕。</div></div>';
+
+V.redteam='<div class="p-title">红队评测与发布门禁</div><div class="p-sub">红线/越狱/跨客户泄漏/注入；每次模型或 Prompt 变更自动回归，红线项必须 100% 通过。</div>'+
+ '<div class="wf solid"><table><tr><th>运行</th><th>评测集</th><th>通过率</th><th>门禁</th></tr>'+
+ '<tr><td><b>RT-2026-09-30</b></td><td>集 v3（120 例）</td><td>100%</td><td><span class="st g">通过·可发布</span></td></tr>'+
+ '<tr><td><b>RT-2026-09-28</b></td><td>集 v3（120 例）</td><td>98.3%</td><td><span class="st r">阻断</span></td></tr></table></div>'+
+ '<div class="row"><div class="btn fill">运行红队回归</div></div>';
+
+V.generated='<div class="p-title">生成内容集中审核</div><div class="p-sub">汇总进入正式流程的 AI 内容；只做“看得见”，审核仍在既有四眼完成。</div>'+
+ '<div class="wf solid"><table><tr><th>内容</th><th>来源端</th><th>类型</th><th>状态</th></tr>'+
+ '<tr><td><b>方案草稿（c-1980）</b></td><td>顾问端</td><td>方案</td><td><span class="st a">四眼中</span></td></tr>'+
+ '<tr><td><b>防骗教育：费用先看清</b></td><td>知识中心</td><td>教育</td><td><span class="st g">已发布</span></td></tr>'+
+ '<tr><td><b>补件指引回复</b></td><td>顾问端</td><td>回复</td><td><span class="st b">待顾问确认</span></td></tr></table></div>';
+
+var NOTES={
+ collect:'资料导入与自动提取，低置信字段强制人工确认。',review:'四眼复核与来源时效核验。',
+ version:'版本树与失效联动下架。',metrics:'系统指标看板，禁业务红线指标。',
+ models:'自托管模型与 Prompt 版本管理，在线默认关闭。',consent:'同意台账与脱敏审计。',
+ redteam:'红队回归作为发布门禁。',generated:'生成内容集中可见，不另设审核捷径。'
+};
+function go(k){
+ document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+ document.getElementById('p-'+k).classList.add('on');
+ document.querySelectorAll('#side button').forEach(b=>b.classList.toggle('on',b.dataset.go===k));
+ document.getElementById('note').textContent=NOTES[k];
+}
+document.getElementById('side').innerHTML='<div class="grp">AI 知识与运营</div>'+
+ P.map(x=>'<button data-go="'+x[0]+'">'+x[1]+'</button>').join('');
+document.getElementById('main').innerHTML=P.map(x=>'<div class="view" id="p-'+x[0]+'">'+V[x[0]]+'</div>').join('');
+document.addEventListener('click',function(e){var b=e.target.closest('#side button');if(b)go(b.dataset.go);});
+go('collect');
+</script>
+</body>
+</html>
