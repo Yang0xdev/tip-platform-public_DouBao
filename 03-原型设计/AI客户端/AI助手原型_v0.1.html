@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>客户端 AI 助手原型 v0.1（线框）</title>
+<style>
+:root{
+  --ink:#1B2433;--mut:#5E6B7E;--faint:#8A95A6;--line:#D9DFE8;--line-2:#EDF0F5;
+  --paper:#F5F7FA;--navy:#002661;--berry:#AF2D67;
+  --green:#177A5B;--green-bg:#E6F4EE;--amber:#B45309;--amber-bg:#FBF1E2;--red:#C03221;--red-bg:#FCEBEA;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#E9EDF3;color:var(--ink);min-height:100vh;}
+.stage{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:30px 14px 60px;}
+.stage-head{text-align:center;margin-bottom:20px;max-width:720px;}
+.stage-head h1{font-size:19px;font-weight:800;}
+.stage-head p{font-size:12.5px;color:var(--mut);margin-top:6px;line-height:1.8;}
+.pill{display:inline-block;font-size:11px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:4px 12px;color:var(--mut);margin-top:8px;}
+/* phone */
+.phone{width:390px;height:800px;border-radius:42px;background:#1B2A3A;padding:11px;box-shadow:0 26px 60px rgba(10,25,60,.3);position:relative;flex:none;}
+.screens{position:absolute;inset:11px;border-radius:32px;overflow:hidden;background:var(--paper);}
+.view{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--paper);overflow:hidden;
+ opacity:0;pointer-events:none;transform:translateX(26px);transition:transform .34s cubic-bezier(.22,1,.36,1),opacity .26s;}
+.view.on{opacity:1;pointer-events:auto;transform:none;z-index:2;}
+.sb{height:44px;flex:none;display:flex;align-items:center;gap:9px;padding:0 18px;font-size:12px;font-weight:700;}
+.sb .bk{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.body{flex:1;min-height:0;overflow-y:auto;padding:6px 16px 14px;scrollbar-width:none;}
+.body::-webkit-scrollbar{display:none;}
+/* tabbar: 7 tabs, center raised (wireframe) */
+.tabbar{height:66px;background:#fff;border-top:1px solid var(--line);display:flex;flex:none;position:relative;}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:var(--faint);text-decoration:none;cursor:pointer;padding-bottom:5px;}
+.tabbar a.on{color:var(--navy);font-weight:700;}
+.tabbar a .ti{width:21px;height:21px;border:2px solid currentColor;border-radius:6px;}
+.tabbar a.ai{position:relative;}
+.tabbar a.ai .ti{width:46px;height:46px;border-radius:50%;background:repeating-linear-gradient(45deg,#AF2D67 0 8px,#002661 8px 16px);
+ border:3px solid #fff;box-shadow:0 6px 16px rgba(16,32,64,.28);position:absolute;top:-20px;}
+.tabbar a.ai span{margin-top:30px;}
+/* wire blocks */
+.wf{border:1.5px dashed var(--line);border-radius:14px;background:#fff;padding:13px 14px;margin-bottom:11px;}
+.wf.solid{border-style:solid;}
+.wf .lab{font-size:10px;color:var(--faint);font-weight:700;letter-spacing:.4px;margin-bottom:7px;}
+.row{display:flex;align-items:center;gap:10px;}
+.grow{flex:1;min-width:0;}
+.h-title{font-size:16px;font-weight:800;}
+.h-sub{font-size:11.5px;color:var(--mut);line-height:1.7;margin-top:5px;}
+.sq{border:1.5px solid var(--line);border-radius:12px;background:#fff;padding:11px 12px;font-size:12.5px;color:var(--mut);}
+.sq b{color:var(--ink);font-weight:700;}
+.suggest{display:flex;flex-direction:column;gap:8px;}
+.suggest .s{border:1.5px solid var(--line);border-radius:12px;background:#fff;padding:11px 13px;font-size:12.5px;cursor:pointer;display:flex;gap:9px;align-items:center;}
+.suggest .s .n{width:26px;height:26px;border-radius:8px;border:1.5px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--faint);}
+.btn{border:1.5px solid var(--navy);background:#fff;color:var(--navy);font-family:inherit;font-weight:700;border-radius:18px;height:42px;
+ display:flex;align-items:center;justify-content:center;font-size:13.5px;cursor:pointer;width:100%;}
+.btn.fill{background:var(--navy);color:#fff;}
+.btn.berry{border-color:var(--berry);background:var(--berry);color:#fff;}
+.btn.ghost{border-color:var(--line);color:var(--mut);}
+.btn.sm{height:34px;font-size:12px;width:auto;padding:0 15px;border-radius:15px;}
+.sec-t{font-size:12px;font-weight:800;color:var(--ink);margin:14px 2px 9px;display:flex;justify-content:space-between;align-items:center;}
+.sec-t span{font-size:10.5px;color:var(--faint);font-weight:600;}
+/* chat */
+.msg{display:flex;margin-bottom:11px;}
+.msg.user{justify-content:flex-end;}
+.bub{max-width:84%;border:1.5px solid var(--line);border-radius:15px;padding:11px 13px;font-size:12.5px;line-height:1.75;background:#fff;}
+.msg.user .bub{background:var(--navy);color:#fff;border-color:var(--navy);border-bottom-right-radius:5px;}
+.msg.ai .bub{border-bottom-left-radius:5px;}
+.bub b{font-weight:800;}
+.src{display:flex;gap:6px;align-items:flex-start;font-size:10.5px;color:var(--mut);border-top:1px dashed var(--line);margin-top:8px;padding-top:7px;}
+.src .tag{font-size:9.5px;font-weight:800;border-radius:5px;padding:1px 6px;flex:none;}
+.tag.off{background:var(--green-bg);color:var(--green);}
+.tag.co{background:#E9F2F8;color:#1D5F8A;}
+.tag.sp{background:var(--amber-bg);color:var(--amber);}
+.nextstep{background:#F0F4FA;border:1px solid var(--line);border-radius:11px;padding:9px 11px;font-size:11.5px;color:var(--navy);margin-top:8px;display:flex;gap:8px;align-items:center;}
+/* consent */
+.consent{border:1.5px solid var(--line);border-radius:13px;padding:11px 13px;font-size:12px;display:flex;gap:10px;align-items:flex-start;margin-bottom:9px;background:#fff;cursor:pointer;}
+.consent .ck{width:19px;height:19px;border-radius:6px;border:2px solid var(--line);flex:none;margin-top:1px;}
+.consent.on .ck{background:var(--navy);border-color:var(--navy);position:relative;}
+.consent.on .ck::after{content:"";position:absolute;left:5px;top:2px;width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);}
+/* states */
+.statebox{display:flex;flex-direction:column;align-items:center;gap:10px;padding:40px 24px;text-align:center;color:var(--mut);font-size:12px;line-height:1.8;}
+.statebox .ic{width:54px;height:54px;border-radius:16px;border:1.5px dashed var(--line);display:flex;align-items:center;justify-content:center;}
+.skel{height:12px;border-radius:6px;background:var(--line-2);margin-bottom:9px;}
+.ctxchip{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;background:#E9F2F8;color:#1D5F8A;border-radius:14px;padding:5px 11px;}
+.composer{flex:none;border-top:1px solid var(--line);background:#fff;padding:9px 12px 12px;display:flex;gap:8px;align-items:center;}
+.composer .in{flex:1;height:40px;border:1.5px solid var(--line);border-radius:20px;display:flex;align-items:center;padding:0 14px;font-size:12px;color:var(--faint);}
+.composer .send{width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;flex:none;font-size:15px;}
+.hist .s{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:12px;background:#fff;padding:11px 13px;margin-bottom:8px;font-size:12px;cursor:pointer;}
+.hist .s .d{font-size:10.5px;color:var(--faint);margin-left:auto;white-space:nowrap;}
+.devnote{max-width:760px;margin:24px auto 0;background:#fff;border:1px dashed var(--line);border-radius:14px;padding:15px 19px;font-size:12px;color:var(--mut);line-height:1.9;}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="stage-head">
+    <h1>客户端 AI 助手原型 v0.1（线框）</h1>
+    <p>AI 为底部中央凸起主 Tab。覆盖：AI 主页、案件问答单独同意、流式回答（结论→分项→来源→下一步）、上下文入口、历史会话、红线拒答、模型不可用态。<br>本稿为功能原型，非视觉稿；视觉在 UI 阶段按 v1.4 体系并入并升版 v1.5。</p>
+    <span class="pill">点下方页面清单切换</span>
+  </div>
+  <div class="phone"><div class="screens" id="root"></div></div>
+  <div class="devnote" id="note"></div>
+</div>
+
+<script>
+/* 底部 7 Tab（中央凸起 AI） */
+function tabbar(active){
+  var t=[['home','首页'],['case','办理'],['proj','项目'],['ai','AI 助手'],['world','全球通行'],['svc','服务'],['me','我的']];
+  return '<div class="tabbar">'+t.map(function(x){
+    var cls=x[0]==='ai'?'ai':'';
+    return '<a class="'+cls+(active===x[0]?' on':'')+'" data-go="'+(x[0]==='ai'?'aihome':x[0])+'"><div class="ti"></div><span>'+x[1]+'</span></a>';
+  }).join('')+'</div>';
+}
+function sb(title,back){
+  return '<div class="sb">'+(back?'<div class="bk" data-go="aihome">‹</div>':'')+'<span>'+title+'</span></div>';
+}
+function composer(){
+  return '<div class="composer"><div class="in">输入你的问题…</div><div class="send">↑</div></div>';
+}
+var V={};
+
+/* P1 AI 主页 */
+V.aihome='<div class="view">'+
+ '<div class="body">'+
+ '<div style="padding:6px 2px 4px;"><div class="h-title">你好，有问题随时问我</div>'+
+ '<div class="h-sub">我只基于你的案件与已发布内容回答，每条回答都带来源；不确定的我会明说。</div></div>'+
+ '<div class="sec-t">你可以问<span>点击试用</span></div>'+
+ '<div class="suggest">'+
+ '<div class="s" data-go="p_answer"><div class="n">1</div>我的案件现在到哪一步了？</div>'+
+ '<div class="s" data-go="p_answer"><div class="n">2</div>这笔费用是什么？包含哪些？</div>'+
+ '<div class="s" data-go="p_answer"><div class="n">3</div>我还需要准备哪些材料？</div>'+
+ '<div class="s" data-go="p_answer"><div class="n">4</div>怎么识别“包成功”骗局？</div>'+
+ '</div>'+
+ '<div class="sec-t">最近会话<span data-go="p_hist">全部</span></div>'+
+ '<div class="hist">'+
+ '<div class="s" data-go="p_answer"><div class="grow">技术居留 · 费用分项咨询</div><div class="d">昨天</div></div>'+
+ '<div class="s" data-go="p_answer"><div class="grow">无犯罪公证材料要求</div><div class="d">周一</div></div>'+
+ '</div>'+
+ '</div>'+composer()+tabbar('ai')+'</div>';
+
+/* P2 首次案件问答：单独同意 */
+V.p_consent='<div class="view">'+sb('案件问答 · 授权说明','1')+
+ '<div class="body">'+
+ '<div class="wf solid"><div class="lab">单独同意（首次）</div>'+
+ '<div class="h-sub" style="color:var(--ink);line-height:1.9;">为回答你的问题，将向模型提供必要的<b>案件片段</b>（如进度、费用项）。模型运行在你本机，片段不向第三方发送。你可以随时撤回授权。</div></div>'+
+ '<div class="consent on" data-t="1"><div class="ck"></div><div>我已知悉并同意提供案件片段用于本次问答</div></div>'+
+ '<div class="consent" data-t="2"><div class="ck"></div><div>我知道 AI 的回答仅为信息整理，不是资格认定或结果承诺</div></div>'+
+ '<div style="margin-top:6px;"><div class="btn berry" data-go="p_answer">同意并开始提问</div></div>'+
+ '<div style="margin-top:9px;"><div class="btn ghost" data-go="aihome">暂不同意（仅可使用通用科普）</div></div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* P3 会话：流式回答（结论→分项→来源→下一步） */
+V.p_answer='<div class="view">'+
+ '<div class="body" style="padding-top:10px;">'+
+ '<div class="ctxchip">当前案件：CASE-0001 ×</div>'+
+ '<div class="msg user" style="margin-top:11px;"><div class="bub">我的案件现在到哪一步了？</div></div>'+
+ '<div class="msg ai"><div class="bub">'+
+ '<b>你的案件已被官方受理，目前在材料准备阶段。</b>'+
+ '<div style="margin-top:7px;">分项说明：<br>1. 官方已受理（上一阶段已完成）；<br>2. 当前阶段：材料准备，待补充无犯罪公证；<br>3. 暂无需要你支付的新费用。</div>'+
+ '<div class="src"><span class="tag off">官方已批准</span><span>受理回执 · 2026-09-24（已核验）</span></div>'+
+ '<div class="src"><span class="tag sp">未经核验</span><span>服务方周报提及“审理较快”，不能作为结论依据</span></div>'+
+ '<div class="nextstep">下一步：9 月 28 日前上传无犯罪公证；需要我说明公证怎么办理吗？</div>'+
+ '</div></div>'+
+ '<div class="sec-t">相关问题</div>'+
+ '<div class="suggest"><div class="s" data-go="p_refuse"><div class="n">!</div>你就直接告诉我，最终能不能通过？</div></div>'+
+ '</div>'+composer()+tabbar('ai')+'</div>';
+
+/* P4 红线拒答 */
+V.p_refuse='<div class="view">'+
+ '<div class="body" style="padding-top:10px;">'+
+ '<div class="msg user"><div class="bub">你就直接告诉我，最终能不能通过？</div></div>'+
+ '<div class="msg ai"><div class="bub">我不能预测审批结果，也不能给出“能不能通过”的结论——结果由官方依法审核决定。<br><br>我可以为你：说明当前进度与差距、列出已核验的事实，或帮你联系顾问做人工解答。'+
+ '<div class="nextstep">下一步：联系我的顾问（已为你发起）</div></div></div>'+
+ '</div>'+composer()+tabbar('ai')+'</div>';
+
+/* P5 从案件详情进入（上下文已带入） */
+V.p_context='<div class="view">'+
+ '<div class="body">'+
+ '<div class="wf solid"><div class="lab">入口示意：案件详情 → 问问我的进度</div>'+
+ '<div class="row"><div class="sq grow"><b>CASE-0001</b><div class="h-sub">材料准备中</div></div>'+
+ '<div class="btn sm fill" data-go="p_consent">问问我的进度</div></div></div>'+
+ '<div class="h-sub" style="padding:0 3px;">点击后进入问答，<b>自动携带案件上下文</b>，首次需单独同意（见 P2）。</div>'+
+ '</div>'+tabbar('case')+'</div>';
+
+/* P6 历史会话 */
+V.p_hist='<div class="view">'+sb('我的问答','1')+
+ '<div class="body hist">'+
+ '<div class="s" data-go="p_answer"><div class="grow">我的案件现在到哪一步了</div><div class="d">今天</div></div>'+
+ '<div class="s" data-go="p_answer"><div class="grow">技术居留 · 费用分项咨询</div><div class="d">昨天</div></div>'+
+ '<div class="s" data-go="p_answer"><div class="grow">无犯罪公证材料要求</div><div class="d">周一</div></div>'+
+ '<div class="s" data-go="p_answer"><div class="grow">随行子女材料清单</div><div class="d">9/24</div></div>'+
+ '<div class="sec-t">会话治理</div>'+
+ '<div class="btn ghost">清空全部会话</div>'+
+ '<div class="h-sub" style="margin-top:9px;">注销账户时，全部会话随注销流程一并删除。</div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* P7 模型不可用 */
+V.p_unavailable='<div class="view">'+
+ '<div class="body">'+
+ '<div class="statebox">'+
+ '<div class="ic">!</div>'+
+ '<b style="color:var(--ink);">AI 助手暂时不可用</b>'+
+ '<div>未检测到本机模型（Ollama 未运行，或未授权当前网站）。你仍可查看静态进度与费用。</div>'+
+ '<div style="display:flex;flex-direction:column;gap:8px;width:100%;margin-top:6px;">'+
+ '<div class="btn fill" data-go="p_context">查看我的案件（静态）</div>'+
+ '<div class="btn ghost">查看配置指引</div>'+
+ '</div></div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* 非 AI tab 占位（演示用，真实页面沿用 v1.4） */
+['home','case','proj','world','svc','me'].forEach(function(k){
+ V[k]='<div class="view"><div class="body"><div class="statebox"><div class="ic">·</div><b style="color:var(--ink);">沿用 v1.4 现有页面</b><div>本原型仅演示 AI 相关流程。</div></div></div>'+tabbar(k)+'</div>';
+});
+
+var ORDER=['aihome','p_consent','p_answer','p_refuse','p_context','p_hist','p_unavailable'];
+var NOTES={
+ aihome:'P1 AI 主页：中央凸起 Tab 进入；建议问题 + 最近会话 + 输入框。',
+ p_consent:'P2 单独同意：案件片段授权，两项确认；可拒绝（仅留通用科普）。',
+ p_answer:'P3 回答契约：结论→分项→来源（off/sp 分级标注）→下一步。',
+ p_refuse:'P4 红线：结果预测类问题 100% 拒答并转人工。',
+ p_context:'P5 上下文入口：案件详情深链进入，自动带案件。',
+ p_hist:'P6 历史会话：可查看/清空，注销随删。',
+ p_unavailable:'P7 异常态：模型未运行不伪装，保留静态入口。'
+};
+function go(k){
+  document.querySelectorAll('.view').forEach(function(v){v.classList.remove('on');});
+  var el=document.getElementById('v-'+k);if(el)el.classList.add('on');
+  document.getElementById('note').textContent=NOTES[k]||'';
+}
+document.getElementById('root').innerHTML=ORDER.map(function(k){return V[k].replace('class="view"','class="view" id="v-'+k+'"');}).join('');
+document.addEventListener('click',function(e){
+  var el=e.target.closest('[data-go]');if(!el)return;
+  go(el.getAttribute('data-go'));
+});
+/* consent toggles */
+document.addEventListener('click',function(e){
+  var c=e.target.closest('.consent');if(!c)return;c.classList.toggle('on');
+});
+go('aihome');
+</script>
+</body>
+</html>
