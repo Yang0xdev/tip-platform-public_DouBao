@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>顾问端 AI 工作台原型 v0.2（线框 · 重设计）</title>
+<style>
+:root{--ink:#1B2433;--mut:#5E6B7E;--faint:#8A95A6;--line:#D9DFE8;--line-2:#EDF0F5;--paper:#F5F7FA;
+--navy:#002661;--berry:#AF2D67;--green:#177A5B;--green-bg:#E6F4EE;--amber:#B45309;--amber-bg:#FBF1E2;--red:#C03221;--red-bg:#FCEBEA;--blue:#1D5F8A;--blue-bg:#E9F2F8;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#E9EDF3;color:var(--ink);min-height:100vh;}
+.stage{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:30px 14px 60px;}
+.stage-head{text-align:center;margin-bottom:20px;max-width:720px;}
+.stage-head h1{font-size:19px;font-weight:800;}.stage-head p{font-size:12.5px;color:var(--mut);margin-top:6px;line-height:1.8;}
+.pill{display:inline-block;font-size:11px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:4px 12px;color:var(--mut);margin-top:8px;}
+.phone{width:390px;height:800px;border-radius:42px;background:#1B2A3A;padding:11px;box-shadow:0 26px 60px rgba(10,25,60,.3);position:relative;flex:none;}
+.screens{position:absolute;inset:11px;border-radius:32px;overflow:hidden;background:var(--paper);}
+.view{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transform:translateX(26px);transition:transform .34s cubic-bezier(.22,1,.36,1),opacity .26s;}
+.view.on{opacity:1;pointer-events:auto;transform:none;z-index:2;}
+.sb{height:44px;flex:none;display:flex;align-items:center;gap:9px;padding:0 18px;font-size:12px;font-weight:700;}
+.sb .bk{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.body{flex:1;min-height:0;overflow-y:auto;padding:6px 16px 14px;scrollbar-width:none;}.body::-webkit-scrollbar{display:none;}
+.tabbar{height:64px;background:#fff;border-top:1px solid var(--line);display:flex;flex:none;padding-bottom:5px;}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;color:var(--faint);text-decoration:none;cursor:pointer;}
+.tabbar a.on{color:var(--navy);font-weight:700;}.tabbar a .ti{width:21px;height:21px;border:2px solid currentColor;border-radius:6px;}
+.wf{border:1.5px dashed var(--line);border-radius:14px;background:#fff;padding:13px 14px;margin-bottom:11px;}
+.wf.solid{border-style:solid;}.wf .lab{font-size:10px;color:var(--faint);font-weight:700;letter-spacing:.4px;margin-bottom:7px;}
+.h-title{font-size:16px;font-weight:800;}.h-sub{font-size:11.5px;color:var(--mut);line-height:1.7;margin-top:5px;}
+.row{display:flex;align-items:center;gap:10px;}.grow{flex:1;min-width:0;}
+.btn{border:1.5px solid var(--navy);background:#fff;color:var(--navy);font-family:inherit;font-weight:700;border-radius:18px;height:38px;display:flex;align-items:center;justify-content:center;font-size:12.5px;cursor:pointer;padding:0 15px;}
+.btn.fill{background:var(--navy);color:#fff;}.btn.berry{border-color:var(--berry);background:var(--berry);color:#fff;}.btn.ghost{border-color:var(--line);color:var(--mut);}
+.btn.sm{height:31px;font-size:11px;padding:0 12px;border-radius:14px;}
+.sec-t{font-size:12px;font-weight:800;margin:14px 2px 9px;}
+.act{border:1.5px solid var(--line);border-radius:12px;background:#fff;padding:10px 12px;font-size:12px;margin-bottom:8px;display:flex;gap:9px;align-items:center;cursor:pointer;}
+.act .rk{width:24px;height:24px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;}
+.rk.r{background:var(--red-bg);color:var(--red);}.rk.a{background:var(--amber-bg);color:var(--amber);}.rk.b{background:var(--blue-bg);color:var(--blue);}
+.anchor{border:1.5px solid var(--navy);border-radius:13px;background:#fff;padding:9px 12px;display:flex;gap:9px;align-items:center;font-size:12px;margin-bottom:11px;cursor:pointer;}
+.anchor .av{width:30px;height:30px;border-radius:50%;background:var(--navy-50,#EDF1F8);flex:none;}
+.st{font-size:10px;font-weight:800;border-radius:6px;padding:2px 7px;}
+.st.g{background:var(--green-bg);color:var(--green);}.st.a{background:var(--amber-bg);color:var(--amber);}.st.r{background:var(--red-bg);color:var(--red);}.st.b{background:var(--blue-bg);color:var(--blue);}
+.draft{display:flex;gap:9px;align-items:flex-start;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px;background:#fff;font-size:11.5px;}
+.draft .ck{width:20px;height:20px;border:1.5px solid var(--line);border-radius:6px;flex:none;margin-top:1px;}
+.src{display:flex;gap:6px;align-items:flex-start;font-size:10px;color:var(--mut);border-top:1px dashed var(--line);margin-top:7px;padding-top:6px;}
+.ipadbox{border:1.5px solid var(--line);border-radius:14px;background:#fff;padding:12px;display:flex;gap:10px;min-height:230px;}
+.stage-area{flex:1;border:1.5px dashed var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--faint);}
+.hint-col{width:128px;border:1.5px dashed var(--amber);border-radius:10px;background:var(--amber-bg);padding:9px;font-size:10.5px;color:var(--amber);line-height:1.7;}
+.note{max-width:760px;margin:22px auto 0;background:#fff;border:1px dashed var(--line);border-radius:14px;padding:15px 19px;font-size:12px;color:var(--mut);line-height:1.9;}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="stage-head">
+    <h1>顾问端 AI 工作台原型 v0.2（线框 · 重设计）</h1>
+    <p>核心概念：AI 始终锚定一位客户；随“晨间案头→会前→会中 iPad→会后收口”的节奏；风险时刻才出现。</p>
+    <span class="pill">点击页面元素切换</span>
+  </div>
+  <div class="phone"><div class="screens" id="root"></div></div>
+  <div class="note" id="note"></div>
+</div>
+<script>
+function tabbar(active){
+ var t=[['work','工作台'],['clients','客户'],['cases','案件'],['proposal','方案'],['me','我的']];
+ return '<div class="tabbar">'+t.map(x=>'<a class="'+(active===x[0]?'on':'')+'" data-go="'+(x[0]==='work'?'morning':x[0])+'"><div class="ti"></div><span>'+x[1]+'</span></a>').join('')+'</div>';
+}
+function sb(t,b){return '<div class="sb">'+(b?'<div class="bk" data-go="morning">‹</div>':'')+'<span>'+t+'</span></div>';}
+function anchor(cust,stage,scope){
+ return '<div class="anchor" data-go="anchor"><div class="av"></div><div class="grow"><b>当前客户：'+cust+'</b><div style="font-size:10.5px;color:var(--faint);margin-top:2px;">'+stage+' · 授权：'+scope+'</div></div><div style="font-size:11px;color:var(--faint);">切换</div></div>';
+}
+var V={};
+
+/* 晨间作战简报 + 风险雷达 */
+V.morning='<div class="view"><div class="body">'+
+ '<div style="padding:6px 2px 2px;"><div class="h-title">早上好，陈某</div><div class="h-sub">今日按风险排序 · 只升级提醒不改截止</div></div>'+
+ '<div class="sec-t">风险雷达（3）</div>'+
+ '<div class="act"><div class="rk r">!</div><div class="grow" style="font-size:11.5px;">CASE-A02 回执 T0 剩 4 小时，已转人工+主管</div></div>'+
+ '<div class="act"><div class="rk a">?</div><div class="grow" style="font-size:11.5px;">c-2051 提问“能否通过”，待你合规回应</div></div>'+
+ '<div class="act"><div class="rk b">i</div><div class="grow" style="font-size:11.5px;">ORD-2407 凭证待核验（≠到账）</div></div>'+
+ '<div class="sec-t">行动清单（按风险排序）</div>'+
+ '<div class="act" data-go="postmeet"><div class="rk r">1</div><div class="grow" style="font-size:11.5px;">#1980 会后待收口（记录已暂存）</div><div class="btn sm fill">去处理</div></div>'+
+ '<div class="act" data-go="premeet"><div class="rk a">2</div><div class="grow" style="font-size:11.5px;">10:30 会面 #2051，会前简报已就绪</div><div class="btn sm">查看</div></div>'+
+ '<div class="act" data-go="proposal"><div class="rk b">3</div><div class="grow" style="font-size:11.5px;">PROP-312 2 段缺来源，待补后自检</div></div>'+
+ '</div>'+tabbar('work')+'</div>';
+
+/* 客户锚点切换 */
+V.anchor='<div class="view">'+sb('切换客户锚点',1)+'<div class="body">'+
+ '<div class="wf solid" style="padding:9px 12px;font-size:11.5px;color:var(--faint);">搜索客户（仅 active 主责）</div>'+
+ ['#1980 材料准备','#2051 方案复核','#2049 待接受（不可选）','#1902 交接中'].map((t,i)=>'<div class="act"><div class="av" style="width:26px;height:26px;border-radius:50%;background:var(--line);"></div><div class="grow" style="font-size:11.5px;">'+t+'</div>'+(i<2?'<span class="st g">可选</span>':'<span class="st r">不可操作</span>')+'</div>').join('')+
+ '<div class="h-sub">非主责/交接中/待接受客户不进入 AI 上下文。</div>'+
+ '</div>'+tabbar('work')+'</div>';
+
+/* 会前简报 + 动线 */
+V.premeet='<div class="view">'+sb('会前简报 · #2051',1)+'<div class="body">'+
+ anchor('#2051','方案阶段','技术居留 A')+
+ '<div class="wf solid"><div class="lab">自上次会面的变化</div><div style="font-size:11.5px;line-height:1.8;">客户补充了资产证明；新增提问“通过率”；无新费用。</div></div>'+
+ '<div class="wf solid"><div class="lab">预判问题 / 缺失材料 / 可讨论范围</div><div style="font-size:11.5px;line-height:1.9;">预判：周期、子女随行；<br>缺：无犯罪公证；<br>范围：授权内，不含结果承诺。</div></div>'+
+ '<div class="wf solid"><div class="lab">建议讲解动线（核准素材）</div><div style="font-size:11.5px;line-height:1.9;">需求确认 → 项目讲解卡 v3 → 费用说明对客版 → 下一步</div></div>'+
+ '<div class="btn fill" style="width:100%;" data-go="ipad">进入 iPad 展业模式</div>'+
+ '</div>'+tabbar('work')+'</div>';
+
+/* iPad 展业：讲解区 + 顾问私有提示列 */
+V.ipad='<div class="view">'+sb('iPad 展业模式（讲解伴侣）',1)+'<div class="body">'+
+ '<div class="ipadbox"><div class="stage-area">客户可见：核准讲解素材（全屏）</div>'+
+ '<div class="hint-col"><b>顾问私有</b><br>默认收起<br><br>客户问“多久能办”：<br>以已发布内容说明参考区间，非承诺<br><br><span style="color:var(--red);">红线：不答结果</span></div></div>'+
+ '<div class="h-sub" style="margin-top:9px;">提示层客户视角不可见；现场记录会后统一整理。</div>'+
+ '<div class="btn fill" style="width:100%;margin-top:9px;" data-go="postmeet">会面结束 · 会后收口</div>'+
+ '</div></div>';
+
+/* 会后一屏收口：四类草稿 */
+V.postmeet='<div class="view">'+sb('会后收口 · #1980',1)+'<div class="body">'+
+ anchor('#1980','材料准备','技术居留 A')+
+ '<div class="draft"><div class="ck"></div><div class="grow"><b>跟进（fact）</b>：客户关注子女教育<div style="color:var(--faint);margin-top:3px;">另 1 条 internal 已分离</div></div></div>'+
+ '<div class="draft"><div class="ck"></div><div class="grow"><b>任务</b>：9-28 前补无犯罪公证（T0·合同）</div></div>'+
+ '<div class="draft"><div class="ck"></div><div class="grow"><b>对客消息</b>：材料清单与公证指引</div></div>'+
+ '<div class="draft"><div class="ck"></div><div class="grow"><b>方案待更新</b>：随子女教育安排补充说明</div></div>'+
+ '<div class="row"><div class="btn ghost grow" style="width:auto;">弃用</div><div class="btn fill grow" style="width:auto;">逐条采纳并署名</div></div>'+
+ '<div class="h-sub">采纳后分别走词库/T0/四眼，AI 不代行。</div>'+
+ '</div>'+tabbar('work')+'</div>';
+
+/* 方案协作：缺来源标注 + 自检 */
+V.proposal='<div class="view">'+sb('方案协作起草',1)+'<div class="body">'+
+ anchor('#1980','材料准备','技术居留 A')+
+ '<div class="wf solid"><div class="lab">正文草稿</div><div style="font-size:11.5px;line-height:1.8;">建议申请技术居留 A；费用与步骤如下…<br><span style="color:var(--amber);">“办理较快”等 2 段缺来源，需删除或补引用</span></div></div>'+
+ '<div class="wf solid"><div class="lab">费项（只读快照）</div><div style="font-size:11.5px;line-height:1.9;">¥30,000 已确认 · USD 4,500 估算 · 官方费待确认</div></div>'+
+ '<div class="btn berry" style="width:100%;" data-go="selfcheck">提交前合规自检</div>'+
+ '</div>'+tabbar('proposal')+'</div>';
+
+/* 建议回复 + 无新事实态 */
+V.reply='<div class="view">'+sb('建议回复',1)+'<div class="body">'+
+ anchor('#1980','材料准备','技术居留 A')+
+ '<div class="wf solid"><div style="font-size:11.5px;line-height:1.8;">已受理，材料准备中，待补无犯罪公证；本周无新费用。</div>'+
+ '<div class="src"><span class="st g">已核验</span>受理回执 09-24</div></div>'+
+ '<div class="wf" style="font-size:11px;color:var(--faint);">客户等待 3 周·主动关怀：<b style="color:var(--amber);">无 co/off 新事实，不生成假更新</b></div>'+
+ '<div class="row"><div class="btn ghost grow" style="width:auto;">弃用</div><div class="btn fill grow" style="width:auto;">确认发送</div></div>'+
+ '</div>'+tabbar('clients')+'</div>';
+
+/* 合规自检结果 */
+V.selfcheck='<div class="view">'+sb('提交前合规自检',1)+'<div class="body">'+
+ '<div class="wf solid"><div style="font-size:11.5px;line-height:2;"><span style="color:var(--red);">!</span> 非核准措辞 1 处<br><span style="color:var(--amber);">?</span> 缺来源 2 段<br><span style="color:var(--green);">✓</span> 费项一致、四眼资格满足</div></div>'+
+ '<div class="btn berry" style="width:100%;">按清单修订</div>'+
+ '<div class="h-sub">自检不替代复核、不改变状态。</div>'+
+ '</div>'+tabbar('proposal')+'</div>';
+
+['clients','cases','me'].forEach(k=>{V[k]='<div class="view"><div class="body"><div class="wf" style="margin-top:70px;text-align:center;color:var(--faint);font-size:11.5px;">沿用现有页面（本原型仅演示 AI）</div></div>'+tabbar(k)+'</div>';});
+var ORDER=['morning','anchor','premeet','ipad','postmeet','proposal','reply','selfcheck'];
+var NOTES={
+ morning:'晨间：风险雷达 + 按风险排序行动清单，一键直达并锚定客户。',
+ anchor:'AI 始终锚定一位客户；非主责/交接/待接受不可选。',
+ premeet:'会前简报：变化、预判、缺失、范围、核准动线。',
+ ipad:'会中：客户看讲解，顾问私有提示层默认收起。',
+ postmeet:'会后一屏收口四类草稿，采纳后走既有规则。',
+ proposal:'方案起草标注缺来源，费表只读，先自检再四眼。',
+ reply:'建议回复只基于已核验事实；无新事实不造假更新。',
+ selfcheck:'自检问题清单，不替代复核。'
+};
+function go(k){
+ document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+ var el=document.getElementById('v-'+k);if(el)el.classList.add('on');
+ document.getElementById('note').textContent=NOTES[k]||'';
+ var b=document.querySelector('.body');if(b)b.scrollTop=0;
+}
+document.getElementById('root').innerHTML=ORDER.map(k=>V[k].replace('class="view"','class="view" id="v-'+k+'"')).join('');
+document.addEventListener('click',function(e){var el=e.target.closest('[data-go]');if(el)go(el.getAttribute('data-go'));});
+go('morning');
+</script>
+</body>
+</html>
