@@ -86,6 +86,14 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .hist .s{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:12px;background:#fff;padding:11px 13px;margin-bottom:8px;font-size:12px;cursor:pointer;}
 .hist .s .d{font-size:10.5px;color:var(--faint);margin-left:auto;white-space:nowrap;}
 .devnote{max-width:760px;margin:24px auto 0;background:#fff;border:1px dashed var(--line);border-radius:14px;padding:15px 19px;font-size:12px;color:var(--mut);line-height:1.9;}
+.qchip{border:1.5px solid var(--line);background:#fff;color:var(--mut);font-size:11.5px;border-radius:999px;padding:7px 13px;cursor:pointer;}
+.qchip.on{background:var(--navy);border-color:var(--navy);color:#fff;font-weight:700;}
+.cmp{width:100%;border-collapse:collapse;font-size:10.5px;background:#fff;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;}
+.cmp th,.cmp td{border:1px solid var(--line-2);padding:8px 6px;text-align:left;vertical-align:top;line-height:1.5;}
+.cmp th{background:#F0F4FA;font-weight:800;color:var(--ink);font-size:10px;}
+.cmp td:first-child{font-weight:700;color:var(--ink);}
+.step-dot{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);color:var(--faint);font-size:11px;display:flex;align-items:center;justify-content:center;flex:none;}
+.step-dot.on{background:var(--navy);border-color:var(--navy);color:#fff;}
 </style>
 </head>
 <body>
@@ -121,8 +129,10 @@ V.aihome='<div class="view">'+
  '<div class="body">'+
  '<div style="padding:6px 2px 4px;"><div class="h-title">你好，有问题随时问我</div>'+
  '<div class="h-sub">我只基于你的案件与已发布内容回答，每条回答都带来源；不确定的我会明说。</div></div>'+
+ '<div class="wf solid" style="padding:11px 13px;cursor:pointer;" data-go="p_brief"><div class="row"><div class="grow"><div style="font-size:12.5px;font-weight:800;">本周进展简报</div><div class="h-sub">官方已受理 · 1 项待办 · 无新费用</div></div><div style="color:var(--faint);">›</div></div></div>'+
  '<div class="sec-t">你可以问<span>点击试用</span></div>'+
  '<div class="suggest">'+
+ '<div class="s" data-go="p_interview"><div class="n" style="border-color:var(--berry);color:var(--berry);">AI</div>我适合去哪？帮我对比项目（需求访谈）</div>'+
  '<div class="s" data-go="p_answer"><div class="n">1</div>我的案件现在到哪一步了？</div>'+
  '<div class="s" data-go="p_answer"><div class="n">2</div>这笔费用是什么？包含哪些？</div>'+
  '<div class="s" data-go="p_answer"><div class="n">3</div>我还需要准备哪些材料？</div>'+
@@ -204,14 +214,91 @@ V.p_unavailable='<div class="view">'+
  '</div></div>'+
  '</div>'+tabbar('ai')+'</div>';
 
+/* P8 需求访谈（引导式，第2/4题） */
+V.p_interview='<div class="view">'+sb('需求访谈','1')+
+ '<div class="body" style="padding-top:10px;">'+
+ '<div style="font-size:11px;color:var(--mut);margin:2px 2px 7px;">第 2 / 4 题 · 约需 1 分钟</div>'+
+ '<div style="display:flex;gap:5px;margin-bottom:13px;">'+[1,2,3,4].map(function(i){
+   return '<div style="flex:1;height:5px;border-radius:3px;background:'+(i<=2?'var(--navy)':'var(--line)')+';"></div>';}).join('')+'</div>'+
+ '<div class="msg ai"><div class="bub">你最看重身份规划带来的什么？可以多选，也可以直接用话说。</div></div>'+
+ '<div id="chips" style="display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 12px;">'+
+ ['全球通行便利','子女教育','养老居住','资产配置','营商环境'].map(function(t,i){
+   return '<div class="qchip'+(i<2?' on':'')+'">'+t+'</div>';}).join('')+'</div>'+
+ '<div class="msg user"><div class="bub">通行便利和孩子教育</div></div>'+
+ '<div class="h-sub" style="margin:4px 2px;">你的回答只用于整理需求，可随时修改或转人工。</div>'+
+ '<div class="btn fill" data-go="p_profile">下一题（演示：完成访谈）</div>'+
+ '</div>'+composer()+tabbar('ai')+'</div>';
+
+/* P9 需求画像 */
+V.p_profile='<div class="view">'+sb('需求画像','1')+
+ '<div class="body">'+
+ '<div class="h-sub" style="margin:2px 2px 10px;">以下是根据你的回答整理的需求画像，请确认或修改。</div>'+
+ [['主要目标','全球通行便利 · 子女国际教育','修改'],
+  ['预算区间','平台服务费 20–40 万元人民币区间（非报价）','修改'],
+  ['家庭构成','主申 + 配偶 + 1 名学龄子女','修改'],
+  ['时间期望','希望 12 个月内完成递交（非承诺）','修改']].map(function(r){
+  return '<div class="wf solid" style="padding:11px 13px;margin-bottom:9px;"><div class="row"><div class="grow"><div class="lab">'+r[0]+'</div><div style="font-size:12.5px;">'+r[1]+'</div></div><div class="btn sm ghost">'+r[2]+'</div></div></div>';}).join('')+
+ '<div class="btn berry" data-go="p_compare">确认画像，生成项目比较</div>'+
+ '<div class="h-sub" style="margin-top:9px;">画像为你的自述整理，不是资格认定。</div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* P10 项目比较（仅已发布项目） */
+V.p_compare='<div class="view">'+sb('项目比较','1')+
+ '<div class="body">'+
+ '<div class="h-sub" style="margin:2px 2px 10px;">仅比较<b>已发布项目</b>，以下为分项事实，供你和顾问讨论。</div>'+
+ '<table class="cmp"><colgroup><col style="width:30%"><col style="width:24%"><col style="width:23%"><col style="width:23%"></colgroup>'+
+ '<tr><th></th><th>技术居留 A</th><th>数字居留 B</th><th>投资入籍 C</th></tr>'+
+ '<tr><td>平台服务费</td><td>¥30,000（已确认）</td><td>区间·已发布</td><td>区间·已发布</td></tr>'+
+ '<tr><td>办理周期</td><td>以已发布内容为准</td><td>以已发布内容为准</td><td>以已发布内容为准</td></tr>'+
+ '<tr><td>通行范围</td><td>项目说明已列</td><td>项目说明已列</td><td>项目说明已列</td></tr>'+
+ '<tr><td>居住要求</td><td>项目说明已列</td><td>项目说明已列</td><td>项目说明已列</td></tr></table>'+
+ '<div style="display:flex;flex-direction:column;gap:7px;margin-top:11px;">'+
+ '<div class="wf solid" style="padding:10px 12px;margin:0;"><div class="row"><div class="grow" style="font-size:12px;">与“通行+教育”目标较贴近：技术居留 A</div><div class="qchip on" style="cursor:default;">建议</div></div></div>'+
+ '</div>'+
+ '<div class="h-sub" style="margin:10px 2px;">比较结果是<b>建议而非资格结论</b>，须经顾问人工复核。</div>'+
+ '<div class="btn fill" data-go="p_review">提交顾问复核</div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* P11 顾问复核 */
+V.p_review='<div class="view">'+sb('顾问复核','1')+
+ '<div class="body">'+
+ '<div class="wf solid">'+
+ '<div style="display:flex;flex-direction:column;gap:11px;">'+
+ '<div class="row"><div class="step-dot on">✓</div><div class="grow" style="font-size:12.5px;">需求画像与比较已提交</div><div class="h-sub" style="margin:0;">今天</div></div>'+
+ '<div class="row"><div class="step-dot on">✓</div><div class="grow" style="font-size:12.5px;">顾问人工复核</div><div class="h-sub" style="margin:0;">已完成</div></div>'+
+ '<div class="row"><div class="step-dot">3</div><div class="grow" style="font-size:12.5px;color:var(--faint);">预约沟通，确认正式方案</div></div>'+
+ '</div></div>'+
+ '<div class="wf solid"><div class="lab">顾问复核意见（示例）</div>'+
+ '<div class="h-sub" style="color:var(--ink);line-height:1.9;">结合你的通行与教育目标，建议优先沟通技术居留 A；资金证明与随行子女材料需进一步确认。<b>此为人工复核意见，不构成结果承诺。</b></div></div>'+
+ '<div class="btn fill">预约我的顾问</div>'+
+ '<div style="margin-top:9px;"><div class="btn ghost" data-go="aihome">返回 AI 主页</div></div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* P12 每周进展简报（主动式） */
+V.p_brief='<div class="view">'+sb('本周进展简报','1')+
+ '<div class="body">'+
+ '<div class="wf solid"><div class="lab">本周进展（已核验）</div>'+
+ '<div class="row"><div class="grow" style="font-size:12.5px;">官方已受理你的申请</div><div class="qchip on" style="cursor:default;">off</div></div></div>'+
+ '<div class="wf solid"><div class="lab">待办（1）</div>'+
+ '<div class="row"><div class="grow" style="font-size:12.5px;">上传无犯罪公证 · 临近截止</div><div class="btn sm fill" data-go="p_answer">问 AI</div></div></div>'+
+ '<div class="wf solid"><div class="lab">费用</div><div style="font-size:12.5px;">本周无新增待付费用</div></div>'+
+ '<div class="h-sub" style="margin:8px 2px;">简报由系统按周生成，仅含你有权查看的内容；可在通知设置中调整。</div>'+
+ '<div class="btn ghost" data-go="aihome">返回 AI 主页</div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
 /* 非 AI tab 占位（演示用，真实页面沿用 v1.4） */
 ['home','case','proj','world','svc','me'].forEach(function(k){
  V[k]='<div class="view"><div class="body"><div class="statebox"><div class="ic">·</div><b style="color:var(--ink);">沿用 v1.4 现有页面</b><div>本原型仅演示 AI 相关流程。</div></div></div>'+tabbar(k)+'</div>';
 });
 
-var ORDER=['aihome','p_consent','p_answer','p_refuse','p_context','p_hist','p_unavailable'];
+var ORDER=['aihome','p_interview','p_profile','p_compare','p_review','p_brief','p_consent','p_answer','p_refuse','p_context','p_hist','p_unavailable'];
 var NOTES={
- aihome:'P1 AI 主页：中央凸起 Tab 进入；建议问题 + 最近会话 + 输入框。',
+ aihome:'P1 AI 主页：中央凸起 Tab；简报卡 + 需求访谈入口 + 建议问题 + 最近会话。',
+ p_interview:'P8 需求访谈：逐题推进、多选标签、进度可见、可转人工。',
+ p_profile:'P9 需求画像：自述信息结构化确认，可逐项修改。',
+ p_compare:'P10 项目比较：仅已发布项目分项对比，建议标签，非资格结论。',
+ p_review:'P11 顾问复核：人工复核为必经门，复核意见 + 预约沟通。',
+ p_brief:'P12 每周简报：主动式 digest（进展/待办/费用），可追问。',
  p_consent:'P2 单独同意：案件片段授权，两项确认；可拒绝（仅留通用科普）。',
  p_answer:'P3 回答契约：结论→分项→来源（off/sp 分级标注）→下一步。',
  p_refuse:'P4 红线：结果预测类问题 100% 拒答并转人工。',
@@ -232,6 +319,10 @@ document.addEventListener('click',function(e){
 /* consent toggles */
 document.addEventListener('click',function(e){
   var c=e.target.closest('.consent');if(!c)return;c.classList.toggle('on');
+});
+/* interview chips toggles */
+document.addEventListener('click',function(e){
+  var c=e.target.closest('#chips .qchip');if(!c)return;c.classList.toggle('on');
 });
 go('aihome');
 </script>
