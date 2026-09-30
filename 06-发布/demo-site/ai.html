@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>客户端 AI 高保真 v1.5（AI-first）</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23AF2D67'/%3E%3Cstop offset='1' stop-color='%23002661'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M8 20l5-6 4 3 7-9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --navy:#002661;--navy-700:#1E3E78;--navy-100:#DCE4F2;--navy-50:#EDF1F8;
+  --berry:#AF2D67;--berry-50:#FAEEF4;
+  --grad:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);
+  --ink:#1B2433;--mut:#5E6B7E;--faint:#8A95A6;--line:#E5E9F0;--line-2:#F0F3F8;--paper:#F5F7FA;
+  --green:#177A5B;--green-bg:#E6F4EE;--amber:#B45309;--amber-bg:#FBF1E2;--red:#C03221;--red-bg:#FCEBEA;--blue:#1D5F8A;--blue-bg:#E9F2F8;--purple:#6B5AA8;--purple-bg:#EFECF7;
+  --sh1:0 1px 2px rgba(16,32,67,.05),0 6px 18px -8px rgba(16,32,67,.12);--sh2:0 2px 6px rgba(16,32,67,.05),0 20px 44px -14px rgba(15,35,80,.22);
+  --ease-out:cubic-bezier(.16,1,.3,1);--spring:cubic-bezier(.34,1.3,.5,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
+body{font-family:"Manrope","Noto Sans SC",-apple-system,"PingFang SC",sans-serif;background:#E9EDF3;color:var(--ink);min-height:100vh;}
+.stage{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:34px 16px 60px;}
+.stage-head{text-align:center;margin-bottom:22px;max-width:680px;}
+.stage-head h1{font-size:20px;font-weight:800;}
+.stage-head p{font-size:12.5px;color:var(--mut);margin-top:6px;line-height:1.7;}
+.stage-head .pill{display:inline-block;font-size:11px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:4px 12px;color:var(--mut);margin-top:8px;}
+/* phone */
+.phone{width:390px;height:800px;border-radius:42px;background:#11262B;padding:11px;box-shadow:0 30px 70px rgba(10,25,60,.35);position:relative;flex:none;}
+.screens{position:absolute;inset:11px;border-radius:32px;overflow:hidden;}
+.view{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--paper);overflow:hidden;opacity:0;pointer-events:none;transform:translateX(30px) scale(.985);transition:transform .42s cubic-bezier(.22,1,.36,1),opacity .3s ease;will-change:transform,opacity;}
+.view.on{opacity:1;pointer-events:auto;transform:none;z-index:2;}
+.body{flex:1 1 0;min-height:0;overflow-y:auto;padding:4px 18px 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.body::-webkit-scrollbar{display:none;}
+/* 7-tab bar with raised center AI */
+.tabbar{height:66px;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-top:1px solid var(--line);display:flex;flex:none;padding-bottom:7px;position:relative;}
+.tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;font-size:10px;color:var(--faint);text-decoration:none;padding-bottom:3px;cursor:pointer;}
+.tabbar a.on{color:var(--navy);font-weight:700;}
+.tabbar a svg{width:21px;height:21px;}
+.tabbar a.ai{align-items:center;}
+.tabbar a.ai .orb{width:52px;height:52px;border-radius:50%;background:var(--grad);background-size:180% 180%;animation:drift 10s ease-in-out infinite alternate;
+ border:4px solid #fff;box-shadow:0 8px 20px rgba(94,36,107,.4);position:absolute;top:-22px;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;transition:transform .2s var(--spring);}
+.tabbar a.ai .orb:active{transform:scale(.92);}
+.tabbar a.ai .orb svg{width:24px;height:24px;}
+.tabbar a.ai span{margin-top:30px;}
+/* atoms */
+.card{background:#fff;border-radius:18px;box-shadow:var(--sh1);padding:16px;margin-bottom:12px;}
+.btn{border:0;font-family:inherit;font-weight:700;border-radius:22px;height:46px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:15px;cursor:pointer;text-decoration:none;transition:transform .18s var(--spring),box-shadow .25s,filter .2s;}
+.btn:active{transform:scale(.962);}
+.btn.navy{background:linear-gradient(180deg,#0B3A82 0%,#002661 100%);color:#fff;box-shadow:0 6px 18px rgba(0,38,97,.24),inset 0 1px 0 rgba(255,255,255,.16);}
+.btn.berry{background:linear-gradient(180deg,#C63D80 0%,#A5275F 100%);color:#fff;box-shadow:0 6px 18px rgba(175,45,103,.26),inset 0 1px 0 rgba(255,255,255,.16);}
+.btn.ghost{background:#fff;border:1.5px solid var(--navy);color:var(--navy);}
+.btn.quiet{background:var(--navy-50);color:var(--navy);}
+.btn.sm{height:36px;font-size:13px;border-radius:18px;padding:0 16px;}
+.st{font-size:11px;font-weight:600;border-radius:7px;padding:3px 9px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
+.st .d{width:6px;height:6px;border-radius:50%;background:currentColor;}
+.st.g{background:var(--green-bg);color:var(--green);}.st.a{background:var(--amber-bg);color:var(--amber);}
+.st.r{background:var(--red-bg);color:var(--red);}.st.b{background:var(--blue-bg);color:var(--blue);}.st.p{background:var(--purple-bg);color:var(--purple);}
+.st.n{background:var(--line-2);color:var(--mut);}
+.chip{font-size:12px;border:1px solid var(--line);background:#fff;color:var(--mut);border-radius:16px;padding:7px 14px;display:inline-block;white-space:nowrap;flex:none;transition:background .18s,color .18s,border-color .18s,transform .15s var(--spring);cursor:pointer;}.chip:active{transform:scale(.94);}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy);}
+.appbar{display:flex;align-items:center;gap:10px;padding:8px 2px 12px;}
+.appbar .bk{width:36px;height:36px;border-radius:50%;background:#fff;box-shadow:var(--sh1);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;transition:transform .15s var(--spring);}.appbar .bk:active{transform:scale(.88);}
+.appbar .tt{font-size:17px;font-weight:700;flex:1;}
+.sec-t{font-size:13px;font-weight:700;margin:16px 2px 10px;color:var(--ink);display:flex;justify-content:space-between;align-items:center;}
+.sec-t span{font-size:11px;color:var(--faint);font-weight:600;cursor:pointer;}
+.gradband{background:var(--grad);background-size:170% 170%;animation:drift 16s ease-in-out infinite alternate;color:#fff;border-radius:20px;padding:18px;box-shadow:0 12px 28px rgba(94,36,107,.25);}
+@keyframes drift{0%{background-position:0 30%}100%{background-position:100% 70%}}
+/* chat */
+.msg{display:flex;margin-bottom:12px;}
+.msg.user{justify-content:flex-end;}
+.bub{max-width:86%;padding:13px 15px;font-size:13px;line-height:1.78;border-radius:17px;box-shadow:var(--sh1);}
+.msg.user .bub{background:linear-gradient(180deg,#0B3A82,#002661);color:#fff;border-bottom-right-radius:6px;}
+.msg.ai .bub{background:#fff;border-bottom-left-radius:6px;}
+.bub b{font-weight:800;}
+.src{display:flex;gap:7px;align-items:flex-start;font-size:11px;color:var(--mut);border-top:1px dashed var(--line);margin-top:10px;padding-top:9px;}
+.src .tag{font-size:10px;font-weight:800;border-radius:6px;padding:2px 7px;flex:none;}
+.tag.off{background:var(--green-bg);color:var(--green);}.tag.co{background:var(--blue-bg);color:var(--blue);}.tag.sp{background:var(--amber-bg);color:var(--amber);}
+.nextstep{background:var(--navy-50);border-radius:12px;padding:10px 12px;font-size:12px;color:var(--navy);margin-top:10px;display:flex;gap:8px;align-items:center;font-weight:600;}
+.ctxchip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;background:var(--blue-bg);color:var(--blue);border-radius:15px;padding:6px 12px;}
+.composer{flex:none;border-top:1px solid var(--line);background:rgba(255,255,255,.97);backdrop-filter:blur(12px);padding:9px 14px 13px;display:flex;gap:9px;align-items:center;}
+.composer .in{flex:1;height:42px;border:1.5px solid var(--line);border-radius:21px;display:flex;align-items:center;padding:0 16px;font-size:13px;color:var(--faint);}
+.composer .send{width:42px;height:42px;border-radius:50%;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;flex:none;font-size:17px;cursor:pointer;box-shadow:0 5px 14px rgba(94,36,107,.35);}
+/* consent */
+.consent{border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;font-size:13px;display:flex;gap:11px;align-items:flex-start;margin-bottom:10px;background:#fff;cursor:pointer;line-height:1.7;}
+.consent .ck{width:21px;height:21px;border-radius:7px;border:2px solid var(--line);flex:none;margin-top:2px;transition:all .18s;}
+.consent.on .ck{background:var(--navy);border-color:var(--navy);position:relative;}
+.consent.on .ck::after{content:"";position:absolute;left:6px;top:2px;width:6px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);}
+/* states */
+.statebox{display:flex;flex-direction:column;align-items:center;gap:11px;padding:46px 26px;text-align:center;color:var(--mut);font-size:13px;line-height:1.85;}
+.statebox .ic{width:60px;height:60px;border-radius:18px;background:var(--navy-50);color:var(--navy);display:flex;align-items:center;justify-content:center;}
+.statebox .ic svg{width:28px;height:28px;}
+/* compare table */
+.cmp{width:100%;border-collapse:collapse;font-size:11px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:var(--sh1);}
+.cmp th,.cmp td{border-bottom:1px solid var(--line-2);padding:10px 8px;text-align:left;vertical-align:top;line-height:1.55;}
+.cmp th{background:var(--navy-50);font-weight:800;color:var(--navy);font-size:10.5px;}
+.cmp td:first-child{font-weight:700;}
+.cmp tr:last-child td{border-bottom:0;}
+.step-dot{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);color:var(--faint);font-size:12px;display:flex;align-items:center;justify-content:center;flex:none;}
+.step-dot.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+.hist .s{display:flex;align-items:center;gap:11px;background:#fff;border-radius:14px;padding:13px 14px;margin-bottom:9px;font-size:13px;box-shadow:var(--sh1);cursor:pointer;}
+.hist .s .d{font-size:11px;color:var(--faint);margin-left:auto;white-space:nowrap;}
+.suggest .s{display:flex;gap:11px;align-items:center;background:#fff;border-radius:15px;padding:13px 14px;margin-bottom:9px;box-shadow:var(--sh1);cursor:pointer;font-size:13px;transition:transform .2s var(--ease-out);}
+.suggest .s:active{transform:scale(.97);}
+.suggest .s .n{width:30px;height:30px;border-radius:10px;background:var(--navy-50);color:var(--navy);display:flex;align-items:center;justify-content:center;flex:none;font-size:12px;font-weight:800;}
+.suggest .s .n.berry{background:var(--berry-50);color:var(--berry);}
+.devnote{max-width:760px;margin:24px auto 0;background:#fff;border-radius:14px;box-shadow:var(--sh1);padding:15px 19px;font-size:12.5px;color:var(--mut);line-height:1.9;}
+.toast{position:absolute;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);background:rgba(20,30,50,.92);color:#fff;font-size:12px;padding:9px 17px;border-radius:20px;opacity:0;pointer-events:none;transition:all .3s var(--spring);z-index:20;white-space:nowrap;}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="stage-head">
+    <h1>客户端 AI 高保真 · v1.5（AI-first）</h1>
+    <p>中央凸起 AI 主 Tab。覆盖 AI 主页、需求访谈→画像→项目比较→顾问复核、会话（带来源）、单独同意、每周简报、历史、红线拒答与异常态。<br>本稿并入客户端后冻结为 v1.5（7 Tab）；非 AI 页面保持 v1.4 不变。</p>
+    <span class="pill">点击页面内元素切换</span>
+  </div>
+  <div class="phone"><div class="screens" id="root"></div><div class="toast" id="toast"></div></div>
+  <div class="devnote" id="note"></div>
+</div>
+<script>
+var ICONS={
+ home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
+ case:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/>',
+ proj:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+ world:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/>',
+ svc:'<path d="M4 13v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="12" width="4" height="7" rx="2"/><rect x="17" y="12" width="4" height="7" rx="2"/>',
+ me:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/>'
+};
+function svg(name){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+ICONS[name]+'</svg>';}
+function tabbar(active){
+ var t=[['home','首页'],['case','办理'],['proj','项目'],['ai','AI'],['world','全球通行'],['svc','服务'],['me','我的']];
+ return '<div class="tabbar">'+t.map(function(x){
+  if(x[0]==='ai'){
+   return '<a class="ai'+(active==='ai'?' on':'')+'" data-go="aihome"><div class="orb"><svg viewBox="0 0 24 24" fill="white"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg></div><span>AI 助手</span></a>';
+  }
+  return '<a class="'+(active===x[0]?' on':'')+'" data-toast="演示稿仅包含 AI 页面">'+svg(x[0])+'<span>'+x[1]+'</span></a>';
+ }).join('')+'</div>';
+}
+function appbar(title,back){
+ var chev='<svg viewBox="0 0 24 24" fill="none" stroke="#5E6B7E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>';
+ return '<div class="appbar">'+(back?'<div class="bk" data-go="aihome">'+chev+'</div>':'')+'<div class="tt">'+title+'</div></div>';
+}
+function composer(){return '<div class="composer"><div class="in">输入你的问题…</div><div class="send">↑</div></div>';}
+var V={};
+
+/* AI 主页 */
+V.aihome='<div class="view"><div class="body">'+
+ '<div style="padding:8px 2px 2px;"><div style="font-size:22px;font-weight:800;line-height:1.4;">你好，我是你的<br>身份规划助手</div>'+
+ '<div style="font-size:12.5px;color:var(--mut);margin-top:8px;line-height:1.8;">我只基于你的案件与已发布内容回答，每条都带来源；不确定的我会明说。</div></div>'+
+ '<div class="card" style="margin-top:14px;padding:13px 15px;cursor:pointer;" data-go="brief"><div style="display:flex;gap:11px;align-items:center;"><div style="flex:1;"><div style="font-size:13.5px;font-weight:800;">本周进展简报</div><div style="font-size:11.5px;color:var(--mut);margin-top:3px;">官方已受理 · 1 项待办 · 无新费用</div></div><div style="color:var(--faint);font-size:18px;">›</div></div></div>'+
+ '<div class="sec-t">你可以问</div><div class="suggest">'+
+ '<div class="s" data-go="interview"><div class="n berry">AI</div>我适合去哪？帮我对比项目</div>'+
+ '<div class="s" data-go="chat"><div class="n">1</div>我的案件现在到哪一步了？</div>'+
+ '<div class="s" data-go="chat"><div class="n">2</div>这笔费用是什么？包含哪些？</div>'+
+ '<div class="s" data-go="chat"><div class="n">3</div>我还需要准备哪些材料？</div>'+
+ '<div class="s" data-go="chat"><div class="n">4</div>怎么识别“包成功”骗局？</div>'+
+ '</div>'+
+ '<div class="sec-t">最近会话<span data-go="hist">全部</span></div>'+
+ '<div class="hist"><div class="s" data-go="chat"><div style="flex:1;">技术居留 · 费用分项咨询</div><div class="d">昨天</div></div>'+
+ '<div class="s" data-go="chat"><div style="flex:1;">无犯罪公证材料要求</div><div class="d">周一</div></div></div>'+
+ '</div>'+composer()+tabbar('ai')+'</div>';
+
+/* 需求访谈 */
+V.interview='<div class="view">'+appbar('需求访谈',1)+'<div class="body">'+
+ '<div style="font-size:11.5px;color:var(--mut);margin:2px 2px 8px;">第 2 / 4 题 · 约需 1 分钟</div>'+
+ '<div style="display:flex;gap:5px;margin-bottom:15px;">'+[1,2,3,4].map(function(i){return '<div style="flex:1;height:5px;border-radius:3px;background:'+(i<=2?'var(--navy)':'var(--line)')+'"></div>';}).join('')+'</div>'+
+ '<div class="msg ai"><div class="bub">你最看重身份规划带来的什么？可以多选，也可以直接用话说。</div></div>'+
+ '<div id="chips" style="display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 13px;">'+
+ ['全球通行便利','子女教育','养老居住','资产配置','营商环境'].map(function(t,i){return '<div class="chip'+(i<2?' on':'')+'">'+t+'</div>';}).join('')+'</div>'+
+ '<div class="msg user"><div class="bub">通行便利和孩子教育</div></div>'+
+ '<div style="font-size:11.5px;color:var(--mut);margin:6px 2px 12px;">回答只用于整理需求，可随时修改或转人工。</div>'+
+ '<div class="btn navy" data-go="profile">下一题（演示：完成访谈）</div>'+
+ '</div>'+composer()+tabbar('ai')+'</div>';
+
+/* 需求画像 */
+V.profile='<div class="view">'+appbar('需求画像',1)+'<div class="body">'+
+ '<div style="font-size:12.5px;color:var(--mut);margin:2px 2px 11px;line-height:1.7;">根据你的回答整理的需求画像，请确认或修改。</div>'+
+ [['主要目标','全球通行便利 · 子女国际教育'],['预算区间','平台服务费 20–40 万元人民币区间（非报价）'],['家庭构成','主申 + 配偶 + 1 名学龄子女'],['时间期望','希望 12 个月内完成递交（非承诺）']].map(function(r){
+  return '<div class="card" style="padding:13px 15px;margin-bottom:10px;"><div style="display:flex;gap:10px;align-items:center;"><div style="flex:1;"><div style="font-size:10.5px;color:var(--faint);font-weight:700;margin-bottom:4px;">'+r[0]+'</div><div style="font-size:13px;">'+r[1]+'</div></div><div class="btn sm quiet">修改</div></div></div>';
+ }).join('')+
+ '<div class="btn berry" data-go="compare">确认画像，生成项目比较</div>'+
+ '<div style="font-size:11.5px;color:var(--mut);margin-top:10px;">画像为你的自述整理，不是资格认定。</div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* 项目比较 */
+V.compare='<div class="view">'+appbar('项目比较',1)+'<div class="body">'+
+ '<div style="font-size:12.5px;color:var(--mut);margin:2px 2px 11px;line-height:1.7;">仅比较<b>已发布项目</b>，以下为分项事实，供你和顾问讨论。</div>'+
+ '<table class="cmp"><tr><th style="width:28%"></th><th>技术居留 A</th><th>数字居留 B</th><th>投资入籍 C</th></tr>'+
+ '<tr><td>平台服务费</td><td>¥30,000（已确认）</td><td>区间·已发布</td><td>区间·已发布</td></tr>'+
+ '<tr><td>办理周期</td><td>以已发布内容为准</td><td>以已发布内容为准</td><td>以已发布内容为准</td></tr>'+
+ '<tr><td>通行范围</td><td>项目说明已列</td><td>项目说明已列</td><td>项目说明已列</td></tr>'+
+ '<tr><td>居住要求</td><td>项目说明已列</td><td>项目说明已列</td><td>项目说明已列</td></tr></table>'+
+ '<div class="card" style="margin-top:12px;padding:12px 14px;display:flex;gap:9px;align-items:center;"><div style="flex:1;font-size:12.5px;">与“通行+教育”目标较贴近：技术居留 A</div><span class="st g">建议</span></div>'+
+ '<div style="font-size:11.5px;color:var(--mut);margin:8px 2px 12px;line-height:1.7;">比较结果是<b>建议而非资格结论</b>，须经顾问人工复核。</div>'+
+ '<div class="btn navy" data-go="review">提交顾问复核</div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* 顾问复核 */
+V.review='<div class="view">'+appbar('顾问复核',1)+'<div class="body">'+
+ '<div class="card"><div style="display:flex;flex-direction:column;gap:13px;">'+
+ '<div style="display:flex;gap:11px;align-items:center;"><div class="step-dot on">✓</div><div style="flex:1;font-size:13px;">需求画像与比较已提交</div><div style="font-size:11px;color:var(--faint);">今天</div></div>'+
+ '<div style="display:flex;gap:11px;align-items:center;"><div class="step-dot on">✓</div><div style="flex:1;font-size:13px;">顾问人工复核</div><div style="font-size:11px;color:var(--faint);">已完成</div></div>'+
+ '<div style="display:flex;gap:11px;align-items:center;"><div class="step-dot">3</div><div style="flex:1;font-size:13px;color:var(--faint);">预约沟通，确认正式方案</div></div>'+
+ '</div></div>'+
+ '<div class="card"><div style="font-size:10.5px;color:var(--faint);font-weight:700;margin-bottom:7px;">顾问复核意见（示例）</div>'+
+ '<div style="font-size:12.5px;line-height:1.85;">结合你的通行与教育目标，建议优先沟通技术居留 A；资金证明与随行子女材料需进一步确认。<b>此为人工复核意见，不构成结果承诺。</b></div></div>'+
+ '<div class="btn navy">预约我的顾问</div>'+
+ '<div style="margin-top:10px;"><div class="btn ghost" data-go="aihome">返回 AI 主页</div></div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* 会话：流式回答 */
+V.chat='<div class="view"><div class="body" style="padding-top:10px;">'+
+ '<div class="ctxchip">当前案件：CASE-0001 ×</div>'+
+ '<div class="msg user" style="margin-top:12px;"><div class="bub">我的案件现在到哪一步了？</div></div>'+
+ '<div class="msg ai"><div class="bub"><b>你的案件已被官方受理，目前在材料准备阶段。</b>'+
+ '<div style="margin-top:8px;">分项说明：<br>1. 官方已受理（上一阶段已完成）；<br>2. 当前阶段：材料准备，待补充无犯罪公证；<br>3. 暂无需要你支付的新费用。</div>'+
+ '<div class="src"><span class="tag off">官方已批准</span><span>受理回执 · 2026-09-24（已核验）</span></div>'+
+ '<div class="src"><span class="tag sp">未经核验</span><span>服务方周报提及“审理较快”，不能作为结论依据</span></div>'+
+ '<div class="nextstep">下一步：9 月 28 日前上传无犯罪公证；需要我说明公证怎么办理吗？</div>'+
+ '</div></div>'+
+ '<div class="sec-t">相关问题</div><div class="suggest"><div class="s" data-go="refuse"><div class="n">!</div>你就直接告诉我，最终能不能通过？</div></div>'+
+ '</div>'+composer()+tabbar('ai')+'</div>';
+
+/* 红线拒答 */
+V.refuse='<div class="view"><div class="body" style="padding-top:10px;">'+
+ '<div class="msg user"><div class="bub">你就直接告诉我，最终能不能通过？</div></div>'+
+ '<div class="msg ai"><div class="bub">我不能预测审批结果，也不能给出“能不能通过”的结论——结果由官方依法审核决定。<br><br>我可以为你：说明当前进度与差距、列出已核验的事实，或帮你联系顾问做人工解答。'+
+ '<div class="nextstep">下一步：联系我的顾问（已为你发起）</div></div></div>'+
+ '</div>'+composer()+tabbar('ai')+'</div>';
+
+/* 单独同意 */
+V.consent='<div class="view">'+appbar('案件问答 · 授权说明',1)+'<div class="body">'+
+ '<div class="gradband" style="padding:15px 17px;margin-bottom:13px;"><div style="font-size:13.5px;line-height:1.8;">为回答你的问题，将向模型提供必要的<b>案件片段</b>（如进度、费用项）。模型运行在你本机，片段不向第三方发送。你可以随时撤回授权。</div></div>'+
+ '<div class="consent on"><div class="ck"></div><div>我已知悉并同意提供案件片段用于本次问答</div></div>'+
+ '<div class="consent"><div class="ck"></div><div>我知道 AI 的回答仅为信息整理，不是资格认定或结果承诺</div></div>'+
+ '<div style="margin-top:8px;"><div class="btn berry" data-go="chat">同意并开始提问</div></div>'+
+ '<div style="margin-top:10px;"><div class="btn ghost" data-go="aihome">暂不同意（仅可使用通用科普）</div></div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* 历史会话 */
+V.hist='<div class="view">'+appbar('我的问答',1)+'<div class="body hist">'+
+ '<div class="s" data-go="chat"><div style="flex:1;">我的案件现在到哪一步了</div><div class="d">今天</div></div>'+
+ '<div class="s" data-go="chat"><div style="flex:1;">技术居留 · 费用分项咨询</div><div class="d">昨天</div></div>'+
+ '<div class="s" data-go="chat"><div style="flex:1;">无犯罪公证材料要求</div><div class="d">周一</div></div>'+
+ '<div class="s" data-go="chat"><div style="flex:1;">随行子女材料清单</div><div class="d">9/24</div></div>'+
+ '<div class="sec-t">会话治理</div><div class="btn ghost">清空全部会话</div>'+
+ '<div style="font-size:11.5px;color:var(--mut);margin-top:10px;line-height:1.7;">注销账户时，全部会话随注销流程一并删除。</div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* 每周简报 */
+V.brief='<div class="view">'+appbar('本周进展简报',1)+'<div class="body">'+
+ '<div class="card"><div style="font-size:10.5px;color:var(--faint);font-weight:700;margin-bottom:9px;">本周进展（已核验）</div><div style="display:flex;gap:10px;align-items:center;"><div style="flex:1;font-size:13px;">官方已受理你的申请</div><span class="st g">off</span></div></div>'+
+ '<div class="card"><div style="font-size:10.5px;color:var(--faint);font-weight:700;margin-bottom:9px;">待办（1）</div><div style="display:flex;gap:10px;align-items:center;"><div style="flex:1;font-size:13px;">上传无犯罪公证 · 临近截止</div><div class="btn sm navy" data-go="chat">问 AI</div></div></div>'+
+ '<div class="card"><div style="font-size:10.5px;color:var(--faint);font-weight:700;margin-bottom:7px;">费用</div><div style="font-size:13px;">本周无新增待付费用</div></div>'+
+ '<div style="font-size:11.5px;color:var(--mut);margin:6px 2px 12px;line-height:1.7;">简报按周生成，仅含你有权查看的内容，可在通知设置中调整。</div>'+
+ '<div class="btn ghost" data-go="aihome">返回 AI 主页</div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* 模型不可用 */
+V.unavailable='<div class="view"><div class="body"><div class="statebox">'+
+ '<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg></div>'+
+ '<b style="color:var(--ink);font-size:15px;">AI 助手暂时不可用</b>'+
+ '<div>未检测到本机模型（Ollama 未运行，或未授权当前网站）。你仍可查看静态进度与费用。</div>'+
+ '<div style="display:flex;flex-direction:column;gap:9px;width:100%;margin-top:8px;"><div class="btn navy">查看我的案件（静态）</div><div class="btn ghost">查看配置指引</div></div>'+
+ '</div></div>'+tabbar('ai')+'</div>';
+
+var ORDER=['aihome','interview','profile','compare','review','brief','chat','consent','hist','refuse','unavailable'];
+var NOTES={
+ aihome:'AI 主页：问候 + 简报卡 + 场景建议 + 最近会话；中央凸起入口。',
+ interview:'需求访谈：逐题推进、多选标签、进度可见、可转人工。',
+ profile:'需求画像：自述信息结构化确认，可逐项修改。',
+ compare:'项目比较：仅已发布项目分项对比，建议标签，非资格结论。',
+ review:'顾问复核：人工复核为必经门，复核意见 + 预约沟通。',
+ brief:'每周简报：主动式 digest（进展/待办/费用），可追问。',
+ chat:'会话：结论→分项→来源（off/sp 分级）→下一步。',
+ consent:'单独同意：案件片段授权，两项确认，可拒绝。',
+ hist:'历史会话：可查看/清空，注销随删。',
+ refuse:'红线：结果预测 100% 拒答并转人工。',
+ unavailable:'异常态：模型未运行不伪装，保留静态入口。'
+};
+function go(k){
+ document.querySelectorAll('.view').forEach(function(v){v.classList.remove('on');});
+ var el=document.getElementById('v-'+k);if(el)el.classList.add('on');
+ document.getElementById('note').textContent=NOTES[k]||'';
+ var b=document.querySelector('.body');if(b)b.scrollTop=0;
+}
+document.getElementById('root').innerHTML=ORDER.map(function(k){return V[k].replace('class="view"','class="view" id="v-'+k+'"');}).join('');
+var toastT;
+document.addEventListener('click',function(e){
+ var t=e.target.closest('[data-toast]');
+ if(t){var tt=document.getElementById('toast');tt.textContent=t.getAttribute('data-toast');tt.classList.add('on');clearTimeout(toastT);toastT=setTimeout(function(){tt.classList.remove('on');},1800);return;}
+ var el=e.target.closest('[data-go]');
+ if(el){go(el.getAttribute('data-go'));}
+ var c=e.target.closest('.consent');if(c)c.classList.toggle('on');
+ var ch=e.target.closest('#chips .chip');if(ch)ch.classList.toggle('on');
+});
+go('aihome');
+</script>
+</body>
+</html>
