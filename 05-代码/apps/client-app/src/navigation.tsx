@@ -3,7 +3,7 @@ import { Text } from "react-native";
 import { NavigationContainer, type NavigatorScreenParams } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { colors } from "@tip/ui-native";
+import { colors, RaisedTabBar } from "@tip/ui-native";
 
 import HomeScreen from "./screens/HomeScreen";
 import ProjectListScreen from "./screens/ProjectListScreen";
@@ -55,6 +55,7 @@ function TabIcon({ glyph, color }: { glyph: string; color: string }) {
 function Tabs() {
   return (
     <Tab.Navigator
+      tabBar={(props) => <RaisedTabBar {...props} centerName="AiTab" />}
       screenOptions={{
         ...headerBase,
         tabBarActiveTintColor: colors.navy,

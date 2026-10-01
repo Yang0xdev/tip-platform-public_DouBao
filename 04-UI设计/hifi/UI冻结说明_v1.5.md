@@ -81,3 +81,16 @@
 - AI 高保真：/ai（客户端 v1.5）、/advisor-ai（顾问 v1.8）、/admin-ai（总后台 v0.1）；
 - 五端高保真：/client、/advisor、/advisor-ipad、/admin、/portal；
 - 实时系统：/live/client（7 Tab，AI 可用）、/live/advisor（6 Tab，AI 可用）、/live/admin（A01–A13，A13 可执行）。
+
+## 9. 欠债补齐与全端 AI 统一（2026-10-01，已上线冻结）
+
+1. **中央凸起 orb 欠债已清**：客户端、顾问端实时 App 均采用自定义 RaisedTabBar——
+   中央签名渐变 58px 圆形 orb、上浮凸起、白边、呼吸脉冲；
+2. **顾问端「学习」Tab 已补**：实时顾问端为 7 Tab（工作台/客户/案件/[AI]/方案/学习/我的），
+   学习与培训中心含必修合规/产品知识/情景演练，进度本机持久化；
+3. **静态查看端 AI 并入完成（全端统一）**：
+   - /client：24 原视图 + 11 AI 视图 = 34 屏，7 Tab 中央 orb；
+   - /advisor：13 原视图 + 案件看板 + 13 AI 视图 = 27 屏，7 Tab 中央 orb；
+   - /advisor-ipad：工作模式右栏并入「AI 讲解伴侣」（仅顾问可见、默认收起、演示模式隐藏）；
+   - /admin：并入 A13 AI 知识运营（指标 + 采集 + 四眼条目）；
+4. 至此五端 UI/页面/功能口径统一；实时系统 API 逻辑未变，无需 Render 重部署。

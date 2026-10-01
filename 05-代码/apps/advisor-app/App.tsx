@@ -15,7 +15,8 @@ import ProposalScreen from "./src/screens/ProposalScreen";
 import CasesScreen from "./src/screens/CasesScreen";
 import MeScreen from "./src/screens/MeScreen";
 import AdvisorAiScreen from "./src/screens/AdvisorAiScreen";
-import { colors } from "@tip/ui-native";
+import LearningScreen from "./src/screens/LearningScreen";
+import { colors, RaisedTabBar } from "@tip/ui-native";
 
 export type RootStackParamList = {
   ClientsList: undefined;
@@ -54,6 +55,7 @@ export default function App() {
         <StatusBar style="dark" />
         <NavigationContainer>
           <Tab.Navigator
+            tabBar={(props) => <RaisedTabBar {...props} centerName="AI" />}
             screenOptions={{
               headerShadowVisible: false,
               headerStyle: { backgroundColor: "#F5F7FA" },
@@ -69,6 +71,7 @@ export default function App() {
             <Tab.Screen name="AI" component={AdvisorAiScreen}
               options={{ tabBarIcon: tabIcon("✦"), tabBarActiveTintColor: colors.berry }} />
             <Tab.Screen name="方案" component={ProposalScreen} options={{ tabBarIcon: tabIcon("≡") }} />
+            <Tab.Screen name="学习" component={LearningScreen} options={{ tabBarIcon: tabIcon("◇") }} />
             <Tab.Screen name="我的" component={MeScreen} options={{ tabBarIcon: tabIcon("◌") }} />
           </Tab.Navigator>
         </NavigationContainer>

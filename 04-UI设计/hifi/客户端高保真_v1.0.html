@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>客户端高保真 · 全集 v1.4（精修版）</title>
+<title>客户端高保真 · 全集 v1.5（含 AI）</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23AF2D67'/%3E%3Cstop offset='1' stop-color='%23002661'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M8 20l5-6 4 3 7-9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap">
 <style>
@@ -172,14 +172,54 @@ a:focus-visible,button:focus-visible,.btn:focus-visible{outline:2.5px solid #AF2
 .gradline{height:2px;border:0;border-radius:2px;background:var(--grad);background-size:200% 200%;
  animation:drift 16s ease-in-out infinite alternate;}
 @media(prefers-reduced-motion:reduce){.skeleton::after,.gradline{animation:none!important;}}
+/* ===== AI 并入层（v1.5）：中央 orb + 会话/同意/比较 ===== */
+.tabbar a.ai{align-items:center;}
+.tabbar a.ai .orb{width:52px;height:52px;border-radius:50%;background:var(--grad);background-size:180% 180%;
+ animation:drift 10s ease-in-out infinite alternate;border:4px solid #fff;box-shadow:0 8px 20px rgba(94,36,107,.4);
+ position:absolute;top:-22px;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;
+ transition:transform .2s var(--spring);}
+.tabbar a.ai .orb:active{transform:scale(.92);}
+.tabbar a.ai .orb svg{width:24px;height:24px;}
+.tabbar a.ai span{margin-top:30px;}
+.msg{display:flex;margin-bottom:12px;}
+.msg.user{justify-content:flex-end;}
+.bub{max-width:86%;padding:13px 15px;font-size:13px;line-height:1.78;border-radius:17px;box-shadow:var(--sh1);}
+.msg.user .bub{background:linear-gradient(180deg,#0B3A82,#002661);color:#fff;border-bottom-right-radius:6px;}
+.msg.ai .bub{background:#fff;border-bottom-left-radius:6px;}
+.bub b{font-weight:800;}
+.src{display:flex;gap:7px;align-items:flex-start;font-size:11px;color:var(--mut);border-top:1px dashed var(--line);margin-top:10px;padding-top:9px;}
+.src .tag{font-size:10px;font-weight:800;border-radius:6px;padding:2px 7px;flex:none;}
+.tag.off{background:var(--green-bg);color:var(--green);}.tag.co{background:var(--blue-bg);color:var(--blue);}.tag.sp{background:var(--amber-bg);color:var(--amber);}
+.nextstep{background:var(--navy-50);border-radius:12px;padding:10px 12px;font-size:12px;color:var(--navy);margin-top:10px;display:flex;gap:8px;align-items:center;font-weight:600;}
+.ctxchip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;background:var(--blue-bg);color:var(--blue);border-radius:15px;padding:6px 12px;}
+.composer{flex:none;border-top:1px solid var(--line);background:rgba(255,255,255,.97);backdrop-filter:blur(12px);padding:9px 14px 13px;display:flex;gap:9px;align-items:center;}
+.composer .in{flex:1;height:42px;border:1.5px solid var(--line);border-radius:21px;display:flex;align-items:center;padding:0 16px;font-size:13px;color:var(--faint);}
+.composer .send{width:42px;height:42px;border-radius:50%;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;flex:none;font-size:17px;cursor:pointer;box-shadow:0 5px 14px rgba(94,36,107,.35);}
+.consent{border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;font-size:13px;display:flex;gap:11px;align-items:flex-start;margin-bottom:10px;background:#fff;cursor:pointer;line-height:1.7;}
+.consent .ck{width:21px;height:21px;border-radius:7px;border:2px solid var(--line);flex:none;margin-top:2px;transition:all .18s;}
+.consent.on .ck{background:var(--navy);border-color:var(--navy);position:relative;}
+.consent.on .ck::after{content:"";position:absolute;left:6px;top:2px;width:6px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);}
+.cmp{width:100%;border-collapse:collapse;font-size:11px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:var(--sh1);table-layout:fixed;}
+.cmp th,.cmp td{border-bottom:1px solid var(--line-2);padding:10px 8px;text-align:left;vertical-align:top;line-height:1.55;}
+.cmp th{background:var(--navy-50);font-weight:800;color:var(--navy);font-size:10.5px;}
+.cmp td:first-child{font-weight:700;}
+.cmp tr:last-child td{border-bottom:0;}
+.step-dot{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);color:var(--faint);font-size:12px;display:flex;align-items:center;justify-content:center;flex:none;}
+.step-dot.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+.hist .s{display:flex;align-items:center;gap:11px;background:#fff;border-radius:14px;padding:13px 14px;margin-bottom:9px;font-size:13px;box-shadow:var(--sh1);cursor:pointer;}
+.hist .s .d{font-size:11px;color:var(--faint);margin-left:auto;white-space:nowrap;}
+.suggest .s{display:flex;gap:11px;align-items:center;background:#fff;border-radius:15px;padding:13px 14px;margin-bottom:9px;box-shadow:var(--sh1);cursor:pointer;font-size:13px;transition:transform .2s var(--ease-out);}
+.suggest .s:active{transform:scale(.97);}
+.suggest .s .n{width:30px;height:30px;border-radius:10px;background:var(--navy-50);color:var(--navy);display:flex;align-items:center;justify-content:center;flex:none;font-size:12px;font-weight:800;}
+.suggest .s .n.berry{background:var(--berry-50);color:var(--berry);}
 </style>
 </head>
 <body>
 <div class="stage">
   <div class="stage-head">
-    <h1>客户端高保真 · 全集 v1.4（精修版）</h1>
+    <h1>客户端高保真 · 全集 v1.5（含 AI 主 Tab）</h1>
     <p>方向 C「双色签名」· 主链路 9 屏 + 全球通行 / 服务工单 / 消息 / 我的与家庭授权 / 项目比较 / 防骗教育，共 21 屏可点击<br>示例数据均为虚构【示例】；本稿为视觉与交互样机，非最终文案。</p>
-    <span class="pill">点击屏内按钮可跳转 · 底部 6 tab 可切换</span>
+    <span class="pill">点击屏内按钮可跳转 · 底部 7 tab（中央 AI）可切换</span>
   </div>
   <div class="phone"><div class="screen"><div class="screens" id="root"></div></div></div>
   <div class="devnote">
@@ -216,7 +256,24 @@ const I={
 };
 function ic(k,s){s=s||20;return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+I[k]+'</svg>';}
 function sb(txt){return '<div class="sb"><span>9:41</span><span style="letter-spacing:1px;">● ● ●</span></div>';}
-function tb(active){const t=[['home','home','首页'],['projects','search','找项目'],['global','globe','全球通行'],['cases','case','我的办理'],['services','headset','服务'],['me','user','我的']];return '<div class="tabbar">'+t.map(x=>'<a data-go="'+x[0]+'" class="'+(active===x[0]?'on':'')+'">'+ic(x[1])+'<span>'+x[2]+'</span></a>').join('')+'</div>';}
+/* 统一 7 Tab：首页/办理/项目/[AI orb]/全球通行/服务/我的（v1.5 并入） */
+function tb(active){
+ const norm={case:'cases',proj:'projects',projects:'projects',world:'global',svc:'services',home:'home',ai:'ai',cases:'cases',global:'global',services:'services',me:'me'};
+ const a=norm[active]||active;
+ const star='<svg viewBox="0 0 24 24" fill="white"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>';
+ const cell=(go,glyph,label)=>'<a data-go="'+go+'" class="'+(a===go?'on':'')+'">'+ic(glyph)+'<span>'+label+'</span></a>';
+ return '<div class="tabbar">'+
+  cell('home','home','首页')+cell('cases','case','办理')+cell('projects','search','项目')+
+  '<a class="ai'+(a==='ai'?' on':'')+'" data-go="aihome"><div class="orb">'+star+'</div><span>AI</span></a>'+
+  cell('global','globe','全球通行')+cell('services','headset','服务')+cell('me','user','我的')+
+  '</div>';
+}
+function tabbar(active){return tb(active);}
+function appbar(title,back){
+ var chev='<svg viewBox="0 0 24 24" fill="none" stroke="#5E6B7E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>';
+ return '<div class="appbar">'+(back?'<div class="bk" data-go="aihome">'+chev+'</div>':'')+'<div class="tt">'+title+'</div></div>';
+}
+function composer(){return '<div class="composer"><div class="in">输入你的问题…</div><div class="send">↑</div></div>';}
 function view(id,inner,cls){return '<div class="view '+(cls||'')+'" id="v-'+id+'">'+inner+'</div>';}
 const V={};
 
@@ -529,9 +586,131 @@ V.education=view('education',sb()+'<div class="body"><div class="appbar"><div cl
 
 V.advisorCard=view('advisorCard',sb()+'<div class="body"><div class="gbar"><div class="gbk" data-go="assessmentResult">'+ic('back',18)+'</div><div class="tt">顾问名片</div></div><div class="card" style="text-align:center;padding:30px 22px;"><div style="width:72px;height:72px;border-radius:50%;background:var(--grad);margin:0 auto 12px;box-shadow:0 8px 20px rgba(94,36,107,.3);display:flex;align-items:center;justify-content:center;color:#fff;">'+ic('user',34)+'</div><b style="font-size:17px;">陈某</b><div class="small mut" style="margin-top:4px;">身份规划顾问 · 示例出入境咨询（北京）</div><div style="display:flex;gap:7px;justify-content:center;margin:14px 0;flex-wrap:wrap;"><span class="st g"><span class="d"></span>资质已核验</span><span class="st n">备案 BJ-2026-018</span></div><div class="small mut" style="line-height:1.9;">已授权 A 国技术居留等 3 个项目；名片仅展示白名单核验字段，无成功率类表述。</div><a class="btn berry block" style="margin-top:18px;" data-toast="请求已发送，顾问接受后服务关系成立">请求该顾问服务</a></div></div>');
 
+/* ===== AI 视图并入（v1.5） ===== */
+/* AI 主页 */
+V.aihome='<div class="view"><div class="body">'+
+ '<div style="padding:8px 2px 2px;"><div style="font-size:22px;font-weight:800;line-height:1.4;">你好，我是你的<br>身份规划助手</div>'+
+ '<div style="font-size:12.5px;color:var(--mut);margin-top:8px;line-height:1.8;">我只基于你的案件与已发布内容回答，每条都带来源；不确定的我会明说。</div></div>'+
+ '<div class="card" style="margin-top:14px;padding:13px 15px;cursor:pointer;" data-go="brief"><div style="display:flex;gap:11px;align-items:center;"><div style="flex:1;"><div style="font-size:13.5px;font-weight:800;">本周进展简报</div><div style="font-size:11.5px;color:var(--mut);margin-top:3px;">官方已受理 · 1 项待办 · 无新费用</div></div><div style="color:var(--faint);font-size:18px;">›</div></div></div>'+
+ '<div class="sec-t">你可以问</div><div class="suggest">'+
+ '<div class="s" data-go="interview"><div class="n berry">AI</div>我适合去哪？帮我对比项目</div>'+
+ '<div class="s" data-go="chat"><div class="n">1</div>我的案件现在到哪一步了？</div>'+
+ '<div class="s" data-go="chat"><div class="n">2</div>这笔费用是什么？包含哪些？</div>'+
+ '<div class="s" data-go="chat"><div class="n">3</div>我还需要准备哪些材料？</div>'+
+ '<div class="s" data-go="chat"><div class="n">4</div>怎么识别“包成功”骗局？</div>'+
+ '</div>'+
+ '<div class="sec-t">最近会话<span data-go="hist">全部</span></div>'+
+ '<div class="hist"><div class="s" data-go="chat"><div style="flex:1;">技术居留 · 费用分项咨询</div><div class="d">昨天</div></div>'+
+ '<div class="s" data-go="chat"><div style="flex:1;">无犯罪公证材料要求</div><div class="d">周一</div></div></div>'+
+ '</div>'+composer()+tabbar('ai')+'</div>';
+
+/* 需求访谈 */
+V.interview='<div class="view">'+appbar('需求访谈',1)+'<div class="body">'+
+ '<div style="font-size:11.5px;color:var(--mut);margin:2px 2px 8px;">第 2 / 4 题 · 约需 1 分钟</div>'+
+ '<div style="display:flex;gap:5px;margin-bottom:15px;">'+[1,2,3,4].map(function(i){return '<div style="flex:1;height:5px;border-radius:3px;background:'+(i<=2?'var(--navy)':'var(--line)')+'"></div>';}).join('')+'</div>'+
+ '<div class="msg ai"><div class="bub">你最看重身份规划带来的什么？可以多选，也可以直接用话说。</div></div>'+
+ '<div id="chips" style="display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 13px;">'+
+ ['全球通行便利','子女教育','养老居住','资产配置','营商环境'].map(function(t,i){return '<div class="chip'+(i<2?' on':'')+'">'+t+'</div>';}).join('')+'</div>'+
+ '<div class="msg user"><div class="bub">通行便利和孩子教育</div></div>'+
+ '<div style="font-size:11.5px;color:var(--mut);margin:6px 2px 12px;">回答只用于整理需求，可随时修改或转人工。</div>'+
+ '<div class="btn navy" data-go="profile">下一题（演示：完成访谈）</div>'+
+ '</div>'+composer()+tabbar('ai')+'</div>';
+
+/* 需求画像 */
+V.profile='<div class="view">'+appbar('需求画像',1)+'<div class="body">'+
+ '<div style="font-size:12.5px;color:var(--mut);margin:2px 2px 11px;line-height:1.7;">根据你的回答整理的需求画像，请确认或修改。</div>'+
+ [['主要目标','全球通行便利 · 子女国际教育'],['预算区间','平台服务费 20–40 万元人民币区间（非报价）'],['家庭构成','主申 + 配偶 + 1 名学龄子女'],['时间期望','希望 12 个月内完成递交（非承诺）']].map(function(r){
+  return '<div class="card" style="padding:13px 15px;margin-bottom:10px;"><div style="display:flex;gap:10px;align-items:center;"><div style="flex:1;"><div style="font-size:10.5px;color:var(--faint);font-weight:700;margin-bottom:4px;">'+r[0]+'</div><div style="font-size:13px;">'+r[1]+'</div></div><div class="btn sm quiet">修改</div></div></div>';
+ }).join('')+
+ '<div class="btn berry" data-go="compare">确认画像，生成项目比较</div>'+
+ '<div style="font-size:11.5px;color:var(--mut);margin-top:10px;">画像为你的自述整理，不是资格认定。</div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* 项目比较 */
+V.compare='<div class="view">'+appbar('项目比较',1)+'<div class="body">'+
+ '<div style="font-size:12.5px;color:var(--mut);margin:2px 2px 11px;line-height:1.7;">仅比较<b>已发布项目</b>，以下为分项事实，供你和顾问讨论。</div>'+
+ '<table class="cmp"><tr><th style="width:28%"></th><th>技术居留 A</th><th>数字居留 B</th><th>投资入籍 C</th></tr>'+
+ '<tr><td>平台服务费</td><td>¥30,000（已确认）</td><td>区间·已发布</td><td>区间·已发布</td></tr>'+
+ '<tr><td>办理周期</td><td>以已发布内容为准</td><td>以已发布内容为准</td><td>以已发布内容为准</td></tr>'+
+ '<tr><td>通行范围</td><td>项目说明已列</td><td>项目说明已列</td><td>项目说明已列</td></tr>'+
+ '<tr><td>居住要求</td><td>项目说明已列</td><td>项目说明已列</td><td>项目说明已列</td></tr></table>'+
+ '<div class="card" style="margin-top:12px;padding:12px 14px;display:flex;gap:9px;align-items:center;"><div style="flex:1;font-size:12.5px;">与“通行+教育”目标较贴近：技术居留 A</div><span class="st g">建议</span></div>'+
+ '<div style="font-size:11.5px;color:var(--mut);margin:8px 2px 12px;line-height:1.7;">比较结果是<b>建议而非资格结论</b>，须经顾问人工复核。</div>'+
+ '<div class="btn navy" data-go="review">提交顾问复核</div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* 顾问复核 */
+V.review='<div class="view">'+appbar('顾问复核',1)+'<div class="body">'+
+ '<div class="card"><div style="display:flex;flex-direction:column;gap:13px;">'+
+ '<div style="display:flex;gap:11px;align-items:center;"><div class="step-dot on">✓</div><div style="flex:1;font-size:13px;">需求画像与比较已提交</div><div style="font-size:11px;color:var(--faint);">今天</div></div>'+
+ '<div style="display:flex;gap:11px;align-items:center;"><div class="step-dot on">✓</div><div style="flex:1;font-size:13px;">顾问人工复核</div><div style="font-size:11px;color:var(--faint);">已完成</div></div>'+
+ '<div style="display:flex;gap:11px;align-items:center;"><div class="step-dot">3</div><div style="flex:1;font-size:13px;color:var(--faint);">预约沟通，确认正式方案</div></div>'+
+ '</div></div>'+
+ '<div class="card"><div style="font-size:10.5px;color:var(--faint);font-weight:700;margin-bottom:7px;">顾问复核意见（示例）</div>'+
+ '<div style="font-size:12.5px;line-height:1.85;">结合你的通行与教育目标，建议优先沟通技术居留 A；资金证明与随行子女材料需进一步确认。<b>此为人工复核意见，不构成结果承诺。</b></div></div>'+
+ '<div class="btn navy">预约我的顾问</div>'+
+ '<div style="margin-top:10px;"><div class="btn ghost" data-go="aihome">返回 AI 主页</div></div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* 会话：流式回答 */
+V.chat='<div class="view"><div class="body" style="padding-top:10px;">'+
+ '<div class="ctxchip">当前案件：CASE-0001 ×</div>'+
+ '<div class="msg user" style="margin-top:12px;"><div class="bub">我的案件现在到哪一步了？</div></div>'+
+ '<div class="msg ai"><div class="bub"><b>你的案件已被官方受理，目前在材料准备阶段。</b>'+
+ '<div style="margin-top:8px;">分项说明：<br>1. 官方已受理（上一阶段已完成）；<br>2. 当前阶段：材料准备，待补充无犯罪公证；<br>3. 暂无需要你支付的新费用。</div>'+
+ '<div class="src"><span class="tag off">官方已批准</span><span>受理回执 · 2026-09-24（已核验）</span></div>'+
+ '<div class="src"><span class="tag sp">未经核验</span><span>服务方周报提及“审理较快”，不能作为结论依据</span></div>'+
+ '<div class="nextstep">下一步：9 月 28 日前上传无犯罪公证；需要我说明公证怎么办理吗？</div>'+
+ '</div></div>'+
+ '<div class="sec-t">相关问题</div><div class="suggest"><div class="s" data-go="refuse"><div class="n">!</div>你就直接告诉我，最终能不能通过？</div></div>'+
+ '</div>'+composer()+tabbar('ai')+'</div>';
+
+/* 红线拒答 */
+V.refuse='<div class="view"><div class="body" style="padding-top:10px;">'+
+ '<div class="msg user"><div class="bub">你就直接告诉我，最终能不能通过？</div></div>'+
+ '<div class="msg ai"><div class="bub">我不能预测审批结果，也不能给出“能不能通过”的结论——结果由官方依法审核决定。<br><br>我可以为你：说明当前进度与差距、列出已核验的事实，或帮你联系顾问做人工解答。'+
+ '<div class="nextstep">下一步：联系我的顾问（已为你发起）</div></div></div>'+
+ '</div>'+composer()+tabbar('ai')+'</div>';
+
+/* 单独同意 */
+V.consent='<div class="view">'+appbar('案件问答 · 授权说明',1)+'<div class="body">'+
+ '<div class="gradband" style="padding:15px 17px;margin-bottom:13px;"><div style="font-size:13.5px;line-height:1.8;">为回答你的问题，将向模型提供必要的<b>案件片段</b>（如进度、费用项）。模型运行在你本机，片段不向第三方发送。你可以随时撤回授权。</div></div>'+
+ '<div class="consent on"><div class="ck"></div><div>我已知悉并同意提供案件片段用于本次问答</div></div>'+
+ '<div class="consent"><div class="ck"></div><div>我知道 AI 的回答仅为信息整理，不是资格认定或结果承诺</div></div>'+
+ '<div style="margin-top:8px;"><div class="btn berry" data-go="chat">同意并开始提问</div></div>'+
+ '<div style="margin-top:10px;"><div class="btn ghost" data-go="aihome">暂不同意（仅可使用通用科普）</div></div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* 历史会话 */
+V.hist='<div class="view">'+appbar('我的问答',1)+'<div class="body hist">'+
+ '<div class="s" data-go="chat"><div style="flex:1;">我的案件现在到哪一步了</div><div class="d">今天</div></div>'+
+ '<div class="s" data-go="chat"><div style="flex:1;">技术居留 · 费用分项咨询</div><div class="d">昨天</div></div>'+
+ '<div class="s" data-go="chat"><div style="flex:1;">无犯罪公证材料要求</div><div class="d">周一</div></div>'+
+ '<div class="s" data-go="chat"><div style="flex:1;">随行子女材料清单</div><div class="d">9/24</div></div>'+
+ '<div class="sec-t">会话治理</div><div class="btn ghost">清空全部会话</div>'+
+ '<div style="font-size:11.5px;color:var(--mut);margin-top:10px;line-height:1.7;">注销账户时，全部会话随注销流程一并删除。</div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* 每周简报 */
+V.brief='<div class="view">'+appbar('本周进展简报',1)+'<div class="body">'+
+ '<div class="card"><div style="font-size:10.5px;color:var(--faint);font-weight:700;margin-bottom:9px;">本周进展（已核验）</div><div style="display:flex;gap:10px;align-items:center;"><div style="flex:1;font-size:13px;">官方已受理你的申请</div><span class="st g">off</span></div></div>'+
+ '<div class="card"><div style="font-size:10.5px;color:var(--faint);font-weight:700;margin-bottom:9px;">待办（1）</div><div style="display:flex;gap:10px;align-items:center;"><div style="flex:1;font-size:13px;">上传无犯罪公证 · 临近截止</div><div class="btn sm navy" data-go="chat">问 AI</div></div></div>'+
+ '<div class="card"><div style="font-size:10.5px;color:var(--faint);font-weight:700;margin-bottom:7px;">费用</div><div style="font-size:13px;">本周无新增待付费用</div></div>'+
+ '<div style="font-size:11.5px;color:var(--mut);margin:6px 2px 12px;line-height:1.7;">简报按周生成，仅含你有权查看的内容，可在通知设置中调整。</div>'+
+ '<div class="btn ghost" data-go="aihome">返回 AI 主页</div>'+
+ '</div>'+tabbar('ai')+'</div>';
+
+/* 模型不可用 */
+V.unavailable='<div class="view"><div class="body"><div class="statebox">'+
+ '<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg></div>'+
+ '<b style="color:var(--ink);font-size:15px;">AI 助手暂时不可用</b>'+
+ '<div>未检测到本机模型（Ollama 未运行，或未授权当前网站）。你仍可查看静态进度与费用。</div>'+
+ '<div style="display:flex;flex-direction:column;gap:9px;width:100%;margin-top:8px;"><div class="btn navy">查看我的案件（静态）</div><div class="btn ghost">查看配置指引</div></div>'+
+ '</div></div>'+tabbar('ai')+'</div>';
+
 /* render */
 const root=document.getElementById('root');
-Object.keys(V).forEach(k=>{const w=document.createElement('div');w.innerHTML=V[k];root.appendChild(w.firstElementChild);});
+Object.keys(V).forEach(k=>{const w=document.createElement('div');w.innerHTML=V[k];const node=w.firstElementChild;if(!node.id)node.id='v-'+k;root.appendChild(node);});
 let hist=['login'];
 function go(k,push){const el=document.getElementById('v-'+k);if(!el)return;
  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on','back'));
@@ -543,7 +722,9 @@ function qpick(el){[...el.parentNode.children].forEach(c=>c.classList.remove('on
 document.addEventListener('click',e=>{
  const g=e.target.closest('[data-go]');if(g){go(g.dataset.go);return;}
  const tt=e.target.closest('[data-toast]');if(tt){toast(tt.dataset.toast);return;}
- const q=e.target.closest('.qopt');if(q)qpick(q);
+ const q=e.target.closest('.qopt');if(q){qpick(q);return;}
+ const cc=e.target.closest('.consent');if(cc){cc.classList.toggle('on');return;}
+ const ch=e.target.closest('.chip');if(ch){ch.classList.toggle('on');return;}
 });
 go('login',false);
 </script>

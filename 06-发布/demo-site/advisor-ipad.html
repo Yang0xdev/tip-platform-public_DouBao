@@ -123,6 +123,15 @@ a:focus-visible,button:focus-visible,.btn:focus-visible{outline:2.5px solid #AF2
 .gradline{height:2px;border:0;border-radius:2px;background:var(--grad);background-size:200% 200%;
  animation:drift 16s ease-in-out infinite alternate;}
 @media(prefers-reduced-motion:reduce){.skeleton::after,.gradline{animation:none!important;}}
+/* AI 讲解伴侣（v1.8 并入，仅工作模式顾问可见） */
+.ai-comp{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;}
+.ai-comp-head{width:100%;display:flex;align-items:center;gap:8px;border:0;background:var(--navy-50);
+ color:var(--navy);font-size:11.5px;font-weight:700;padding:9px 12px;cursor:pointer;font-family:inherit;}
+.ai-comp-state{font-size:11px;font-weight:600;color:var(--faint);}
+.ai-comp-body{padding:10px 11px;display:flex;flex-direction:column;gap:8px;}
+.ai-hint{border:1px solid var(--line-2);border-left:3px solid var(--navy);border-radius:9px;padding:9px 10px;
+ font-size:11px;line-height:1.75;color:var(--mut);}
+.ai-hint b{color:var(--ink);font-size:11.5px;}
 </style>
 </head>
 <body>
@@ -179,6 +188,16 @@ a:focus-visible,button:focus-visible,.btn:focus-visible{outline:2.5px solid #AF2
             <div class="task"><b>PROP-312 双人复核</b><span style="color:var(--faint);">复核通过后方可发送客户</span></div>
             <div class="task"><b>B 地区授权申请审核中</b><span style="color:var(--faint);">通过前不可报价、不锁佣</span></div>
             <div class="task"><b>林某备案 9/30 到期</b><span style="color:var(--faint);">联动客户交接，停新接旧不失联</span></div>
+            <h5 style="margin-top:16px;">AI 讲解伴侣（仅顾问可见 · 默认收起）</h5>
+            <div class="ai-comp" id="ai-comp">
+              <button class="ai-comp-head" onclick="var b=document.getElementById('ai-comp-body');var c=document.getElementById('ai-comp');var h=b.style.display==='block';b.style.display=h?'none':'block';c.className=h?'ai-comp':'ai-comp open';this.querySelector('.ai-comp-state').textContent=h?'唤起 ›':'收起';"><span style="flex:1;text-align:left;">展业提示（grounded · 不答结果）</span><span class="ai-comp-state">唤起 ›</span></button>
+              <div class="ai-comp-body" id="ai-comp-body" style="display:none;">
+                <div class="ai-hint"><b>客户问“多久能办”</b><br>以已发布内容说明参考区间，非时限承诺。</div>
+                <div class="ai-hint"><b>客户问“能不能通过”</b><br>不预测结果；说明进度以官方/已核验记录为准。</div>
+                <div class="ai-hint"><b>现场记录</b><br>轻记录会后统一整理，不直接发送、不入对客视图。</div>
+                <div class="ai-hint" style="color:var(--red);border-color:var(--red-bg);">红线：提示层客户视角不可见；演示模式自动隐藏。</div>
+              </div>
+            </div>
             <h5 style="margin-top:16px;">只读红线</h5>
             <div class="task" style="color:var(--mut);">不可改金额 / 到账 / 官方进度；越权操作服务端拒绝并审计。</div>
           </div>
