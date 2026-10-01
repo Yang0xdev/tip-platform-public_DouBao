@@ -61,6 +61,8 @@ import { ComplianceEventAdminController } from "./compliance/compliance-event.co
 import { DeletionAdminController, DeletionCustomerController } from "./deletion/deletion.controller.js";
 import { InviteAdminController } from "./invite/invite.controller.js";
 import { SeedLogController } from "./deletion/seed-log.controller.js";
+import { AiService } from "./ai/ai.service.js";
+import { AiController } from "./ai/ai.controller.js";
 import { TicketService } from "./ticket/ticket.service.js";
 import { CommissionService } from "./commission/commission.service.js";
 import { ComplianceEventService } from "./compliance/compliance-event.service.js";
@@ -134,7 +136,8 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     DeletionCustomerController,
     DeletionAdminController,
     InviteAdminController,
-    SeedLogController
+    SeedLogController,
+    AiController
   ],
   providers: [
     PrismaService,
@@ -162,6 +165,7 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
 TaskService,
 MaterialService,
 TimelineService,
+AiService,
     ConsentService,
     NotificationService,
     ProviderService,

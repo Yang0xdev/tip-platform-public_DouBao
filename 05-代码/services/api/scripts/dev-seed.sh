@@ -11,6 +11,7 @@ fi
 BASE="${BASE:-http://localhost:3100}"
 A=(-H "content-type: application/json" -H "x-tip-realm: staff" -H "x-tip-user: s-author")
 V=(-H "content-type: application/json" -H "x-tip-realm: staff" -H "x-tip-user: s-verifier")
+C=(-H "content-type: application/json" -H "x-tip-realm: customer" -H "x-tip-user: c-1980")
 j() { python3 -c "import sys,json;d=json.load(sys.stdin);print(d$1)"; }
 
 echo "== 境内机构（M1-01）"
@@ -161,9 +162,9 @@ echo "  provider active: $SP_ID（A02 准入）"
 # 材料清单 + 客户上传 + 平台审核（走真实门）
 curl -s "${V[@]}" -X POST "$BASE/admin/materials/checklist" -d "{\"caseId\":\"$CASE_ID\"}" >/dev/null
 MAT_ID=$(curl -s "${V[@]}" "$BASE/admin/materials?caseId=$CASE_ID" | j "['records'][0]['id']")
-curl -s "${V[@]}" -H "x-tip-realm:customer" -H "x-tip-user:c-1980" -X POST \
+curl -s "${C[@]}" -X POST \
   "$BASE/v1/materials/upload" -d "{
-    \"caseId\":\"$CASE_ID\",\"itemId\":\"$MAT_ID\",
+    \"caseId\":\"$CASE_ID\",\"personRef\":\"c-1980\",\"itemCode\":\"passport\",
     \"fileHash\":\"hash-demo-1\",\"artifactRef\":\"L3://p1.jpg\",
     \"mime\":\"image/jpeg\",\"sizeBytes\":102400
   }" >/dev/null

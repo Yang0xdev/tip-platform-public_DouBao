@@ -160,5 +160,22 @@ export const api = {
   listNotifications: () => getJson<{ records: unknown[] }>("/v1/notifications", true),
   listTickets: () => getJson<{ records: Array<{ id: string; kind: string; title: string; state: string; complaintCategory: string | null; createdAt: string }> }>("/v1/tickets/mine", true),
   createTicket: (body: { kind: string; title: string; description: string }) =>
-    postJson<{ id: string }>("/v1/tickets", body, true)
+    postJson<{ id: string }>("/v1/tickets", body, true),
+  aiConsent: () => getJson<{ granted: boolean; at: string | null }>("/v1/ai/consent", true),
+  aiSetConsent: (granted: boolean) => postJson<{ granted: boolean }>("/v1/ai/consent", { granted }, true),
+  aiSuggestions: () => getJson<{ records: Array<{ key: string; text: string }> }>("/v1/ai/suggestions", true),
+  aiAsk: (message: string) => postJson<AiAnswerView>("/v1/ai/ask", { message }, true)
 };
+
+export interface AiSourceView {
+  level: string;
+  title: string;
+  ref: string;
+}
+
+export interface AiAnswerView {
+  text: string;
+  sources: AiSourceView[];
+  next?: string;
+  needConsent?: boolean;
+}

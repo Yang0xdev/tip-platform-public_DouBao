@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 知识工程架构：知识编译层（LLM Wiki + LightRAG + 路由）</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23AF2D67'/%3E%3Cstop offset='1' stop-color='%23002661'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M8 20l5-6 4 3 7-9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Manrope:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+:root{--navy:#002661;--navy-50:#EDF1F8;--navy-100:#DCE4F2;--berry:#AF2D67;--berry-50:#FAEEF4;
+--ink:#1B2433;--mut:#5E6B7E;--faint:#8A95A6;--line:#E5E9F0;--paper:#F5F7FA;
+--green:#177A5B;--green-bg:#E6F4EE;--amber:#B45309;--amber-bg:#FBF1E2;--red:#C03221;--red-bg:#FCEBEA;--blue:#1D5F8A;--blue-bg:#E9F2F8;
+--grad:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Manrope,"Noto Sans SC",sans-serif;background:#E9EDF3;color:var(--ink);line-height:1.6;}
+.wrap{max-width:1060px;margin:0 auto;padding:40px 20px 70px;}
+.head{text-align:center;margin-bottom:30px;}
+.head h1{font-size:24px;font-weight:800;}
+.head p{font-size:13.5px;color:var(--mut);margin-top:9px;}
+.tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:18px 0 6px;}
+.tab{font-size:12.5px;font-weight:700;border:1.5px solid var(--line);background:#fff;color:var(--mut);border-radius:999px;padding:7px 17px;cursor:pointer;transition:all .25s;}
+.tab.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+.panel{display:none;animation:rise .4s cubic-bezier(.22,1,.36,1);}
+.panel.on{display:block;}
+@keyframes rise{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+.card{background:#fff;border-radius:18px;box-shadow:0 8px 24px rgba(15,35,80,.08);padding:22px 24px;margin-bottom:16px;}
+h2{font-size:16px;font-weight:800;margin-bottom:14px;}
+.layer{border-radius:14px;padding:15px 18px;margin-bottom:10px;display:flex;gap:14px;align-items:center;}
+.layer .tag{font-size:11px;font-weight:800;border-radius:8px;padding:4px 10px;flex:none;min-width:74px;text-align:center;}
+.layer .body{flex:1;font-size:13px;}
+.layer .body b{font-size:13.5px;}
+.layer .body span{color:var(--mut);font-size:12px;}
+.l0{background:var(--red-bg);}.l0 .tag{background:var(--red);color:#fff;}
+.l1{background:var(--berry-50);}.l1 .tag{background:var(--berry);color:#fff;}
+.l2{background:var(--blue-bg);}.l2 .tag{background:var(--blue);color:#fff;}
+.l3{background:var(--navy-50);}.l3 .tag{background:var(--navy);color:#fff;}
+.arrow{text-align:center;color:var(--faint);font-size:18px;margin:-4px 0 6px;}
+.flow{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch;}
+.node{flex:1;min-width:150px;background:var(--paper);border:1.5px solid var(--line);border-radius:13px;padding:13px 15px;font-size:12.5px;}
+.node b{display:block;font-size:13px;margin-bottom:5px;}
+.node.qa{background:var(--navy);color:#fff;border:0;}
+.node.qa span{color:rgba(255,255,255,.82);font-size:11.5px;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);}
+th{font-size:11.5px;color:var(--faint);font-weight:700;}
+.pill{display:inline-block;font-size:11px;font-weight:700;border-radius:7px;padding:3px 9px;}
+.pill.g{background:var(--green-bg);color:var(--green);}.pill.a{background:var(--amber-bg);color:var(--amber);}.pill.r{background:var(--red-bg);color:var(--red);}
+.krow{display:flex;gap:12px;flex-wrap:wrap;}
+.k{flex:1;min-width:210px;background:var(--paper);border-radius:14px;padding:16px 18px;}
+.k .n{width:34px;height:34px;border-radius:10px;background:var(--grad);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px;margin-bottom:10px;}
+.k b{font-size:13.5px;}.k p{font-size:12px;color:var(--mut);margin-top:5px;line-height:1.7;}
+.back{display:inline-block;margin-top:14px;font-size:12.5px;color:var(--navy);font-weight:700;text-decoration:none;}
+@media(max-width:640px){.head h1{font-size:19px;}.layer{flex-direction:column;align-items:flex-start;gap:8px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="head">
+  <h1>AI 知识工程架构 · 知识编译层</h1>
+  <p>从“每次临时检索”到“先把知识编译成可复利的资产”：LLM Wiki 为主体，LightRAG 图谱支撑多跳比较，轻 Agent 路由</p>
+  <div class="tabs">
+   <div class="tab on" data-p="stack">分层架构</div>
+   <div class="tab" data-p="query">查询路由</div>
+   <div class="tab" data-p="compare">路径对比</div>
+   <div class="tab" data-p="phase">分期落地</div>
+  </div>
+ </div>
+
+ <div class="panel on" id="p-stack">
+  <div class="card">
+   <h2>四层知识编译栈（自下而上）</h2>
+   <div class="layer l0"><div class="tag">L0 raw</div><div class="body"><b>不可变原件</b> <span>现有文档存储；L3 独立桶、不进模型；唯一事实来源</span></div></div>
+   <div class="arrow">↑ ingest（一次一份）</div>
+   <div class="layer l1"><div class="tag">L1 Wiki</div><div class="body"><b>编译页（Markdown）</b> <span>项目/概念/实体/对比/总览；frontmatter 含来源、级别、版本、复核人；四眼后发布</span></div></div>
+   <div class="layer l2"><div class="tag">L2 图谱</div><div class="body"><b>LightRAG 式增量子图</b> <span>国家/项目/要求/客户情境节点与关系；支撑匹配、比较、多跳</span></div></div>
+   <div class="layer l3"><div class="tag">L3 向量</div><div class="body"><b>向量索引（按需）</b> <span>语料增长后补，单事实定位；小规模先不建</span></div></div>
+   <div class="arrow">↑ 定时 Lint：冲突 / 旧结论 / 孤立页 / 缺引用 / 来源失效联动下架</div>
+  </div>
+ </div>
+
+ <div class="panel" id="p-query">
+  <div class="card">
+   <h2>查询时：轻 Agent 路由（可枚举、可控）</h2>
+   <div class="flow">
+    <div class="node qa"><b>客户 / 顾问提问</b><span>文字或语音（语音仅转文字）</span></div>
+    <div class="node"><b>问题分类</b><span>事实定位 / 匹配比较 / 全局总结</span></div>
+   </div>
+   <div style="height:10px;"></div>
+   <div class="flow">
+    <div class="node"><b>事实 → Wiki / 向量</b><span>政策、费用、模板条文</span></div>
+    <div class="node"><b>匹配比较 → 图谱</b><span>项目适配、多跳、综合方案</span></div>
+    <div class="node"><b>全局 → 主题页</b><span>未来社区摘要（K3）</span></div>
+   </div>
+   <div style="height:10px;"></div>
+   <div class="flow">
+    <div class="node qa"><b>带引用的草稿</b><span>结论 → 分项 → 来源 co/off → 下一步</span></div>
+    <div class="node"><b>人工确认署名</b><span>AI 不触发业务动作、不做结果承诺</span></div>
+   </div>
+  </div>
+ </div>
+
+ <div class="panel" id="p-compare">
+  <div class="card">
+   <h2>五种路径对比（按问题类型路由，非互斥）</h2>
+   <table>
+    <tr><th>路径</th><th>强在</th><th>多跳/全局</th><th>成本/更新</th></tr>
+    <tr><td>向量 RAG</td><td>单文档事实</td><td><span class="pill r">弱</span></td><td>低 / 增量</td></tr>
+    <tr><td>微软 GraphRAG</td><td>全局战略问题</td><td><span class="pill g">强</span></td><td>高 / 重建社区</td></tr>
+    <tr><td>LightRAG</td><td>多跳+比较</td><td><span class="pill g">强</span></td><td>低-中 / 增量</td></tr>
+    <tr><td>Agentic RAG</td><td>复杂任务</td><td><span class="pill g">强</span></td><td>延迟高</td></tr>
+    <tr><td><b>LLM Wiki</b></td><td>沉淀复利、可审计</td><td><span class="pill a">中</span></td><td>低 / 需核查层</td></tr>
+   </table>
+   <p style="font-size:12px;color:var(--mut);margin-top:12px;">本平台选择：LLM Wiki 主体 + LightRAG 图谱 + 按需向量 + 轻路由；完整 GraphRAG 与纯 RAG 不采用。</p>
+  </div>
+ </div>
+
+ <div class="panel" id="p-phase">
+  <div class="card">
+   <h2>三期落地</h2>
+   <div class="krow">
+    <div class="k"><div class="n">K1</div><b>Wiki 编译器</b><p>ingest → Wiki 草稿 + index/log → 四眼 → 发布；定时 Lint。服务总后台知识中心与三端事实问答。</p></div>
+    <div class="k"><div class="n">K2</div><b>轻量图谱</b><p>增量抽取项目/要求/情境关系，支撑客户端访谈比较与顾问综合诉求方案。</p></div>
+    <div class="k"><div class="n">K3</div><b>向量 + 路由</b><p>语料达阈值后补向量索引；在线模型仅作难任务可选开关，默认关闭。</p></div>
+   </div>
+   <a class="back" href="/">‹ 返回演示首页</a>
+  </div>
+ </div>
+</div>
+<script>
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+ document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));
+ t.classList.add('on');document.getElementById('p-'+t.dataset.p).classList.add('on');
+}));
+</script>
+</body>
+</html>

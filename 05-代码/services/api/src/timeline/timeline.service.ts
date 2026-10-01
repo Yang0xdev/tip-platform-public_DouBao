@@ -46,7 +46,9 @@ const FIXED_WORDING: Record<string, string> = {
   submitted: "已递交",
   accepted: "官方已受理",
   approved: "官方已批准",
-  refused: "官方未批准"
+  refused: "官方未批准",
+  material_submit: "材料已提交",
+  material_approved: "材料审核通过"
 };
 
 @Injectable()

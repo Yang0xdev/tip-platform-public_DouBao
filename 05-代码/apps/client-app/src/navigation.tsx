@@ -15,11 +15,13 @@ import FavoritesScreen from "./screens/FavoritesScreen";
 import CaseListScreen from "./screens/CaseListScreen";
 import CaseDetailScreen from "./screens/CaseDetailScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import AiScreen from "./screens/AiScreen";
 
 export type TabParamList = {
   HomeTab: undefined;
   CaseTab: undefined;
   ProjectsTab: undefined;
+  AiTab: undefined;
   GlobalTab: undefined;
   ServiceTab: undefined;
   MeTab: undefined;
@@ -64,6 +66,7 @@ function Tabs() {
       <Tab.Screen name="HomeTab" component={HomeScreen} options={{ title: "首页", headerShown: false, tabBarIcon: ({ color }) => <TabIcon glyph="⌂" color={color} /> }} />
       <Tab.Screen name="CaseTab" component={CaseListScreen} options={{ title: "办理", tabBarIcon: ({ color }) => <TabIcon glyph="◷" color={color} /> }} />
       <Tab.Screen name="ProjectsTab" component={ProjectListScreen} options={{ title: "项目", tabBarIcon: ({ color }) => <TabIcon glyph="▤" color={color} /> }} />
+      <Tab.Screen name="AiTab" component={AiScreen} options={{ title: "AI", tabBarActiveTintColor: colors.berry, tabBarIcon: ({ color }) => <TabIcon glyph="✦" color={color} /> }} />
       <Tab.Screen name="GlobalTab" component={GlobalAccessScreen} options={{ title: "全球通行", tabBarIcon: ({ color }) => <TabIcon glyph="◎" color={color} /> }} />
       <Tab.Screen name="ServiceTab" component={ServiceScreen} options={{ title: "服务", tabBarIcon: ({ color }) => <TabIcon glyph="♢" color={color} /> }} />
       <Tab.Screen name="MeTab" component={ProfileScreen} options={{ title: "我的", tabBarIcon: ({ color }) => <TabIcon glyph="◔" color={color} /> }} />
