@@ -66,3 +66,18 @@
    已发布资料查询、客户进展；全部按顾问归属过滤，物理排除支付账户/到账明细/投诉正文/L3/非归属客户；
 3. 顾问 App 实时网页为 **6 Tab**，AI 中央（莓红 ✦）：工作台/客户/案件/[AI]/方案/我的；
 4. 欠债（登记）：「学习」Tab 与中央凸起 orb/Reanimated 动效后续补齐，视觉契约以顾问端 AI 高保真 v1.8 为准。
+
+## 7. 总后台 AI 知识与运营中心初步冻结（2026-10-01）
+
+1. 端点冻结：`GET/POST /admin/ai-knowledge[/ingest/:id/submit/:id/review/:id/invalidate]`、`GET /admin/ai/metrics`；
+2. 知识条目四眼 draft→submitted→published（复核人≠编制人，服务端强制）；失效立即从对客列表移除；
+3. 运营指标仅含系统可计数项（客户/顾问 AI 提问、转人工兜底、授权客户、已发布知识），
+   不含获批率/成交额等业务效果；拦截数/采纳率 LLM 接入后启用；
+4. 后台新增模块 **A13 AI 知识运营**（实时页可执行）。
+
+## 8. 公网页面全量清单（2026-10-01，均经 https://demo.hbwhere.com 验证）
+
+- 入口 /；UI 总览 /ui-gallery；交易全链路 /transaction-flow；知识工程架构 /knowledge-arch；
+- AI 高保真：/ai（客户端 v1.5）、/advisor-ai（顾问 v1.8）、/admin-ai（总后台 v0.1）；
+- 五端高保真：/client、/advisor、/advisor-ipad、/admin、/portal；
+- 实时系统：/live/client（7 Tab，AI 可用）、/live/advisor（6 Tab，AI 可用）、/live/admin（A01–A13，A13 可执行）。
