@@ -14,6 +14,7 @@ import ClientDetailScreen from "./src/screens/ClientDetailScreen";
 import ProposalScreen from "./src/screens/ProposalScreen";
 import CasesScreen from "./src/screens/CasesScreen";
 import MeScreen from "./src/screens/MeScreen";
+import AdvisorAiScreen from "./src/screens/AdvisorAiScreen";
 import { colors } from "@tip/ui-native";
 
 export type RootStackParamList = {
@@ -65,6 +66,8 @@ export default function App() {
             <Tab.Screen name="工作台" component={QueueScreen} options={{ tabBarIcon: tabIcon("◔") }} />
             <Tab.Screen name="客户" component={ClientsStack} options={{ tabBarIcon: tabIcon("◍") }} />
             <Tab.Screen name="案件" component={CasesScreen} options={{ tabBarIcon: tabIcon("◷") }} />
+            <Tab.Screen name="AI" component={AdvisorAiScreen}
+              options={{ tabBarIcon: tabIcon("✦"), tabBarActiveTintColor: colors.berry }} />
             <Tab.Screen name="方案" component={ProposalScreen} options={{ tabBarIcon: tabIcon("≡") }} />
             <Tab.Screen name="我的" component={MeScreen} options={{ tabBarIcon: tabIcon("◌") }} />
           </Tab.Navigator>

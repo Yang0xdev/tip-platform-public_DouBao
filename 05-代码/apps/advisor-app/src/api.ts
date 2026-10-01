@@ -120,5 +120,13 @@ export const api = {
   case: (id: string) => req<CaseRow>(`/advisor/cases/${id}`),
   tasks: () => req<{ records: TaskRow[] }>("/advisor/tasks/mine"),
   materials: (caseId: string) => req<{ records: MaterialRow[] }>(`/advisor/materials?caseId=${caseId}`),
-  commissions: () => req<{ records: Array<{ id: string; orderId: string; feeItemCode: string; amountMinor: string; currency: string; state: string; settlementBatchId: string | null }> }>("/advisor/commissions/mine")
+  commissions: () => req<{ records: Array<{ id: string; orderId: string; feeItemCode: string; amountMinor: string; currency: string; state: string; settlementBatchId: string | null }> }>("/advisor/commissions/mine"),
+  aiSuggestions: () => req<{ records: Array<{ key: string; text: string }> }>("/advisor/ai/suggestions"),
+  aiAsk: (message: string) => req<AiAnswerView>("/advisor/ai/ask", { method: "POST", body: JSON.stringify({ message }) })
 };
+
+export interface AiAnswerView {
+  text: string;
+  sources: Array<{ level: string; title: string; ref: string }>;
+  next?: string;
+}
