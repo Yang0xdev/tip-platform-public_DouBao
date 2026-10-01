@@ -124,11 +124,22 @@ export class AiService {
       return this.materialAnswer(caseRecords);
     }
 
+    this.audit.record({
+      actor: customerRef, realm: "customer", action: "ai.ask",
+      resource: customerRef, result: "allow", reason: "fallback"
+    });
     return {
       text: "我没有在你的案件资料中找到直接答案，为避免误导，建议联系你的顾问确认。",
       sources: [],
       next: "也可以在「服务」页提交工单。"
     };
+  }
+
+  /** 已授权客户数（运营指标） */
+  consentCount(): number {
+    let n = 0;
+    for (const c of this.consents.values()) if (c.granted) n += 1;
+    return n;
   }
 
   /* ---------- 答案构造 ---------- */

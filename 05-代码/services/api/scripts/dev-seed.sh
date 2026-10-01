@@ -229,3 +229,20 @@ echo "  invite created（邀请灰度门）"
 curl -s -H "content-type: application/json" -H "x-tip-realm:customer" -H "x-tip-user:c-3000" -X POST \
   "$BASE/v1/account/deletion" -d '{"reason":"不再需要服务"}' >/dev/null
 echo "  deletion cooling（15 天冷静期）"
+
+# ============ AI 初步：知识条目四眼 + 客户授权与问答（运营指标演示） ============
+KN=$(curl -s "${A[@]}" -X POST "$BASE/admin/ai-knowledge/ingest" -d '{
+  "title":"识别“包成功、不成功全退”话术（示例）",
+  "kind":"education",
+  "sourceRef":"EDU-2026-001",
+  "level":"co",
+  "body":"任何承诺获批结果的说法都违规；进度以官方/已核验记录为准。"
+}')
+KN_ID=$(echo "$KN" | j "['id']")
+curl -s "${A[@]}" -X POST "$BASE/admin/ai-knowledge/$KN_ID/submit" >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/ai-knowledge/$KN_ID/review" -d '{"decision":"approve"}' >/dev/null
+echo "  knowledge published: $KN_ID（四眼）"
+curl -s "${C[@]}" -X POST "$BASE/v1/ai/consent" -d '{"granted":true}' >/dev/null
+curl -s "${C[@]}" -X POST "$BASE/v1/ai/ask" -d '{"message":"我的案件到哪一步了"}' >/dev/null
+curl -s "${C[@]}" -X POST "$BASE/v1/ai/ask" -d '{"message":"我还有哪些费用"}' >/dev/null
+echo "  ai metrics seeded（客户授权 + 2 次 grounded 问答）"

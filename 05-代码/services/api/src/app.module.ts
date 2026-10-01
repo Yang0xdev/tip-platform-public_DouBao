@@ -65,6 +65,8 @@ import { AiService } from "./ai/ai.service.js";
 import { AiController } from "./ai/ai.controller.js";
 import { AdvisorAiService } from "./ai/advisor-ai.service.js";
 import { AdvisorAiController } from "./ai/advisor-ai.controller.js";
+import { KnowledgeService } from "./ai/knowledge.service.js";
+import { KnowledgeController } from "./ai/knowledge.controller.js";
 import { TicketService } from "./ticket/ticket.service.js";
 import { CommissionService } from "./commission/commission.service.js";
 import { ComplianceEventService } from "./compliance/compliance-event.service.js";
@@ -140,7 +142,8 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     InviteAdminController,
     SeedLogController,
     AiController,
-    AdvisorAiController
+    AdvisorAiController,
+    KnowledgeController
   ],
   providers: [
     PrismaService,
@@ -170,6 +173,7 @@ MaterialService,
 TimelineService,
 AiService,
 AdvisorAiService,
+KnowledgeService,
     ConsentService,
     NotificationService,
     ProviderService,

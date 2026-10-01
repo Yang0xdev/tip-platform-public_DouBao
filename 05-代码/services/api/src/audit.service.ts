@@ -104,4 +104,9 @@ export class AuditService implements OnModuleInit {
   tail(limit = 20): AuditRecord[] {
     return this.chain.slice(-limit);
   }
+
+  /** 按 action（可选 reason）计数，供运营指标使用 */
+  countAction(action: string, reason?: string): number {
+    return this.chain.filter((r) => r.action === action && (reason === undefined || r.reason === reason)).length;
+  }
 }
