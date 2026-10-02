@@ -122,7 +122,16 @@ export const api = {
   materials: (caseId: string) => req<{ records: MaterialRow[] }>(`/advisor/materials?caseId=${caseId}`),
   commissions: () => req<{ records: Array<{ id: string; orderId: string; feeItemCode: string; amountMinor: string; currency: string; state: string; settlementBatchId: string | null }> }>("/advisor/commissions/mine"),
   aiSuggestions: () => req<{ records: Array<{ key: string; text: string }> }>("/advisor/ai/suggestions"),
-  aiAsk: (message: string) => req<AiAnswerView>("/advisor/ai/ask", { method: "POST", body: JSON.stringify({ message }) })
+  aiAsk: (message: string) => req<AiAnswerView>("/advisor/ai/ask", { method: "POST", body: JSON.stringify({ message }) }),
+  aiContext: (kind: string, customerRef?: string) => {
+    const qs = new URLSearchParams({ kind });
+    if (customerRef) qs.set("customerRef", customerRef);
+    return req<import("./ai/types").AdvisorContextEnvelope>(`/advisor/ai/context?${qs.toString()}`);
+  },
+  createTask: (body: {
+    caseId: string; type: string; title: string; ownerId: string;
+    dueAt: string; source: "official" | "contract" | "sla"; t0: boolean;
+  }) => req<{ id: string }>("/admin/tasks", { method: "POST", body: JSON.stringify(body) })
 };
 
 export interface AiAnswerView {

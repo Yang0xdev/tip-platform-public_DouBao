@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
-import { CurrentActor, RealmAllowed, RealmGuard } from "../realm.guard.js";
+import { Body, Controller, Get, Post, Query, UseGuards } from "@nestjs/common";
+import { CurrentActor, RealmAllowed, RealmGuard, type Actor } from "../realm.guard.js";
 import { AdvisorAiService } from "./advisor-ai.service.js";
 
 /**
@@ -18,7 +18,17 @@ export class AdvisorAiController {
   }
 
   @Post("ask")
-  ask(@Body() body: { message: string }, @CurrentActor() actor: { user: string }) {
+  ask(@Body() body: { message: string }, @CurrentActor() actor: Actor) {
     return this.ai.ask(actor.user, body?.message ?? "");
+  }
+
+  /** U2：顾问上下文包（锚定客户） */
+  @Get("context")
+  context(
+    @CurrentActor() actor: Actor,
+    @Query("customerRef") customerRef?: string,
+    @Query("kind") kind?: string
+  ) {
+    return this.ai.context(actor.user, customerRef || null, kind ?? "general");
   }
 }
