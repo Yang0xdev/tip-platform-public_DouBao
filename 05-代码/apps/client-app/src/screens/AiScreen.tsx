@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { FlatList, Text, View, Pressable, TextInput, KeyboardAvoidingView, Platform } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { api, type AiAnswerView } from "../api";
+import { AiOrchestrator, type AiMode } from "../ai/orchestrator";
 import { Card, colors, signatureGradient } from "../ui";
 
 /**
- * 客户端 AI（初步功能）：
+ * 客户端 AI：
  *  - 首次进入显单独同意（案件片段授权，可拒绝/可撤回）；
- *  - 对话式问答，答案由服务端从真实 co/off 事实确定性拼装、带来源；
- *  - 本版不接 LLM；ChatProvider(Qwen) 为后续升级。
+ *  - U1 混合：本机 Ollama(Qwen) 在线时走 grounded + LLM 流式（L），
+ *    不可用/校验不过自动回退确定性 grounded 问答（D，现有冻结行为）。
  */
 
 interface Msg {
@@ -17,6 +18,7 @@ interface Msg {
   text: string;
   sources?: AiAnswerView["sources"];
   next?: string;
+  streaming?: boolean;
 }
 
 const LEVEL_LABEL: Record<string, string> = { cu: "客户记录", co: "公司记录", sp: "服务方", off: "官方核验" };
@@ -27,12 +29,15 @@ export default function AiScreen() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [mode, setMode] = useState<{ mode: AiMode; model: string | null }>({ mode: "D", model: null });
   const seq = useRef(0);
   const listRef = useRef<FlatList<Msg>>(null);
+  const orch = useRef(new AiOrchestrator());
 
   useEffect(() => {
     api.aiConsent().then((c) => setConsent(c.granted)).catch(() => setConsent(false));
     api.aiSuggestions().then((d) => setSuggestions(d.records.map((r) => r.text))).catch(() => {});
+    orch.current.probe().then(setMode).catch(() => {});
   }, []);
 
   const nextId = () => {
@@ -46,18 +51,26 @@ export default function AiScreen() {
     setInput("");
     setBusy(true);
     setMessages((m) => [...m, { id: nextId(), role: "user", text: q }]);
+    const aiId = nextId();
+    setMessages((m) => [...m, { id: aiId, role: "ai", text: "", streaming: true }]);
+    const patch = (p: Partial<Msg>) =>
+      setMessages((m) => m.map((x) => (x.id === aiId ? { ...x, ...p } : x)));
     try {
-      const a = await api.aiAsk(q);
-      if (a.needConsent) {
+      const r = await orch.current.ask(q, {
+        onDelta: (full) => patch({ text: full })
+      });
+      if (r.needConsent) {
         setConsent(false);
+        setMessages((m) => m.filter((x) => x.id !== aiId));
       } else {
-        setMessages((m) => [...m, { id: nextId(), role: "ai", text: a.text, sources: a.sources, next: a.next }]);
+        setMode({ mode: r.mode, model: r.model ?? null });
+        patch({ text: r.text, sources: r.sources, next: r.next, streaming: false });
       }
     } catch (e) {
-      setMessages((m) => [
-        ...m,
-        { id: nextId(), role: "ai", text: `暂时无法回答：${(e as Error).message}。请稍后再试或联系顾问。` }
-      ]);
+      patch({
+        text: `暂时无法回答：${(e as Error).message}。请稍后再试或联系顾问。`,
+        streaming: false
+      });
     } finally {
       setBusy(false);
     }
@@ -114,11 +127,37 @@ export default function AiScreen() {
         ListHeaderComponent={
           messages.length === 0 ? (
             <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 7,
+                  backgroundColor: mode.mode === "L" ? "#E6F4EE" : colors.navy50,
+                  borderRadius: 999,
+                  paddingVertical: 7,
+                  paddingHorizontal: 13,
+                  marginBottom: 14,
+                  alignSelf: "flex-start"
+                }}>
+                <View
+                  style={{
+                    width: 7,
+                    height: 7,
+                    borderRadius: 4,
+                    backgroundColor: mode.mode === "L" ? "#177A5B" : colors.faint
+                  }}
+                />
+                <Text style={{ fontSize: 11.5, color: mode.mode === "L" ? "#177A5B" : colors.mut, fontWeight: "600" }}>
+                  {mode.mode === "L"
+                    ? `已连接本地模型${mode.model ? ` · ${mode.model}` : ""}`
+                    : "基础模式（未检测到本地模型）"}
+                </Text>
+              </View>
               <Text style={{ fontSize: 17, fontWeight: "800", color: colors.ink, marginBottom: 4 }}>
                 你好，我是你的 AI 助手
               </Text>
               <Text style={{ fontSize: 13, color: colors.mut, marginBottom: 14 }}>
-                可以问我案件进度、费用、材料，或防骗问题
+                可以和我聊聊需求，或问案件进度、费用、材料、防骗问题
               </Text>
               {suggestions.map((s) => (
                 <Pressable key={s} onPress={() => send(s)} style={{ marginBottom: 8 }}>
@@ -142,7 +181,7 @@ export default function AiScreen() {
                 borderColor: colors.line
               }}>
               <Text style={{ fontSize: 13.5, color: item.role === "user" ? "#fff" : colors.ink, lineHeight: 21 }}>
-                {item.text}
+                {item.text || (item.streaming ? "正在调取已核验记录…" : "")}
               </Text>
               {item.sources && item.sources.length > 0 && (
                 <View style={{ marginTop: 9, borderTopWidth: 1, borderTopColor: colors.line, paddingTop: 8 }}>

@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, Query, UseGuards } from "@nestjs/common";
 import { CurrentActor, RealmAllowed, RealmGuard, type Actor } from "../realm.guard.js";
+import { AiContextService, type ContextKind } from "./context.service.js";
 import { AiService } from "./ai.service.js";
 
 /**
@@ -10,7 +11,28 @@ import { AiService } from "./ai.service.js";
 @UseGuards(RealmGuard)
 @RealmAllowed("customer")
 export class AiController {
-  constructor(private readonly ai: AiService) {}
+  constructor(
+    private readonly ai: AiService,
+    private readonly contextSvc: AiContextService
+  ) {}
+
+  /** U1：授权上下文包（grounded 片段） */
+  @Get("context")
+  context(
+    @CurrentActor() actor: Actor,
+    @Query("kind") kind: ContextKind,
+    @Query("caseId") caseId?: string,
+    @Query("projectCodes") projectCodes?: string
+  ) {
+    return this.contextSvc.build(
+      actor.user,
+      kind ?? "general",
+      {
+        caseId: caseId || undefined,
+        projectCodes: projectCodes ? projectCodes.split(",").filter(Boolean) : undefined
+      }
+    );
+  }
 
   @Get("consent")
   consent(@CurrentActor() actor: Actor) {

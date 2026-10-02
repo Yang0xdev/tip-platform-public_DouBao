@@ -63,6 +63,9 @@ import { InviteAdminController } from "./invite/invite.controller.js";
 import { SeedLogController } from "./deletion/seed-log.controller.js";
 import { AiService } from "./ai/ai.service.js";
 import { AiController } from "./ai/ai.controller.js";
+import { AiContextService } from "./ai/context.service.js";
+import { WikiController } from "./wiki/wiki.controller.js";
+import { WikiService } from "./wiki/wiki.service.js";
 import { AdvisorAiService } from "./ai/advisor-ai.service.js";
 import { AdvisorAiController } from "./ai/advisor-ai.controller.js";
 import { KnowledgeService } from "./ai/knowledge.service.js";
@@ -143,6 +146,7 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     SeedLogController,
     AiController,
     AdvisorAiController,
+    WikiController,
     KnowledgeController
   ],
   providers: [
@@ -174,6 +178,8 @@ TimelineService,
 AiService,
 AdvisorAiService,
 KnowledgeService,
+    AiContextService,
+    WikiService,
     ConsentService,
     NotificationService,
     ProviderService,

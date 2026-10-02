@@ -164,7 +164,13 @@ export const api = {
   aiConsent: () => getJson<{ granted: boolean; at: string | null }>("/v1/ai/consent", true),
   aiSetConsent: (granted: boolean) => postJson<{ granted: boolean }>("/v1/ai/consent", { granted }, true),
   aiSuggestions: () => getJson<{ records: Array<{ key: string; text: string }> }>("/v1/ai/suggestions", true),
-  aiAsk: (message: string) => postJson<AiAnswerView>("/v1/ai/ask", { message }, true)
+  aiAsk: (message: string) => postJson<AiAnswerView>("/v1/ai/ask", { message }, true),
+  aiContext: (kind: string, params?: { caseId?: string; projectCodes?: string[] }) => {
+    const qs = new URLSearchParams({ kind });
+    if (params?.caseId) qs.set("caseId", params.caseId);
+    if (params?.projectCodes?.length) qs.set("projectCodes", params.projectCodes.join(","));
+    return getJson<import("./ai/types").ContextEnvelope>(`/v1/ai/context?${qs.toString()}`, true);
+  }
 };
 
 export interface AiSourceView {
