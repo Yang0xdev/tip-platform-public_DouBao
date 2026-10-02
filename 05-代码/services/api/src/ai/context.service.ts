@@ -6,6 +6,7 @@ import { CaseService, STAGE_LABELS } from "../case/case.service.js";
 import { MaterialService } from "../material/material.service.js";
 import { OrderService } from "../order/order.service.js";
 import { TimelineService } from "../timeline/timeline.service.js";
+import { WikiService } from "../wiki/wiki.service.js";
 import { AiService } from "./ai.service.js";
 import { KnowledgeService } from "./knowledge.service.js";
 
@@ -62,7 +63,8 @@ export class AiContextService {
     private readonly knowledgeSvc: KnowledgeService,
     private readonly catalog: CatalogService,
     private readonly audit: AuditService,
-    private readonly ai: AiService
+    private readonly ai: AiService,
+    private readonly wiki: WikiService
   ) {}
 
   build(
@@ -244,11 +246,16 @@ export class AiContextService {
 
   private collectKnowledge(kind: ContextKind) {
     const records = this.knowledgeSvc.published().records;
-    return records.slice(0, 8).map((k) => ({
+    const out = records.slice(0, 8).map((k) => ({
       id: k.id,
       title: k.title,
       excerpt: this.clip(k.body)
     }));
+    // K1：已发布 Wiki 主题页作为编译层知识投影
+    for (const p of this.wiki.publishedPages().slice(0, 6)) {
+      out.push({ id: p.id, title: p.title, excerpt: this.clip(p.markdown) });
+    }
+    return out;
   }
 
   /* ---------------- 注入预扫与工具 ---------------- */
