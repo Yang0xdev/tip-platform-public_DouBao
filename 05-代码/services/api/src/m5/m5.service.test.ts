@@ -6,7 +6,8 @@ function expectError(fn: () => unknown, code: string) {
   try {
     fn();
   } catch (e) {
-    assert.equal((e as { code?: string }).code, code);
+    const ex = e as { code?: string; getResponse?: () => { code?: string } };
+    assert.equal(ex.getResponse?.().code ?? ex.code, code);
     return;
   }
   assert.fail(`应抛出 ${code}`);

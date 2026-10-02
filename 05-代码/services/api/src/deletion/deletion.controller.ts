@@ -34,7 +34,8 @@ export class DeletionCustomerController {
   @Get("deletion/mine")
   @RealmAllowed("customer")
   mine(@CurrentActor() actor: Actor) {
-    return this.deletions.forCustomer(actorUser(actor)) ?? null;
+    const r = this.deletions.forCustomer(actorUser(actor));
+    return { records: r ? [r] : [] };
   }
 }
 

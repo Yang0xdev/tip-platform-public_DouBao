@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, Injectable } from "@nestjs/common";
 import { AuditService } from "../audit.service.js";
 
 /**
@@ -22,9 +22,17 @@ export interface DeletionRequest {
   blockedReason: string | null;
 }
 
-export class DeletionError extends Error {
-  constructor(public code: string, message: string) {
-    super(message);
+const STATUS_BY_CODE: Record<string, number> = {
+  "43901": 400,
+  "43902": 409,
+  "43903": 409,
+  "43904": 409,
+  "43905": 404
+};
+
+export class DeletionError extends HttpException {
+  constructor(code: string, message: string) {
+    super({ code, message }, STATUS_BY_CODE[code] ?? 400);
   }
 }
 

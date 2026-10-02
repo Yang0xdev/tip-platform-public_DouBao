@@ -170,7 +170,29 @@ export const api = {
     if (params?.caseId) qs.set("caseId", params.caseId);
     if (params?.projectCodes?.length) qs.set("projectCodes", params.projectCodes.join(","));
     return getJson<import("./ai/types").ContextEnvelope>(`/v1/ai/context?${qs.toString()}`, true);
-  }
+  },
+  myEngagements: () =>
+    getJson<{ records: Array<{
+      id: string; source: string; state: string; projectCode: string | null;
+      advisorId: string | null; relationshipState: string | null; questionnaireGranted: boolean;
+    }> }>("/v1/engagements/mine", true),
+  consents: (caseId: string) =>
+    getJson<{ records: Array<{
+      id: string; personRef: string; action: string; state: string;
+      validUntil: string | null; channel: string;
+    }> }>(`/v1/consents?caseId=${caseId}`, true),
+  notifPrefs: (caseId: string) =>
+    getJson<{ app: boolean; sms: boolean; email: boolean }>(`/v1/notifications/prefs?caseId=${caseId}`, true),
+  setNotifPrefs: (caseId: string, prefs: { app: boolean; sms: boolean; email: boolean }) =>
+    postJson<unknown>("/v1/notifications/prefs", { caseId, ...prefs }, true),
+  requestDeletion: (reason: string) =>
+    postJson<{ id: string; state: string }>("/v1/account/deletion", { reason }, true),
+  cancelDeletion: (id: string) =>
+    postJson<{ state: string }>(`/v1/account/deletion/${id}/cancel`, {}, true),
+  myDeletions: () =>
+    getJson<{ records: Array<{ id: string; state: string; coolingUntil: string }> }>(
+      "/v1/account/deletion/mine", true
+    )
 };
 
 export interface AiSourceView {
