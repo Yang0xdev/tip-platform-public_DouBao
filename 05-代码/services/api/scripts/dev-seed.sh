@@ -53,6 +53,66 @@ echo "  published project: $PROJ_ID"
 curl -s "${A[@]}" -X POST "$BASE/admin/catalog/projects/drafts" -d '{"code":"PROJ-DIGITAL-C","title":"C国数字游民（示例草稿）","body":"草稿内容，待核验。"}' >/dev/null
 echo "  draft project created"
 
+echo "== 初评问卷 + 结论模板 + 规则集发布（M1-07/08）"
+QN=$(curl -s "${A[@]}" -X POST "$BASE/admin/assessment/templates/questionnaire/drafts" -d "{
+  \"code\":\"QN-RESIDENCE\",\"title\":\"技术居留初评问卷（示例）\",\"content\":{\"questions\":[
+    {\"code\":\"q_age\",\"group\":\"基本情况\",\"title\":\"你的年龄是？\",\"type\":\"number\",\"required\":true},
+    {\"code\":\"q_education\",\"group\":\"基本情况\",\"title\":\"你的最高学历？\",\"type\":\"single\",\"required\":true,\"options\":[
+      {\"value\":\"college\",\"label\":\"大专\"},{\"value\":\"bachelor\",\"label\":\"本科\"},
+      {\"value\":\"master\",\"label\":\"硕士\"},{\"value\":\"phd\",\"label\":\"博士\"}]},
+    {\"code\":\"q_employer\",\"group\":\"岗位与担保\",\"title\":\"是否已有合规雇主提供担保？\",\"type\":\"single\",\"required\":true,\"options\":[
+      {\"value\":\"yes\",\"label\":\"是\"},{\"value\":\"no\",\"label\":\"否\"}]},
+    {\"code\":\"q_offer\",\"group\":\"岗位与担保\",\"title\":\"是否已获得技术岗位聘用？\",\"type\":\"single\",\"required\":true,\"options\":[
+      {\"value\":\"yes\",\"label\":\"是\"},{\"value\":\"no\",\"label\":\"否\"}]},
+    {\"code\":\"q_income\",\"group\":\"岗位与担保\",\"title\":\"预计年薪（当地货币，示例数值）？\",\"type\":\"number\",\"required\":true},
+    {\"code\":\"q_background\",\"group\":\"背景情况\",\"title\":\"是否可提供无犯罪记录？\",\"type\":\"single\",\"required\":true,\"options\":[
+      {\"value\":\"yes\",\"label\":\"是\"},{\"value\":\"no\",\"label\":\"否\"}]}
+  ]}}")
+QN_ID=$(echo "$QN" | j "['id']")
+curl -s "${A[@]}" -X POST "$BASE/admin/assessment/templates/$QN_ID/submit" >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/assessment/templates/$QN_ID/review" -d '{"event":"approve"}' >/dev/null
+echo "  questionnaire published: $QN_ID"
+
+RT=$(curl -s "${A[@]}" -X POST "$BASE/admin/assessment/templates/result_template/drafts" -d "{
+  \"code\":\"RT-RESIDENCE\",\"title\":\"技术居留结论模板（示例）\",\"content\":{\"blocks\":{
+    \"eligible\":{\"title\":\"初步信息符合\",\"body\":\"你提供的信息与该路径已公示条件初步匹配；这是信息整理，不是资格认定，个案以官方审核为准。\"},
+    \"gap\":{\"title\":\"存在明确差距\",\"body\":\"部分条件目前不满足，可查看差距项与方向提示；不代表无法弥补。\"},
+    \"unconfirmed\":{\"title\":\"信息待确认\",\"body\":\"还有信息未提供，补全后可再次整理。\"},
+    \"not_committed\":{\"title\":\"信息未完成\",\"body\":\"必填项未完成，暂不能形成整理结果。\"}
+  },\"needsManualNote\":\"如需进一步解读，可联系顾问；结果不产生自动归属。\",\"noMatchNote\":\"当前试点暂无匹配路径时，请以官方渠道信息为准。\"}}")
+RT_ID=$(echo "$RT" | j "['id']")
+curl -s "${A[@]}" -X POST "$BASE/admin/assessment/templates/$RT_ID/submit" >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/assessment/templates/$RT_ID/review" -d '{"event":"approve"}' >/dev/null
+echo "  result template published: $RT_ID"
+
+RL=$(curl -s "${A[@]}" -X POST "$BASE/admin/assessment/rulesets/drafts" -d "{
+  \"projectCode\":\"PROJ-TECH-A\",\"ruleSet\":{\"projectCode\":\"PROJ-TECH-A\",\"requiredQuestions\":[
+    \"q_age\",\"q_education\",\"q_employer\",\"q_offer\",\"q_income\",\"q_background\"],\"dimensions\":[
+    {\"code\":\"d_age\",\"label\":\"年龄\",\"all\":[
+      {\"questionCode\":\"q_age\",\"op\":\"gte\",\"value\":18},
+      {\"questionCode\":\"q_age\",\"op\":\"lte\",\"value\":60}],
+      \"evidenceVerificationIds\":[\"$VF_ID\"]},
+    {\"code\":\"d_education\",\"label\":\"学历\",\"all\":[
+      {\"questionCode\":\"q_education\",\"op\":\"in\",\"value\":[\"bachelor\",\"master\",\"phd\"]}],
+      \"evidenceVerificationIds\":[\"$VF_ID\"],\"gapGuidance\":\"不同岗位对学历要求存在差异，可与顾问确认。\"},
+    {\"code\":\"d_employer\",\"label\":\"雇主担保\",\"all\":[
+      {\"questionCode\":\"q_employer\",\"op\":\"eq\",\"value\":\"yes\"}],
+      \"evidenceVerificationIds\":[\"$VF_ID\"]},
+    {\"code\":\"d_offer\",\"label\":\"岗位聘用\",\"all\":[
+      {\"questionCode\":\"q_offer\",\"op\":\"eq\",\"value\":\"yes\"}],
+      \"evidenceVerificationIds\":[\"$VF_ID\"]},
+    {\"code\":\"d_income\",\"label\":\"薪资水平\",\"all\":[
+      {\"questionCode\":\"q_income\",\"op\":\"gte\",\"value\":30000}],
+      \"evidenceVerificationIds\":[\"$VF_ID\"]},
+    {\"code\":\"d_background\",\"label\":\"背景情况\",\"all\":[
+      {\"questionCode\":\"q_background\",\"op\":\"eq\",\"value\":\"yes\"}],
+      \"evidenceVerificationIds\":[\"$VF_ID\"]}
+  ]}}")
+RL_ID=$(echo "$RL" | j "['id']")
+curl -s "${A[@]}" -X POST "$BASE/admin/assessment/rulesets/$RL_ID/submit" >/dev/null
+curl -s "${V[@]}" -X POST "$BASE/admin/assessment/rulesets/$RL_ID/review" -d '{"event":"approve"}' >/dev/null
+echo "  ruleset published: $RL_ID"
+
 echo "== 顾问入驻 + 授权（M1-07/09，顾问 adv-chen）"
 CHEN=(-H "content-type: application/json" -H "x-tip-realm: staff" -H "x-tip-user: adv-chen")
 OB=$(curl -s "${CHEN[@]}" -X POST "$BASE/advisor/onboarding/drafts" -d "{

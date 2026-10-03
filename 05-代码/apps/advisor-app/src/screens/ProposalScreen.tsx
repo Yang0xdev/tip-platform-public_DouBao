@@ -7,9 +7,10 @@ import {
   TextInput,
   View
 } from "react-native";
-import { api, type ProposalView, type RelationshipView } from "../api";
+import { api, type ProposalView, type RelationshipView, type ProposalDetailView } from "../api";
 import { Card, SectionLabel, Tag } from "../ui";
 import { PrimaryButton, riseEntering } from "@tip/ui-native";
+import { fromMinor, type Currency } from "@tip/core";
 
 const STATE: Record<string, { text: string; tone: "default" | "ok" | "warn" | "berry" }> = {
   advisor_draft: { text: "草稿", tone: "default" },
@@ -27,6 +28,25 @@ export default function ProposalScreen() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ customerRef: "", advice: "", responsibilities: "", validDays: "14" });
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [detail, setDetail] = useState<ProposalDetailView | null>(null);
+  const [detailError, setDetailError] = useState<string | null>(null);
+
+  const toggleDetail = async (id: string) => {
+    if (expandedId === id) {
+      setExpandedId(null);
+      setDetail(null);
+      return;
+    }
+    setExpandedId(id);
+    setDetail(null);
+    setDetailError(null);
+    try {
+      setDetail(await api.getProposal(id));
+    } catch (e) {
+      setDetailError((e as Error).message);
+    }
+  };
 
   const load = useCallback(async () => {
     const [p, c] = await Promise.all([api.proposals(), api.clients()]);
@@ -138,23 +158,86 @@ export default function ProposalScreen() {
       }
       renderItem={({ item, index }) => {
         const st = STATE[item.state] ?? { text: item.state, tone: "default" as const };
+        const open = expandedId === item.id;
         return (
-          <Card {...riseEntering(Math.min(index, 8))} style={{ marginTop: 12 }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-              <Text style={{ fontWeight: "700", color: "#1B2433", fontSize: 15 }}>
-                {item.id} · v{item.revision}
+          <Pressable onPress={() => void toggleDetail(item.id)}>
+            <Card {...riseEntering(Math.min(index, 8))} style={{ marginTop: 12 }}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                <Text style={{ fontWeight: "700", color: "#1B2433", fontSize: 15 }}>
+                  {item.id} · v{item.revision}
+                </Text>
+                <Tag text={st.text} tone={st.tone} />
+              </View>
+              <Text style={{ marginTop: 8, color: "#5E6B7E", fontSize: 13 }}>
+                客户 {item.customerRef} · {item.projectCode}
               </Text>
-              <Tag text={st.text} tone={st.tone} />
-            </View>
-            <Text style={{ marginTop: 8, color: "#5E6B7E", fontSize: 13 }}>
-              客户 {item.customerRef} · {item.projectCode}
-            </Text>
-            {item.validUntil && (
-              <Text style={{ marginTop: 4, color: "#8A95A6", fontSize: 12 }}>
-                有效期至 {new Date(item.validUntil).toLocaleDateString()}
+              {item.validUntil && (
+                <Text style={{ marginTop: 4, color: "#8A95A6", fontSize: 12 }}>
+                  有效期至 {new Date(item.validUntil).toLocaleDateString()}
+                </Text>
+              )}
+              <Text style={{ marginTop: 8, color: open ? "#AF2D67" : "#8A95A6", fontSize: 12, fontWeight: "700" }}>
+                {open ? "收起详情 ︿" : "查看详情 ﹀"}
               </Text>
-            )}
-          </Card>
+
+              {open && (
+                <View style={{ marginTop: 10, borderTopWidth: 1, borderTopColor: "#E5E9F0", paddingTop: 10 }}>
+                  {detailError && <Text style={{ color: "#C03221", fontSize: 12.5 }}>{detailError}</Text>}
+                  {!detail && !detailError && <Text style={{ color: "#8A95A6", fontSize: 12.5 }}>加载中…</Text>}
+                  {detail && (
+                    <>
+                      <Text style={{ fontSize: 12.5, fontWeight: "800", color: "#1B2433", marginBottom: 6 }}>
+                        费用快照（异币种分列，不合计）
+                      </Text>
+                      {detail.feeSnapshot.map((f) => (
+                        <View key={f.code} style={{
+                          flexDirection: "row", justifyContent: "space-between",
+                          paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: "#F0F3F8"
+                        }}>
+                          <Text style={{ fontSize: 12.5, color: "#1B2433", flex: 1 }}>
+                            {f.label}
+                            <Text style={{ color: "#8A95A6" }}> · {f.collector}</Text>
+                          </Text>
+                          <Text style={{ fontSize: 12.5, color: "#1B2433", fontWeight: "700" }}>
+                            {f.amountMinor
+                              ? `${fromMinor(BigInt(f.amountMinor), f.currency as Currency)} ${f.currency}`
+                              : "待确认"}
+                          </Text>
+                        </View>
+                      ))}
+
+                      <Text style={{ fontSize: 12.5, fontWeight: "800", color: "#1B2433", marginTop: 10, marginBottom: 6 }}>
+                        个性化建议
+                      </Text>
+                      {detail.advice.map((a, i) => (
+                        <View key={i} style={{ marginBottom: 8 }}>
+                          <Text style={{ fontSize: 12.5, color: "#5E6B7E", lineHeight: 19 }}>{a.text}</Text>
+                          <Text style={{ fontSize: 11, color: "#8A95A6", marginTop: 2 }}>
+                            {a.manualSignature
+                              ? `人工署名：${a.manualSignature.name}`
+                              : a.sourceRef ? `来源：${a.sourceRef}` : ""}
+                          </Text>
+                        </View>
+                      ))}
+
+                      <Text style={{ fontSize: 12.5, fontWeight: "800", color: "#1B2433", marginBottom: 4 }}>责任分工</Text>
+                      <Text style={{ fontSize: 12.5, color: "#5E6B7E", lineHeight: 19 }}>{detail.responsibilities}</Text>
+
+                      <Text style={{ fontSize: 12.5, fontWeight: "800", color: "#1B2433", marginTop: 10, marginBottom: 4 }}>
+                        不承诺事项
+                      </Text>
+                      {detail.nonCommitments.map((n) => (
+                        <Text key={n} style={{ fontSize: 12, color: "#5E6B7E", lineHeight: 18 }}>· {n}</Text>
+                      ))}
+                      <Text style={{ fontSize: 11, color: "#8A95A6", marginTop: 8 }}>
+                        复核人：{detail.reviewerId ?? "—"}
+                      </Text>
+                    </>
+                  )}
+                </View>
+              )}
+            </Card>
+          </Pressable>
         );
       }}
     />

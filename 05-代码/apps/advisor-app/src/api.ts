@@ -49,6 +49,23 @@ export interface ProposalView {
   updatedAt: string;
 }
 
+export interface ProposalDetailView {
+  id: string;
+  revision: number;
+  customerRef: string;
+  projectCode: string;
+  state: string;
+  feeSnapshot: Array<{
+    code: string; label: string; nature: string; collector: string;
+    currency: string; amountMinor: string | null; certainty: string;
+  }>;
+  advice: Array<{ text: string; sourceRef?: string; manualSignature?: { name: string; signedAt: string } }>;
+  responsibilities: string;
+  nonCommitments: string[];
+  validUntil: string | null;
+  reviewerId: string | null;
+}
+
 export interface FollowView {
   id: string;
   text: string;
@@ -104,6 +121,8 @@ export const api = {
     req<ProposalView>("/advisor/proposals/drafts", { method: "POST", body: JSON.stringify(body) }),
   submitProposal: (id: string) =>
     req<ProposalView>(`/advisor/proposals/${id}/submit`, { method: "POST" }),
+  getProposal: (id: string) =>
+    req<ProposalDetailView>(`/advisor/proposals/${id}`),
   clientDetail: (relationshipId: string) =>
     req<ClientDetailView>(`/advisor/clients/${relationshipId}/detail`),
   addFollow: (customerRef: string, text: string, kind: "fact" | "internal") =>
