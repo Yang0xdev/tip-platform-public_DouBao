@@ -15,3 +15,8 @@ demo/_shots/
 # 隧道工具与日志（环境内使用，不入仓库）
 tools/cloudflared
 tools/*.log
+
+# Expo CNG 生成的原生工程（EAS 构建时由 prebuild 重新生成，不入库）
+apps/*/ios/
+apps/*/android/
+apps/*/dist-web-live/

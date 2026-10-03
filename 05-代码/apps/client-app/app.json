@@ -4,16 +4,30 @@
     "slug": "tip-client",
     "version": "0.1.0",
     "orientation": "portrait",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "assetBundlePatterns": [
       "**/*"
     ],
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F5F7FA"
+    },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.tip.client"
+      "bundleIdentifier": "com.tip.client",
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
-      "package": "com.tip.client"
+      "package": "com.tip.client",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#002661"
+      }
     },
     "extra": {
       "stage": "m0-spike"
