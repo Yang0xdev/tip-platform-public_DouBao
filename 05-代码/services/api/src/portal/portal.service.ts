@@ -367,8 +367,17 @@ export class PortalService implements OnModuleInit {
 
   /* ---------------- 内部 ---------------- */
 
-  private requireAcc(id: string): PortalAccount {
-    const a = this.accounts.get(id);
+  private requireAcc(idOrLogin: string): PortalAccount {
+    let a = this.accounts.get(idOrLogin);
+    if (!a) {
+      // 伙伴侧身份为登录名（login），管理侧为内部编号（PA-xxxx），两者均可解析
+      for (const x of this.accounts.values()) {
+        if (x.login === idOrLogin) {
+          a = x;
+          break;
+        }
+      }
+    }
     if (!a) throw new PortalError(404, "43401", "门户账号不存在");
     return a;
   }
