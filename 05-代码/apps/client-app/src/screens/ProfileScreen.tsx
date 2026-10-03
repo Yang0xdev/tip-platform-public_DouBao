@@ -275,7 +275,7 @@ export default function ProfileScreen() {
       </Card>
 
       <Text style={{ fontSize: 11, color: colors.faint, textAlign: "center", marginTop: 4 }}>
-        透明身份规划平台客户端 · v1.7
+        透明身份规划平台客户端 · v2.1
       </Text>
     </ScrollView>
   );
