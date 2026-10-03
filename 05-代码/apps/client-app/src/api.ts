@@ -135,11 +135,12 @@ export interface TimelineEventView {
   id: string;
   level: string;
   title: string;
-  occurredAt: string;
+  at: string;
 }
 export interface MaterialView {
   id: string;
   personRef: string;
+  itemCode: string;
   title: string;
   state: string;
 }
@@ -157,6 +158,10 @@ export const api = {
   listTasks: () => getJson<{ records: TaskView[] }>("/v1/tasks/mine", true),
   listTimeline: (caseId: string) => getJson<{ records: TimelineEventView[] }>(`/v1/timeline?caseId=${caseId}`, true),
   listMaterials: (caseId: string) => getJson<{ records: MaterialView[] }>(`/v1/materials?caseId=${caseId}`, true),
+  uploadMaterial: (body: {
+    caseId: string; personRef: string; itemCode: string;
+    fileHash: string; artifactRef: string; mime: string; sizeBytes: number;
+  }) => postJson<MaterialView>("/v1/materials/upload", body, true),
   listNotifications: () => getJson<{ records: unknown[] }>("/v1/notifications", true),
   listTickets: () => getJson<{ records: Array<{ id: string; kind: string; title: string; state: string; complaintCategory: string | null; createdAt: string }> }>("/v1/tickets/mine", true),
   createTicket: (body: { kind: string; title: string; description: string }) =>
