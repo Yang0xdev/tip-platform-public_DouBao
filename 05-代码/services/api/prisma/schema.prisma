@@ -98,3 +98,14 @@ model AggregateSnapshot {
   @@index([kind, aggregateId, version])
   @@map("aggregate_snapshots")
 }
+
+/// 内存服务状态快照（整服务深快照 JSONB；启动恢复、定时自动保存、关停落盘）。
+/// key 为服务名（如 catalog.service），data 为可重建的纯数据（Map/Date/BigInt 有标记）。
+model ServiceState {
+  key       String   @id
+  data      Json
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  @@map("service_states")
+}

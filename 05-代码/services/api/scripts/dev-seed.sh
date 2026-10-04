@@ -14,6 +14,14 @@ V=(-H "content-type: application/json" -H "x-tip-realm: staff" -H "x-tip-user: s
 C=(-H "content-type: application/json" -H "x-tip-realm: customer" -H "x-tip-user: c-1980")
 j() { python3 -c "import sys,json;d=json.load(sys.stdin);print(d$1)"; }
 
+# 持久化幂等：数据库中已有服务状态时跳过示例 seed（避免重启后重复播种）
+PSTATUS=$(curl -s "${V[@]}" "$BASE/v1/persistence/status")
+POP=$(echo "$PSTATUS" | j ".get('populated',False)")
+if [ "$POP" = "True" ]; then
+  echo "检测到持久化状态已存在，跳过示例 seed（如需重播种请清空 service_states 表）"
+  exit 0
+fi
+
 echo "== 境内机构（M1-01）"
 ENT=$(curl -s "${A[@]}" -X POST "$BASE/admin/entities" -d '{"name":"示例出入境咨询（北京）有限公司","creditCode":"91110000EXAMPLE001","filingNo":"BJ-2026-018","filingExpiresAt":"2027-03-31","contactName":"李运营","contactPhone":"010-00000000"}')
 ENT_ID=$(echo "$ENT" | j "['id']")

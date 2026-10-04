@@ -78,6 +78,8 @@ import { InviteService } from "./invite/invite.service.js";
 import { ConsentCustomerController, ConsentAdminController } from "./consent/consent.controller.js";
 import { PrismaService } from "./persistence/prisma.service.js";
 import { SnapshotStore } from "./persistence/snapshot.store.js";
+import { StateOrchestrator } from "./persistence/state.orchestrator.js";
+import { PersistenceController } from "./persistence/persistence.controller.js";
 
 @Module({
   imports: [],
@@ -147,7 +149,8 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
     AiController,
     AdvisorAiController,
     WikiController,
-    KnowledgeController
+    KnowledgeController,
+    PersistenceController
   ],
   providers: [
     PrismaService,
@@ -189,7 +192,8 @@ KnowledgeService,
     CommissionService,
     ComplianceEventService,
     DeletionService,
-    InviteService
+    InviteService,
+    StateOrchestrator
   ]
 })
 export class AppModule {}
