@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#002661" />
+    <link rel="manifest" href="live/client/manifest.webmanifest" />
+    <title>免费安装为 App · 透明身份规划</title>
+    <style>
+      :root { --navy:#002661; --berry:#AF2D67; }
+      * { box-sizing:border-box; }
+      body { margin:0; font-family:"Manrope","Noto Sans SC",system-ui,-apple-system,"PingFang SC",sans-serif;
+        background:#F5F7FA; color:#1B2433; -webkit-font-smoothing:antialiased; }
+      .wrap { max-width:880px; margin:0 auto; padding:48px 24px 72px; }
+      .kicker { font-size:12.5px; font-weight:700; letter-spacing:1px; color:var(--berry); }
+      h1 { font-size:30px; font-weight:800; margin:10px 0 8px; }
+      .sub { color:#5E6B7E; font-size:14.5px; line-height:23px; max-width:640px; }
+      .cards { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:34px; }
+      @media (max-width:720px){ .cards{ grid-template-columns:1fr; } }
+      .card { background:#fff; border-radius:18px; padding:26px; box-shadow:0 1px 2px rgba(16,32,67,.05),0 18px 44px -22px rgba(15,35,80,.25); }
+      .card h2 { margin:0 0 4px; font-size:17px; font-weight:800; }
+      .card .for { font-size:12.5px; color:#8A95A6; margin-bottom:16px; }
+      ol { margin:0; padding-left:20px; }
+      li { font-size:13.5px; line-height:22px; color:#3D4A5E; margin-bottom:9px; }
+      .tag { display:inline-block; font-size:11px; font-weight:700; color:#177A5B; background:#E6F4EE;
+        border-radius:999px; padding:3px 11px; margin-bottom:14px; }
+      .links { display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
+      .lk { text-decoration:none; color:#fff; background:linear-gradient(180deg,#0B3A82,#002661);
+        height:44px; padding:0 22px; border-radius:22px; display:inline-flex; align-items:center;
+        font-size:13.5px; font-weight:700; box-shadow:inset 0 1px 0 rgba(255,255,255,.14); }
+      .lk.berry { background:linear-gradient(132deg,#AF2D67,#5E246B 46%,#002661); }
+      .note { margin-top:26px; font-size:12.5px; color:#8A95A6; line-height:20px; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="kicker">零付费 · 无需 Apple 开发者账号</div>
+      <h1>把 App 装到手机或电脑</h1>
+      <p class="sub">
+        客户端与顾问端已支持 PWA 安装：iPhone 从 Safari 添加到主屏幕，即出现 App 图标、
+        全屏运行、无浏览器地址栏；电脑 Chrome/Edge 可安装为独立窗口应用，并支持离线打开已缓存页面。
+      </p>
+
+      <div class="cards">
+        <div class="card">
+          <span class="tag">iPhone / iPad</span>
+          <h2>添加到主屏幕</h2>
+          <div class="for">请使用系统自带 Safari 浏览器</div>
+          <ol>
+            <li>用 Safari 打开要安装的 App 链接（客户端或顾问端）。</li>
+            <li>点击底部「分享」按钮（方框向上箭头）。</li>
+            <li>下滑选择「添加到主屏幕」，点右上角「添加」。</li>
+            <li>回到主屏幕，点击 App 图标即可全屏使用。</li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <span class="tag">电脑 Chrome / Edge</span>
+          <h2>安装为桌面应用</h2>
+          <div class="for">Windows / Mac 均可</div>
+          <ol>
+            <li>用 Chrome 或 Edge 打开 App 链接。</li>
+            <li>地址栏右侧出现「安装」图标，点击它；
+              或从右上角菜单选择「安装"透明身份规划"」。</li>
+            <li>确认安装后，桌面与开始菜单生成应用图标。</li>
+            <li>双击即在独立窗口运行，无浏览器标签栏。</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="links">
+        <a class="lk berry" href="live/client/">安装客户端</a>
+        <a class="lk" href="live/advisor/">安装顾问端</a>
+        <a class="lk" href="index.html">返回演示首页</a>
+      </div>
+
+      <p class="note">
+        说明：首次安装需联网打开一次以完成缓存；离线时可打开已缓存页面，
+        实时数据会如实提示网络错误、不做假数据。iOS 若长期不使用，系统可能回收缓存，重新打开即可恢复。
+      </p>
+    </div>
+  </body>
+</html>

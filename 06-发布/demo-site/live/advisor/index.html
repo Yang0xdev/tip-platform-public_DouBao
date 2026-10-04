@@ -23,7 +23,15 @@
         flex: 1;
       }
     </style>
-  <link rel="shortcut icon" href="/live/advisor/favicon.ico" /></head>
+  <link rel="shortcut icon" href="/live/advisor/favicon.ico" /><!-- tip-pwa-injected -->
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="展业">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="theme-color" content="#002661">
+  </head>
 
   <body>
     <!-- Use static rendering with Expo Router to support running without JavaScript. -->
@@ -33,5 +41,12 @@
     <!-- The root element for your Expo app. -->
     <div id="root"></div>
   <script src="/live/advisor/_expo/static/js/web/index-7bfd011d76db7278bc8e7b4c8648eff5.js" defer></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function () {});
+      });
+    }
+  </script>
 </body>
 </html>
