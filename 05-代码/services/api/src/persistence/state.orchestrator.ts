@@ -36,6 +36,7 @@ import { AiService } from "../ai/ai.service.js";
 import { AdvisorAiService } from "../ai/advisor-ai.service.js";
 import { KnowledgeService } from "../ai/knowledge.service.js";
 import { WikiService } from "../wiki/wiki.service.js";
+import { RefineryService } from "../refinery/refinery.service.js";
 
 /* ============ 深快照 / 深恢复（只处理纯数据，类实例一律跳过） ============ */
 
@@ -184,7 +185,8 @@ export class StateOrchestrator implements OnApplicationBootstrap, OnModuleDestro
     private readonly ai: AiService,
     private readonly advisorAi: AdvisorAiService,
     private readonly knowledge: KnowledgeService,
-    private readonly wiki: WikiService
+    private readonly wiki: WikiService,
+    private readonly refinery: RefineryService
   ) {}
 
   private registry(): Array<{ key: string; inst: object }> {
@@ -222,7 +224,8 @@ export class StateOrchestrator implements OnApplicationBootstrap, OnModuleDestro
       { key: "ai", inst: this.ai },
       { key: "advisor-ai", inst: this.advisorAi },
       { key: "knowledge", inst: this.knowledge },
-      { key: "wiki", inst: this.wiki }
+      { key: "wiki", inst: this.wiki },
+      { key: "refinery", inst: this.refinery }
     ];
   }
 

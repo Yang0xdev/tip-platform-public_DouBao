@@ -4,6 +4,7 @@ import { A01Content, A03Advisors, A04Assign, A05Contract, A11Quality, A12Complia
 import { A02Providers, A06Delivery, A09Notifications } from "./modules-m3.js";
 import { A07Commission, A08Tickets, A10Compliance } from "./modules-m4.js";
 import { A13Knowledge } from "./modules-ai.js";
+import { A14Refinery } from "./modules-refinery.js";
 
 /* ---------------- 模块地图（与总后台高保真、PRD 一致） ---------------- */
 const MODULES = [
@@ -19,7 +20,8 @@ const MODULES = [
   { code: "A10", name: "权限审计", prd: "M4", desc: "角色矩阵 · 审批中心 · Consent 台账 · 哈希链" },
   { code: "A11", name: "质量基线", prd: "M1", desc: "核验覆盖率 · 临期率 · 授权节拍 · 初评漏斗（只读基线）" },
   { code: "A12", name: "合规工作台", prd: "M1", desc: "问卷/结论模板 · 规则集四眼 · 词库（M1 子集）" },
-  { code: "A13", name: "AI 知识运营", prd: "AI", desc: "知识四眼 · 失效联动 · AI 使用与转人工指标" }
+  { code: "A13", name: "AI 知识运营", prd: "AI", desc: "知识四眼 · 失效联动 · AI 使用与转人工指标" },
+  { code: "A14", name: "AI 数据工厂", prd: "V4", desc: "七工段 · 证据抽取 · 清洗归一 · 血缘 · 发布联动" }
 ];
 
 const DOOR_LABELS: Record<string, string> = {
@@ -180,7 +182,8 @@ function Shell({ actor, onLogout }: { actor: Actor; onLogout: () => void }) {
           {active === "A11" && <A11Quality actor={actor} />}
           {active === "A12" && <A12Compliance actor={actor} />}
           {active === "A13" && <A13Knowledge actor={actor} />}
-          {!["home", "A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10", "A11", "A12", "A13"].includes(active) && <ModulePlaceholder code={active} />}
+          {active === "A14" && <A14Refinery actor={actor} />}
+          {!["home", "A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10", "A11", "A12", "A13", "A14"].includes(active) && <ModulePlaceholder code={active} />}
         </div>
       </main>
     </div>

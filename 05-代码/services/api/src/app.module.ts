@@ -81,6 +81,11 @@ import { SnapshotStore } from "./persistence/snapshot.store.js";
 import { StateOrchestrator } from "./persistence/state.orchestrator.js";
 import { PersistenceController } from "./persistence/persistence.controller.js";
 import { AiHubController } from "./aihub/aihub.controller.js";
+import { RefineryController } from "./refinery/refinery.controller.js";
+import { RefineryService } from "./refinery/refinery.service.js";
+import { LayoutParser } from "./refinery/parser.service.js";
+import { ExtractionEngine } from "./refinery/extractor.service.js";
+import { Normalizer } from "./refinery/normalizer.service.js";
 import { ModelRegistry } from "./aihub/model.registry.js";
 import { ModelRouter } from "./aihub/model.router.js";
 import { AiEvalService } from "./aihub/eval.service.js";
@@ -155,7 +160,8 @@ import { AiEvalService } from "./aihub/eval.service.js";
     WikiController,
     KnowledgeController,
     PersistenceController,
-    AiHubController
+    AiHubController,
+    RefineryController
   ],
   providers: [
     PrismaService,
@@ -201,7 +207,11 @@ KnowledgeService,
     StateOrchestrator,
     ModelRegistry,
     ModelRouter,
-    AiEvalService
+    AiEvalService,
+    LayoutParser,
+    ExtractionEngine,
+    Normalizer,
+    RefineryService
   ]
 })
 export class AppModule {}
