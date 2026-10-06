@@ -80,6 +80,10 @@ import { PrismaService } from "./persistence/prisma.service.js";
 import { SnapshotStore } from "./persistence/snapshot.store.js";
 import { StateOrchestrator } from "./persistence/state.orchestrator.js";
 import { PersistenceController } from "./persistence/persistence.controller.js";
+import { AiHubController } from "./aihub/aihub.controller.js";
+import { ModelRegistry } from "./aihub/model.registry.js";
+import { ModelRouter } from "./aihub/model.router.js";
+import { AiEvalService } from "./aihub/eval.service.js";
 
 @Module({
   imports: [],
@@ -150,7 +154,8 @@ import { PersistenceController } from "./persistence/persistence.controller.js";
     AdvisorAiController,
     WikiController,
     KnowledgeController,
-    PersistenceController
+    PersistenceController,
+    AiHubController
   ],
   providers: [
     PrismaService,
@@ -193,7 +198,10 @@ KnowledgeService,
     ComplianceEventService,
     DeletionService,
     InviteService,
-    StateOrchestrator
+    StateOrchestrator,
+    ModelRegistry,
+    ModelRouter,
+    AiEvalService
   ]
 })
 export class AppModule {}

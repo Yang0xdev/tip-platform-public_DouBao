@@ -174,6 +174,9 @@ export function A13Knowledge({ actor }: { actor: Actor }) {
         </div>
       </div>
 
+      {/* AI 中枢：模型矩阵 / 路由试跑 / 评测红队（V4 P0 增量，并入 A13） */}
+      <AiHubOps actor={actor} />
+
       {/* K1 知识编译层（U1 增量，并入 A13，不另设导航） */}
       <K1Wiki actor={actor} />
     </div>
@@ -189,8 +192,169 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
-/* ================= K1 知识编译层（Wiki，U1 增量） ================= */
+/* ================= AI 中枢：模型矩阵 / 路由 / 评测红队（V4 P0） ================= */
 
+interface HubStatus {
+  tag: string; tier: string; capabilities: string[];
+  available: boolean; loaded: boolean; sizeBytes?: number; note?: string;
+}
+interface HubEvalCase { id: string; group: "redteam" | "quality"; name: string; pass: boolean }
+interface HubEvalReport {
+  ranAt: string; total: number; passed: number; failed: number;
+  redlinePassRate: number; gatePassed: boolean; cases: HubEvalCase[];
+}
+
+function Dot({ on, label }: { on: boolean; label: [string, string] }) {
+  return (
+    <span className={`inline-flex items-center gap-1.5 text-[11.5px] ${on ? "text-ok" : "text-faint"}`}>
+      <span className={`w-2 h-2 rounded-full ${on ? "bg-ok" : "bg-line"}`} />
+      {on ? label[0] : label[1]}
+    </span>
+  );
+}
+
+export function AiHubOps({ actor }: { actor: Actor }) {
+  const [tok, setTok] = useState(0);
+  const [busy, setBusy] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const [routeForm, setRouteForm] = useState({ task: "draft", text: "", sensitivity: "normal" });
+  const [decision, setDecision] = useState<Record<string, unknown> | null>(null);
+
+  const models = useApi<{
+    probe: { baseUrl: string; probedAt: string | null; error: string | null };
+    statuses: HubStatus[];
+  }>("/admin/aihub/models", actor, [tok]);
+  const report = useApi<HubEvalReport>("/admin/aihub/eval/report", actor, [tok]);
+
+  const refresh = () => setTok(Date.now());
+
+  async function act(key: string, path: string, body?: unknown) {
+    setBusy(key); setErr(null);
+    try {
+      const r = await post(actor, path, body ?? {});
+      if (key === "route") setDecision(r as Record<string, unknown>);
+      else refresh();
+    } catch (e) { setErr((e as Error).message); } finally { setBusy(null); }
+  }
+
+  const probe = models.data?.probe;
+
+  return (
+    <div className="space-y-5">
+      <Panel title="本地 AI 中枢 · 模型矩阵（本地优先；云第三档默认关闭）">
+        <div className="flex flex-wrap items-center gap-3 mb-3 text-[11.5px] text-faint">
+          <span>目标 Ollama：<span className="font-mono text-mut">{probe?.baseUrl ?? "…"}</span></span>
+          <span>探测时间：{probe?.probedAt ? new Date(probe.probedAt).toLocaleString() : "未探测"}</span>
+          {probe?.error && <span className="text-warn">不可达（{probe.error}）——公网容器无本地模型属正常，本地 Mac 上为在线状态</span>}
+          <span className="flex-1" />
+          <button onClick={() => act("probe", "/admin/aihub/probe")} disabled={busy !== null}
+            className="btn-navy h-9 rounded-btn px-3.5 text-white text-[12px] font-semibold disabled:opacity-60">
+            {busy === "probe" ? "探测中…" : "重新探测"}
+          </button>
+        </div>
+        {models.loading ? (
+          <div className="space-y-2">{Array.from({ length: 5 }).map((_, i) => <div key={i} className="h-10 rounded-xl bg-line-soft animate-pulse" />)}</div>
+        ) : (
+          <table className="w-full text-[12.5px]">
+            <thead><tr><Th w="16%">模型标签</Th><Th w="10%">档位</Th><Th w="20%">能力</Th>
+              <Th w="12%">已安装</Th><Th w="10%">常驻</Th><Th w="9%">体积</Th><Th w="23%">用途</Th></tr></thead>
+            <tbody>
+              {(models.data?.statuses ?? []).map((s) => (
+                <tr key={s.tag} className="border-t border-line-soft">
+                  <Td mono>{s.tag}</Td>
+                  <Td>{s.tier}</Td>
+                  <Td><span className="text-[11px] text-mut">{s.capabilities.join(" / ")}</span></Td>
+                  <Td><Dot on={s.available} label={["已安装", "未安装"]} /></Td>
+                  <Td><Dot on={s.loaded} label={["常驻", "—"]} /></Td>
+                  <Td>{s.sizeBytes ? `${(s.sizeBytes / 1e9).toFixed(1)} GB` : "—"}</Td>
+                  <Td><span className="text-[11px] text-faint">{s.note}</span></Td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </Panel>
+
+      <div className="grid grid-cols-2 gap-5">
+        {/* 路由试跑 */}
+        <Panel title="路由试跑（任务 → 模型档位 / 降级链）">
+          <div className="space-y-3">
+            <Field label="任务类型">
+              <select value={routeForm.task} onChange={(e) => setRouteForm({ ...routeForm, task: e.target.value })} className={inputCls}>
+                <option value="classify">分类分诊</option>
+                <option value="extract_simple">简单抽取</option>
+                <option value="extract_complex">复杂抽取</option>
+                <option value="draft">初稿组织</option>
+                <option value="reason">多步推理</option>
+                <option value="vision">视觉理解</option>
+                <option value="embed">向量化</option>
+                <option value="chat">对话</option>
+              </select>
+            </Field>
+            <Field label="任务描述（自动评分复杂度）">
+              <textarea value={routeForm.text} onChange={(e) => setRouteForm({ ...routeForm, text: e.target.value })}
+                className={`${inputCls} min-h-[76px] py-2`} placeholder="如：先了解项目，然后对比费用，同时考虑周期…" />
+            </Field>
+            <Field label="密级">
+              <select value={routeForm.sensitivity} onChange={(e) => setRouteForm({ ...routeForm, sensitivity: e.target.value })} className={inputCls}>
+                <option value="normal">普通</option>
+                <option value="sensitive">敏感（禁止云）</option>
+              </select>
+            </Field>
+            <button onClick={() => act("route", "/admin/aihub/route", routeForm)} disabled={busy !== null}
+              className="btn-navy h-10 rounded-btn px-4 text-white text-[13px] font-semibold disabled:opacity-60">
+              {busy === "route" ? "…" : "试跑路由"}
+            </button>
+            {decision && (
+              <div className="rounded-xl bg-navy-50/70 border border-line p-3 text-[11.5px] space-y-1">
+                <div>档位：<b className="text-navy">{String(decision.tier)}</b>（复杂度 {String(decision.complexity)}）</div>
+                <div>候选：<span className="font-mono">{(decision.candidateTags as string[] ?? []).join(" ") || "（目录无该档标签）"}</span></div>
+                <div>云档：{decision.cloudAllowed ? "允许" : "不允许"}；降级：{String(decision.fallbackTier)}</div>
+                <div className="text-faint">{String(decision.reason)}</div>
+              </div>
+            )}
+          </div>
+        </Panel>
+
+        {/* 评测红队 */}
+        <Panel title="评测 / 红队门禁（红线必须 100%）">
+          {report.loading ? (
+            <div className="h-[180px] rounded-xl bg-line-soft animate-pulse" />
+          ) : (
+            <>
+              <div className={`rounded-xl border p-4 mb-3 ${report.data?.gatePassed ? "border-ok/30 bg-ok-bg" : "border-bad/30 bg-bad-bg"}`}>
+                <div className={`text-[15px] font-extrabold ${report.data?.gatePassed ? "text-ok" : "text-bad"}`}>
+                  {report.data?.gatePassed ? "门禁通过：可发布该模型/提示词版本" : "门禁未通过：禁止发布"}
+                </div>
+                <div className="text-[11.5px] text-mut mt-1">
+                  用例 {report.data?.total} · 通过 {report.data?.passed} · 失败 {report.data?.failed}
+                  · 红线拦截率 {Math.round((report.data?.redlinePassRate ?? 0) * 100)}%
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 max-h-[190px] overflow-auto">
+                {(report.data?.cases ?? []).map((c) => (
+                  <div key={c.id} className="flex items-center gap-2 text-[11.5px]">
+                    <span className={`w-1.5 h-1.5 rounded-full ${c.pass ? "bg-ok" : "bg-bad"}`} />
+                    <span className="font-mono text-[10px] text-faint">{c.id}</span>
+                    <span className="truncate">{c.name}</span>
+                  </div>
+                ))}
+              </div>
+              <button onClick={() => act("eval", "/admin/aihub/eval/run")} disabled={busy !== null}
+                className="btn-navy h-10 rounded-btn px-4 mt-3 text-white text-[13px] font-semibold disabled:opacity-60">
+                {busy === "eval" ? "评测中…" : "立即跑评测/红队"}
+              </button>
+            </>
+          )}
+        </Panel>
+      </div>
+      {err && <div className="text-[11.5px] text-bad">{err}</div>}
+    </div>
+  );
+}
+
+
+/* ================= K1 知识编译层（Wiki，U1 增量） ================= */
 export function K1Wiki({ actor }: { actor: Actor }) {
   const [tok, setTok] = useState(0);
   const [reviewer, setReviewer] = useState("admin02");
