@@ -175,12 +175,23 @@ export function A14Refinery({ actor }: { actor: Actor }) {
         )}
         {r.stage === "awaiting_review" && (
           <>
-            <ActBtn label="复核通过" kind="ok"
-              run={() => post(asReviewer, `/admin/refinery/sources/${r.id}/review`, { decision: "approve" })} onDone={refresh} />
-            <ActBtn label="驳回" kind="berry"
-              run={() => post(asReviewer, `/admin/refinery/sources/${r.id}/review`, {
-                decision: "reject", reason: "字段证据不足，需补充"
-              })} onDone={refresh} />
+            {!r.reviewerId && (
+              <>
+                <ActBtn label="复核通过" kind="ok"
+                  run={() => post(asReviewer, `/admin/refinery/sources/${r.id}/review`, { decision: "approve" })} onDone={refresh} />
+                <ActBtn label="驳回" kind="berry"
+                  run={() => post(asReviewer, `/admin/refinery/sources/${r.id}/review`, {
+                    decision: "reject", reason: "字段证据不足，需补充"
+                  })} onDone={refresh} />
+              </>
+            )}
+            {r.reviewerId && (
+              <>
+                <span className="text-[11px] text-mut self-center">已四眼（{r.reviewerId}）</span>
+                <ActBtn label="发布到 L1" kind="navy"
+                  run={() => post(actor, `/admin/refinery/sources/${r.id}/publish`, {})} onDone={refresh} />
+              </>
+            )}
           </>
         )}
         {r.stage === "published" && <span className="text-[11.5px] text-ok font-semibold">已发布 {r.publishedId}</span>}
