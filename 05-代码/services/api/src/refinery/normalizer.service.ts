@@ -26,18 +26,24 @@ export class Normalizer {
     if (!field.value) return null;
     const v = field.value;
 
-    if (field.kind === "date" || /\d{4}\s*[年/.-]\s*\d{1,2}/.test(v)) {
-      const iso = this.toIsoDate(v);
-      if (iso && iso !== v) return { to: iso, rule: "date-iso" };
-    }
+    // list 为多条目原文拼接：只做空白/术语整理，不做日期/金额抽取（避免破坏整段）
+    if (field.kind !== "list") {
+      if (field.kind === "date" || /\d{4}\s*[年/.-]\s*\d{1,2}/.test(v)) {
+        const iso = this.toIsoDate(v);
+        if (iso && iso !== v) return { to: iso, rule: "date-iso" };
+      }
 
-    if (field.kind === "money" || /(人民币|美元|欧元|CNY|USD|EUR)\s*[\d,]|[\d,]+\s*(元|美元|欧元)/.test(v)) {
-      const std = this.normalizeMoney(v);
-      if (std && std !== v) return { to: std, rule: "money-standard" };
+      if (field.kind === "money" || /(人民币|美元|欧元|CNY|USD|EUR)\s*[\d,]|[\d,]+\s*(元|美元|欧元)/.test(v)) {
+        const std = this.normalizeMoney(v);
+        if (std && std !== v) return { to: std, rule: "money-standard" };
+      }
     }
 
     let t = v.trim();
-    for (const [re, rep] of TERM_ALIASES) t = t.replace(re, rep);
+    // 专有名称（项目名/签约主体）不做术语替换
+    if (!["program_name", "party_a", "party_b"].includes(field.key)) {
+      for (const [re, rep] of TERM_ALIASES) t = t.replace(re, rep);
+    }
     if (t !== v) return { to: t, rule: "term-alias" };
     return null;
   }

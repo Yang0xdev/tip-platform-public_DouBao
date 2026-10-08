@@ -86,6 +86,7 @@ import { RefineryService } from "./refinery/refinery.service.js";
 import { LayoutParser } from "./refinery/parser.service.js";
 import { ExtractionEngine } from "./refinery/extractor.service.js";
 import { Normalizer } from "./refinery/normalizer.service.js";
+import { LlmExtractor } from "./refinery/llm-extractor.service.js";
 import { ModelRegistry } from "./aihub/model.registry.js";
 import { ModelRouter } from "./aihub/model.router.js";
 import { AiEvalService } from "./aihub/eval.service.js";
@@ -211,6 +212,7 @@ KnowledgeService,
     LayoutParser,
     ExtractionEngine,
     Normalizer,
+    LlmExtractor,
     RefineryService
   ]
 })

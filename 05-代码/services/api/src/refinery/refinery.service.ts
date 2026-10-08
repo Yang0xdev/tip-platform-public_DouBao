@@ -11,6 +11,7 @@ import type {
 import { LayoutParser } from "./parser.service.js";
 import { ExtractionEngine } from "./extractor.service.js";
 import { Normalizer } from "./normalizer.service.js";
+import { LlmExtractor } from "./llm-extractor.service.js";
 import { WikiService } from "../wiki/wiki.service.js";
 import { AuditService } from "../audit.service.js";
 import { SAMPLE_DOCS } from "./sample.docs.js";
@@ -25,8 +26,8 @@ class RefineryError extends HttpException {
 const CLASSIFY_MARKERS: Array<{ type: DocType; markers: RegExp }> = [
   { type: "fee_schedule", markers: /(费表|服务费|官方费|律师费|费用明细|fee\s*schedule)/i },
   { type: "regulation", markers: /(条例|法规|通知|办法|法案|生效|施行|根据.*规定|regulation|act\b)/i },
-  { type: "contract", markers: /(甲方|乙方|合同|协议|contract|agreement)/i },
-  { type: "id_document", markers: /(护照|身份证|出生证|证件号码)/ },
+  { type: "contract", markers: /(甲方|乙方|本协议|服务协议|签署|contract|agreement)/i },
+  { type: "id_document", markers: /(护照号|护照号码|身份证|证件号码|出生证编号)/ },
   { type: "report", markers: /(报告|尽职调查|评估报告|report)/i },
   { type: "email", markers: /(发件人|收件人|主题：|from:|subject:)/i },
   { type: "project_doc", markers: /(项目介绍|办理周期|居住要求|申请条件|项目亮点|processing\s*time|residency)/i }
@@ -60,6 +61,7 @@ export class RefineryService {
     private readonly parser: LayoutParser,
     private readonly extractor: ExtractionEngine,
     private readonly normalizer: Normalizer,
+    private readonly llm: LlmExtractor,
     private readonly wiki: WikiService
   ) {}
 
@@ -170,14 +172,33 @@ export class RefineryService {
     return this.get(id);
   }
 
-  /* ---------------- ④ 结构化抽取（两阶段） ---------------- */
+  /* ---------------- ④ 结构化抽取（确定性 + 本地 LLM 混合） ---------------- */
 
-  extract(actorId: string, id: string): RawSource {
+  async extract(actorId: string, id: string): Promise<RawSource> {
     const raw = this.must(id);
     if (!raw.blocks) throw new RefineryError(422, "44404", "请先完成版面解析");
-    raw.fields = this.extractor.extract(raw.docType ?? "other", raw.blocks);
-    raw.extractModel = "deterministic-schema";
+    const deterministic = this.extractor.extract(raw.docType ?? "other", raw.blocks);
+    const ollamaBase = process.env.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434";
+    const { fields, modelUsed, disagreements } = await this.llm.extractHybrid(
+      raw.docType ?? "other", raw.blocks, deterministic, ollamaBase
+    );
+    raw.fields = fields;
+    raw.llmDisagreements = disagreements;
+    raw.extractModel = modelUsed
+      ? `hybrid: ${modelUsed} + deterministic`
+      : "deterministic（本地 LLM 不可用）";
     this.advance(raw, "extracted", actorId, `${raw.fields.length} 字段`);
+    return this.get(id);
+  }
+
+  /** 写入版面块（浏览器侧视觉解析回传） */
+  setBlocks(actorId: string, id: string, blocks: RawSource["blocks"]): RawSource {
+    const raw = this.must(id);
+    if (!blocks?.length) throw new RefineryError(400, "44412", "版面块为空");
+    raw.blocks = blocks;
+    raw.parseTool = "browser-vision";
+    raw.stage = "parsed";
+    raw.history.push({ stage: "parsed", at: new Date().toISOString(), actorId, note: "browser-vision" });
     return this.get(id);
   }
 
@@ -223,6 +244,9 @@ export class RefineryService {
       if (f.state === "found" && !f.evidence)
         findings.push({ code: "L-EVI", level: "block", message: `字段「${f.label}」无证据锚定`, fieldKey: f.key });
     }
+    // LLM 分歧（warn，供人工复核关注）
+    for (const d of raw.llmDisagreements ?? [])
+      findings.push({ code: "L-DISAGREE", level: "warn", message: `LLM 分歧待关注：${d}` });
     // 红线措辞（对字段值与标题）
     const parts = [raw.title, ...fields.map((f) => f.value ?? "")];
     for (const p of parts) {
@@ -304,11 +328,11 @@ export class RefineryService {
   }
 
   /** 自动跑到待复核（classify→…→submit），供批量处理与示例包 */
-  autoRun(actorId: string, id: string): RawSource {
+  async autoRun(actorId: string, id: string): Promise<RawSource> {
     let raw = this.get(id);
     if (raw.stage === "ingested") raw = this.classify(actorId, id);
     if (raw.stage === "classified") raw = this.parse(actorId, id);
-    if (raw.stage === "parsed") raw = this.extract(actorId, id);
+    if (raw.stage === "parsed") raw = await this.extract(actorId, id);
     if (raw.stage === "extracted") raw = this.normalize(actorId, id);
     if (raw.stage === "normalized") raw = this.submitForReview(actorId, id);
     return raw;
@@ -392,7 +416,7 @@ export class RefineryService {
 
   /* ---------------- 示例包（移民高频资料，全部【示例】） ---------------- */
 
-  loadSamplePack(actorId: string): { ingested: string[] } {
+  async loadSamplePack(actorId: string): Promise<{ ingested: string[] }> {
     const ids: string[] = [];
     for (const s of SAMPLE_DOCS) {
       // 幂等：标题已存在则跳过
@@ -400,7 +424,7 @@ export class RefineryService {
       const raw = this.ingestText(actorId, {
         title: s.title, content: s.content, sourceType: "export", sample: true
       });
-      this.autoRun(actorId, raw.id);
+      await this.autoRun(actorId, raw.id);
       ids.push(raw.id);
     }
     return { ingested: ids };

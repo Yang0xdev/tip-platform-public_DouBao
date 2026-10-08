@@ -30,8 +30,12 @@ export class ExtractionEngine {
         const items: string[] = [];
         const evidenceBlock = presenceHits[0]!;
         for (const b of blocks) {
+          let item: string | null = null;
+          // 解析器已识别的列表块（项目符号被剥离）
+          if (b.type === "list" && b.text.trim().length >= 4) item = b.text.trim();
           const m = schema.item ? schema.item.exec(b.text) : null;
-          if (m && m[1]) items.push(m[1].trim());
+          if (m?.[1]) item = m[1].trim();
+          if (item) items.push(item.slice(0, 80));
         }
         const state = items.length > 0 ? "found" : "uncertain";
         out.push({
@@ -77,6 +81,6 @@ export class ExtractionEngine {
       if (!amount) return null;
       return cur ? `${cur} ${amount}` : amount;
     }
-    return m[1] ? m[1].trim() : null;
+    return m.slice(1).find((g) => g?.trim())?.trim() ?? null;
   }
 }

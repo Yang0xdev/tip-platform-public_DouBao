@@ -70,6 +70,7 @@ export interface RawSource {
   extractModel?: string;
   normalization?: Array<{ fieldKey: string; from: string; to: string; rule: string }>;
   findings?: ValidationFinding[];
+  llmDisagreements?: string[];
   reviewerId?: string;
   publishedId?: string;
   history: Array<{ stage: RefineryStage; at: string; actorId: string; note?: string }>;

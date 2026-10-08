@@ -35,6 +35,37 @@ export class RefineryController {
     return this.refinery.ingestPdf(actor.user, body);
   }
 
+  /** 批量采集（文件夹多选/导入）；auto=true 自动跑到待复核 */
+  @Post("sources/ingest-batch")
+  async ingestBatch(
+    @Body() body: { items: Array<{ title: string; content: string }>; auto?: boolean },
+    @CurrentActor() actor: Actor
+  ) {
+    const ids: string[] = [];
+    for (const item of body.items ?? []) {
+      try {
+        const raw = this.refinery.ingestText(actor.user, {
+          title: item.title, content: item.content, sourceType: "folder"
+        });
+        if (body.auto !== false) await this.refinery.autoRun(actor.user, raw.id);
+        ids.push(raw.id);
+      } catch {
+        /* 重复/空内容跳过 */
+      }
+    }
+    return { ingested: ids };
+  }
+
+  /** 浏览器侧视觉解析回传版面块 */
+  @Post("sources/:id/blocks")
+  setBlocks(
+    @Param("id") id: string,
+    @Body() body: { blocks: unknown },
+    @CurrentActor() actor: Actor
+  ) {
+    return this.refinery.setBlocks(actor.user, id, body.blocks as never);
+  }
+
   @Get("sources")
   list() {
     return this.refinery.list();

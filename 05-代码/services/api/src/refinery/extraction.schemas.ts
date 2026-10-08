@@ -31,12 +31,12 @@ export const IMMIGRATION_EXTRACTION: DocExtractionSchema[] = [
       {
         key: "program_name", label: "项目/计划名称", kind: "text", required: true,
         presence: /(计划|项目|方案|法案|program|plan)/i,
-        value: /(?:关于)?([A-Za-z\u4e00-\u9fa5A-Za-z0-9「」（）()\s]{2,24}?(?:计划|项目|方案|法案))/
+        value: /名称[：:]\s*([^\n，。]{2,30})|([A-Za-z\u4e00-\u9fa50-9「」（）()\s]{2,24}?(?:计划|项目|方案|法案))/
       },
       {
         key: "jurisdiction", label: "发布机构/司法管辖区", kind: "text",
         presence: /(发布|颁布|主管|机构|政府|部门|ministry|government)/i,
-        value: /([A-Za-z\u4e00-\u9fa5]{2,20}?(?:政府|部|部门|委员会|局|ministry|government))/i
+        value: /(?:[由为：:])([A-Za-z\u4e00-\u9fa5]{2,20}?(?:政府|部门|委员会|局|部|ministry|government))/
       },
       {
         key: "effective_date", label: "生效日期", kind: "date",
@@ -46,7 +46,7 @@ export const IMMIGRATION_EXTRACTION: DocExtractionSchema[] = [
       {
         key: "key_requirements", label: "关键要求", kind: "list",
         presence: /(要求|条件|资格|requirement|eligibility)/i,
-        item: /^\s*(?:[-*•]\s*)?(.{4,80}(?:要求|条件|资格|证明|无犯罪|年龄|学历|资产))/
+        item: /^\s*(?:[-*•]\s+|\d+[.、]\s*)(.{4,80})/
       }
     ]
   },
@@ -76,7 +76,7 @@ export const IMMIGRATION_EXTRACTION: DocExtractionSchema[] = [
       {
         key: "program_name", label: "项目名称", kind: "text", required: true,
         presence: /(项目|计划|program)/i,
-        value: /([A-Za-z\u4e00-\u9fa5A-Za-z0-9「」（）()\s]{2,24}?(?:项目|计划))/
+        value: /名称[：:]\s*([^\n，。]{2,30})|([A-Za-z\u4e00-\u9fa50-9「」（）()\s]{2,24}?(?:项目|计划))/
       },
       {
         key: "processing_time", label: "办理周期", kind: "text",
@@ -86,12 +86,12 @@ export const IMMIGRATION_EXTRACTION: DocExtractionSchema[] = [
       {
         key: "residency_requirement", label: "居住要求", kind: "text",
         presence: /(居住|居留|登录|residency)/i,
-        value: /([^。\n]{0,40}(?:居住|居留|登录)[^。\n]{0,30})/
+        value: /居住要求[：:\s]+([^。\n]{2,40})/
       },
       {
         key: "eligibility", label: "适用/资格条件", kind: "list",
         presence: /(条件|资格|适用|eligibility)/i,
-        item: /^\s*(?:[-*•]\s*)?(.{4,80}(?:条件|资格|年龄|学历|资产|无犯罪|适用))/
+        item: /^\s*(?:[-*•]\s+|\d+[.、]\s*)(.{4,80})/
       }
     ]
   },

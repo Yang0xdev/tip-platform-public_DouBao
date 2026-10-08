@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { type Actor } from "./api.js";
 import { Badge, Loading, Panel, Td, Th, useApi } from "./modules.js";
 import { ActBtn, post } from "./modules-m3.js";
@@ -76,7 +76,10 @@ export function A14Refinery({ actor }: { actor: Actor }) {
   const [selId, setSelId] = useState<string | null>(null);
   const [form, setForm] = useState({ title: "", content: "" });
   const [ingestErr, setIngestErr] = useState<string | null>(null);
+  const [uploadMsg, setUploadMsg] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const pdfRef = useRef<HTMLInputElement>(null);
+  const folderRef = useRef<HTMLInputElement>(null);
 
   const raws = useApi<{ records: RawRow[] }>("/admin/refinery/sources", actor, [tick]);
   const cans = useApi<{ records: CanRow[] }>("/admin/refinery/canonical", actor, [tick]);
@@ -96,6 +99,54 @@ export function A14Refinery({ actor }: { actor: Actor }) {
       setIngestErr((e as Error).message);
     } finally {
       setBusy(false);
+    }
+  }
+
+  /** PDF 上传：数字件服务端解析；扫描件提示走视觉模型 */
+  async function onPdfFile(file: File) {
+    setBusy(true); setUploadMsg(null);
+    try {
+      const dataUrl = await new Promise<string>((res, rej) => {
+        const fr = new FileReader();
+        fr.onload = () => res(fr.result as string);
+        fr.onerror = rej;
+        fr.readAsDataURL(file);
+      });
+      const base64 = dataUrl.split(",")[1]!;
+      const r = (await post(actor, "/admin/refinery/sources/ingest-pdf", {
+        title: file.name.replace(/\.pdf$/i, ""), base64
+      })) as RawRow;
+      const vision = /待视觉模型/.test(r.parseTool ?? "");
+      setUploadMsg(vision
+        ? "疑似扫描件：请在本机 Qwen-VL 可用时解析（浏览器视觉通道）"
+        : `PDF 已解析（${r.blocks?.length ?? 0} 块），可一键跑到复核`);
+      refresh(); setSelId(r.id);
+    } catch (e) {
+      setUploadMsg(`PDF 上传失败：${(e as Error).message}`);
+    } finally {
+      setBusy(false);
+      if (pdfRef.current) pdfRef.current.value = "";
+    }
+  }
+
+  /** 文件夹批量导入（.txt/.md/.html），自动跑到待复核 */
+  async function onFolderFiles(files: FileList) {
+    const picked = [...files].filter((f) => /\.(txt|md|html?)$/i.test(f.name));
+    if (picked.length === 0) { setUploadMsg("文件夹中未找到 .txt/.md/.html 文件"); return; }
+    setBusy(true); setUploadMsg(null);
+    try {
+      const items = await Promise.all(picked.map(async (f) => ({
+        title: f.name.replace(/\.(txt|md|html?)$/i, ""),
+        content: await f.text()
+      })));
+      const r = (await post(actor, "/admin/refinery/sources/ingest-batch", { items, auto: true })) as { ingested: string[] };
+      setUploadMsg(`批量导入 ${r.ingested.length} 份（已自动跑到待复核；重复内容自动跳过）`);
+      refresh();
+    } catch (e) {
+      setUploadMsg(`批量导入失败：${(e as Error).message}`);
+    } finally {
+      setBusy(false);
+      if (folderRef.current) folderRef.current.value = "";
     }
   }
 
@@ -150,7 +201,7 @@ export function A14Refinery({ actor }: { actor: Actor }) {
           <Metric label="字段平均置信" value={String(dash.data?.metrics.avgFieldConf ?? 0)} />
         </div>
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          <ActBtn label="载入移民高频示例包（4 份）" kind="navy"
+          <ActBtn label="载入移民高频示例包（10 份）" kind="navy"
             run={() => post(actor, "/admin/refinery/sample-pack", {})} onDone={refresh} />
           <div className="flex items-center gap-2 text-[12px] text-faint">
             复核人 id
@@ -166,10 +217,26 @@ export function A14Refinery({ actor }: { actor: Actor }) {
         <div className="grid md:grid-cols-2 gap-3">
           <input placeholder="资料标题" value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })} className={inputCls} />
-          <div className="text-[11px] text-faint self-center">
-            支持 PDF 数字件（API 已具备，UI 上传随后开放）；扫描件走视觉模型。
+          <div className="flex flex-wrap items-center gap-2">
+            <input ref={pdfRef} type="file" accept="application/pdf" className="hidden"
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) void onPdfFile(f); }} />
+            <button disabled={busy} onClick={() => pdfRef.current?.click()}
+              className="h-9 px-4 rounded-btn border border-line text-[12px] font-semibold text-navy disabled:opacity-50 hover:bg-line-soft transition">
+              上传数字 PDF
+            </button>
+            <input ref={folderRef} type="file" multiple className="hidden"
+              onChange={(e) => { if (e.target.files) void onFolderFiles(e.target.files); }} />
+            <button disabled={busy} onClick={() => {
+              const el = folderRef.current!;
+              el.setAttribute("webkitdirectory", "");
+              el.click();
+            }}
+              className="h-9 px-4 rounded-btn border border-line text-[12px] font-semibold text-navy disabled:opacity-50 hover:bg-line-soft transition">
+              文件夹批量导入
+            </button>
           </div>
         </div>
+        {uploadMsg && <div className="mt-2 rounded-lg bg-navy-50 px-3 py-2 text-[12px] text-navy">{uploadMsg}</div>}
         <textarea placeholder="粘贴正文内容…" rows={5} value={form.content}
           onChange={(e) => setForm({ ...form, content: e.target.value })}
           className="mt-3 w-full rounded-xl border border-line px-3 py-2.5 text-[13px] outline-none focus:border-navy focus:ring-2 focus:ring-navy-50 transition" />
