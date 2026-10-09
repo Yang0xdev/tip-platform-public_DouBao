@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { CurrentActor, RealmAllowed, RealmGuard, type Actor } from "../realm.guard.js";
 import type { DocType } from "./refinery.types.js";
 import { RefineryService } from "./refinery.service.js";
+import { CollectorsService } from "./collectors/collectors.service.js";
 
 /**
  * AI 数据工厂管理端点（admin/refinery/*，staff）。
@@ -11,7 +12,16 @@ import { RefineryService } from "./refinery.service.js";
 @UseGuards(RealmGuard)
 @RealmAllowed("staff")
 export class RefineryController {
-  constructor(private readonly refinery: RefineryService) {}
+  constructor(
+    private readonly refinery: RefineryService,
+    private readonly collectors?: CollectorsService
+  ) {}
+
+  /* 采集器状态（文件夹/邮箱） */
+  @Get("collectors/status")
+  collectorsStatus() {
+    return this.collectors?.status() ?? { folder: { enabled: false }, imap: { enabled: false } };
+  }
 
   /* ① 采集 */
   @Post("sources/ingest-text")

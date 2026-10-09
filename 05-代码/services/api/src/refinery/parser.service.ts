@@ -67,7 +67,9 @@ export class LayoutParser {
     needsVision: boolean;
   }> {
     const pdfjs: any = await import("pdfjs-dist/legacy/build/pdf.mjs");
-    const doc = await pdfjs.getDocument({ data: bytes, isEvalSupported: false, useSystemFonts: true }).promise;
+    const doc = await pdfjs.getDocument({
+      data: new Uint8Array(bytes), isEvalSupported: false, useSystemFonts: true
+    }).promise;
     const blocks: LayoutBlock[] = [];
     let seq = 0;
     let totalChars = 0;

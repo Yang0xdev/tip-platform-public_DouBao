@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { type Actor } from "./api.js";
 import { Badge, Loading, Panel, Td, Th, useApi } from "./modules.js";
 import { ActBtn, post } from "./modules-m3.js";
+import { pickVisionModel, visionParsePdf } from "./vision-parse.js";
 
 /* ================= A14 AI 数据工厂 ================= */
 
@@ -80,10 +81,12 @@ export function A14Refinery({ actor }: { actor: Actor }) {
   const [busy, setBusy] = useState(false);
   const pdfRef = useRef<HTMLInputElement>(null);
   const folderRef = useRef<HTMLInputElement>(null);
+  const scanFiles = useRef(new Map<string, File>());
 
   const raws = useApi<{ records: RawRow[] }>("/admin/refinery/sources", actor, [tick]);
   const cans = useApi<{ records: CanRow[] }>("/admin/refinery/canonical", actor, [tick]);
   const dash = useApi<any>("/admin/refinery/dashboard", actor, [tick]);
+  const coll = useApi<any>("/admin/refinery/collectors/status", actor, [tick]);
   const sel = raws.data?.records.find((r) => r.id === selId) ?? null;
 
   async function ingest() {
@@ -117,8 +120,9 @@ export function A14Refinery({ actor }: { actor: Actor }) {
         title: file.name.replace(/\.pdf$/i, ""), base64
       })) as RawRow;
       const vision = /待视觉模型/.test(r.parseTool ?? "");
+      if (vision) scanFiles.current.set(r.id, file);
       setUploadMsg(vision
-        ? "疑似扫描件：请在本机 Qwen-VL 可用时解析（浏览器视觉通道）"
+        ? "疑似扫描件：点击下方「浏览器视觉解析」，由本机 Qwen-VL 转录（图像不离开本机）"
         : `PDF 已解析（${r.blocks?.length ?? 0} 块），可一键跑到复核`);
       refresh(); setSelId(r.id);
     } catch (e) {
@@ -150,6 +154,28 @@ export function A14Refinery({ actor }: { actor: Actor }) {
     }
   }
 
+  /** 扫描件：本机视觉模型转录版面块，回传后自动跑到待复核 */
+  async function runVision(id: string) {
+    const file = scanFiles.current.get(id);
+    if (!file) { setUploadMsg("未保留该 PDF 文件，请重新上传该扫描件"); return; }
+    setBusy(true); setUploadMsg(null);
+    try {
+      const model = await pickVisionModel();
+      const { blocks, truncated } = await visionParsePdf(file, model, (cur, total) =>
+        setUploadMsg(`视觉解析中：第 ${cur}/${total} 页（模型 ${model}）`));
+      if (blocks.length === 0) throw new Error("视觉模型未转录出任何版面块");
+      await post(actor, `/admin/refinery/sources/${id}/blocks`, { blocks: blocks as unknown });
+      setUploadMsg(`视觉转录完成（${blocks.length} 块${truncated ? "，超出 12 页部分未处理" : ""}），继续自动工段…`);
+      await post(actor, `/admin/refinery/sources/${id}/auto-run`, {});
+      refresh();
+      setUploadMsg(`扫描件已走完抽取/清洗，进入待复核（${blocks.length} 块）`);
+    } catch (e) {
+      setUploadMsg((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   /** 行内工段按钮（按状态） */
   function StageActions({ r }: { r: RawRow }) {
     const asReviewer = { ...actor, user: reviewer };
@@ -165,7 +191,9 @@ export function A14Refinery({ actor }: { actor: Actor }) {
           <ActBtn label="解析" kind="ghost" run={() => post(actor, `/admin/refinery/sources/${r.id}/parse`, {})} onDone={refresh} />
         )}
         {r.stage === "parsed" && (
-          <ActBtn label="抽取" kind="ghost" run={() => post(actor, `/admin/refinery/sources/${r.id}/extract`, {})} onDone={refresh} />
+          /待视觉模型/.test(r.parseTool ?? "")
+            ? <ActBtn label="浏览器视觉解析" kind="navy" run={async () => runVision(r.id)} onDone={refresh} />
+            : <ActBtn label="抽取" kind="ghost" run={() => post(actor, `/admin/refinery/sources/${r.id}/extract`, {})} onDone={refresh} />
         )}
         {r.stage === "extracted" && (
           <ActBtn label="清洗归一" kind="ghost" run={() => post(actor, `/admin/refinery/sources/${r.id}/normalize`, {})} onDone={refresh} />
@@ -223,7 +251,33 @@ export function A14Refinery({ actor }: { actor: Actor }) {
         </div>
       </Panel>
 
-      {/* 采集 */}
+      {/* 自动采集器状态 */}
+      <Panel title="自动采集器（文件夹 / 邮箱）" sub="服务端按环境变量启用；采集到的资料自动跑到待复核">
+        <div className="grid md:grid-cols-2 gap-3">
+          {[
+            { k: "folder", name: "文件夹监听", env: "REFINERY_WATCH_DIR" },
+            { k: "imap", name: "邮箱 IMAP", env: "IMAP_HOST / IMAP_USER / IMAP_PASS" }
+          ].map((c) => {
+            const s = coll.data?.[c.k];
+            return (
+              <div key={c.k} className="rounded-2xl border border-line p-3.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[13px] font-bold text-navy">{c.name}</span>
+                  <span className={`text-[10.5px] font-bold px-2 py-0.5 rounded-full ${
+                    s?.enabled ? "bg-ok-bg text-ok" : "bg-line-soft text-faint"
+                  }`}>{s?.enabled ? "已启用" : "未启用"}</span>
+                </div>
+                <div className="text-[11px] text-faint mt-2">配置：{c.env}</div>
+                {s?.lastRunAt && <div className="text-[11px] text-faint mt-1">
+                  上次运行 {new Date(s.lastRunAt).toLocaleString()} · 入库 {s.lastIngested}
+                </div>}
+                {s?.lastError && <div className="text-[11px] text-bad mt-1">异常：{s.lastError}</div>}
+              </div>
+            );
+          })}
+        </div>
+      </Panel>
+
       <Panel title="① 采集入 L0（不可变）" sub="粘贴资料正文（政策/费表/项目资料/合同等）；系统生成内容指纹去重">
         <div className="grid md:grid-cols-2 gap-3">
           <input placeholder="资料标题" value={form.title}
