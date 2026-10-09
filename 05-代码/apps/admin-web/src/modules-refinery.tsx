@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { type Actor } from "./api.js";
 import { Badge, Loading, Panel, Td, Th, useApi } from "./modules.js";
 import { ActBtn, post } from "./modules-m3.js";
-import { pickVisionModel, visionParsePdf } from "./vision-parse.js";
+import { pickVisionModel, probeOllama, visionParsePdf, type ProbeResult, type VisionBlock } from "./vision-parse.js";
 
 /* ================= A14 AI 数据工厂 ================= */
 
@@ -82,6 +82,8 @@ export function A14Refinery({ actor }: { actor: Actor }) {
   const pdfRef = useRef<HTMLInputElement>(null);
   const folderRef = useRef<HTMLInputElement>(null);
   const scanFiles = useRef(new Map<string, File>());
+  const [probe, setProbe] = useState<ProbeResult | null>(null);
+  const [visionDraft, setVisionDraft] = useState<{ id: string; blocks: VisionBlock[]; truncated: boolean } | null>(null);
 
   const raws = useApi<{ records: RawRow[] }>("/admin/refinery/sources", actor, [tick]);
   const cans = useApi<{ records: CanRow[] }>("/admin/refinery/canonical", actor, [tick]);
@@ -154,7 +156,7 @@ export function A14Refinery({ actor }: { actor: Actor }) {
     }
   }
 
-  /** 扫描件：本机视觉模型转录版面块，回传后自动跑到待复核 */
+  /** 扫描件：本机视觉模型转录版面块 → 打开逐页校对弹窗 */
   async function runVision(id: string) {
     const file = scanFiles.current.get(id);
     if (!file) { setUploadMsg("未保留该 PDF 文件，请重新上传该扫描件"); return; }
@@ -164,9 +166,24 @@ export function A14Refinery({ actor }: { actor: Actor }) {
       const { blocks, truncated } = await visionParsePdf(file, model, (cur, total) =>
         setUploadMsg(`视觉解析中：第 ${cur}/${total} 页（模型 ${model}）`));
       if (blocks.length === 0) throw new Error("视觉模型未转录出任何版面块");
+      setVisionDraft({ id, blocks, truncated });
+      setUploadMsg(`视觉转录完成（${blocks.length} 块），请逐页校对后确认`);
+    } catch (e) {
+      setUploadMsg((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  /** 校对确认：回传版面块并自动跑到待复核 */
+  async function confirmVision() {
+    if (!visionDraft) return;
+    const { id, blocks } = visionDraft;
+    setBusy(true);
+    try {
       await post(actor, `/admin/refinery/sources/${id}/blocks`, { blocks: blocks as unknown });
-      setUploadMsg(`视觉转录完成（${blocks.length} 块${truncated ? "，超出 12 页部分未处理" : ""}），继续自动工段…`);
       await post(actor, `/admin/refinery/sources/${id}/auto-run`, {});
+      setVisionDraft(null);
       refresh();
       setUploadMsg(`扫描件已走完抽取/清洗，进入待复核（${blocks.length} 块）`);
     } catch (e) {
@@ -249,6 +266,37 @@ export function A14Refinery({ actor }: { actor: Actor }) {
             <span className="text-[10.5px]">（四眼：须不同于提交人）</span>
           </div>
         </div>
+      </Panel>
+
+      {/* Mac 视觉环境自检 */}
+      <Panel title="本机视觉环境自检（Mac / 工作站）" sub="浏览器直连本机 Ollama；扫描件图像不离开本机">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <ActBtn label="检测本机视觉环境" kind="navy" run={async () => setProbe(await probeOllama())} onDone={() => {}} />
+          <a href="/mac-vision" target="_blank" rel="noreferrer"
+            className="h-9 px-4 inline-flex items-center rounded-btn border border-line text-[12px] font-semibold text-navy hover:bg-line-soft transition">
+            Mac 配置图文指引
+          </a>
+        </div>
+        {probe && (
+          <div className="mt-3 space-y-2">
+            <div className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11.5px] font-bold ${
+              probe.reachable ? "bg-ok-bg text-ok" : "bg-bad-bg text-bad"
+            }`}>
+              {probe.reachable ? "Ollama 已连通" : "Ollama 未连通"}
+            </div>
+            {probe.reachable && (
+              <div className="text-[12px] text-mut">
+                已安装模型：{probe.allModels.join("、") || "（无）"}
+                <div className="mt-1">
+                  {probe.vlModels.length > 0
+                    ? <span className="text-ok font-semibold">视觉模型就绪：{probe.vlModels.join("、")}</span>
+                    : <span className="text-warn font-semibold">未发现视觉模型，请执行：ollama pull qwen2.5vl:7b</span>}
+                </div>
+              </div>
+            )}
+            {probe.error && <div className="rounded-lg bg-bad-bg px-3 py-2 text-[11.5px] text-bad">{probe.error}</div>}
+          </div>
+        )}
       </Panel>
 
       {/* 自动采集器状态 */}
@@ -442,6 +490,68 @@ export function A14Refinery({ actor }: { actor: Actor }) {
           </div>
         </Loading>
       </Panel>
+
+      {/* 视觉转录逐页校对弹窗 */}
+      {visionDraft && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy/40 backdrop-blur-sm">
+          <div className="w-full max-w-2xl max-h-[86vh] overflow-y-auto rounded-3xl bg-white shadow-2xl">
+            <div className="sticky top-0 bg-white/95 backdrop-blur px-6 pt-5 pb-3 border-b border-line-soft flex items-center justify-between">
+              <div>
+                <div className="text-[15px] font-extrabold text-navy">逐页校对转录结果 · {visionDraft.id}</div>
+                <div className="text-[11px] text-faint mt-0.5">
+                  共 {visionDraft.blocks.length} 块{visionDraft.truncated ? "；超出 12 页部分未处理" : ""}；可改文字、改类型、删除误识别块
+                </div>
+              </div>
+              <button className="text-faint hover:text-navy text-[20px] leading-none"
+                onClick={() => setVisionDraft(null)}>×</button>
+            </div>
+            <div className="px-6 py-4 space-y-3">
+              {[...new Set(visionDraft.blocks.map((b) => b.page))].map((p) => (
+                <div key={p}>
+                  <div className="text-[10.5px] font-bold text-faint mb-1.5">第 {p} 页</div>
+                  <div className="space-y-2">
+                    {visionDraft.blocks.filter((b) => b.page === p).map((b) => {
+                      const idx = visionDraft.blocks.indexOf(b);
+                      const set = (patch: Partial<VisionBlock>) =>
+                        setVisionDraft({
+                          ...visionDraft,
+                          blocks: visionDraft.blocks.map((x, i) => (i === idx ? { ...x, ...patch } : x))
+                        });
+                      return (
+                        <div key={b.id} className="rounded-xl border border-line p-2.5 flex gap-2">
+                          <select value={b.type} onChange={(e) => set({ type: e.target.value as VisionBlock["type"] })}
+                            className="h-8 w-[104px] shrink-0 rounded-lg border border-line bg-white px-1.5 text-[11px] outline-none">
+                            <option value="heading">标题</option>
+                            <option value="paragraph">段落</option>
+                            <option value="list">清单</option>
+                            <option value="table">表格</option>
+                          </select>
+                          <textarea value={b.text} rows={Math.min(6, Math.max(1, Math.ceil(b.text.length / 34)))}
+                            onChange={(e) => set({ text: e.target.value })}
+                            className="flex-1 rounded-lg border border-line px-2.5 py-1.5 text-[12px] outline-none focus:border-navy resize-y" />
+                          <button className="self-start text-faint hover:text-bad text-[16px] leading-none px-1"
+                            onClick={() => setVisionDraft({
+                              ...visionDraft, blocks: visionDraft.blocks.filter((x) => x.id !== b.id)
+                            })}>×</button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="sticky bottom-0 bg-white/95 backdrop-blur px-6 py-3.5 border-t border-line-soft flex justify-end gap-2.5">
+              <button className="h-10 px-5 rounded-btn border border-line text-[13px] font-semibold text-navy hover:bg-line-soft"
+                onClick={() => setVisionDraft(null)}>取消</button>
+              <button disabled={busy || visionDraft.blocks.every((b) => !b.text.trim())}
+                className="h-10 px-6 rounded-btn bg-navy text-white text-[13px] font-semibold disabled:opacity-50 hover:opacity-90"
+                onClick={() => void confirmVision()}>
+                确认并继续工段
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

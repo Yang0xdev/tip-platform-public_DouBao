@@ -19,6 +19,32 @@ export interface VisionBlock {
 const OLLAMA = "http://127.0.0.1:11434";
 const MAX_PAGES = 12;
 
+export interface ProbeResult {
+  reachable: boolean;
+  allModels: string[];
+  vlModels: string[];
+  error?: string;
+}
+
+/** 自检：浏览器 → 本机 Ollama 连通性与视觉模型清单 */
+export async function probeOllama(): Promise<ProbeResult> {
+  let tags: { models?: Array<{ name: string }> };
+  try {
+    const r = await fetch(`${OLLAMA}/api/tags`);
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    tags = await r.json();
+  } catch {
+    return {
+      reachable: false, allModels: [], vlModels: [],
+      error:
+        "连不上本机 Ollama。请确认：① Ollama 已启动；② 已执行 launchctl setenv OLLAMA_ORIGINS 放行本站并重启 Ollama"
+    };
+  }
+  const allModels = (tags.models ?? []).map((m) => m.name);
+  const vlModels = allModels.filter((n) => /vl/i.test(n));
+  return { reachable: true, allModels, vlModels };
+}
+
 /** 探测本机 Ollama 上可用的视觉模型；不可达抛错（含配置指引） */
 export async function pickVisionModel(): Promise<string> {
   let tags: { models?: Array<{ name: string }> };
@@ -45,12 +71,8 @@ export async function pickVisionModel(): Promise<string> {
 async function transcribePage(
   model: string, imageBase64: string, page: number
 ): Promise<VisionBlock[]> {
-  const prompt = [
-    "你是严谨的文档转录引擎。逐字转录图片中的文档内容，按版面结构分块输出。",
-    "只输出 JSON：{\"blocks\":[{\"type\":\"heading|paragraph|list|table\",\"text\":\"逐字内容\"}]}。",
-    "规则：标题用 heading；普通段落用 paragraph；多条目清单合并为一个 list（条目间用换行）；表格用 table 并保留行列文字；",
-    "不得总结、不得补全、不得翻译、不得添加图片中没有的内容；看不清的文字不要输出。"
-  ].join("");
+  // 极简 prompt：实测对 Qwen2.5-VL（3b/7b）最稳健；任何加长规则反而导致只输出标题
+  const prompt = '逐字转录，只输出 JSON：{"blocks":[{"type":"heading|paragraph|list|table","text":"..."}]}';
   const r = await fetch(`${OLLAMA}/api/generate`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -95,13 +117,15 @@ export async function visionParsePdf(
   for (let p = 1; p <= total; p++) {
     onProgress?.(p, total);
     const page = await pdf.getPage(p);
-    const viewport = page.getViewport({ scale: 1.6 });
+    const viewport = page.getViewport({ scale: 2.0 });
     const canvas = document.createElement("canvas");
     canvas.width = Math.ceil(viewport.width);
     canvas.height = Math.ceil(viewport.height);
     const ctx = canvas.getContext("2d")!;
     await page.render({ canvasContext: ctx, viewport }).promise;
-    const img = canvas.toDataURL("image/jpeg", 0.85).split(",")[1]!;
+    // 用 PNG（无损）：实测 JPEG 压缩伪影会让 3b 模型把整页合并成一块；
+    // 白底文字页 PNG 仅约 300KB，体积可接受
+    const img = canvas.toDataURL("image/png").split(",")[1]!;
     const pageBlocks = await transcribePage(model, img, p);
     blocks.push(...pageBlocks);
   }
