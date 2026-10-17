@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-# HBWhere · Mac 本机视觉解析一键配置（v3：强制端口交接 + 通道归属校验）
+# HBWhere · Mac 本机视觉解析一键配置（v4：彻底退出应用本体 + 通道归属校验）
 # 双击运行（若被 Gatekeeper 拦截：右键 → 打开 → 打开）
 # 幂等，可重复执行；全程不使用 sudo，不产生任何费用
 #
@@ -23,7 +23,7 @@ PLIST="$HOME/Library/LaunchAgents/com.hbwhere.ollama-relay.plist"
 UID_NUM="$(id -u)"
 
 echo "=========================================="
-echo "  HBWhere 本机视觉解析配置（Mac）v3"
+echo "  HBWhere 本机视觉解析配置（Mac）v4"
 echo "=========================================="
 
 port_busy(){ lsof -nP -iTCP:"$1" -sTCP:LISTEN >/dev/null 2>&1; }
@@ -55,28 +55,42 @@ if [ -z "$OLLAMA" ]; then
 fi
 ok "Ollama：${OLLAMA}"
 
-# 2) 彻底停旧：先卸载旧通道，再结束 Ollama，直到两个端口都释放
+# 2) 彻底停旧：先卸载旧通道；先退出 GUI 应用本体（否则它会自动拉起服务），
+#    再按端口精确结束持有进程，直到两个端口都释放
 info "停止旧 Ollama 与旧安全通道…"
 launchctl bootout "gui/${UID_NUM}/com.hbwhere.ollama-relay" 2>/dev/null || true
 launchctl unload "$PLIST" 2>/dev/null || true
+
+osascript -e 'tell application "Ollama" to quit' 2>/dev/null || true
 osascript -e 'quit app "Ollama"' 2>/dev/null || true
-sleep 3
-for i in $(seq 1 12); do
+# Ollama App 主程序在不同版本叫 Ollama 或 ollama-darwin；先把它本身结束，防止它重启服务
+killall ollama-darwin 2>/dev/null || true
+killall Ollama 2>/dev/null || true
+sleep 4
+
+# 端口仍被占用：按 PID 精确结束（不依赖进程名），最多等约 40 秒
+for i in $(seq 1 20); do
   port_busy 11434 || port_busy 11435 || break
-  pkill -x ollama 2>/dev/null || true
+  PIDS="$(lsof -nP -iTCP:11434 -sTCP:LISTEN -t 2>/dev/null; lsof -nP -iTCP:11435 -sTCP:LISTEN -t 2>/dev/null)"
+  for p in $PIDS; do kill "$p" 2>/dev/null || true; done
+  # 应用本体若又拉起，再结束一轮
+  killall ollama-darwin 2>/dev/null || true
+  killall Ollama 2>/dev/null || true
   sleep 2
 done
+# 仍占用则强制结束
 if port_busy 11434 || port_busy 11435; then
-  pkill -9 -x ollama 2>/dev/null || true
+  PIDS="$(lsof -nP -iTCP:11434 -sTCP:LISTEN -t 2>/dev/null; lsof -nP -iTCP:11435 -sTCP:LISTEN -t 2>/dev/null)"
+  for p in $PIDS; do kill -9 "$p" 2>/dev/null || true; done
   sleep 3
 fi
 if port_busy 11434 || port_busy 11435; then
-  fail "端口 11434/11435 仍被占用（可能有另一个 Ollama 或终端 serve 在运行）。请完全退出 Ollama（菜单栏图标 → Quit）后重新运行本脚本。"
+  fail "端口 11434/11435 仍被占用。请手动操作：菜单栏点 Ollama 图标 → Quit Ollama；若终端里跑过 ollama serve，请在那个终端按 Ctrl+C，然后重新运行本脚本。"
   lsof -nP -iTCP:11434 -sTCP:LISTEN 2>/dev/null
   lsof -nP -iTCP:11435 -sTCP:LISTEN 2>/dev/null
   read -n1 -r -p "按任意键关闭…"; exit 1
 fi
-ok "旧进程已全部停止，端口已释放"
+ok "Ollama 应用与服务已全部停止，端口已释放"
 
 # 3) 写入 Ollama 环境变量（GUI App 从 launchd 继承）
 launchctl setenv OLLAMA_ORIGINS "$ORIGINS"
