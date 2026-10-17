@@ -6,14 +6,14 @@
 <title>Mac 本机视觉解析配置指引 · HBWhere</title>
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Manrope:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap">
 <style>
-  :root{--navy:#002661;--berry:#AF2D67;--faint:#8A95A6;--line:#E5E9F0;--soft:#F0F3F8;--paper:#F5F7FA;--ok:#177A5B;--okbg:#E6F4EE}
+  :root{--navy:#002661;--berry:#AF2D67;--faint:#8A95A6;--line:#E5E9F0;--soft:#F0F3F8;--paper:#F5F7FA;--ok:#177A5B;--okbg:#E6F4EE;--bad:#C03221;--badbg:#FCEBEA}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Manrope','Noto Sans SC',system-ui,sans-serif;background:var(--paper);color:#1B2433;line-height:1.65}
-  .hero{background:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);color:#fff;padding:56px 24px 64px}
+  .hero{background:linear-gradient(132deg,#AF2D67 0%,#5E246B 46%,#002661 100%);background-size:170% 100%;color:#fff;padding:56px 24px 64px}
   .wrap{max-width:860px;margin:0 auto}
   .hero h1{font-size:30px;font-weight:800;letter-spacing:-.5px}
   .hero p{opacity:.88;margin-top:10px;font-size:14.5px;max-width:620px}
-  .card{background:#fff;border-radius:22px;padding:28px 30px;margin-top:-34px;box-shadow:0 18px 50px rgba(0,38,97,.12)}
+  .card{background:#fff;border-radius:22px;padding:30px 32px;margin-top:-34px;box-shadow:0 18px 50px rgba(0,38,97,.12)}
   h2{font-size:18px;font-weight:800;color:var(--navy);margin:34px 0 14px;display:flex;align-items:center;gap:10px}
   h2 .n{width:28px;height:28px;border-radius:10px;background:linear-gradient(132deg,#AF2D67,#002661);color:#fff;font-size:13px;display:inline-flex;align-items:center;justify-content:center;font-weight:700}
   .cmd{position:relative;background:#0B1B38;color:#DCE4F2;border-radius:14px;padding:14px 16px;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:12.5px;line-height:1.7;overflow-x:auto;margin:10px 0}
@@ -23,55 +23,97 @@
   ul.clean{list-style:none;padding-left:2px}
   ul.clean li{padding:6px 0 6px 26px;position:relative;font-size:13.5px}
   ul.clean li::before{content:"";position:absolute;left:4px;top:14px;width:8px;height:8px;border-radius:50%;background:linear-gradient(132deg,#AF2D67,#002661)}
+  ul.steps{list-style:none;counter-reset:s;padding-left:2px}
+  ul.steps li{counter-increment:s;padding:8px 0 8px 42px;position:relative;font-size:14px}
+  ul.steps li::before{content:counter(s);position:absolute;left:0;top:6px;width:28px;height:28px;border-radius:10px;background:linear-gradient(132deg,#AF2D67,#002661);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center}
   .note{background:var(--okbg);border-radius:14px;padding:14px 16px;font-size:12.5px;color:var(--ok);margin-top:12px}
   .warn{background:#FBF1E2;border-radius:14px;padding:14px 16px;font-size:12.5px;color:#B45309;margin-top:12px}
   table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
   th{text-align:left;color:var(--faint);font-weight:700;font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line)}
   td{padding:10px;border-bottom:1px solid var(--soft)}
   code{background:var(--soft);border-radius:6px;padding:1px 7px;font-size:11.5px;font-family:ui-monospace,Menlo,monospace}
-  .btn{display:inline-flex;align-items:center;height:44px;padding:0 24px;border-radius:999px;background:linear-gradient(132deg,#AF2D67,#002661);color:#fff;font-weight:700;font-size:14px;text-decoration:none;margin-top:20px}
+  .btn{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 28px;border-radius:999px;background:linear-gradient(132deg,#AF2D67,#002661);color:#fff;font-weight:700;font-size:14.5px;text-decoration:none;margin-top:18px;box-shadow:0 10px 26px rgba(175,45,103,.28)}
+  .btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line);box-shadow:none}
+  .hero .btn{background:#fff;color:var(--navy);box-shadow:none}
+  .auto-box{background:linear-gradient(132deg,#FAEEF4 0%,#EDF1F8 100%);border:1px solid var(--line);border-radius:18px;padding:24px 26px;margin-top:18px}
+  .check-box{border:1.5px solid var(--line);border-radius:18px;padding:22px 26px;margin-top:22px}
+  .check-status{margin-top:12px;border-radius:12px;padding:13px 16px;font-size:13px;display:none}
+  .check-status.ok{display:block;background:var(--okbg);color:var(--ok)}
+  .check-status.bad{display:block;background:var(--badbg);color:var(--bad)}
+  .check-status.wait{display:block;background:var(--soft);color:var(--navy)}
+  .check-status b{font-weight:700}
+  details{margin-top:18px;border:1px solid var(--line);border-radius:16px;padding:0 22px}
+  details[open]{padding-bottom:20px}
+  summary{cursor:pointer;font-weight:700;color:var(--navy);font-size:14.5px;padding:18px 0;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"展开";float:right;font-size:12px;color:var(--faint);font-weight:400}
+  details[open] summary::after{content:"收起"}
   .foot{text-align:center;color:var(--faint);font-size:11.5px;padding:36px 20px 46px}
 </style>
 </head>
 <body>
 <div class="hero"><div class="wrap">
-  <h1>Mac 本机视觉解析 · 5 分钟配置</h1>
+  <h1>Mac 本机视觉解析 · 一键配置</h1>
   <p>让后台 A14 的扫描件由你 Mac 上的 Qwen-VL 逐页转录。图像只在浏览器与本机 Ollama 之间传输，不上云、不产生任何费用。</p>
+  <a class="btn" href="/mac-setup.zip" download>下载一键配置脚本（mac-setup.zip）</a>
 </div></div>
 
 <div class="wrap">
 <div class="card">
 
-  <h2><span class="n">1</span>安装并启动 Ollama</h2>
-  <div class="cmd">brew install ollama<span class="c">  # 或官网 ollama.com 下载，启动菜单栏 App</span></div>
+  <div class="auto-box">
+    <h2 style="margin-top:0">推荐方式：双击自动完成（约 1 分钟 + 模型下载）</h2>
+    <ul class="steps">
+      <li><strong>下载并解压</strong>上面的 <code>mac-setup.zip</code>，得到 <code>mac-setup.command</code></li>
+      <li><strong>双击运行</strong>；若提示“无法打开（来自身份不明的开发者）”，对文件<strong>右键 → 打开 → 打开</strong>即可</li>
+      <li>脚本自动完成：安装/启动 Ollama → 放行演示站点 → 重启 → 拉取视觉模型 → 自检；看到“全部就绪”即完成</li>
+    </ul>
+    <div class="note">脚本可重复运行（幂等），不使用 sudo；模型已存在会自动跳过下载。</div>
+  </div>
 
-  <h2><span class="n">2</span>拉取视觉模型（约 5GB）</h2>
-  <div class="cmd">ollama pull qwen2.5vl:7b
+  <div class="check-box">
+    <h2 style="margin-top:0">运行完脚本？点这里即时检测</h2>
+    <p style="font-size:13px;color:#5E6B7E">检测直接从浏览器访问你本机的 <code>127.0.0.1:11434</code>，结果只显示在本页，不上传任何信息。</p>
+    <a class="btn" id="checkBtn" href="javascript:void(0)">检测本机视觉环境</a>
+    <div class="check-status" id="checkStatus"></div>
+  </div>
+
+  <details>
+    <summary>手动配置（不想用脚本时，共 5 步）</summary>
+
+    <h2><span class="n">1</span>安装并启动 Ollama</h2>
+    <div class="cmd">brew install ollama<span class="c">  # 或官网 ollama.com 下载，启动菜单栏 App</span></div>
+
+    <h2><span class="n">2</span>拉取视觉模型（约 5GB）</h2>
+    <div class="cmd">ollama pull qwen2.5vl:7b
 ollama list<span class="c">  # 确认列表里有 qwen2.5vl:7b</span></div>
-  <div class="note">内存 16GB 的 Mac 跑 7B 完全可用；首次推理会慢一些（模型加载），之后逐页约十几秒。</div>
+    <div class="note">内存 16GB 的 Mac 跑 7B 完全可用；首次推理会慢一些（模型加载），之后逐页约十几秒。</div>
 
-  <h2><span class="n">3</span>放行演示站点（关键，否则浏览器被拦截）</h2>
-  <div class="cmd">launchctl setenv OLLAMA_ORIGINS "https://demo.hbwhere.com,http://localhost:5100"
+    <h2><span class="n">3</span>放行演示站点（关键，否则浏览器被拦截）</h2>
+    <div class="cmd">launchctl setenv OLLAMA_ORIGINS "https://demo.hbwhere.com,http://localhost:5100"
 launchctl setenv OLLAMA_HOST "127.0.0.1:11434"</div>
-  <ul class="clean">
-    <li>执行后<strong>退出菜单栏的 Ollama 再重新打开</strong>（环境变量才生效）</li>
-    <li>验证：终端运行 <code>curl http://127.0.0.1:11434/api/tags</code>，能看到模型 JSON 即正常</li>
-  </ul>
+    <ul class="clean">
+      <li>执行后<strong>退出菜单栏的 Ollama 再重新打开</strong>（环境变量才生效）</li>
+      <li>验证：终端运行 <code>curl http://127.0.0.1:11434/api/tags</code>，能看到模型 JSON 即正常</li>
+    </ul>
+    <div class="warn">终端一行命令也可直接跑脚本：<code>bash -c "$(curl -fsSL https://demo.hbwhere.com/mac-setup.command)"</code></div>
 
-  <h2><span class="n">4</span>回到后台自检并解析</h2>
-  <ul class="clean">
-    <li>打开 A14，点「<strong>检测本机视觉环境</strong>」，显示“Ollama 已连通 · 视觉模型就绪”</li>
-    <li>在「① 采集」上传扫描 PDF → L0 队列该行点「<strong>浏览器视觉解析</strong>」</li>
-    <li>逐页转录完成后，在弹窗里校对（可改字、改类型、删误识别块）→「确认并继续工段」</li>
-    <li>资料自动跑到待复核，四眼通过后发布到 L1</li>
-  </ul>
-  <a class="btn" href="/live/admin/">前往后台 A14</a>
+    <h2><span class="n">4</span>回到后台自检并解析</h2>
+    <ul class="clean">
+      <li>打开 A14，点「<strong>检测本机视觉环境</strong>」，显示“Ollama 已连通 · 视觉模型就绪”</li>
+      <li>在「① 采集」上传扫描 PDF → L0 队列该行点「<strong>浏览器视觉解析</strong>」</li>
+      <li>逐页转录完成后，在弹窗里校对（可改字、改类型、删误识别块）→「确认并继续工段」</li>
+      <li>资料自动跑到待复核，四眼通过后发布到 L1</li>
+    </ul>
+    <a class="btn" href="/live/admin/">前往后台 A14</a>
+  </details>
 
   <h2><span class="n">!</span>常见问题</h2>
   <table>
     <tr><th style="width:42%">现象</th><th>处理</th></tr>
+    <tr><td>双击 .command 被拦截</td><td>对文件右键 → 打开 → 打开；或用上面的终端一行命令</td></tr>
     <tr><td>自检提示“Ollama 未连通”</td><td>Ollama 未启动，或第 3 步后未重启 Ollama</td></tr>
-    <tr><td>提示“未发现视觉模型”</td><td>执行 <code>ollama pull qwen2.5vl:7b</code></td></tr>
+    <tr><td>提示“未发现视觉模型”</td><td>执行 <code>ollama pull qwen2.5vl:7b</code>，或重跑脚本</td></tr>
     <tr><td>浏览器报 CORS / 网络错误</td><td>OLLAMA_ORIGINS 未含 <code>https://demo.hbwhere.com</code>，改后重启</td></tr>
     <tr><td>转录内容明显错乱</td><td>确认用的是 qwen2.5vl:7b 而非小模型；扫描件尽量清晰、正向</td></tr>
     <tr><td>超过 12 页未处理</td><td>单次上限 12 页，把 PDF 拆分为多个文件分别解析</td></tr>
@@ -88,6 +130,30 @@ document.querySelectorAll('.cmd').forEach(function(c){
   b.onclick=function(){ navigator.clipboard.writeText(c.innerText.replace(/^复制\n/,'')); b.textContent='已复制'; setTimeout(function(){b.textContent='复制'},1500); };
   c.appendChild(b);
 });
+(function(){
+  var btn=document.getElementById('checkBtn'), st=document.getElementById('checkStatus');
+  btn.addEventListener('click',async function(){
+    st.className='check-status wait'; st.textContent='正在连接本机 Ollama（127.0.0.1:11434）…';
+    try{
+      var ctrl=new AbortController(); setTimeout(function(){ctrl.abort();},8000);
+      var r=await fetch('http://127.0.0.1:11434/api/tags',{signal:ctrl.signal});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      var d=await r.json();
+      var models=(d.models||[]).map(function(m){return m.name||''});
+      var vl=models.filter(function(n){return /vl/i.test(n);});
+      if(vl.length){
+        st.className='check-status ok';
+        st.innerHTML='<b>✔ 已就绪：</b>Ollama 已连通，视觉模型 <b>'+vl.join('、')+'</b>。现在可进入 A14 上传扫描件并使用「浏览器视觉解析」。';
+      }else{
+        st.className='check-status bad';
+        st.innerHTML='<b>Ollama 已连通，但未发现视觉模型。</b>请在终端执行 <code>ollama pull qwen2.5vl:7b</code>，或重跑一键脚本。';
+      }
+    }catch(e){
+      st.className='check-status bad';
+      st.innerHTML='<b>无法连接本机 Ollama。</b>请确认：① 已安装并启动 Ollama；② 已运行一键脚本（或手动完成放行配置）；③ 完成后重启了 Ollama。';
+    }
+  });
+})();
 </script>
 </body>
 </html>
