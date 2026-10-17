@@ -68,8 +68,8 @@ fi
 if $OLLAMA list 2>/dev/null | grep -q "qwen2.5vl"; then
   ok "已存在 Qwen2.5-VL 模型，跳过下载"
 else
-  info "开始拉取 $VL（约 4.7GB，取决于网速，请勿关闭窗口）…"
-  $OLLAMA pull $VL
+  info "开始拉取 ${VL}（约 4.7GB，取决于网速，请勿关闭窗口）…"
+  ${OLLAMA} pull ${VL}
 fi
 
 # 6) 自检
