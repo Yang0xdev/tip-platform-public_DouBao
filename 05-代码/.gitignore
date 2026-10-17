@@ -20,3 +20,4 @@ tools/*.log
 apps/*/ios/
 apps/*/android/
 apps/*/dist-web-live/
+.backups/
