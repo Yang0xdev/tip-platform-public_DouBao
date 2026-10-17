@@ -66,9 +66,10 @@
     <ul class="steps">
       <li><strong>下载并解压</strong>上面的 <code>mac-setup.zip</code>，得到 <code>mac-setup.command</code></li>
       <li><strong>双击运行</strong>；若提示“无法打开（来自身份不明的开发者）”，对文件<strong>右键 → 打开 → 打开</strong>即可</li>
-      <li>脚本自动完成：安装/启动 Ollama → 放行演示站点 → 重启 → 拉取视觉模型 → 自检；看到“全部就绪”即完成</li>
+      <li>脚本自动完成：安装/启动 Ollama → 放行演示站点 → 安装 Chrome 安全通道（开机自启）→ 拉取视觉模型 → 自检；看到“全部就绪”即完成</li>
     </ul>
-    <div class="note">脚本可重复运行（幂等），不使用 sudo；模型已存在会自动跳过下载。</div>
+    <div class="note">脚本可重复运行（幂等），不使用 sudo；模型已存在会自动跳过下载。新版脚本自动安装一个仅监听本机的「安全通道」，Safari 与 Chrome 均可直接检测和解析。</div>
+    <div class="warn">请在 Mac 的 <b>Safari 或 Chrome</b> 中操作（App 内置浏览器运行在云端，访问不到本机）。若你之前跑过旧版脚本、Chrome 仍连不上，请重新下载本页最新脚本再运行一次。</div>
   </div>
 
   <div class="check-box">
@@ -79,7 +80,7 @@
   </div>
 
   <details>
-    <summary>手动配置（不想用脚本时，共 5 步）</summary>
+    <summary>手动配置（仅 Safari 适用，共 5 步；Chrome 请用上方一键脚本）</summary>
 
     <h2><span class="n">1</span>安装并启动 Ollama</h2>
     <div class="cmd">brew install ollama<span class="c">  # 或官网 ollama.com 下载，启动菜单栏 App</span></div>
@@ -114,7 +115,8 @@ launchctl setenv OLLAMA_HOST "127.0.0.1:11434"</div>
     <tr><td>双击 .command 被拦截</td><td>对文件右键 → 打开 → 打开；或用上面的终端一行命令</td></tr>
     <tr><td>自检提示“Ollama 未连通”</td><td>Ollama 未启动，或第 3 步后未重启 Ollama</td></tr>
     <tr><td>提示“未发现视觉模型”</td><td>执行 <code>ollama pull qwen2.5vl:7b</code>，或重跑脚本</td></tr>
-    <tr><td>浏览器报 CORS / 网络错误</td><td>OLLAMA_ORIGINS 未含 <code>https://demo.hbwhere.com</code>，改后重启</td></tr>
+    <tr><td>Chrome 报 CORS / 网络错误 / 被阻止</td><td>Chrome 的私有网络安全策略（PNA）要求本地安全通道：重新运行本页<b>最新一键脚本</b>即可；或改用 Safari</td></tr>
+    <tr><td>豆包等内置浏览器连不上</td><td>内置浏览器在云端运行，访问不到你电脑；请用系统 Safari/Chrome</td></tr>
     <tr><td>转录内容明显错乱</td><td>确认用的是 qwen2.5vl:7b 而非小模型；扫描件尽量清晰、正向</td></tr>
     <tr><td>超过 12 页未处理</td><td>单次上限 12 页，把 PDF 拆分为多个文件分别解析</td></tr>
   </table>
@@ -150,7 +152,10 @@ document.querySelectorAll('.cmd').forEach(function(c){
       }
     }catch(e){
       st.className='check-status bad';
-      st.innerHTML='<b>无法连接本机 Ollama。</b>请确认：① 已安装并启动 Ollama；② 已运行一键脚本（或手动完成放行配置）；③ 完成后重启了 Ollama。';
+      st.innerHTML='<b>无法连接本机 Ollama。请按顺序排查：</b><br>'
+        +'① <b>请改用系统浏览器 Safari 或 Chrome 打开本页再检测</b>（豆包等 App 的内置浏览器可能在云端运行，访问不到你电脑的 127.0.0.1）；<br>'
+        +'② 在「终端」执行 <code>curl http://127.0.0.1:11434/api/tags</code>：若没有返回模型 JSON，说明 Ollama 未启动或未重启，先打开 Ollama 再重跑脚本；<br>'
+        +'③ 以后 A14 的视觉解析也请始终在系统浏览器中操作。';
     }
   });
 })();
