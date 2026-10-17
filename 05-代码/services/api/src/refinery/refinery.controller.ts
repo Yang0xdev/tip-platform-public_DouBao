@@ -28,7 +28,7 @@ export class RefineryController {
   ingestText(
     @Body()
     body: {
-      title: string; content: string; sourceType?: "folder" | "scan" | "email" | "export" | "manual" | "api";
+      title: string; content: string; sourceType?: "folder" | "scan" | "digital" | "email" | "export" | "manual" | "api";
       format?: "text/plain" | "text/html" | "text/markdown" | "spreadsheet";
       sensitivity?: "normal" | "sensitive";
     },

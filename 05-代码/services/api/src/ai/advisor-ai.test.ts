@@ -4,6 +4,11 @@ import { world, effectiveOrder } from "../test-utils/world.js";
 import { AdvisorAiService } from "./advisor-ai.service.js";
 import { KnowledgeService } from "./knowledge.service.js";
 import { WikiService } from "../wiki/wiki.service.js";
+import { LayoutParser } from "../refinery/parser.service.js";
+import { ExtractionEngine } from "../refinery/extractor.service.js";
+import { Normalizer } from "../refinery/normalizer.service.js";
+import { LlmExtractor } from "../refinery/llm-extractor.service.js";
+import { RefineryService } from "../refinery/refinery.service.js";
 
 /** 生效订单 + 首付核验 → 自动建案（adv-1 / c-1980） */
 function setup(customerRef: string) {
@@ -20,8 +25,11 @@ function setup(customerRef: string) {
   w.timeline.recordCompany(caseId, "material_submit", "admin");
   const knowledge = new KnowledgeService(w.audit);
   const wiki = new WikiService(w.audit);
-  const ai = new AdvisorAiService(w.eng, w.cases, w.tasks, w.materials, w.timeline, w.cat, w.audit, knowledge, wiki);
-  return { ai, w, knowledge, wiki };
+  const refinery = new RefineryService(
+    w.audit, new LayoutParser(), new ExtractionEngine(), new Normalizer(), new LlmExtractor(new Normalizer()), wiki
+  );
+  const ai = new AdvisorAiService(w.eng, w.cases, w.tasks, w.materials, w.timeline, w.cat, w.audit, knowledge, wiki, refinery);
+  return { ai, w, knowledge, wiki, refinery };
 }
 
 test("顾问AI：晨间简报返回真实队列/客户计数", () => {
@@ -47,6 +55,21 @@ test("顾问AI：资料查询仅返回已发布内容；非归属客户不可查
   assert.ok(foreign.text.includes("请指定客户"));
   const none = ai.ask("adv-1", "查询不存在的政策xyz");
   assert.ok(none.text.includes("没有匹配"));
+});
+
+test("顾问AI：材料清单问题命中数据工厂 L1 已发布规范资料", async () => {
+  const { ai, refinery } = setup("c-1980");
+  const raw = refinery.ingestText("eng-1", {
+    title: "安提瓜材料清单",
+    content: "1 护照公证：彩色复印件，中英文公证书，所有申请人\n2 身份证公证：所有申请人\n3 出生公证：所有申请人",
+    sourceType: "manual"
+  });
+  await refinery.autoRun("eng-1", raw.id);
+  refinery.review("rev-1", raw.id, "approve");
+  refinery.publish("rev-1", raw.id);
+  const b = ai.ask("adv-1", "安提瓜需要什么公证材料？");
+  assert.ok(b.text.includes("安提瓜材料清单"), b.text);
+  assert.ok(b.sources.some((s) => s.ref.startsWith("CAN-")));
 });
 
 test("U2 上下文：锚定非归属客户被拒；compsolution 只含已发布；无支付/投诉/L3 字段", () => {

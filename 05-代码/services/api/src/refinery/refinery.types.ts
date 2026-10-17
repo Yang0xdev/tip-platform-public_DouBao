@@ -53,7 +53,7 @@ export interface ValidationFinding {
 
 export interface RawSource {
   id: string;
-  sourceType: "folder" | "scan" | "email" | "export" | "manual" | "api";
+  sourceType: "folder" | "scan" | "digital" | "email" | "export" | "manual" | "api";
   title: string;
   contentType: "text/plain" | "text/html" | "text/markdown" | "application/pdf" | "spreadsheet";
   hash: string;

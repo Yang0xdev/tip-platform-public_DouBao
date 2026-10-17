@@ -120,15 +120,21 @@ export class RefineryService {
     const id = `RAW-${String(this.rawSeq).padStart(4, "0")}`;
     const now = new Date().toISOString();
     const raw: RawSource = {
-      id, sourceType: "scan", title: body.title.trim(), contentType: "application/pdf",
+      id, sourceType: needsVision ? "scan" : "digital", title: body.title.trim(), contentType: "application/pdf",
       hash, sensitivity: body.sensitivity ?? "normal", ingestedAt: now,
       stage: "parsed", blocks, parseTool: needsVision ? `${tool}（待视觉模型）` : tool,
       history: [
-        { stage: "ingested", at: now, actorId, note: "pdf" },
+        { stage: "ingested", at: now, actorId, note: needsVision ? "pdf-scan" : "pdf-digital" },
         { stage: "parsed", at: now, actorId, note: tool }
       ],
       sample: body.sample
     };
+    // 数字件解析即得到正文，立即分诊；扫描件留待视觉转录回传后补分类（setBlocks）
+    if (!needsVision) {
+      const d = this.detectDocType(raw);
+      raw.docType = d.docType; raw.classifyConf = d.conf; raw.classifyModel = "deterministic";
+      raw.history.push({ stage: "classified", at: now, actorId, note: `auto:${d.docType}` });
+    }
     this.raws.set(id, raw);
     this.audit.record({ actor: actorId, realm: "staff", action: "refinery.ingest.pdf", resource: id, result: "allow" });
     return this.get(id);
@@ -136,22 +142,26 @@ export class RefineryService {
 
   /* ---------------- ② 分类分诊 ---------------- */
 
+  /** 确定性分诊打分（关键词标记），供 PDF 入库后自动分诊与人工分诊共用 */
+  private detectDocType(raw: RawSource): { docType: DocType; conf: number } {
+    const text = this.fullText(raw);
+    const scores = new Map<DocType, number>();
+    for (const c of CLASSIFY_MARKERS) {
+      const m = text.match(new RegExp(c.markers.source, c.markers.flags));
+      if (m) scores.set(c.type, (scores.get(c.type) ?? 0) + m.length);
+    }
+    let best: DocType = "other"; let bestN = 0;
+    for (const [t, n] of scores) if (n > bestN) { best = t; bestN = n; }
+    return { docType: best, conf: bestN === 0 ? 0.4 : Math.min(0.96, 0.62 + bestN * 0.12) };
+  }
+
   classify(actorId: string, id: string, override?: DocType): RawSource {
     const raw = this.must(id);
     if (override) {
       raw.docType = override; raw.classifyConf = 1; raw.classifyModel = "manual";
     } else {
-      const text = this.fullText(raw);
-      const scores = new Map<DocType, number>();
-      for (const c of CLASSIFY_MARKERS) {
-        const m = text.match(new RegExp(c.markers.source, c.markers.flags));
-        if (m) scores.set(c.type, (scores.get(c.type) ?? 0) + m.length);
-      }
-      let best: DocType = "other"; let bestN = 0;
-      for (const [t, n] of scores) if (n > bestN) { best = t; bestN = n; }
-      raw.docType = best;
-      raw.classifyConf = bestN === 0 ? 0.4 : Math.min(0.96, 0.62 + bestN * 0.12);
-      raw.classifyModel = "deterministic";
+      const d = this.detectDocType(raw);
+      raw.docType = d.docType; raw.classifyConf = d.conf; raw.classifyModel = "deterministic";
     }
     this.advance(raw, "classified", actorId, raw.docType);
     return this.get(id);
@@ -197,6 +207,12 @@ export class RefineryService {
     if (!blocks?.length) throw new RefineryError(400, "44412", "版面块为空");
     raw.blocks = blocks;
     raw.parseTool = "browser-vision";
+    // 视觉转录补齐了正文，此时补跑分诊（扫描件入库时无文字、无法分诊）
+    if (!raw.docType) {
+      const d = this.detectDocType(raw);
+      raw.docType = d.docType; raw.classifyConf = d.conf; raw.classifyModel = "deterministic";
+      raw.history.push({ stage: "classified", at: new Date().toISOString(), actorId, note: `vision-auto:${d.docType}` });
+    }
     raw.stage = "parsed";
     raw.history.push({ stage: "parsed", at: new Date().toISOString(), actorId, note: "browser-vision" });
     return this.get(id);

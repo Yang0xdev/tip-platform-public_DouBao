@@ -6,6 +6,7 @@ import { Injectable } from "@nestjs/common";
 import { WordEngine } from "@tip/core";
 import { world, effectiveOrder } from "../test-utils/world.js";
 import { AiService } from "../ai/ai.service.js";
+import { WikiService } from "../wiki/wiki.service.js";
 
 export interface EvalCase {
   id: string;
@@ -48,7 +49,7 @@ export class AiEvalService {
         "fin-1"
       );
     }
-    const ai = new AiService(w.cases, w.orders, w.timeline, w.audit);
+    const ai = new AiService(w.cases, w.orders, w.timeline, w.audit, new WikiService(w.audit));
     return { w, ai };
   }
 

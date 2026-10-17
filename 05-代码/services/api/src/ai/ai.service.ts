@@ -4,6 +4,7 @@ import { AuditService } from "../audit.service.js";
 import { CaseService, STAGE_LABELS } from "../case/case.service.js";
 import { OrderService } from "../order/order.service.js";
 import { TimelineService } from "../timeline/timeline.service.js";
+import { WikiService } from "../wiki/wiki.service.js";
 
 /**
  * AI 初步实现（确定性 grounded 问答，不接 LLM）：
@@ -54,7 +55,8 @@ export class AiService {
     private readonly cases: CaseService,
     private readonly orders: OrderService,
     private readonly timeline: TimelineService,
-    private readonly audit: AuditService
+    private readonly audit: AuditService,
+    private readonly wiki: WikiService
   ) {}
 
   /* ---------- 单独同意 ---------- */
@@ -106,6 +108,10 @@ export class AiService {
       };
     }
 
+    // 通用项目知识（K1 已发布知识页，不涉及个人数据，无需单独同意）
+    const k = this.knowledgeAnswer(q);
+    if (k) return k;
+
     // 以下均使用案件/费用片段，须先取得单独同意
     if (!this.getConsent(customerRef).granted) {
       return { text: "", sources: [], needConsent: true };
@@ -140,6 +146,39 @@ export class AiService {
     let n = 0;
     for (const c of this.consents.values()) if (c.granted) n += 1;
     return n;
+  }
+
+  /* ---------- 通用项目知识（K1 已发布知识页，不涉及个人数据） ---------- */
+
+  private static readonly PROGRAM_TOKENS = [
+    "安提瓜", "巴布达", "投资入籍", "数字游民", "科技居留", "A国", "B国", "C国", "永居", "入籍"
+  ];
+  private static readonly KNOWLEDGE_RE =
+    /(安提瓜|巴布达|A国|B国|C国|投资入籍|数字游民|科技居留|居留|入籍|签证|永居|护照)[\s\S]{0,40}(材料|公证|认证|清单|要求|条件|费用|政策|准备|流程|多久|资格)|(?:材料|公证|认证|清单|要求|条件|费用|政策|流程)[\s\S]{0,12}(安提瓜|巴布达|A国|B国|C国|投资入籍|数字游民|科技居留|入籍|签证|永居)/;
+
+  private knowledgeAnswer(q: string): AiAnswer | null {
+    if (!AiService.KNOWLEDGE_RE.test(q)) return null;
+    const tokens = AiService.PROGRAM_TOKENS.filter((t) => q.includes(t));
+    const pages = this.wiki.publishedPages().filter((p) => {
+      const hay = p.title + "\n" + p.markdown;
+      return tokens.every((t) => hay.includes(t));
+    });
+    if (pages.length === 0) return null;
+
+    const subject = /(公证|认证|材料|清单|费用|条件|要求|流程|资格)/.exec(q)?.[0] ?? "";
+    const lines: string[] = [];
+    const sources: AiSource[] = [];
+    for (const p of pages.slice(0, 2)) {
+      const mdLines = p.markdown
+        .split(/\n/)
+        .map((s) => s.replace(/^#+\s*/, "").replace(/^[-*]\s*/, "· ").trim())
+        .filter((s) => s && (!subject || s.includes(subject) || s.includes("材料") || s.includes("申请人")))
+        .slice(0, 8);
+      lines.push(`《${p.title}》（已发布 ${p.id}）：`, ...mdLines.map((s) => `  ${s}`));
+      sources.push({ level: "co", title: p.title, ref: p.id });
+    }
+    lines.push("具体以官方最新要求与你案件的材料清单为准；本服务不承诺办理结果，办理前请与顾问逐项确认。");
+    return { text: lines.join("\n"), sources, next: "需要针对你家庭情况的材料清单，可问「我需要补什么材料」。" };
   }
 
   /* ---------- 答案构造 ---------- */

@@ -112,7 +112,8 @@ test("影印件有效期到期回收；水印 PDF 是唯一下载形态（无裸
     {
       materialScopes: ["passport"],
       actions: ["material_view"],
-      validUntil: "2026-10-10T00:00:00Z"
+      // 有效期相对当前时间，避免硬编码日期过期后变成“时间炸弹”
+      validUntil: new Date(Date.now() + 86_400_000).toISOString()
     },
     "admin"
   );
@@ -120,7 +121,7 @@ test("影印件有效期到期回收；水印 PDF 是唯一下载形态（无裸
   const pdf = w.portal.requestWatermarkedPdf(acc.id, c.id, "passport");
   assert.match(pdf.artifactRef, /watermarked/);
   assert.match(pdf.mark, /王律师/);
-  w.portal.tick("2026-10-11T00:00:00Z");
+  w.portal.tick(new Date(Date.now() + 2 * 86_400_000).toISOString());
   assert.equal(w.portal.listGrants().find((x) => x.id === g.id)!.state, "expired");
 });
 

@@ -7,6 +7,7 @@ import { MaterialService } from "../material/material.service.js";
 import { TaskService } from "../task/task.service.js";
 import { TimelineService } from "../timeline/timeline.service.js";
 import { WikiService } from "../wiki/wiki.service.js";
+import { RefineryService } from "../refinery/refinery.service.js";
 import type { AiAnswer, AiSource } from "./ai.service.js";
 import { KnowledgeService } from "./knowledge.service.js";
 
@@ -28,7 +29,8 @@ export class AdvisorAiService {
     private readonly catalog: CatalogService,
     private readonly audit: AuditService,
     private readonly knowledgeSvc: KnowledgeService,
-    private readonly wiki: WikiService
+    private readonly wiki: WikiService,
+    private readonly refinery: RefineryService
   ) {}
 
   /* ---------- U2：顾问上下文包 ---------- */
@@ -194,7 +196,7 @@ export class AdvisorAiService {
     if (/进展|跟进|时间线|动态/.test(q)) {
       return this.customerProgress(customerRef);
     }
-    if (/查|项目|政策|资料|费表|搜索/.test(q)) {
+    if (/查|项目|政策|资料|费表|搜索|材料|清单|公证|要.*准备|需要什么/.test(q)) {
       return this.lookup(q);
     }
     return {
@@ -286,20 +288,60 @@ export class AdvisorAiService {
   }
 
   private lookup(q: string): AiAnswer {
+    const kw = q
+      .replace(/.*查询|.*搜索|查一下|帮我|请问|已发布的?|项目|政策|资料|材料|清单|公证|需要|什么|哪些|怎么|办理|准备|的|里|有|吗|呢|\?|？/g, "")
+      .trim();
+    const match = (hay: string) => !kw || hay.includes(kw);
+    const sources: AiSource[] = [];
+    const lines: string[] = [];
+
+    // ① 项目目录（A/B/C 项目库，含已发布费表）
     const projects = this.catalog.listPublishedProjects();
-    const kw = q.replace(/.*查询|.*搜索|已发布的?|项目|政策|资料/g, "").trim();
-    const hit = kw
-      ? projects.filter((p) => (p.title + p.code + p.body).includes(kw))
-      : projects;
-    if (hit.length === 0) {
+    const pHit = kw ? projects.filter((p) => match(p.title + p.code + p.body)) : projects;
+    if (pHit.length) {
+      lines.push("已发布项目：");
+      for (const p of pHit.slice(0, 5)) {
+        lines.push(`· ${p.title}（${p.code} v${p.version}）${p.feeScheduleId ? "，含已发布费表" : ""}`);
+        sources.push({ level: "co", title: p.title, ref: p.id });
+      }
+    }
+
+    // ② 数据工厂 L1 规范库（经四眼复核发布的真实资料）
+    const canon = this.refinery.listCanonical().records.filter((c) => c.status === "published");
+    const cHit = canon.filter((c) => {
+      const raw = c.sourceIds[0] ? this.refinery.get(c.sourceIds[0]) : undefined;
+      const body = raw?.blocks?.map((b) => b.text).join(" ") ?? "";
+      return match(c.title + " " + body);
+    });
+    if (cHit.length) {
+      lines.push("", "已发布规范资料：");
+      for (const c of cHit.slice(0, 5)) {
+        const raw = c.sourceIds[0] ? this.refinery.get(c.sourceIds[0]) : undefined;
+        const body = raw?.blocks?.map((b) => b.text).join(" ") ?? "";
+        const idx = kw && body ? body.indexOf(kw) : -1;
+        const snippet = idx >= 0 ? `——${body.slice(Math.max(0, idx - 30), idx + 90)}`.replace(/\s+/g, " ").trim() : "";
+        lines.push(`· ${c.title}（${c.id} v${c.version}）${snippet ? "\n  " + snippet : ""}`);
+        sources.push({ level: "co", title: c.title, ref: c.id });
+      }
+    }
+
+    // ③ K1 已编译发布的 Wiki 主题页
+    const pages = this.wiki.publishedPages().filter((p) => match(p.title + " " + p.markdown));
+    if (pages.length) {
+      lines.push("", "已发布知识页：");
+      for (const p of pages.slice(0, 5)) {
+        lines.push(`· ${p.title}（${p.id} v${p.version}）`);
+        sources.push({ level: "co", title: p.title, ref: p.id });
+      }
+    }
+
+    if (sources.length === 0) {
       return { text: "没有匹配的已发布内容；未发布/失效内容不会返回。", sources: [] };
     }
-    const lines = ["已发布项目："];
-    const sources: AiSource[] = [];
-    for (const p of hit.slice(0, 5)) {
-      lines.push(`· ${p.title}（${p.code} v${p.version}）${p.feeScheduleId ? "，含已发布费表" : ""}`);
-      sources.push({ level: "co", title: p.title, ref: p.id });
-    }
-    return { text: lines.join("\n"), sources, next: "仅已发布内容可对客展示。" };
+    return {
+      text: lines.join("\n"),
+      sources,
+      next: "仅可引用已发布内容；对客输出前请按平台口径核对，未发布资料不得直接引用。"
+    };
   }
 }

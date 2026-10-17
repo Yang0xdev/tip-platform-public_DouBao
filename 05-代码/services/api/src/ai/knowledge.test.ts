@@ -3,11 +3,12 @@ import assert from "node:assert/strict";
 import { world } from "../test-utils/world.js";
 import { KnowledgeService } from "./knowledge.service.js";
 import { AiService } from "./ai.service.js";
+import { WikiService } from "../wiki/wiki.service.js";
 
 function setup() {
   const w = world();
   const knowledge = new KnowledgeService(w.audit);
-  const ai = new AiService(w.cases, w.orders, w.timeline, w.audit);
+  const ai = new AiService(w.cases, w.orders, w.timeline, w.audit, new WikiService(w.audit));
   return { w, knowledge, ai };
 }
 
