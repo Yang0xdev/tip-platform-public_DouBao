@@ -22,6 +22,14 @@ export class AuditService implements OnModuleInit {
 
   async onModuleInit() {
     if (this.prisma?.enabled) {
+      // 一次性清库开关联动：WIPE_ON_BOOT=1 时同步清空审计链，以空链启动
+      // （旧实例与新实例并发写同一 seq 会产生分叉，残留旧链会导致重放校验拒绝启动）。
+      if (process.env.WIPE_ON_BOOT === "1") {
+        const deleted = await this.prisma.db.auditEvent.deleteMany({});
+        console.warn(`WIPE_ON_BOOT=1：已清空 audit_events ${deleted.count} 行，审计链从空开始`);
+        this.hydrated = true;
+        return;
+      }
       const rows = await this.prisma.db.auditEvent.findMany({ orderBy: { seq: "asc" } });
       this.chain = rows.map((r) => ({
         seq: Number(r.seq),

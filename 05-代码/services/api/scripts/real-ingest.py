@@ -109,18 +109,12 @@ def main():
             continue
 
         try:
-            path = os.path.join(FILES_ROOT, rel)
-            # ① 采集
-            if ext == "pdf" and size <= PDF_BYTES_LIMIT and os.path.exists(path):
-                with open(path, "rb") as f:
-                    b64 = base64.b64encode(f.read()).decode()
-                sc, raw = req("POST", "/admin/refinery/sources/ingest-pdf", ADMIN,
-                              {"title": title, "base64": b64}, allow_4xx=True)
-            else:
-                fmt = "spreadsheet" if ext == "xlsx" else "text/plain"
-                sc, raw = req("POST", "/admin/refinery/sources/ingest-text", ADMIN,
-                              {"title": title, "content": r["text"], "sourceType": "export", "format": fmt},
-                              allow_4xx=True)
+            # ① 采集：统一走 ingest-text（文本来自 manifest 生成时的本地抽取）。
+            # 不在服务端做 PDF 解析，避免免费实例（512MB）事件循环阻塞/内存溢出导致 502。
+            fmt = "spreadsheet" if ext == "xlsx" else "text/plain"
+            sc, raw = req("POST", "/admin/refinery/sources/ingest-text", ADMIN,
+                          {"title": title, "content": r["text"], "sourceType": "export", "format": fmt},
+                          allow_4xx=True)
             sid = raw.get("id") if isinstance(raw, dict) else None
             if not sid:
                 if sc == 409:
