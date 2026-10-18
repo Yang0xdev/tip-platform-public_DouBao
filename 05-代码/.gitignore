@@ -21,3 +21,4 @@ apps/*/ios/
 apps/*/android/
 apps/*/dist-web-live/
 .backups/
+real-ingest-result.json

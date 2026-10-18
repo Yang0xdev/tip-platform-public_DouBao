@@ -235,6 +235,17 @@ export class StateOrchestrator implements OnApplicationBootstrap, OnModuleDestro
 
   async onApplicationBootstrap(): Promise<void> {
     if (!this.enabled) return;
+    // 一次性清库开关：WIPE_ON_BOOT=1 时启动即清空全部持久化状态且不恢复。
+    // 用于生产测试数据切换；数据重建完成后必须立即移除该环境变量，否则重启/休眠唤醒会再次清空。
+    if (process.env.WIPE_ON_BOOT === "1") {
+      const deleted = await this.prisma.db.serviceState.deleteMany({});
+      this.logger.warn(`WIPE_ON_BOOT=1：已清空 service_states ${deleted.count} 行，以空业务态启动`);
+      this.timer = setInterval(() => {
+        this.flush().catch((e) => this.logger.warn(`自动保存失败: ${String(e)}`));
+      }, AUTOSAVE_MS);
+      this.timer.unref?.();
+      return;
+    }
     const rows = await this.prisma.db.serviceState.count();
     if (rows > 0) {
       await this.restoreAll();
