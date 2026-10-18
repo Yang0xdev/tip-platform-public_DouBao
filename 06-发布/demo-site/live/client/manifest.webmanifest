@@ -1,7 +1,7 @@
 {
   "name": "透明身份规划",
-  "short_name": "身份规划",
-  "description": "透明化身份规划服务：项目、办理进度、工单与 AI 助手",
+  "short_name": "HBWhere",
+  "description": "在售身份项目、费用分项与初步评估",
   "lang": "zh-CN",
   "dir": "ltr",
   "start_url": "./",

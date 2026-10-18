@@ -6,6 +6,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { api, type ProjectView } from "../api";
 import { listFavorites, type FavoriteItem } from "../storage";
 import { Card, GradientButton, Loading, ErrorBox, EmptyBox, Tag, colors, signatureGradient } from "../ui";
+import { ProjectCard } from "../components/ProjectCard";
+import { PROJECT_META } from "../projectMeta";
 import type { RootStackParamList } from "../navigation";
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
@@ -40,8 +42,17 @@ export default function HomeScreen() {
     <FlatList
       style={{ flex: 1, backgroundColor: colors.paper }}
       contentContainerStyle={{ paddingBottom: 28 }}
-      data={projects ?? []}
+      data={(projects ?? []).slice(0, 6)}
       keyExtractor={(p) => p.id}
+      ListFooterComponent={
+        projects && projects.length > 6 ? (
+          <Pressable onPress={() => nav.navigate("Projects")} style={{ paddingHorizontal: 16, paddingTop: 4 }}>
+            <View style={{ borderWidth: 1, borderColor: colors.line, borderRadius: 14, backgroundColor: colors.white, paddingVertical: 14, alignItems: "center" }}>
+              <Text style={{ fontSize: 13.5, fontWeight: "800", color: colors.navy }}>查看全部 {projects.length} 款在售项目 ›</Text>
+            </View>
+          </Pressable>
+        ) : null
+      }
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.navy} />}
       ListHeaderComponent={
         <View>
@@ -84,7 +95,14 @@ export default function HomeScreen() {
               </Pressable>
             )}
 
-            <Text style={{ fontSize: 15, fontWeight: "800", color: colors.ink, marginTop: 2 }}>已发布项目</Text>
+            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: 2 }}>
+              <Text style={{ fontSize: 15, fontWeight: "800", color: colors.ink }}>在售项目</Text>
+              {projects && projects.length > 0 ? (
+                <Pressable onPress={() => nav.navigate("Projects")}>
+                  <Text style={{ fontSize: 12.5, fontWeight: "700", color: colors.berry }}>全部 {projects.length} 款 ›</Text>
+                </Pressable>
+              ) : null}
+            </View>
             {error ? <ErrorBox message={error} /> : null}
             {!error && projects === null ? <Loading /> : null}
             {!error && projects && projects.length === 0 ? (
@@ -93,19 +111,12 @@ export default function HomeScreen() {
           </View>
         </View>
       }
-      renderItem={({ item, index }) => (
-        <View style={{ paddingHorizontal: 16, marginBottom: 12 }}>
-          <Pressable onPress={() => nav.navigate("ProjectDetail", { id: item.id, title: item.title })}>
-            <Card style={{ backgroundColor: colors.white }}>
-              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                <Text style={{ fontSize: 11, color: colors.faint, fontWeight: "600", letterSpacing: 0.4 }}>{item.code} · v{item.version}</Text>
-                <Tag text="已核验发布" tone="ok" />
-              </View>
-              <Text style={{ fontSize: 15.5, fontWeight: "700", color: colors.ink, marginTop: 8 }} numberOfLines={2}>{item.title}</Text>
-              <Text style={{ fontSize: 12.5, color: colors.mut, marginTop: 6, lineHeight: 18 }} numberOfLines={2}>{item.body}</Text>
-              <Text style={{ fontSize: 12, color: colors.navy, fontWeight: "600", marginTop: 10 }}>查看费用与初步评估 ›</Text>
-            </Card>
-          </Pressable>
+      renderItem={({ item }) => (
+        <View style={{ paddingHorizontal: 16 }}>
+          <ProjectCard
+            p={item}
+            onOpen={() => nav.navigate("ProjectDetail", { id: item.id, title: PROJECT_META[item.code]?.country ?? item.title })}
+          />
         </View>
       )}
     />
