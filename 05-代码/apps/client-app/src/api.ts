@@ -94,13 +94,35 @@ const customerHeaders = (extra?: Record<string, string>) => ({
   ...(extra ?? {})
 });
 
+// 免费托管实例休眠后首次请求需 30–60 秒唤醒；GET 只读且幂等，对网络失败/5xx 做指数退避重试。
+const GET_BACKOFF_MS = [4_000, 8_000, 16_000, 30_000, 45_000];
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
 async function getJson<T>(path: string, asCustomer = false): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, asCustomer ? { headers: customerHeaders() } : undefined);
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}));
-    throw new Error((body as { message?: string }).message ?? `请求失败（${res.status}）`);
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= GET_BACKOFF_MS.length; attempt++) {
+    try {
+      const res = await fetch(`${API_BASE}${path}`, asCustomer ? { headers: customerHeaders() } : undefined);
+      if (res.ok) return (await res.json()) as T;
+      // 免费实例唤醒期间会返回 502/503/504；4xx 属于业务错误，不重试。
+      if (res.status >= 500 && attempt < GET_BACKOFF_MS.length) {
+        lastError = new Error(`服务正在唤醒中（${res.status}）`);
+        await sleep(GET_BACKOFF_MS[attempt]);
+        continue;
+      }
+      const body = await res.json().catch(() => ({}));
+      throw new Error((body as { message?: string }).message ?? `请求失败（${res.status}）`);
+    } catch (e) {
+      // 网络层失败（CORS 预检/连接中断）在冷启动时同样发生；重试到唤醒完成。
+      if (attempt < GET_BACKOFF_MS.length) {
+        lastError = e;
+        await sleep(GET_BACKOFF_MS[attempt]);
+        continue;
+      }
+      throw e;
+    }
   }
-  return (await res.json()) as T;
+  throw lastError instanceof Error ? lastError : new Error("请求失败");
 }
 
 async function postJson<T>(path: string, payload: unknown, asCustomer = false): Promise<T> {

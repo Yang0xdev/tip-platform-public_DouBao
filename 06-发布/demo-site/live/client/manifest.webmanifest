@@ -1,7 +1,7 @@
 {
   "name": "透明身份规划",
-  "short_name": "HBWhere",
-  "description": "在售身份项目、费用分项与初步评估",
+  "short_name": "透明身份规划",
+  "description": "公开的收费、可核验的事实、不承诺结果的身份规划平台",
   "lang": "zh-CN",
   "dir": "ltr",
   "start_url": "./",
