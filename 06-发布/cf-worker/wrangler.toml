@@ -1,0 +1,6 @@
+name = "hbwhere-warm"
+main = "worker.js"
+compatibility_date = "2026-10-18"
+
+[triggers]
+crons = ["*/10 * * * *"]

@@ -27,6 +27,19 @@ head = (
     f'    <meta name="apple-mobile-web-app-title" content="{title}">\n'
     '    <link rel="apple-touch-icon" href="icon-192.png">\n'
     '    <meta name="theme-color" content="#002661">\n'
+    '    <link rel="preconnect" href="https://tip-api-niy0.onrender.com" crossorigin>\n'
+    '    <link rel="dns-prefetch" href="https://tip-api-niy0.onrender.com">\n'
+    '    <style>#boot-splash{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;'
+    'background:linear-gradient(135deg,#AF2D67 0%,#002661 100%);color:#fff;'
+    'font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",sans-serif;z-index:9999}'
+    '#boot-splash .brand{font-size:15px;letter-spacing:.18em;font-weight:600;opacity:.85}'
+    '#boot-splash .spin{width:34px;height:34px;border-radius:50%;border:3px solid rgba(255,255,255,.28);border-top-color:#fff;animation:bootspin .9s linear infinite}'
+    '#boot-splash .tip{font-size:13px;opacity:.8}'
+    '@keyframes bootspin{to{transform:rotate(360deg)}}</style>\n'
+)
+splash = (
+    '    <div id="boot-splash"><div class="brand">透明身份规划</div>'
+    '<div class="spin"></div><div class="tip">正在加载，请稍候…</div></div>\n'
 )
 body_script = (
     '  <script>\n'
@@ -41,6 +54,9 @@ if "</head>" in s:
     s = s.replace("</head>", head + "  </head>", 1)
 else:
     s = head + s
+# 启动屏放在 #root 内，React 挂载后自动替换
+if '<div id="root">' in s:
+    s = s.replace('<div id="root"></div>', '<div id="root">\n' + splash + '  </div>', 1)
 if "</body>" in s:
     s = s.replace("</body>", body_script + "</body>", 1)
 open(path, "w", encoding="utf-8").write(s)

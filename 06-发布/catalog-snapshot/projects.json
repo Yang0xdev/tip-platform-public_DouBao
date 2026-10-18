@@ -1,0 +1,383 @@
+{
+ "records": [
+  {
+   "id": "PRJ-0001",
+   "body": "安提瓜和巴布达位于加勒比海与大西洋之间，为英联邦国家，以旅游业为经济支柱。\n国家发展基金捐款（NDF）路径：单一主申请人向国家发展基金捐款 230,000 美元；另含政府申请费、政府尽职调查费、政府指定持牌律师费、服务费与证件费。单一主申请人示例合计 263,800 美元（不含公证、体检及律师见证费用）；政府申请费按家庭结构收取：单人 10,000 美元、一家四口内 20,000 美元、超过四口每位附属申请人 10,000 美元。\n家庭申请金额以实际人数及年龄为准；所有费用以官方收费与正式发票为准，本平台不作任何获批结果承诺。",
+   "code": "PROJ-ATG-NDF",
+   "state": "published",
+   "title": "【加勒比】安提瓜和巴布达投资入籍 · 国家发展基金捐款（NDF）",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:01.834Z",
+   "updatedAt": "2026-10-18T10:33:01.848Z",
+   "keyFactIds": [
+    "VR-0001"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0001",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0002",
+   "body": "圣卢西亚位于东加勒比海向风群岛中部，1979 年独立，英联邦成员国，官方语言英语。\n基建投资路径：投资款 250,000 美元（4 人以内家庭）；另含移民律师费、背景调查费、银行背调费、社保号费、护照申请费。单一主申请人合计约 269,700 美元；超过 4 人每增加一位副申投资款增加 10,000 美元（16 岁以下增加 5,000 美元，不可退）。\n背调费、社保号费、护照申请费随申请人数量与年龄变化；最终以官方报价为准。",
+   "code": "PROJ-LCA-CBI",
+   "state": "published",
+   "title": "【加勒比】圣卢西亚基建投资入籍",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:01.869Z",
+   "updatedAt": "2026-10-18T10:33:01.882Z",
+   "keyFactIds": [
+    "VR-0002"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0002",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0003",
+   "body": "格林纳达位于加勒比海，英联邦成员国，也是美国商业贸易及航海协定（E-2）成员国。\n国家旅游度假区项目：投资款 270,000 美元；政府规费一家四口 50,000 美元（超出每人另计）；另含申请费、政府审理费、尽职调查费、面试费、律师费、工本杂费及国际快递费。\n价格表为单人申请估算，投资总费用约 339,996 美元，实际以出具的发票金额为准。",
+   "code": "PROJ-GRD-CBI",
+   "state": "published",
+   "title": "【加勒比】格林纳达国家旅游度假区投资入籍",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:01.903Z",
+   "updatedAt": "2026-10-18T10:33:01.915Z",
+   "keyFactIds": [
+    "VR-0003"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0003",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0004",
+   "body": "蒙特塞拉特（Montserrat）为英国海外领地，项目分两阶段：先取得蒙特塞拉特法定身份与 BOTC 护照，再衔接英国公民注册与英国护照。\n特殊贡献投向蒙特塞拉特国家地热能源工程；整体预算 5,500,000 英镑，由投资贡献款 5,000,000 英镑与服务费 500,000 英镑组成；服务费分四期（签约、呈交、肯定性意见、成功）各 125,000 英镑，不成功无需支付第四期。\n目标规划周期约 12–18 个月，非法定审批时限；最终以正式协议及主管机关决定为准。",
+   "code": "PROJ-MSR-UK",
+   "state": "published",
+   "title": "【加勒比】蒙特塞拉特特殊贡献身份 → 英国护照",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:01.935Z",
+   "updatedAt": "2026-10-18T10:33:01.948Z",
+   "keyFactIds": [
+    "VR-0004"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0004",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0005",
+   "body": "瓦努阿图位于南太平洋，DSP 投资入籍项目周期短、无居住要求。\n政府捐赠：单人 80,000 美元、夫妻 100,000 美元、一家三口 115,000 美元、一家四口 130,000 美元；另含背景调查费 10,000 美元、出生证明 1,000 美元、身份证 ID 卡 1,000 美元。\n套餐总费用：单人 100,000、夫妻 120,000、一家三口 135,000、一家四口 150,000 美元；增加子女或父母各 15,000 美元。",
+   "code": "PROJ-VUT-DSP",
+   "state": "published",
+   "title": "【大洋洲】瓦努阿图投资入籍（DSP）",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:01.969Z",
+   "updatedAt": "2026-10-18T10:33:01.981Z",
+   "keyFactIds": [
+    "VR-0005"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0005",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0006",
+   "body": "斐济退休移民签证面向有退休养老与家庭移居需求的申请人。\n办理服务费 6 万元人民币（含一家三口，含咨询、律师、背调、表格、开户及税号服务）；政府申请费 650.05 斐币/户、工本费 189.15 斐币/人；需向斐济银行存入验资款 10 万斐币（存于本人账户，非收费，验资后可自由支配）。\n增加随行子女（18 岁以下 2,000 斐币/人、18 岁及以上 3,000 斐币/人）、父母 3,000 斐币/人；续签律师费每 3 年 2,500 斐币。",
+   "code": "PROJ-FJI-RET",
+   "state": "published",
+   "title": "【大洋洲】斐济退休移民签证",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.002Z",
+   "updatedAt": "2026-10-18T10:33:02.016Z",
+   "keyFactIds": [
+    "VR-0006"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0006",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0007",
+   "body": "圣多美和普林西比位于几内亚湾，为葡语国家、联合国与非盟成员；法律依据为 2022 年第 7 号法律第 26 条及第 07/2025 号法令。\n向国家转型基金捐款：单一申请人 90,000 美元，配偶加两名子女 95,000 美元；递交费 5,000 美元（按一组申请）；身份文件费：公民证书 250 美元/人、护照工本费 350 美元/人、国家身份证 150 美元/人。\n采用先审批后捐款机制，周期约 2–3 个月，无需面试、登陆与居住。",
+   "code": "PROJ-STP-CBI",
+   "state": "published",
+   "title": "【非洲】圣多美和普林西比投资入籍（国家转型基金）",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.038Z",
+   "updatedAt": "2026-10-18T10:33:02.051Z",
+   "keyFactIds": [
+    "VR-0007"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0007",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0008",
+   "body": "马耳他永久居留计划（MPRP），可选择租房或购房路径，一家三代可随行。\n租房路径（一家三口示例）：律师费 30,000 欧元、行政管理费 60,000 欧元、政府捐款 37,000 欧元、慈善捐款 2,000 欧元、房租 14,000 欧元/年、制卡费 500 欧元/人、保险费约 400 欧元/人/年，合计约 145,700 欧元。\n购房路径（一家三口示例）：含购房款 375,000 欧元、印花税、公证费等，合计约 538,708 欧元。具体以正式费用表为准。",
+   "code": "PROJ-MLT-MPRP",
+   "state": "published",
+   "title": "【欧洲】马耳他永久居留计划（MPRP）",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.073Z",
+   "updatedAt": "2026-10-18T10:33:02.086Z",
+   "keyFactIds": [
+    "VR-0008"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0008",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0009",
+   "body": "依据 2024 年 1 月 1 日生效的匈牙利《第三国国民入境和居留一般规则法》，收购由匈牙利国家银行（MNB）注册的房地产基金发行的至少 250,000 欧元投资基金份额，可申请访客投资者居留。\n主要费用：项目管理费 50,000 欧元（两大一小或一大两小）、移民律师费 10,000 欧元/家庭、每增加一名未成年子女 5,000 欧元；基金投资款 250,000 欧元、认购费 2.5%（6,250 欧元）、账户管理费 0.2%/年（5 年一次性 2,500 欧元）。\n签证费 110 欧元/人、居留许可申请费 64 欧元/人、VFS 签证中心服务费 40 欧元；公证、OFFI 翻译、保险等第三方费用按实。",
+   "code": "PROJ-HUN-FUND",
+   "state": "published",
+   "title": "【欧洲】匈牙利访客投资者居留（基金投资）",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.109Z",
+   "updatedAt": "2026-10-18T10:33:02.122Z",
+   "keyFactIds": [
+    "VR-0009"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0009",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0010",
+   "body": "匈牙利欧盟蓝卡面向在匈合规就业的第三国专业人员，持卡可在欧盟成员国工作（丹麦、爱尔兰除外），住满 3 年满足居住时间可申请永居。\n项目发行费 55,000 欧元（含居留卡申请费、移民律师费、制卡费，不含第三方费用）；签证费 110 欧元/人、签证中心服务费 40 欧元/人、境外地址证明 1,000 欧元。\n持有成本约 1,309 欧元/月（公司会计 100、公司社保 338、个人社保 481、个税 390，按最低工资估算）；家庭团聚 3,000 欧元/人，续卡/转永居服务各 5,000 欧元。",
+   "code": "PROJ-HUN-BLUE",
+   "state": "published",
+   "title": "【欧洲】匈牙利欧盟蓝卡",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.143Z",
+   "updatedAt": "2026-10-18T10:33:02.156Z",
+   "keyFactIds": [
+    "VR-0010"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0010",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0011",
+   "body": "希腊黄金居留是现行欧洲投资居留中可购房拿身份的项目之一，无语言、学历及背景要求，一家三代可随行，申根 29 国通行。\n25 万欧元购房档：房价 250,000 欧元；购房相关税杂费约 19,191 欧元，含房产交易税 3.09%（7,725 欧元）、公证费 1.24%（3,100 欧元）、登记费 0.8%（2,000 欧元）、购房律师费 1% 加 24% VAT（3,100 欧元）、税务登记、会计、移民审批费（主申 2,000 欧元、附申 150 欧元，12 岁以下免）、居留卡制卡费 16 欧元/人及健康保险。\n总预算约 269,191 欧元；不含 POA 认证及海牙认证等第三方费用。",
+   "code": "PROJ-GRC-GV",
+   "state": "published",
+   "title": "【欧洲】希腊黄金居留 · 25 万欧元购房档",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.177Z",
+   "updatedAt": "2026-10-18T10:33:02.190Z",
+   "keyFactIds": [
+    "VR-0011"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0011",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0012",
+   "body": "西班牙数字游民签证面向可远程工作的非欧盟工作者、自由职业者与企业家，允许在西班牙合法生活与工作。\n申根签证综合费约 1,200 元人民币/人（含领馆签证费、签证中心服务费、申根旅游保险、机票预订单等）；西班牙有效医疗保险按年龄 41–139 欧元/人/月；地接服务费 1,000 欧元/家庭；登陆后办住家约 450–600 欧元/人、打指纹 16.08 欧元/人。\n公证、海牙认证（普通 100、快件 150 欧元）与翻译按实收取。",
+   "code": "PROJ-ESP-DNV",
+   "state": "published",
+   "title": "【欧洲】西班牙数字游民签证",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.211Z",
+   "updatedAt": "2026-10-18T10:33:02.224Z",
+   "keyFactIds": [
+    "VR-0012"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0012",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0013",
+   "body": "葡萄牙黄金居留 ARI（依据《黄金居留法案》ARI 第 7 条），基金路径通过认购合规基金取得居留，无购房持有与维护成本。\n基金投资款参考 500,000 欧元；律师费、移民申请费、公证翻译等以正式费用文件为准（估算）。\n无强制长期居住要求；具体基金产品与费用结构以正式认购协议与律师报价为准。",
+   "code": "PROJ-PRT-GV",
+   "state": "published",
+   "title": "【欧洲】葡萄牙黄金居留（基金路径）",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.246Z",
+   "updatedAt": "2026-10-18T10:33:02.258Z",
+   "keyFactIds": [
+    "VR-0013"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0013",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0014",
+   "body": "斯洛文尼亚特殊贡献入籍基于《国籍法》中关于国家特殊利益的条款，绕过常规居留年限直接授予公民身份。\n整体预算 3,000,000 欧元，由投资贡献款 2,500,000 欧元与服务费 500,000 欧元组成；服务费分四期（签约、向内政部呈交、收到肯定性意见、成功）各 125,000 欧元，第四期不成功不付。\n规划周期约 10–12 个月，需三次登陆（面谈、提交国家战略投资报告、宣誓领证）；不含公证、体检、律师见证费用。",
+   "code": "PROJ-SVN-CIT",
+   "state": "published",
+   "title": "【欧洲】斯洛文尼亚特殊贡献入籍（欧盟护照）",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.279Z",
+   "updatedAt": "2026-10-18T10:33:02.292Z",
+   "keyFactIds": [
+    "VR-0014"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0014",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0015",
+   "body": "巴拿马购房移民依据 722 号法案及公共安全部第 193 号行政令，购置 30 万美元及以上房产可申请永久居留。\n购房相关：房产交易税 2%、注册费 3‰、过户文件费 100 美元；购房移民律师费 10,000 美元（含一家三口，超出 3,000 美元/人）。\n移民审理政府费：主申 10,000 美元（国库支票 5,000、移民局 5,000），副申各 2,000 美元（12 岁以下免移民局 1,000）；永久居留申请费 3,000 美元/人（18 岁以下免费）；体检 150 美元/人、移民登记 105 美元/人、制卡费按年龄 50/100 美元。",
+   "code": "PROJ-PAN-PR",
+   "state": "published",
+   "title": "【美洲】巴拿马购房永久居留",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.312Z",
+   "updatedAt": "2026-10-18T10:33:02.324Z",
+   "keyFactIds": [
+    "VR-0015"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0015",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0016",
+   "body": "美国 EB-1A 杰出人才移民面向在科学、艺术、教育、商业或体育领域具有杰出能力、获国家级或国际级声誉的申请人，无雇主担保也可申请，是美国职业移民第一优先类别。\n申请围绕获奖、协会会员、媒体报道、原创贡献、学术文章、评审、作品展出、领导职务、高薪、商业成就等十项标准评估，通常需满足其中三项并提供充分证据。\n本项目费用需结合个案评估，平台服务费、官方申请费及第三方费用以正式方案为准（当前待确认）。",
+   "code": "PROJ-USA-EB1A",
+   "state": "published",
+   "title": "【美洲】美国 EB-1A 杰出人才移民",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.344Z",
+   "updatedAt": "2026-10-18T10:33:02.357Z",
+   "keyFactIds": [
+    "VR-0016"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0016",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0017",
+   "body": "阿联酋投资人居留通过在当地设立公司、创业自雇取得阿联酋 EID（俗称老板签/法人签），可用于企业出海、银行开户与资产配置，也常与小国护照搭配使用。\n公司注册、政府收费、签证与 EID 等费用随牌照类型与酋长国不同；平台服务费用以正式方案为准（当前估算）。",
+   "code": "PROJ-ARE-INV",
+   "state": "published",
+   "title": "【亚洲】阿联酋投资人居留（老板签/法人签）",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.377Z",
+   "updatedAt": "2026-10-18T10:33:02.388Z",
+   "keyFactIds": [
+    "VR-0017"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0017",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0018",
+   "body": "新加坡就业准证（Employment Pass，EP）是新加坡人力部签发给外国专业人员（管理层、主管或专业职位）的工作准证。自雇 EP 通过设立新加坡公司、由公司以管理或专业职位聘任本人来申请，首次一般获批 2 年，续签 3 年，满足条件后可申请 PR。\n无年龄、语言硬性要求；属地征税，企业所得税 17%，无遗产税、无股东分红税；一人申请可携全家。\n公司注册、薪资门槛与官方费用以新加坡人力部当期要求为准；平台服务费用以正式方案为准。",
+   "code": "PROJ-SGP-EP",
+   "state": "published",
+   "title": "【亚洲】新加坡自雇 EP 就业准证",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.409Z",
+   "updatedAt": "2026-10-18T10:33:02.421Z",
+   "keyFactIds": [
+    "VR-0018"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0018",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0019",
+   "body": "泰国精英签证（特权入境签证 PE）为长期签证，分 5/10/15/20 年多档，享有机场快速通道、贵宾厅等特权；归类为旅游签证，不允许在泰国工作或学习。\n会员费（含增值税）：黄金卡 5 年 900,000 泰铢；白金卡 10 年 1,500,000 泰铢；钻石卡 15 年 2,500,000 泰铢；至尊卡 20 年 5,000,000 泰铢。",
+   "code": "PROJ-THA-PE",
+   "state": "published",
+   "title": "【亚洲】泰国精英签证（Thailand Privilege）",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.441Z",
+   "updatedAt": "2026-10-18T10:33:02.453Z",
+   "keyFactIds": [
+    "VR-0019"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0019",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0020",
+   "body": "韩国存款移民通过向韩国政府指定银行存入规定金额，取得居留身份并在满足条件后衔接长期居留；存款到期可返还。\n存款金额按年龄与家庭结构分档，具体金额以官方当期政策为准（当前待确认）；另可提供国际学校申请、培训、房屋租赁等后续服务。\n韩国距中国飞行时间约 40 分钟至 2 小时 40 分，华人社群成熟。",
+   "code": "PROJ-KOR-DEP",
+   "state": "published",
+   "title": "【亚洲】韩国存款移民",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.473Z",
+   "updatedAt": "2026-10-18T10:33:02.485Z",
+   "keyFactIds": [
+    "VR-0020"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0020",
+   "suspendReason": null
+  },
+  {
+   "id": "PRJ-0021",
+   "body": "经营管理签证：主申请人在日本成立公司，实缴资本金 3,000 万日元并雇佣 1 名常勤员工，可取得经营管理签证；配偶及 18 周岁以下未婚、经济不独立子女可取得家族滞在签证。\n高度人才签证面向符合积分要求的人才，续签与申请永住路径更短。\n公司注册、资本金为本人经营资金（非办理费）；平台服务费用以正式方案为准。",
+   "code": "PROJ-JPN-BM",
+   "state": "published",
+   "title": "【亚洲】日本经营管理 / 高度人才签证",
+   "version": 1,
+   "editorId": "admin01",
+   "createdAt": "2026-10-18T10:33:02.507Z",
+   "updatedAt": "2026-10-18T10:33:02.519Z",
+   "keyFactIds": [
+    "VR-0021"
+   ],
+   "verifierId": "reviewer1",
+   "publisherId": "reviewer1",
+   "feeScheduleId": "FEE-0021",
+   "suspendReason": null
+  }
+ ],
+ "snapshotAt": "2026-10-18"
+}

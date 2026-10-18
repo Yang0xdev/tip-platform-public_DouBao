@@ -1,0 +1,1718 @@
+{
+ "records": [
+  {
+   "id": "FEE-0001",
+   "body": "依据《GOV_ATG_费用清单-捐款类NDF_v1.0_20260813》；家庭申请按人数与年龄另计，异币种不相加。",
+   "code": "FEE-ATG-NDF",
+   "state": "published",
+   "title": "安提瓜和巴布达 NDF 捐款路径费用（单人示例，USD）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "ndf_contribution",
+     "label": "国家发展基金捐款（NDF）",
+     "nature": "official",
+     "timing": "原则性批准后；不成功不收费",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "安提瓜政府（CIU）",
+     "amountMinor": "23000000"
+    },
+    {
+     "code": "gov_application",
+     "label": "政府申请费（单人）",
+     "nature": "official",
+     "timing": "递交申请前；一家四口内 20,000、超口每人 10,000；不可退",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "安提瓜政府（CIU）",
+     "amountMinor": "1000000"
+    },
+    {
+     "code": "gov_due_diligence",
+     "label": "政府尽职调查费（主申请人）",
+     "nature": "official",
+     "timing": "递交申请前；配偶 5,000、12-17 岁 2,000、18 岁及以上 4,000；不可退",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "安提瓜政府（CIU）",
+     "amountMinor": "850000"
+    },
+    {
+     "code": "license_lawyer",
+     "label": "律师费（政府指定持牌律师）",
+     "nature": "overseas_professional",
+     "timing": "递交申请前；每组家庭；不可退",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "安提瓜政府指定持牌律师",
+     "amountMinor": "1000000"
+    },
+    {
+     "code": "platform_service",
+     "label": "平台服务费",
+     "nature": "platform_service",
+     "timing": "签约按案；不可退",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "北京赛哲桥国际咨询有限公司",
+     "amountMinor": "500000"
+    },
+    {
+     "code": "certificate",
+     "label": "证件费",
+     "nature": "official",
+     "timing": "身份获批后；每人；不成功不收费",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "安提瓜政府（CIU）",
+     "amountMinor": "30000"
+    },
+    {
+     "code": "notary_medical",
+     "label": "公证费、体检费、律师见证费",
+     "nature": "third_party",
+     "timing": "按实际发生，未含在上述合计内",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:01.814Z",
+   "updatedAt": "2026-10-18T10:33:01.825Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0002",
+   "body": "依据《LCA_03_基建项目价格表_202607》；多申请人档位按家庭结构另计。",
+   "code": "FEE-LCA-INFRA",
+   "state": "published",
+   "title": "圣卢西亚基建投资入籍费用（单一主申，USD）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "investment",
+     "label": "基建投资款",
+     "nature": "official",
+     "timing": "获批后；4 人以内 250,000，超 4 人每副申加 10,000",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "圣卢西亚政府指定基建项目",
+     "amountMinor": "25000000"
+    },
+    {
+     "code": "immigration_lawyer",
+     "label": "移民律师费",
+     "nature": "overseas_professional",
+     "timing": "签约",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "圣卢西亚持牌移民律师",
+     "amountMinor": "1000000"
+    },
+    {
+     "code": "background_check",
+     "label": "背景调查费（主申）",
+     "nature": "official",
+     "timing": "随家庭人数/年龄 8,000–28,000",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "圣卢西亚政府",
+     "amountMinor": "800000"
+    },
+    {
+     "code": "bank_check",
+     "label": "银行背调费",
+     "nature": "third_party",
+     "timing": "开户背调",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "圣卢西亚银行",
+     "amountMinor": "100000"
+    },
+    {
+     "code": "social_security",
+     "label": "社保号费（主申）",
+     "nature": "official",
+     "timing": "每人 500–2,500",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "圣卢西亚社保机构",
+     "amountMinor": "50000"
+    },
+    {
+     "code": "passport_application",
+     "label": "护照申请费（主申）",
+     "nature": "official",
+     "timing": "每人 200–1,200",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "圣卢西亚政府",
+     "amountMinor": "20000"
+    },
+    {
+     "code": "extra_dependant",
+     "label": "超 4 人额外附属（16 岁以下）",
+     "nature": "official",
+     "timing": "每位 16 岁以下；不可退",
+     "currency": "USD",
+     "certainty": "estimated",
+     "collector": "圣卢西亚政府",
+     "amountMinor": "500000"
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:01.852Z",
+   "updatedAt": "2026-10-18T10:33:01.861Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0003",
+   "body": "依据《GRD_03_投资入籍最新报价.xlsx》；家庭结构不同时政府规费及背调费另计，以发票为准。",
+   "code": "FEE-GRD-CBI",
+   "state": "published",
+   "title": "格林纳达国家旅游度假区投资入籍费用（USD，估算）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "investment",
+     "label": "投资款（国家旅游度假区）",
+     "nature": "official",
+     "timing": "原则性批准后分期（定金 10%）",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "格林纳达政府指定项目",
+     "amountMinor": "27000000"
+    },
+    {
+     "code": "gov_fee_family4",
+     "label": "政府规费（一家四口）",
+     "nature": "official",
+     "timing": "获批后；超出四口每人另计",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "格林纳达政府",
+     "amountMinor": "5000000"
+    },
+    {
+     "code": "due_diligence",
+     "label": "尽职调查费（17 岁及以上/人）",
+     "nature": "official",
+     "timing": "申请时；不同住配偶/父母 8,000",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "格林纳达政府",
+     "amountMinor": "500000"
+    },
+    {
+     "code": "application_fee",
+     "label": "申请费（每人）",
+     "nature": "official",
+     "timing": "申请时",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "格林纳达政府",
+     "amountMinor": "150000"
+    },
+    {
+     "code": "processing_fee",
+     "label": "政府审理费（17 岁及以上/人）",
+     "nature": "official",
+     "timing": "16 岁及以下 500",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "格林纳达政府",
+     "amountMinor": "150000"
+    },
+    {
+     "code": "interview_fee",
+     "label": "面试费（每人）",
+     "nature": "official",
+     "timing": "面试时",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "格林纳达政府",
+     "amountMinor": "100000"
+    },
+    {
+     "code": "lawyer_fee",
+     "label": "律师费",
+     "nature": "overseas_professional",
+     "timing": "签约",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "格林纳达持牌律师",
+     "amountMinor": "600000"
+    },
+    {
+     "code": "misc_certificate",
+     "label": "工本杂费（每人）",
+     "nature": "official",
+     "timing": "按人",
+     "currency": "USD",
+     "certainty": "estimated",
+     "collector": "格林纳达政府",
+     "amountMinor": "45000"
+    },
+    {
+     "code": "courier",
+     "label": "国际快递费",
+     "nature": "third_party",
+     "timing": "按次",
+     "currency": "USD",
+     "certainty": "estimated",
+     "collector": "快递公司",
+     "amountMinor": "20000"
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:01.887Z",
+   "updatedAt": "2026-10-18T10:33:01.895Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0004",
+   "body": "依据《GBR_05_护照项目流程与费用清单》；不含增值税及第三方费用。",
+   "code": "FEE-MSR-UK",
+   "state": "published",
+   "title": "蒙特塞拉特特殊贡献（英国护照）费用（GBP）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "investment_contribution",
+     "label": "投资贡献款（地热能源工程）",
+     "nature": "official",
+     "timing": "分阶段；不成功由 FCB 90 日内全额退还",
+     "currency": "GBP",
+     "certainty": "confirmed",
+     "collector": "蒙特塞拉特政府指定工程",
+     "amountMinor": "500000000"
+    },
+    {
+     "code": "service_fee",
+     "label": "服务费（四期合计）",
+     "nature": "overseas_professional",
+     "timing": "签约/呈交/肯定性意见/成功各 125,000；第四期不成功不付",
+     "currency": "GBP",
+     "certainty": "confirmed",
+     "collector": "境外持牌服务方（FCB）",
+     "amountMinor": "50000000"
+    },
+    {
+     "code": "notary_medical",
+     "label": "公证费、体检费、律师见证费",
+     "nature": "third_party",
+     "timing": "不含，按实际发生",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:01.919Z",
+   "updatedAt": "2026-10-18T10:33:01.927Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0005",
+   "body": "依据《VUT_03_护照费用明细》；家庭套餐与单人口径以官方报价为准。",
+   "code": "FEE-VUT-DSP",
+   "state": "published",
+   "title": "瓦努阿图 DSP 护照费用（USD）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "gov_donation",
+     "label": "政府捐赠（单人）",
+     "nature": "official",
+     "timing": "原则性批准后；夫妻 100,000/三口 115,000/四口 130,000",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "瓦努阿图政府",
+     "amountMinor": "8000000"
+    },
+    {
+     "code": "background_check",
+     "label": "背景调查费",
+     "nature": "official",
+     "timing": "申请时；其余家庭成员 8,000/人",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "瓦努阿图政府",
+     "amountMinor": "1000000"
+    },
+    {
+     "code": "birth_cert",
+     "label": "出生证明",
+     "nature": "official",
+     "timing": "文件签发",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "瓦努阿图政府",
+     "amountMinor": "100000"
+    },
+    {
+     "code": "id_card",
+     "label": "身份证 ID 卡",
+     "nature": "official",
+     "timing": "文件签发",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "瓦努阿图政府",
+     "amountMinor": "100000"
+    },
+    {
+     "code": "extra_dependant",
+     "label": "增加子女/父母（每人）",
+     "nature": "official",
+     "timing": "按每位随行家属",
+     "currency": "USD",
+     "certainty": "estimated",
+     "collector": "瓦努阿图政府",
+     "amountMinor": "1500000"
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:01.953Z",
+   "updatedAt": "2026-10-18T10:33:01.961Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0006",
+   "body": "依据《FJI_03_退休移民签证费用清单》；验资款为本人存款非收费，异币种不相加。",
+   "code": "FEE-FJI-RET",
+   "state": "published",
+   "title": "斐济退休移民签证费用（CNY + FJD，分币种列示）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "platform_service",
+     "label": "办理服务费（含一家三口）",
+     "nature": "platform_service",
+     "timing": "按合同分步支付；含咨询/律师/背调/开户/税号",
+     "currency": "CNY",
+     "certainty": "confirmed",
+     "collector": "北京赛哲桥国际咨询有限公司",
+     "amountMinor": "6000000"
+    },
+    {
+     "code": "gov_application",
+     "label": "政府申请费",
+     "nature": "official",
+     "timing": "递交申请前；按户",
+     "currency": "FJD",
+     "certainty": "confirmed",
+     "collector": "斐济政府",
+     "amountMinor": "65005"
+    },
+    {
+     "code": "gov_certificate",
+     "label": "工本费（每人）",
+     "nature": "official",
+     "timing": "获批后；每人",
+     "currency": "FJD",
+     "certainty": "confirmed",
+     "collector": "斐济政府",
+     "amountMinor": "18915"
+    },
+    {
+     "code": "bank_notary",
+     "label": "银行存款斐济公证",
+     "nature": "third_party",
+     "timing": "每份；太平绅士公证同价",
+     "currency": "FJD",
+     "certainty": "confirmed",
+     "collector": "斐济银行/公证",
+     "amountMinor": "20000"
+    },
+    {
+     "code": "extra_child",
+     "label": "增加随行子女（18 岁以下/人）",
+     "nature": "platform_service",
+     "timing": "18 岁及以上 3,000；父母 3,000",
+     "currency": "FJD",
+     "certainty": "estimated",
+     "collector": "北京赛哲桥国际咨询有限公司",
+     "amountMinor": "200000"
+    },
+    {
+     "code": "renewal_lawyer",
+     "label": "续签律师费（每 3 年）",
+     "nature": "overseas_professional",
+     "timing": "续签前",
+     "currency": "FJD",
+     "certainty": "estimated",
+     "collector": "斐济持牌律师",
+     "amountMinor": "250000"
+    },
+    {
+     "code": "capital_deposit",
+     "label": "验资款（本人存款，非收费）",
+     "nature": "third_party",
+     "timing": "存入本人账户，验资后可自由支配；非政府收费，仅作资金占用说明",
+     "currency": "FJD",
+     "certainty": "confirmed",
+     "collector": "斐济银行（本人账户）",
+     "amountMinor": "10000000"
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:01.986Z",
+   "updatedAt": "2026-10-18T10:33:01.994Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0007",
+   "body": "依据《STP_01_投资入籍计划介绍（2026）》；先审批后捐款。",
+   "code": "FEE-STP-CBI",
+   "state": "published",
+   "title": "圣多美和普林西比投资入籍费用（USD）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "fund_donation",
+     "label": "国家转型基金捐款（单人）",
+     "nature": "official",
+     "timing": "原则性批准后；配偶+2 子女 95,000",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "圣多美和普林西比政府（CIU）",
+     "amountMinor": "9000000"
+    },
+    {
+     "code": "submission_fee",
+     "label": "递交费（一组申请）",
+     "nature": "official",
+     "timing": "递交申请时",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "圣多美和普林西比政府（CIU）",
+     "amountMinor": "500000"
+    },
+    {
+     "code": "citizenship_cert",
+     "label": "公民证书（每人）",
+     "nature": "official",
+     "timing": "获批后",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "圣多美和普林西比政府",
+     "amountMinor": "25000"
+    },
+    {
+     "code": "passport",
+     "label": "护照工本费（每人）",
+     "nature": "official",
+     "timing": "获批后",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "圣多美和普林西比政府",
+     "amountMinor": "35000"
+    },
+    {
+     "code": "national_id",
+     "label": "国家身份证（每人）",
+     "nature": "official",
+     "timing": "获批后",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "圣多美和普林西比政府",
+     "amountMinor": "15000"
+    },
+    {
+     "code": "extra_family",
+     "label": "三名随行人后增加家庭成员",
+     "nature": "official",
+     "timing": "配偶 10,000；新生儿 500",
+     "currency": "USD",
+     "certainty": "estimated",
+     "collector": "圣多美和普林西比政府",
+     "amountMinor": "500000"
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:02.020Z",
+   "updatedAt": "2026-10-18T10:33:02.029Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0008",
+   "body": "依据《MLT_03_永居费用计算表_一家三口_202508.xlsx》；购房路径合计约 538,708 欧元，详见费用表。",
+   "code": "FEE-MLT-MPRP",
+   "state": "published",
+   "title": "马耳他 MPRP 费用（租房路径一家三口，EUR）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "lawyer_fee",
+     "label": "律师费",
+     "nature": "overseas_professional",
+     "timing": "签约",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "马耳他持牌律师",
+     "amountMinor": "3000000"
+    },
+    {
+     "code": "admin_fee",
+     "label": "行政管理费（主申）",
+     "nature": "official",
+     "timing": "分阶段；附申 7,500",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "马耳他主管机构",
+     "amountMinor": "6000000"
+    },
+    {
+     "code": "gov_donation",
+     "label": "政府捐款（主申）",
+     "nature": "official",
+     "timing": "获批",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "马耳他政府",
+     "amountMinor": "3700000"
+    },
+    {
+     "code": "charity_donation",
+     "label": "慈善捐款",
+     "nature": "official",
+     "timing": "获批",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "马耳他政府指定慈善机构",
+     "amountMinor": "200000"
+    },
+    {
+     "code": "rent",
+     "label": "房租（租房路径，每年）",
+     "nature": "third_party",
+     "timing": "按年；购房路径替换为购房款",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "马耳他出租方",
+     "amountMinor": "1400000"
+    },
+    {
+     "code": "card_fee",
+     "label": "制卡费（5 年，3 人）",
+     "nature": "official",
+     "timing": "500 欧元/人",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "马耳他政府",
+     "amountMinor": "150000"
+    },
+    {
+     "code": "insurance",
+     "label": "保险费（3 人/年）",
+     "nature": "third_party",
+     "timing": "约 400 欧元/人/年，按年龄",
+     "currency": "EUR",
+     "certainty": "estimated",
+     "collector": "保险公司",
+     "amountMinor": "120000"
+    },
+    {
+     "code": "property_purchase",
+     "label": "购房款（购房路径，参考）",
+     "nature": "third_party",
+     "timing": "仅购房路径；另含印花税 5%、公证约 2% 等",
+     "currency": "EUR",
+     "certainty": "estimated",
+     "collector": "马耳他房产出售方",
+     "amountMinor": "37500000"
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:02.056Z",
+   "updatedAt": "2026-10-18T10:33:02.064Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0009",
+   "body": "依据《HUN_03_费用清单》；公证/翻译/保险等人民币计价第三方费按实，不与欧元合计。",
+   "code": "FEE-HUN-FUND",
+   "state": "published",
+   "title": "匈牙利基金投资移民费用（EUR，参考汇率 1 欧≈7.8 元）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "project_mgmt",
+     "label": "项目管理费（两大一小/一大两小）",
+     "nature": "overseas_professional",
+     "timing": "签署合同当天",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "基金项目发行方",
+     "amountMinor": "5000000"
+    },
+    {
+     "code": "immigration_lawyer",
+     "label": "移民律师费（每组家庭）",
+     "nature": "overseas_professional",
+     "timing": "签署合同当天",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "匈牙利律师事务所",
+     "amountMinor": "1000000"
+    },
+    {
+     "code": "extra_child",
+     "label": "额外子女费（每名未成年）",
+     "nature": "overseas_professional",
+     "timing": "签约",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "基金项目发行方",
+     "amountMinor": "500000"
+    },
+    {
+     "code": "fund_investment",
+     "label": "基金投资款",
+     "nature": "official",
+     "timing": "开户后认购基金",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "证券公司代收后转入基金公司",
+     "amountMinor": "25000000"
+    },
+    {
+     "code": "subscription_fee",
+     "label": "基金认购费（投资额 2.5%）",
+     "nature": "third_party",
+     "timing": "开户后",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "证券公司",
+     "amountMinor": "625000"
+    },
+    {
+     "code": "account_fee",
+     "label": "账户管理费（0.2%/年，5 年一次性）",
+     "nature": "third_party",
+     "timing": "开户后",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "证券公司",
+     "amountMinor": "250000"
+    },
+    {
+     "code": "visa_fee",
+     "label": "GI 签证申请费（每人）",
+     "nature": "official",
+     "timing": "递交申请时",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "使领馆",
+     "amountMinor": "11000"
+    },
+    {
+     "code": "residence_fee",
+     "label": "居留许可申请费（每人）",
+     "nature": "official",
+     "timing": "递交时律师支付",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "匈牙利移民局",
+     "amountMinor": "6400"
+    },
+    {
+     "code": "vfs_fee",
+     "label": "VFS 签证中心服务费（每人）",
+     "nature": "third_party",
+     "timing": "预约前",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "VFS 签证中心",
+     "amountMinor": "4000"
+    },
+    {
+     "code": "address_proof",
+     "label": "境外地址证明",
+     "nature": "overseas_professional",
+     "timing": "准备材料时",
+     "currency": "EUR",
+     "certainty": "estimated",
+     "collector": "律师事务所",
+     "amountMinor": "100000"
+    },
+    {
+     "code": "notary_translation",
+     "label": "公证海牙认证（约 1,000 元/份）、OFFI 翻译（约 2,000 元/份）",
+     "nature": "third_party",
+     "timing": "按份实际收取，另有保险约 1,735 元/人",
+     "currency": "CNY",
+     "certainty": "estimated",
+     "collector": "公证处/OFFI 翻译机构",
+     "amountMinor": "100000"
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:02.090Z",
+   "updatedAt": "2026-10-18T10:33:02.100Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0010",
+   "body": "依据《HUN_03_欧盟蓝卡费用清单》《HUN_03_欧盟蓝卡持有成本》；持有成本为按月估算。",
+   "code": "FEE-HUN-BLUE",
+   "state": "published",
+   "title": "匈牙利欧盟蓝卡费用（EUR，参考汇率 1 欧≈8 元）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "issuance_fee",
+     "label": "项目发行费（含居留卡申请/律师/制卡）",
+     "nature": "overseas_professional",
+     "timing": "签署合同起 3 日内",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "项目发行方",
+     "amountMinor": "5500000"
+    },
+    {
+     "code": "visa_fee",
+     "label": "欧盟蓝卡签证费（每人）",
+     "nature": "official",
+     "timing": "办理签证时",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "签证中心/使领馆",
+     "amountMinor": "11000"
+    },
+    {
+     "code": "vcs_fee",
+     "label": "签证中心服务费（每人）",
+     "nature": "third_party",
+     "timing": "办理签证时",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "签证中心",
+     "amountMinor": "4000"
+    },
+    {
+     "code": "address_proof",
+     "label": "境外地址证明",
+     "nature": "overseas_professional",
+     "timing": "准备材料时",
+     "currency": "EUR",
+     "certainty": "estimated",
+     "collector": "律师事务所",
+     "amountMinor": "100000"
+    },
+    {
+     "code": "family_reunion",
+     "label": "家庭团聚服务费（每人）",
+     "nature": "overseas_professional",
+     "timing": "配偶及未成年子女",
+     "currency": "EUR",
+     "certainty": "estimated",
+     "collector": "项目发行方",
+     "amountMinor": "300000"
+    },
+    {
+     "code": "renewal",
+     "label": "欧盟蓝卡续卡（如需）",
+     "nature": "overseas_professional",
+     "timing": "以家庭为单位，另签协议",
+     "currency": "EUR",
+     "certainty": "estimated",
+     "collector": "项目发行方",
+     "amountMinor": "500000"
+    },
+    {
+     "code": "pr_service",
+     "label": "转永居服务费（如需）",
+     "nature": "overseas_professional",
+     "timing": "住满 3 年后；另签协议",
+     "currency": "EUR",
+     "certainty": "estimated",
+     "collector": "项目发行方",
+     "amountMinor": "500000"
+    },
+    {
+     "code": "monthly_hold",
+     "label": "月度持有成本（会计+社保+个税，估算）",
+     "nature": "third_party",
+     "timing": "每月；约 15,708 欧元/年，按最低工资估算",
+     "currency": "EUR",
+     "certainty": "estimated",
+     "collector": "会计/税务/社保",
+     "amountMinor": "130900"
+    },
+    {
+     "code": "notary_translation",
+     "label": "公证海牙认证（约 1,000 元/份）、OFFI 翻译（约 2,000 元/份）",
+     "nature": "third_party",
+     "timing": "按份实际收取；保险约 1,735 元/人",
+     "currency": "CNY",
+     "certainty": "estimated",
+     "collector": "公证处/OFFI 翻译机构",
+     "amountMinor": "100000"
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:02.126Z",
+   "updatedAt": "2026-10-18T10:33:02.135Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0011",
+   "body": "依据《GRC_03_费用清单_25万欧档.xlsx》；杂费约 19,191 欧元，总预算约 269,191 欧元。",
+   "code": "FEE-GRC-GV",
+   "state": "published",
+   "title": "希腊黄金居留 25 万欧购房档费用（EUR）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "property",
+     "label": "购房款（25 万欧档）",
+     "nature": "third_party",
+     "timing": "购房合同签署",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "希腊房产出售方",
+     "amountMinor": "25000000"
+    },
+    {
+     "code": "transaction_tax",
+     "label": "房产交易税（3.09%）",
+     "nature": "official",
+     "timing": "过户时",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "希腊税务局",
+     "amountMinor": "772500"
+    },
+    {
+     "code": "notary",
+     "label": "公证处费用（1.24%）",
+     "nature": "third_party",
+     "timing": "过户时",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "希腊公证处",
+     "amountMinor": "310000"
+    },
+    {
+     "code": "registration",
+     "label": "房屋和土地产权登记费（0.8%）",
+     "nature": "official",
+     "timing": "过户时",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "希腊登记机关",
+     "amountMinor": "200000"
+    },
+    {
+     "code": "property_lawyer",
+     "label": "购房律师费（1% + 24% VAT）",
+     "nature": "overseas_professional",
+     "timing": "含过户及居留卡申请",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "希腊购房律师",
+     "amountMinor": "310000"
+    },
+    {
+     "code": "tax_registration",
+     "label": "税务登记",
+     "nature": "third_party",
+     "timing": "每套",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "税务师",
+     "amountMinor": "10000"
+    },
+    {
+     "code": "poa",
+     "label": "公证授权书",
+     "nature": "third_party",
+     "timing": "每份",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "公证处",
+     "amountMinor": "10000"
+    },
+    {
+     "code": "tax_number",
+     "label": "税号申请",
+     "nature": "third_party",
+     "timing": "申请时",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "税务师",
+     "amountMinor": "5000"
+    },
+    {
+     "code": "accountant",
+     "label": "会计服务费",
+     "nature": "third_party",
+     "timing": "首套 300，第二套起加 200",
+     "currency": "EUR",
+     "certainty": "estimated",
+     "collector": "会计师",
+     "amountMinor": "30000"
+    },
+    {
+     "code": "immigration_fee",
+     "label": "移民审批费（主申）",
+     "nature": "official",
+     "timing": "附申 150/人，12 岁以下免",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "希腊移民局",
+     "amountMinor": "200000"
+    },
+    {
+     "code": "card_fee",
+     "label": "居留卡制卡费（每人）",
+     "nature": "official",
+     "timing": "制卡",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "希腊移民局",
+     "amountMinor": "1600"
+    },
+    {
+     "code": "health_insurance",
+     "label": "健康保险（每人/年）",
+     "nature": "third_party",
+     "timing": "按年龄，儿童约 150",
+     "currency": "EUR",
+     "certainty": "estimated",
+     "collector": "保险公司",
+     "amountMinor": "20000"
+    },
+    {
+     "code": "property_tax",
+     "label": "年度房产持有税（约 0.2%）",
+     "nature": "official",
+     "timing": "每年以税单为准",
+     "currency": "EUR",
+     "certainty": "estimated",
+     "collector": "希腊税务局",
+     "amountMinor": "50000"
+    },
+    {
+     "code": "poa_hk",
+     "label": "香港海牙 POA（第三方，参考）",
+     "nature": "third_party",
+     "timing": "每份；不含在欧元总预算内",
+     "currency": "CNY",
+     "certainty": "estimated",
+     "collector": "香港公证/海牙认证机构",
+     "amountMinor": "350000"
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:02.160Z",
+   "updatedAt": "2026-10-18T10:33:02.169Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0012",
+   "body": "依据《ESP_03_数字游民费用清单_2026》；保险按年龄分档，异币种不相加。",
+   "code": "FEE-ESP-DNV",
+   "state": "published",
+   "title": "西班牙数字游民签证费用（CNY + EUR，分币种列示）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "schengen_visa",
+     "label": "申根签证综合费（每人）",
+     "nature": "third_party",
+     "timing": "约 1,200 元/人，含签证/中心/保险/机票单",
+     "currency": "CNY",
+     "certainty": "estimated",
+     "collector": "领馆/签证中心",
+     "amountMinor": "120000"
+    },
+    {
+     "code": "medical_insurance",
+     "label": "医疗保险（每人/月，按年龄）",
+     "nature": "third_party",
+     "timing": "40–49 岁 58；16–29 岁 41；65–69 岁 139",
+     "currency": "EUR",
+     "certainty": "estimated",
+     "collector": "保险公司",
+     "amountMinor": "5800"
+    },
+    {
+     "code": "local_service",
+     "label": "地接服务费（每家庭）",
+     "nature": "overseas_professional",
+     "timing": "登陆前",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "西班牙地接",
+     "amountMinor": "100000"
+    },
+    {
+     "code": "residence_reg",
+     "label": "办住家（每人）",
+     "nature": "third_party",
+     "timing": "约 450–600 欧元/人，以房东收费为准",
+     "currency": "EUR",
+     "certainty": "estimated",
+     "collector": "西班牙房东/相关机构",
+     "amountMinor": "52500"
+    },
+    {
+     "code": "fingerprint",
+     "label": "打指纹（每人）",
+     "nature": "official",
+     "timing": "录指纹时",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "西班牙警察局",
+     "amountMinor": "1608"
+    },
+    {
+     "code": "notary_apostille",
+     "label": "公证费、海牙认证费、翻译费",
+     "nature": "third_party",
+     "timing": "海牙普通 100/快件 150，公证与翻译按当地标准",
+     "currency": "EUR",
+     "certainty": "estimated",
+     "collector": "西班牙公证处/海牙认证机构",
+     "amountMinor": "10000"
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:02.194Z",
+   "updatedAt": "2026-10-18T10:33:02.203Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0013",
+   "body": "依据《PRT_02_黄金居留法案ARI第7条》及项目汇总；正式分项费表待补充，以下为估算。",
+   "code": "FEE-PRT-GV",
+   "state": "published",
+   "title": "葡萄牙黄金居留（基金路径）费用（EUR，待正式费表）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "fund_investment",
+     "label": "基金投资款（参考）",
+     "nature": "official",
+     "timing": "认购时；以基金认购协议为准",
+     "currency": "EUR",
+     "certainty": "estimated",
+     "collector": "葡萄牙合规基金",
+     "amountMinor": "50000000"
+    },
+    {
+     "code": "lawyer_fee",
+     "label": "律师费",
+     "nature": "overseas_professional",
+     "timing": "待正式律师报价",
+     "currency": "EUR",
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    },
+    {
+     "code": "official_fees",
+     "label": "移民申请及制卡费",
+     "nature": "official",
+     "timing": "待官方费表确认",
+     "currency": "EUR",
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    },
+    {
+     "code": "notary_translation",
+     "label": "公证、翻译、认证",
+     "nature": "third_party",
+     "timing": "按实际发生",
+     "currency": "EUR",
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:02.228Z",
+   "updatedAt": "2026-10-18T10:33:02.237Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0014",
+   "body": "依据《EU_05_护照归化流程与费用清单》；不含增值税及第三方费用。",
+   "code": "FEE-SVN-CIT",
+   "state": "published",
+   "title": "斯洛文尼亚特别归化费用（EUR）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "investment_contribution",
+     "label": "投资贡献款",
+     "nature": "official",
+     "timing": "分阶段；不成功由 FCB 90 日内全额退还",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "斯洛文尼亚政府指定战略项目",
+     "amountMinor": "250000000"
+    },
+    {
+     "code": "service_fee",
+     "label": "服务费（四期合计）",
+     "nature": "overseas_professional",
+     "timing": "签约/呈交/肯定性意见/成功各 125,000；第四期不成功不付",
+     "currency": "EUR",
+     "certainty": "confirmed",
+     "collector": "境外持牌服务方（FCB）",
+     "amountMinor": "50000000"
+    },
+    {
+     "code": "notary_medical",
+     "label": "公证费、体检费、律师见证费",
+     "nature": "third_party",
+     "timing": "不含，按实际发生",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:02.262Z",
+   "updatedAt": "2026-10-18T10:33:02.271Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0015",
+   "body": "依据《PAN_03_项目常规费用清单》；公证、海牙、翻译按实际，多退少补。",
+   "code": "FEE-PAN-PR",
+   "state": "published",
+   "title": "巴拿马购房永久居留费用（USD）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "property",
+     "label": "购房款",
+     "nature": "third_party",
+     "timing": "30 万美元及以上；签约后",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "巴拿马房产商",
+     "amountMinor": "30000000"
+    },
+    {
+     "code": "property_tax",
+     "label": "房产交易税（过户金额 2%）",
+     "nature": "official",
+     "timing": "按 30 万房价估算 2%",
+     "currency": "USD",
+     "certainty": "estimated",
+     "collector": "巴拿马税务局",
+     "amountMinor": "600000"
+    },
+    {
+     "code": "registration",
+     "label": "房产注册费（购房款 3‰）",
+     "nature": "official",
+     "timing": "按 30 万房价估算 3‰",
+     "currency": "USD",
+     "certainty": "estimated",
+     "collector": "巴拿马税务局",
+     "amountMinor": "90000"
+    },
+    {
+     "code": "transfer_doc",
+     "label": "过户文件费",
+     "nature": "official",
+     "timing": "多退少补",
+     "currency": "USD",
+     "certainty": "estimated",
+     "collector": "巴拿马税务局",
+     "amountMinor": "10000"
+    },
+    {
+     "code": "immigration_lawyer",
+     "label": "购房移民律师费（含一家三口）",
+     "nature": "overseas_professional",
+     "timing": "超出人员 3,000/人",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "巴拿马律师楼",
+     "amountMinor": "1000000"
+    },
+    {
+     "code": "gov_processing",
+     "label": "移民审理政府费（主申）",
+     "nature": "official",
+     "timing": "国库支票 5,000 + 移民局 5,000",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "巴拿马移民局/国库",
+     "amountMinor": "1000000"
+    },
+    {
+     "code": "gov_processing_spouse",
+     "label": "移民审理政府费（副申/人）",
+     "nature": "official",
+     "timing": "12 岁以下免移民局 1,000",
+     "currency": "USD",
+     "certainty": "estimated",
+     "collector": "巴拿马移民局/国库",
+     "amountMinor": "200000"
+    },
+    {
+     "code": "pr_application",
+     "label": "永久居留申请费（每人）",
+     "nature": "official",
+     "timing": "18 周岁以下免费",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "巴拿马移民局",
+     "amountMinor": "300000"
+    },
+    {
+     "code": "medical",
+     "label": "体检费（每人）",
+     "nature": "third_party",
+     "timing": "签约后",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "体检医院",
+     "amountMinor": "15000"
+    },
+    {
+     "code": "immigration_register",
+     "label": "移民登记申请费（每人）",
+     "nature": "official",
+     "timing": "签约后",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "巴拿马移民局",
+     "amountMinor": "10500"
+    },
+    {
+     "code": "card_fee",
+     "label": "PR/ID 制卡费（每人）",
+     "nature": "official",
+     "timing": "按年龄 50/100",
+     "currency": "USD",
+     "certainty": "estimated",
+     "collector": "巴拿马移民局",
+     "amountMinor": "10000"
+    },
+    {
+     "code": "check_fee",
+     "label": "支票手续费（每张）",
+     "nature": "third_party",
+     "timing": "按张",
+     "currency": "USD",
+     "certainty": "confirmed",
+     "collector": "银行",
+     "amountMinor": "2140"
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:02.296Z",
+   "updatedAt": "2026-10-18T10:33:02.304Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0016",
+   "body": "暂无费用文件；以下均待确认，评估通过后出具正式分项报价。",
+   "code": "FEE-USA-EB1A",
+   "state": "published",
+   "title": "美国 EB-1A 费用（待正式费表）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "platform_service",
+     "label": "平台服务费",
+     "nature": "platform_service",
+     "timing": "个案评估后定价",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": "北京赛哲桥国际咨询有限公司",
+     "amountMinor": null
+    },
+    {
+     "code": "official_fees",
+     "label": "USCIS 官方申请费",
+     "nature": "official",
+     "timing": "以移民局当期收费为准",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    },
+    {
+     "code": "legal_fee",
+     "label": "美国律师/专业服务费",
+     "nature": "overseas_professional",
+     "timing": "待正式报价",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    },
+    {
+     "code": "third_party",
+     "label": "公证、翻译、体检等",
+     "nature": "third_party",
+     "timing": "按实际发生",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:02.328Z",
+   "updatedAt": "2026-10-18T10:33:02.336Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0017",
+   "body": "暂无正式费用文件；服务底价参考内部项目汇总，政府与第三方费用按实，待正式确认。",
+   "code": "FEE-ARE-INV",
+   "state": "published",
+   "title": "阿联酋投资人居留费用（CNY，估算，待正式费表）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "platform_service",
+     "label": "企业家签证/投资人居留平台服务费",
+     "nature": "platform_service",
+     "timing": "底价参考；以正式合同为准",
+     "currency": "CNY",
+     "certainty": "estimated",
+     "collector": "北京赛哲桥国际咨询有限公司",
+     "amountMinor": "15000000"
+    },
+    {
+     "code": "company_license",
+     "label": "公司注册与牌照费",
+     "nature": "third_party",
+     "timing": "随牌照类型与酋长国",
+     "currency": "CNY",
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    },
+    {
+     "code": "official_visa",
+     "label": "签证与 EID 官方费用",
+     "nature": "official",
+     "timing": "待官方收费确认",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    },
+    {
+     "code": "bank_other",
+     "label": "银行开户、地址与其他第三方",
+     "nature": "third_party",
+     "timing": "按实际发生",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:02.361Z",
+   "updatedAt": "2026-10-18T10:33:02.369Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0018",
+   "body": "暂无正式费用文件；服务费用参考内部项目汇总，公司注册与官方费用按实。",
+   "code": "FEE-SGP-EP",
+   "state": "published",
+   "title": "新加坡自雇 EP 费用（CNY，估算，待正式费表）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "platform_service",
+     "label": "自雇 EP 办理服务费",
+     "nature": "platform_service",
+     "timing": "10–12 万元参考；以正式合同为准",
+     "currency": "CNY",
+     "certainty": "estimated",
+     "collector": "北京赛哲桥国际咨询有限公司",
+     "amountMinor": "11000000"
+    },
+    {
+     "code": "company_setup",
+     "label": "公司注册及秘书/注册地址",
+     "nature": "third_party",
+     "timing": "按服务商报价",
+     "currency": "CNY",
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    },
+    {
+     "code": "official_fee",
+     "label": "EP 官方申请费",
+     "nature": "official",
+     "timing": "以新加坡人力部收费为准",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    },
+    {
+     "code": "salary",
+     "label": "本人薪资（满足 EP 薪资门槛）",
+     "nature": "third_party",
+     "timing": "非办理费；为公司向本人发放的薪资，按当期门槛",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:02.392Z",
+   "updatedAt": "2026-10-18T10:33:02.401Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0019",
+   "body": "依据《THA_01_精英签证新套餐介绍_0325》；为泰国特权卡公司官方会员费。",
+   "code": "FEE-THA-PE",
+   "state": "published",
+   "title": "泰国精英签证会员费（THB）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "gold_5y",
+     "label": "黄金卡（5 年）会员费",
+     "nature": "official",
+     "timing": "入会；20 特权积分/年",
+     "currency": "THB",
+     "certainty": "confirmed",
+     "collector": "泰国特权卡公司（TPC）",
+     "amountMinor": "90000000"
+    },
+    {
+     "code": "platinum_10y",
+     "label": "白金卡（10 年）会员费",
+     "nature": "official",
+     "timing": "入会；35 积分/年",
+     "currency": "THB",
+     "certainty": "confirmed",
+     "collector": "泰国特权卡公司（TPC）",
+     "amountMinor": "150000000"
+    },
+    {
+     "code": "diamond_15y",
+     "label": "钻石卡（15 年）会员费",
+     "nature": "official",
+     "timing": "入会；55 积分/年",
+     "currency": "THB",
+     "certainty": "confirmed",
+     "collector": "泰国特权卡公司（TPC）",
+     "amountMinor": "250000000"
+    },
+    {
+     "code": "ultimate_20y",
+     "label": "至尊卡（20 年）会员费",
+     "nature": "official",
+     "timing": "以官方当期套餐为准",
+     "currency": "THB",
+     "certainty": "estimated",
+     "collector": "泰国特权卡公司（TPC）",
+     "amountMinor": "500000000"
+    },
+    {
+     "code": "platform_service",
+     "label": "平台协办服务费",
+     "nature": "platform_service",
+     "timing": "待正式服务协议",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": "北京赛哲桥国际咨询有限公司",
+     "amountMinor": null
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:02.425Z",
+   "updatedAt": "2026-10-18T10:33:02.433Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0020",
+   "body": "依据《KOR_01_存款移民项目介绍》《KOR_01_存款项目后续服务清单》；存款为本人资金非收费。",
+   "code": "FEE-KOR-DEP",
+   "state": "published",
+   "title": "韩国存款移民费用（存款待确认 + 后续服务 CNY）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "deposit",
+     "label": "政府指定银行存款（本人资金，到期返还）",
+     "nature": "official",
+     "timing": "存款金额按年龄/家庭分档，以官方政策为准；非收费",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": "韩国政府指定银行",
+     "amountMinor": null
+    },
+    {
+     "code": "platform_service",
+     "label": "平台办理服务费",
+     "nature": "platform_service",
+     "timing": "待正式方案",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": "北京赛哲桥国际咨询有限公司",
+     "amountMinor": null
+    },
+    {
+     "code": "school_service",
+     "label": "国际学校申请服务（两所）",
+     "nature": "platform_service",
+     "timing": "含资讯、预约参观、代申请，限两所",
+     "currency": "CNY",
+     "certainty": "confirmed",
+     "collector": "北京赛哲桥国际咨询有限公司",
+     "amountMinor": "3000000"
+    },
+    {
+     "code": "training",
+     "label": "课外兴趣/专业课培训陪同",
+     "nature": "platform_service",
+     "timing": "按天（8 小时），不含交通餐饮",
+     "currency": "CNY",
+     "certainty": "estimated",
+     "collector": "北京赛哲桥国际咨询有限公司",
+     "amountMinor": "150000"
+    },
+    {
+     "code": "official_fee",
+     "label": "签证/登录官方费用",
+     "nature": "official",
+     "timing": "以官方收费为准",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:02.457Z",
+   "updatedAt": "2026-10-18T10:33:02.465Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  },
+  {
+   "id": "FEE-0021",
+   "body": "依据《JPN_01_日本签证介绍》；资本金为公司经营资金非收费，服务费参考内部汇总。",
+   "code": "FEE-JPN-BM",
+   "state": "published",
+   "title": "日本经营管理/高度人才费用（JPY 资本金 + CNY 服务费估算）",
+   "version": 1,
+   "authorId": "admin01",
+   "feeItems": [
+    {
+     "code": "registered_capital",
+     "label": "公司实缴资本金（本人经营资金，非收费）",
+     "nature": "third_party",
+     "timing": "公司注册实缴；为公司资金非办理费",
+     "currency": "JPY",
+     "certainty": "confirmed",
+     "collector": "申请人日本公司",
+     "amountMinor": "30000000"
+    },
+    {
+     "code": "platform_service_bm",
+     "label": "经营管理签证办理服务费（参考）",
+     "nature": "platform_service",
+     "timing": "参考内部汇总，以正式合同为准",
+     "currency": "CNY",
+     "certainty": "estimated",
+     "collector": "北京赛哲桥国际咨询有限公司",
+     "amountMinor": "12000000"
+    },
+    {
+     "code": "platform_service_hsp",
+     "label": "高度人才签证办理服务费（参考）",
+     "nature": "platform_service",
+     "timing": "参考内部汇总，以正式合同为准",
+     "currency": "CNY",
+     "certainty": "estimated",
+     "collector": "北京赛哲桥国际咨询有限公司",
+     "amountMinor": "15000000"
+    },
+    {
+     "code": "company_setup",
+     "label": "公司注册、税务及第三方费用",
+     "nature": "third_party",
+     "timing": "按日本当地服务商报价",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    },
+    {
+     "code": "official_fee",
+     "label": "签证官方申请费",
+     "nature": "official",
+     "timing": "以日本入管局收费为准",
+     "currency": null,
+     "certainty": "tbc",
+     "collector": null,
+     "amountMinor": null,
+     "collectorTbc": true
+    }
+   ],
+   "createdAt": "2026-10-18T10:33:02.489Z",
+   "updatedAt": "2026-10-18T10:33:02.499Z",
+   "reviewerId": "reviewer1",
+   "wordVersion": "baseline-v1"
+  }
+ ],
+ "snapshotAt": "2026-10-18"
+}

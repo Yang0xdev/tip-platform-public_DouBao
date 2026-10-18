@@ -98,14 +98,15 @@ const customerHeaders = (extra?: Record<string, string>) => ({
 const GET_BACKOFF_MS = [4_000, 8_000, 16_000, 30_000, 45_000];
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
-async function getJson<T>(path: string, asCustomer = false): Promise<T> {
+// attempts：总尝试次数；对客目录允许快速失败后回退到站点静态快照，不阻塞首屏。
+async function getJson<T>(path: string, asCustomer = false, attempts = GET_BACKOFF_MS.length + 1): Promise<T> {
   let lastError: unknown;
-  for (let attempt = 0; attempt <= GET_BACKOFF_MS.length; attempt++) {
+  for (let attempt = 0; attempt < attempts; attempt++) {
     try {
       const res = await fetch(`${API_BASE}${path}`, asCustomer ? { headers: customerHeaders() } : undefined);
       if (res.ok) return (await res.json()) as T;
       // 免费实例唤醒期间会返回 502/503/504；4xx 属于业务错误，不重试。
-      if (res.status >= 500 && attempt < GET_BACKOFF_MS.length) {
+      if (res.status >= 500 && attempt < attempts - 1) {
         lastError = new Error(`服务正在唤醒中（${res.status}）`);
         await sleep(GET_BACKOFF_MS[attempt]);
         continue;
@@ -114,7 +115,7 @@ async function getJson<T>(path: string, asCustomer = false): Promise<T> {
       throw new Error((body as { message?: string }).message ?? `请求失败（${res.status}）`);
     } catch (e) {
       // 网络层失败（CORS 预检/连接中断）在冷启动时同样发生；重试到唤醒完成。
-      if (attempt < GET_BACKOFF_MS.length) {
+      if (attempt < attempts - 1) {
         lastError = e;
         await sleep(GET_BACKOFF_MS[attempt]);
         continue;
@@ -124,6 +125,18 @@ async function getJson<T>(path: string, asCustomer = false): Promise<T> {
   }
   throw lastError instanceof Error ? lastError : new Error("请求失败");
 }
+
+// 对客公开目录：API 不可用（免费实例休眠/网络不通）时回退到随站点部署的静态发布快照，
+// 保证公众浏览不依赖实时后端；动态动作（初评/收藏/工单）仍走实时 API。
+async function staticGet<T>(rel: string): Promise<T> {
+  const res = await fetch(rel, { cache: "no-store" });
+  if (!res.ok) throw new Error("静态目录不可用");
+  return (await res.json()) as T;
+}
+const staticProjects = async () =>
+  (await staticGet<{ records: ProjectView[] }>("catalog/projects.json")).records;
+const staticFeeSchedules = async () =>
+  (await staticGet<{ records: FeeScheduleView[] }>("catalog/fee-schedules.json")).records;
 
 async function postJson<T>(path: string, payload: unknown, asCustomer = false): Promise<T> {
   const res = await fetch(`${API_BASE}${path}`, {
@@ -168,9 +181,32 @@ export interface MaterialView {
 }
 
 export const api = {
-  listProjects: () => getJson<{ records: ProjectView[] }>("/v1/catalog/projects"),
-  getProject: (id: string) => getJson<ProjectView>(`/v1/catalog/projects/${id}`),
-  getFeeSchedule: (id: string) => getJson<FeeScheduleView>(`/v1/catalog/fee-schedules/${id}`),
+  // 目录类只读：先尝试实时 API（3 次，约 15 秒），失败回退静态发布快照
+  listProjects: async () => {
+    try {
+      return await getJson<{ records: ProjectView[] }>("/v1/catalog/projects", false, 3);
+    } catch {
+      return { records: await staticProjects() };
+    }
+  },
+  getProject: async (id: string) => {
+    try {
+      return await getJson<ProjectView>(`/v1/catalog/projects/${id}`, false, 3);
+    } catch {
+      const found = (await staticProjects()).find((p) => p.id === id || p.code === id);
+      if (!found) throw new Error("项目不存在");
+      return found;
+    }
+  },
+  getFeeSchedule: async (id: string) => {
+    try {
+      return await getJson<FeeScheduleView>(`/v1/catalog/fee-schedules/${id}`, false, 3);
+    } catch {
+      const found = (await staticFeeSchedules()).find((f) => f.id === id);
+      if (!found) throw new Error("费用表不可用");
+      return found;
+    }
+  },
   getQuestionnaire: () => getJson<Questionnaire>("/v1/assessment/questionnaire"),
   evaluate: (projectCode: string, answers: Record<string, string | number | undefined>) =>
     postJson<EvaluateResponse>("/v1/assessment/evaluate", { projectCode, answers }),
