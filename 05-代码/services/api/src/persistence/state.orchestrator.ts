@@ -239,7 +239,15 @@ export class StateOrchestrator implements OnApplicationBootstrap, OnModuleDestro
     // 用于生产测试数据切换；数据重建完成后必须立即移除该环境变量，否则重启/休眠唤醒会再次清空。
     if (process.env.WIPE_ON_BOOT === "1") {
       const deleted = await this.prisma.db.serviceState.deleteMany({});
-      this.logger.warn(`WIPE_ON_BOOT=1：已清空 service_states ${deleted.count} 行，以空业务态启动`);
+      // 聚合快照（订单/案件/方案/支付/材料等交易聚合）与其他持久化表也要一并清空，
+      // 否则旧演示数据会在 WIPE 后继续从 aggregate_snapshots 复活。
+      const snaps = await this.prisma.db.aggregateSnapshot.deleteMany({});
+      const outbox = await this.prisma.db.outboxEvent.deleteMany({});
+      const flags = await this.prisma.db.featureFlag.deleteMany({});
+      this.logger.warn(
+        `WIPE_ON_BOOT=1：已清空 service_states ${deleted.count} 行、` +
+        `aggregate_snapshots ${snaps.count} 行、outbox_events ${outbox.count} 行、feature_flags ${flags.count} 行，以空业务态启动`
+      );
       this.timer = setInterval(() => {
         this.flush().catch((e) => this.logger.warn(`自动保存失败: ${String(e)}`));
       }, AUTOSAVE_MS);

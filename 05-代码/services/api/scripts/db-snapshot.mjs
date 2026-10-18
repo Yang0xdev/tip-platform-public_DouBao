@@ -39,14 +39,24 @@ try {
     fs.writeFileSync(out, JSON.stringify({ backedUpAt: new Date().toISOString(), count: rows.length, rows }, null, 2));
     console.log(`已备份 ${rows.length} 个服务快照 → ${out}`);
   } else if (cmd === "reset") {
-    if (process.argv[4] !== "--confirm" || process.argv[5] !== "I_KNOW_THIS_WIPES_PRODUCTION") {
+    if (process.argv[3] !== "--confirm" || process.argv[4] !== "I_KNOW_THIS_WIPES_PRODUCTION") {
       console.error("拒绝执行：必须加 --confirm I_KNOW_THIS_WIPES_PRODUCTION");
       process.exit(2);
     }
-    const before = await db.serviceState.count();
+    const before = {
+      serviceStates: await db.serviceState.count(),
+      aggregateSnapshots: await db.aggregateSnapshot.count(),
+      auditEvents: await db.auditEvent.count(),
+      outboxEvents: await db.outboxEvent.count(),
+      featureFlags: await db.featureFlag.count()
+    };
+    // 清空全部业务持久化表（订单/案件等交易聚合存于 aggregate_snapshots，仅清 service_states 会复活旧演示数据）
+    await db.outboxEvent.deleteMany({});
+    await db.aggregateSnapshot.deleteMany({});
     await db.serviceState.deleteMany({});
-    const after = await db.serviceState.count();
-    console.log(`已清空 service_states：${before} → ${after}`);
+    await db.auditEvent.deleteMany({});
+    await db.featureFlag.deleteMany({});
+    console.log("已清空全部业务表：", JSON.stringify(before));
   } else {
     console.error("用法：db-snapshot.mjs backup|reset");
     process.exit(2);
