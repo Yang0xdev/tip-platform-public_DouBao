@@ -181,31 +181,47 @@ export interface MaterialView {
 }
 
 export const api = {
-  // 目录类只读：先尝试实时 API（3 次，约 15 秒），失败回退静态发布快照
+  // 目录类只读：实时 API 优先，6 秒内未响应（冷启动/网络波动）立即用静态发布快照，
+  // 保证对客页面秒开；静态快照与 API 同源于四眼发布数据，每次发布随版本刷新。
   listProjects: async () => {
     try {
-      return await getJson<{ records: ProjectView[] }>("/v1/catalog/projects", false, 3);
+      const live = await Promise.race<{ records: ProjectView[] } | null>([
+        getJson<{ records: ProjectView[] }>("/v1/catalog/projects", false, 2),
+        new Promise((resolve) => setTimeout(() => resolve(null), 6_000))
+      ]);
+      if (live) return live;
     } catch {
-      return { records: await staticProjects() };
+      // 落到静态快照
     }
+    return { records: await staticProjects() };
   },
   getProject: async (id: string) => {
     try {
-      return await getJson<ProjectView>(`/v1/catalog/projects/${id}`, false, 3);
+      const live = await Promise.race<ProjectView | null>([
+        getJson<ProjectView>(`/v1/catalog/projects/${id}`, false, 2),
+        new Promise((resolve) => setTimeout(() => resolve(null), 6_000))
+      ]);
+      if (live) return live;
     } catch {
-      const found = (await staticProjects()).find((p) => p.id === id || p.code === id);
-      if (!found) throw new Error("项目不存在");
-      return found;
+      // 落到静态快照
     }
+    const found = (await staticProjects()).find((p) => p.id === id || p.code === id);
+    if (!found) throw new Error("项目不存在");
+    return found;
   },
   getFeeSchedule: async (id: string) => {
     try {
-      return await getJson<FeeScheduleView>(`/v1/catalog/fee-schedules/${id}`, false, 3);
+      const live = await Promise.race<FeeScheduleView | null>([
+        getJson<FeeScheduleView>(`/v1/catalog/fee-schedules/${id}`, false, 2),
+        new Promise((resolve) => setTimeout(() => resolve(null), 6_000))
+      ]);
+      if (live) return live;
     } catch {
-      const found = (await staticFeeSchedules()).find((f) => f.id === id);
-      if (!found) throw new Error("费用表不可用");
-      return found;
+      // 落到静态快照
     }
+    const found = (await staticFeeSchedules()).find((f) => f.id === id);
+    if (!found) throw new Error("费用表不可用");
+    return found;
   },
   getQuestionnaire: () => getJson<Questionnaire>("/v1/assessment/questionnaire"),
   evaluate: (projectCode: string, answers: Record<string, string | number | undefined>) =>
