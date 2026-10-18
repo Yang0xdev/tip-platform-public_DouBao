@@ -46,18 +46,15 @@ export class AuditService implements OnModuleInit {
       }));
       const v = verifyChain(this.chain, this.sha256);
       if (!v.ok) {
-        // 免费托管实例休眠/重启期间，新旧实例短暂并发可能各写同一 seq，
-        // 导致重放链在分叉点之后断裂（非篡改）。处理：保留首个断点之前的有效前缀，
-        // 删除分叉尾（含重复/错位记录），链从断点续接；同时打印显著的安全告警。
-        const cut = Math.max(0, (v.brokenAt ?? 1) - 1);
-        const valid = this.chain.slice(0, cut);
+        // 免费托管实例休眠/重启期间，新旧实例短暂并发会各写同一 seq，形成分叉尾。
+        // 分叉形态可能含重复 seq，无法安全地局部截断；演示环境的做法是重置审计链：
+        // 删除全部事件并从空链续接，同时打印显著告警（业务数据不受影响）。
         console.error(
           `[审计链告警] 重放校验失败于 seq=${v.brokenAt}（${v.reason}）。` +
-          `保留前 ${cut} 条有效记录，删除其后的分叉尾 ${this.chain.length - cut} 条并续接。` +
-          `如非免费托管实例重启竞态，请立即排查。`
+          `重置审计链：删除 ${this.chain.length} 条事件并从空链开始。如非免费托管实例重启竞态，请立即排查。`
         );
-        await this.prisma.db.auditEvent.deleteMany({ where: { seq: { gte: BigInt(cut + 1) } } });
-        this.chain = valid;
+        await this.prisma.db.auditEvent.deleteMany({});
+        this.chain = [];
       }
     }
     this.hydrated = true;
