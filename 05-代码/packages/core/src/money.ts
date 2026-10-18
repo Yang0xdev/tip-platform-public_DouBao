@@ -7,11 +7,12 @@
  * 5. 内部用最小货币单位的 bigint，杜绝浮点误差。
  */
 
-export type Currency = "CNY" | "USD" | "EUR" | "GBP" | "HKD" | "JPY" | "CAD" | "AUD" | "SGD";
+export type Currency = "CNY" | "USD" | "EUR" | "GBP" | "HKD" | "JPY" | "CAD" | "AUD" | "SGD" | "THB" | "FJD" | "KRW" | "HUF";
 
 /** 各币种小数位（ISO 4217 常见子集，按需扩展） */
 export const CURRENCY_DECIMALS: Record<Currency, number> = {
-  CNY: 2, USD: 2, EUR: 2, GBP: 2, HKD: 2, JPY: 0, CAD: 2, AUD: 2, SGD: 2
+  CNY: 2, USD: 2, EUR: 2, GBP: 2, HKD: 2, JPY: 0, CAD: 2, AUD: 2, SGD: 2,
+  THB: 2, FJD: 2, KRW: 0, HUF: 0
 };
 
 export type FeeNature = "platform_service" | "domestic_service" | "overseas_professional" | "official" | "third_party";

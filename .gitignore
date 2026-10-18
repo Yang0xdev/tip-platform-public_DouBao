@@ -16,3 +16,7 @@ Thumbs.db
 # FUSE 临时标记
 **/.fuse*
 05-代码/apps/admin-web/dist-local/
+
+# 原始资料大文件与本地 seed 结果（不入库）
+00-原始资料/
+05-代码/services/api/scripts/real-seed-result.json
