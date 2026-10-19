@@ -1,19 +1,44 @@
-// 全站访问门禁（Cloudflare Pages Functions 边缘中间件，对自定义域名与 *.pages.dev 同时生效）
+// 访问门禁（Cloudflare Pages Functions，对自定义域名与 *.pages.dev 同时生效）
 //
-// 公开白名单（唯一对客面）：
-//   /live/client/ 及其全部静态资源（含 catalog 静态快照）
-//   /api/*         客户端同源 API 代理
-// 其余所有路径——总入口、原型页、顾问/后台/服务方门户、Mac 视觉工具、脚本——
-// 一律 HTTP Basic Auth，未通过返回 401，且加 noindex 防止搜索引擎收录。
-// 账号口令存于 Pages 项目 Secret：AUTH_USER / AUTH_PASS（wrangler pages secret put）。
+// 公开（对客终端与工具，白名单制）：
+//   /live/client/  /live/advisor/  /live/admin/  /live/portal/
+//   /advisor-ipad.html   /mac-vision.html
+//   /mac-setup.command   /mac-setup.zip   /scan-sample.pdf
+//   /api/*（客户端同源 API 代理）
+//
+// 受保护（默认拒绝，含总入口与全部早期原型/过程页）：
+//   / 总入口，以及 client.html、admin.html、advisor.html、advisor-ai.html、
+//   admin-ai.html、ai.html、install.html、knowledge-arch.html、
+//   transaction-flow.html、ui-gallery.html 和任何未列出的路径
+//   （防止 Cloudflare 对未知路径回退根 index 导致过程页泄露）。
+//
+// 账号口令存于 Pages 项目 Secret：AUTH_USER / AUTH_PASS（由用户自定义）。
 
-const PUBLIC_PATH_PREFIXES = ["/live/client/"];
-const PUBLIC_PATH_EXACT = new Set(["/live/client"]);
+const PUBLIC_PREFIXES = [
+  "/live/client/",
+  "/live/advisor/",
+  "/live/admin/",
+  "/live/portal/",
+  "/api/"
+];
+const PUBLIC_EXACT = new Set([
+  "/live/client",
+  "/live/advisor",
+  "/live/admin",
+  "/live/portal",
+  "/api",
+  "/advisor-ipad",
+  "/advisor-ipad.html",
+  "/mac-vision",
+  "/mac-vision.html",
+  "/mac-setup.command",
+  "/mac-setup.zip",
+  "/scan-sample.pdf"
+]);
 
 function isPublic(pathname) {
-  if (PUBLIC_PATH_EXACT.has(pathname)) return true;
-  if (pathname.startsWith("/api/") || pathname === "/api") return true;
-  for (const p of PUBLIC_PATH_PREFIXES) {
+  if (PUBLIC_EXACT.has(pathname)) return true;
+  for (const p of PUBLIC_PREFIXES) {
     if (pathname.startsWith(p)) return true;
   }
   return false;
@@ -41,7 +66,7 @@ function unauthorized() {
 function checkAuth(request, env) {
   const user = env.AUTH_USER;
   const pass = env.AUTH_PASS;
-  if (!user || !pass) return false; // 未配置 Secret 时宁可全开，避免误锁死；部署后务必确认
+  if (!user || !pass) return false;
   const header = request.headers.get("Authorization") || "";
   const m = /^Basic\s+(.+)$/.exec(header);
   if (!m) return false;
