@@ -1,17 +1,11 @@
 // 访问门禁（Cloudflare Pages Functions，对自定义域名与 *.pages.dev 同时生效）
 //
-// 公开（对客终端与工具，白名单制）：
-//   /live/client/  /live/advisor/  /live/admin/  /live/portal/
-//   /advisor-ipad.html   /mac-vision.html
-//   /mac-setup.command   /mac-setup.zip   /scan-sample.pdf
-//   /api/*（客户端同源 API 代理）
+// 规则（用户最新口径）：
+//   仅「平台总入口 /」及任何未列出的路径需要 Basic Auth；
+//   全部终端（客户端/顾问/后台/服务方门户/视觉工具）与全部冻结 UI 页面公开。
 //
-// 受保护（默认拒绝，含总入口与全部早期原型/过程页）：
-//   / 总入口，以及 client.html、admin.html、advisor.html、advisor-ai.html、
-//   admin-ai.html、ai.html、install.html、knowledge-arch.html、
-//   transaction-flow.html、ui-gallery.html 和任何未列出的路径
-//   （防止 Cloudflare 对未知路径回退根 index 导致过程页泄露）。
-//
+// 「未列出路径默认拒绝」是为了堵住 Cloudflare 对未知路径回退根 index 的行为，
+// 否则像 /live/zzz 会直接把总入口内容返回给未授权访客。
 // 账号口令存于 Pages 项目 Secret：AUTH_USER / AUTH_PASS（由用户自定义）。
 
 const PUBLIC_PREFIXES = [
@@ -22,18 +16,24 @@ const PUBLIC_PREFIXES = [
   "/api/"
 ];
 const PUBLIC_EXACT = new Set([
-  "/live/client",
-  "/live/advisor",
-  "/live/admin",
-  "/live/portal",
-  "/api",
-  "/advisor-ipad",
-  "/advisor-ipad.html",
-  "/mac-vision",
-  "/mac-vision.html",
-  "/mac-setup.command",
-  "/mac-setup.zip",
-  "/scan-sample.pdf"
+  "/live/client", "/live/advisor", "/live/admin", "/live/portal", "/api",
+  // 冻结 UI 原型/说明页（.html 与扩展名形式都要放行）
+  "/client", "/client.html",
+  "/admin", "/admin.html",
+  "/advisor", "/advisor.html",
+  "/advisor-ai", "/advisor-ai.html",
+  "/admin-ai", "/admin-ai.html",
+  "/ai", "/ai.html",
+  "/portal", "/portal.html",
+  "/install", "/install.html",
+  "/knowledge-arch", "/knowledge-arch.html",
+  "/transaction-flow", "/transaction-flow.html",
+  "/ui-gallery", "/ui-gallery.html",
+  // 顾问 iPad 端
+  "/advisor-ipad", "/advisor-ipad.html",
+  // Mac 视觉工具
+  "/mac-vision", "/mac-vision.html",
+  "/mac-setup.command", "/mac-setup.zip", "/scan-sample.pdf"
 ]);
 
 function isPublic(pathname) {
@@ -91,6 +91,7 @@ export async function onRequest(context) {
     return next();
   }
 
+  // 唯一受保护的公开页面是总入口 /；其余匹配均为未知路径，统一 401
   if (!checkAuth(request, env)) {
     return unauthorized();
   }

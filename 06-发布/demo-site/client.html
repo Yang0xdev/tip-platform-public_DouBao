@@ -312,8 +312,14 @@ V.home=view('home',
  '<div class="q" data-go="services"><i>'+ic('headset',15)+'</i>服务工单</div></div>'+
  '<div class="hintbar">'+ic('shield',18)+'<div><b>防骗提示：</b>付款前先核验收费主体与对公账户，平台不会要求向个人账户转账。</div></div>'+
  '<div class="sec-t">为你推荐</div>'+
- '<div class="proj-row" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">A 国 · 随行子女路径</b><div class="small mut" style="margin-top:3px;">随主申请 · v1.4 · 已发布</div></div><span class="st n">了解</span></div>'+
- '<div class="proj-row" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">C 国 · 数字游民</b><div class="small mut" style="margin-top:3px;">收费方案待发布，暂不报价</div></div><span class="st a"><span class="d"></span>待发布</span></div>'+
+ '<div class="proj-row" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13px;">安提瓜和巴布达投资入籍 · 国家发展基金捐…</b><div class="small mut" style="margin-top:3px;">NDF 捐款 · 单人 23 万美元起</div></div><span class="st n">了解</span></div>'+
+ '<div class="proj-row" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13px;">圣卢西亚基建投资入籍</b><div class="small mut" style="margin-top:3px;">基建投资入籍</div></div><span class="st n">了解</span></div>'+
+ '<div class="proj-row" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13px;">格林纳达国家旅游度假区投资入籍</b><div class="small mut" style="margin-top:3px;">旅游度假区投资入籍</div></div><span class="st n">了解</span></div>'+
+ '<div class="proj-row" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13px;">蒙特塞拉特特殊贡献身份 → 英国护照</b><div class="small mut" style="margin-top:3px;">特殊贡献 · 英国海外领地</div></div><span class="st n">了解</span></div>'+
+ '<div class="proj-row" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13px;">瓦努阿图投资入籍（DSP）</b><div class="small mut" style="margin-top:3px;">DSP 投资入籍 · 快速通道</div></div><span class="st n">了解</span></div>'+
+ '<div class="proj-row" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13px;">斐济退休移民签证</b><div class="small mut" style="margin-top:3px;">退休签证 · 长居养老</div></div><span class="st n">了解</span></div>'+
+ '<div class="card" data-go="projects" style="text-align:center;color:var(--navy);font-weight:700;font-size:12.5px;cursor:pointer;">查看全部 21 款在售项目 ›</div>'+
+ 
  '</div>'+tb('home'));
 
 /* 3 找项目 */
@@ -322,11 +328,30 @@ V.projects=view('projects',
  '<div class="body">'+
  '<div class="gtop"><div class="tt">找项目</div><div class="small" style="opacity:.85;margin-top:4px;">按目的地与身份性质，比较已核验项目</div></div>'+
  '<div style="height:44px;background:#fff;border:1px solid var(--line);border-radius:22px;display:flex;align-items:center;gap:9px;padding:0 16px;color:var(--faint);font-size:13px;margin-bottom:12px;">'+ic('search',18)+'<span>搜索目的地 / 身份性质</span></div>'+
- '<div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px;"><span class="chip on">全部</span><span class="chip">工作居留</span><span class="chip">随行子女</span><span class="chip">数字游民</span><span class="chip">长居养老</span></div>'+
- '<div class="proj-row" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">【示例】A 国 · 技术工作居留</b><div class="small mut" style="margin-top:3px;">长期工作居留（非永居）· 参考 9–14 个月</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
- '<div class="proj-row" data-go="project"><div class="flag">'+ic('user',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">【示例】A 国 · 随行子女路径</b><div class="small mut" style="margin-top:3px;">随主申请 · 少量官方附加费</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
- '<div class="proj-row" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">【示例】C 国 · 数字游民</b><div class="small mut" style="margin-top:3px;">项目核验中，暂不可报价</div></div><span class="st a"><span class="d"></span>核验中</span></div>'+
- '<div class="proj-row" style="opacity:.55;"><div class="flag">'+ic('lock',20)+'</div><div style="flex:1;"><b style="font-size:13.5px;">【示例】A 国 · 雇主担保</b><div class="small mut" style="margin-top:3px;">供给暂停，已下架新签</div></div><span class="st n">已暂停</span></div>'+
+ '<div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px;"><span class="chip on" onclick="pf(this,\'\')">全部</span><span class="chip" onclick="pf(this,\'加勒比\')">加勒比</span><span class="chip" onclick="pf(this,\'欧洲\')">欧洲</span><span class="chip" onclick="pf(this,\'大洋洲\')">大洋洲</span><span class="chip" onclick="pf(this,\'亚洲\')">亚洲</span><span class="chip" onclick="pf(this,\'美洲\')">美洲</span><span class="chip" onclick="pf(this,\'非洲\')">非洲</span></div>'+
+ '<div class="small mut" id="pcount" style="margin:0 0 10px;">共 21 款在售项目 · 全部经核验发布</div>'+
+ '<div class="proj-row prow" data-region="加勒比" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13px;">安提瓜和巴布达投资入籍 · 国家发展基金捐款…</b><div class="small mut" style="margin-top:3px;">国家发展基金捐款 · 单人 23 万美元起</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="加勒比" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13px;">圣卢西亚基建投资入籍</b><div class="small mut" style="margin-top:3px;">基建项目投资入籍</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="加勒比" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13px;">格林纳达国家旅游度假区投资入籍</b><div class="small mut" style="margin-top:3px;">国家旅游度假区投资入籍</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="加勒比" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13px;">蒙特塞拉特特殊贡献身份 → 英国护照</b><div class="small mut" style="margin-top:3px;">特殊贡献身份 · 英国海外领地</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="大洋洲" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13px;">瓦努阿图投资入籍（DSP）</b><div class="small mut" style="margin-top:3px;">DSP 计划投资入籍 · 材料至批准约 1–2 个月</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="大洋洲" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13px;">斐济退休移民签证</b><div class="small mut" style="margin-top:3px;">退休移民签证 · 长居养老</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="非洲" data-go="project"><div class="flag">'+ic('globe',20)+'</div><div style="flex:1;"><b style="font-size:13px;">圣多美和普林西比投资入籍（国家转型基金）</b><div class="small mut" style="margin-top:3px;">国家转型基金投资入籍</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="欧洲" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13px;">马耳他永久居留计划（MPRP）</b><div class="small mut" style="margin-top:3px;">永久居留（MPRP）· 租房/购房组合</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="欧洲" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13px;">匈牙利访客投资者居留（基金投资）</b><div class="small mut" style="margin-top:3px;">基金投资访客居留 · 非永居</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="欧洲" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13px;">匈牙利欧盟蓝卡</b><div class="small mut" style="margin-top:3px;">欧盟蓝卡工作居留</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="欧洲" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13px;">希腊黄金居留 · 25 万欧元购房档</b><div class="small mut" style="margin-top:3px;">25 万欧元购房黄金居留</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="欧洲" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13px;">西班牙数字游民签证</b><div class="small mut" style="margin-top:3px;">数字游民签证 · 非永居</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="欧洲" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13px;">葡萄牙黄金居留（基金路径）</b><div class="small mut" style="margin-top:3px;">基金路径黄金居留</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="欧洲" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13px;">斯洛文尼亚特殊贡献入籍（欧盟护照）</b><div class="small mut" style="margin-top:3px;">特殊贡献入籍 · 欧盟护照</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="美洲" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13px;">巴拿马购房永久居留</b><div class="small mut" style="margin-top:3px;">购房永久居留</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="美洲" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13px;">美国 EB-1A 杰出人才移民</b><div class="small mut" style="margin-top:3px;">杰出人才移民 · 无排期职业移民</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="亚洲" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13px;">阿联酋投资人居留（老板签/法人签）</b><div class="small mut" style="margin-top:3px;">投资人/法人居留（老板签）</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="亚洲" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13px;">新加坡自雇 EP 就业准证</b><div class="small mut" style="margin-top:3px;">自雇 EP 就业准证</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="亚洲" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13px;">泰国精英签证（Thailand Privil…</b><div class="small mut" style="margin-top:3px;">Thailand Privilege 精英签证</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="亚洲" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13px;">韩国存款移民</b><div class="small mut" style="margin-top:3px;">存款移民 · 配偶子女随行</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ '<div class="proj-row prow" data-region="亚洲" data-go="project"><div class="flag">'+ic('flag',20)+'</div><div style="flex:1;"><b style="font-size:13px;">日本经营管理 / 高度人才签证</b><div class="small mut" style="margin-top:3px;">经营管理 / 高度人才签证</div></div><span class="st g"><span class="d"></span>已发布</span></div>'+
+ 
  '<div class="card" data-go="compare" style="display:flex;align-items:center;gap:10px;justify-content:center;color:var(--mut);font-size:12.5px;cursor:pointer;">'+ic('star',17)+' 比较夹（2 个项目可对比）</div>'+
  '</div>'+tb('projects'));
 
@@ -339,7 +364,13 @@ V.project=view('project',
  '<div style="display:flex;gap:7px;margin-top:9px;"><span class="st" style="background:rgba(255,255,255,.2);color:#fff;">长期工作居留 · 非永居</span><span class="st" style="background:rgba(255,255,255,.2);color:#fff;">v3.2</span></div></div></div>'+
  '<div class="body">'+
  '<div class="card fade-up"><h4>申请条件（已核验）</h4><div style="font-size:12.5px;color:var(--mut);line-height:2;margin-top:8px;">· 职业在示例清单内，语言达到 B1<br>· 有雇主 offer 或技能评估路径<br>· 随行配偶与子女可一并申请</div></div>'+
+ '<div class="card"><h4>随行家属（可一并申请）</h4><div style="font-size:12.5px;color:var(--mut);line-height:2;margin-top:8px;">· 配偶及未成年子女随行，官方费按家庭结构另收<br>· 需婚姻/亲属关系证明与监护材料；成年子女按规则单独判定<br>· 家属身份随主申请人，主申请结果不保证附属申请</div></div>'+
  '<div class="card"><h4>办理流程与责任分工</h4><div style="font-size:12.5px;color:var(--mut);line-height:2;margin-top:8px;">材料准备可自助完成 → 境外法律段由持牌方递交沟通 → 审批决定由目的地官方作出。</div></div>'+
+ '<div class="card" style="border-left:4px solid var(--navy);"><h4 style="color:var(--navy);">信息来源与核验记录</h4>'+
+ '<table class="fee-tbl" style="margin-top:9px;"><tr><th style="width:34%;">来源</th><th>核验人</th><th>核验时间</th></tr>'+
+ '<tr><td>官方规则文件 v3.2（原文）</td><td>reviewer1</td><td>2026-09</td></tr>'+
+ '<tr><td>持牌方项目介绍</td><td>admin01</td><td>2026-09</td></tr></table>'+
+ '<div class="small mut" style="margin-top:9px;line-height:1.7;">核验人≠发起人；任一来源失效，项目自动转为「待复核」并对客下架。</div></div>'+
  '<div class="card"><h4 style="margin-bottom:10px;">费用分项（按收取方）</h4>'+
  '<table class="fee-tbl"><tr><th>费项</th><th>收取方</th><th>币种</th><th>性质</th></tr>'+
  '<tr><td>平台服务费</td><td>平台</td><td>CNY</td><td>确定</td></tr>'+
@@ -347,6 +378,7 @@ V.project=view('project',
  '<tr><td>境外法律服务</td><td>境外持牌方</td><td>USD</td><td>合同为准</td></tr>'+
  '<tr><td>官方申请费</td><td>官方代收代付</td><td>外币</td><td>可能调整</td></tr></table>'+
  '<div class="small mut" style="margin-top:9px;line-height:1.7;">不同币种不相加、不折算总价；「待确认」不等于 0。</div></div>'+
+ '<div class="card" style="border-left:4px solid var(--red);"><h4 style="color:var(--red);">风险提示（请先了解）</h4><div style="font-size:12.5px;color:var(--mut);line-height:2;margin-top:8px;">· 官方收费与政策可能调整，以正式受理时官方口径为准<br>· 存在补件、拒签或周期延长的可能，平台不承诺结果<br>· 向非签约主体或个人账户付款不受保障；平台不提供任何「包过」渠道</div></div>'+
  '<div class="hintbar" style="background:var(--navy-50);color:var(--navy);">'+ic('shield',18)+'<div>参考周期 9–14 个月，<b>非承诺</b>；不承诺获批、永居或入籍时间点，以官方审理为准。</div></div>'+
  '<div style="height:6px;"></div></div>'+
  '<div class="cta-bar"><a class="btn ghost" style="flex:1;" data-go="compare">'+ic('star',17)+' 比较</a><a class="btn navy" style="flex:1.6;" data-go="assessment">初步评估</a></div>'+
@@ -718,6 +750,16 @@ function go(k,push){const el=document.getElementById('v-'+k);if(!el)return;
  const b=el.querySelector('.body');if(b)b.scrollTop=0;
 }
 let toastT;function toast(m){let t=document.getElementById('utoast');if(!t){t=document.createElement('div');t.id='utoast';t.style.cssText='position:absolute;left:50%;bottom:96px;transform:translate(-50%,140%);background:rgba(27,36,51,.92);backdrop-filter:blur(10px);color:#fff;font-size:13px;padding:12px 20px;border-radius:16px;box-shadow:0 10px 32px rgba(10,20,45,.32);border:1px solid rgba(255,255,255,.08);z-index:50;transition:transform .34s cubic-bezier(.34,1.3,.5,1);max-width:300px;text-align:center;';document.querySelector('.screen').appendChild(t);}t.textContent=m;t.style.transform='translate(-50%,0)';clearTimeout(toastT);toastT=setTimeout(()=>t.style.transform='translate(-50%,140%)',1900);}
+function pf(chip,reg){
+  const view=document.getElementById('v-projects');
+  view.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  chip.classList.add('on');
+  view.querySelectorAll('.prow').forEach(r=>{
+    r.style.display=(!reg||r.getAttribute('data-region')===reg)?'':'none';
+  });
+  const n=reg?view.querySelectorAll('.prow[data-region="'+reg+'"]').length:view.querySelectorAll('.prow').length;
+  const cnt=view.querySelector('#pcount'); if(cnt)cnt.textContent=reg?(reg+' · '+n+' 款'):('共 '+n+' 款在售项目 · 全部经核验发布');
+}
 function qpick(el){[...el.parentNode.children].forEach(c=>c.classList.remove('on'));el.classList.add('on');}
 document.addEventListener('click',e=>{
  const g=e.target.closest('[data-go]');if(g){go(g.dataset.go);return;}
